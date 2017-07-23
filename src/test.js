@@ -15,9 +15,9 @@ var scene = game.scene;
 
 function initTest(){
     var vox = {
-        speed : 3000,
+        speed : 200,
         file : "3x3x3",
-        open : ()=>{
+        open : function(){
             fetch(`vox/${this.file}.vox`).then(function(response){
                 return response.arrayBuffer();
             }).then((function(req){
@@ -58,22 +58,22 @@ function initTest(){
                     this.frames.push(m);
                 }
                 if(this.frames.length<=1){
-                    scene.add(frames[0]);
-                    this.cur = frames[0];
+                    scene.add(this.frames[0]);
+                    this.cur = this.frames[0];
                 }else{
                     this.index = 0;
-                    this.id = setInterval(function(){
+                    this.id = setInterval((function(){
                         if(this.cur)scene.remove(this.cur);
-                        scene.add(frames[this.index]);
-                        this.cur = frames[this.index];
+                        scene.add(this.frames[this.index]);
+                        this.cur = this.frames[this.index];
                         this.index++;
                         if(this.index>=this.frames.length)
                             this.index = 0;
-                    },this.speed);
+                    }).bind(this),this.speed);
                 } 
-            }).bind(this)).catch(function(err){
+            }).bind(this)).catch((function(err){
                 console.log(this.file+' '+err);
-            }); 
+            }).bind(this)); 
         }
     };
     Object.defineProperties(vox,{
