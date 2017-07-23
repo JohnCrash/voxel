@@ -5,7 +5,7 @@
 module.exports.Parser = VoxParser;
 
 function VoxParser(vox){
-    var int32buf = new Int32Array(vox);
+    var int32buf = new Uint32Array(vox);
     if(int32buf[0]!==tag2int('VOX ')){ 
         throw 'invalid .vox format';
     }
@@ -37,6 +37,7 @@ function VoxParser(vox){
                 }
                     break;
                 case 'RGBA':{
+                    vox.pals.push(0);
                     for(let i=0;i<256;i++){
                         vox.pals.push(chunk.data[i]);
                     }
@@ -71,14 +72,14 @@ function VoxParser(vox){
     if(vox.pals.length == 0){
         vox.pals = default_pals;
     }
-    vox.palRGBA = [{r:0,g:0,b:0,a:0}];
-    for(let i = 0;i<255;i++){
+    vox.palRGBA = [];
+    for(let i = 0;i<256;i++){
         var c = vox.pals[i];
         vox.palRGBA.push({
-            r : (c&0xff)/256,
-            g : ((c&0xff00)>>8)/256,
-            b : ((c&0xff0000)>>16)/256,
-            a : ((c&0xff000000)>>24)/256,
+            r : (c&0xff)/255,
+            g : ((c&0xff00)>>8)/255,
+            b : ((c&0xff0000)>>16)/255,
+            a : (c>>>24)/255,
         });
     }
     return vox;
@@ -97,16 +98,16 @@ function int2tag(i){
 }
 
 function Chunk(cbuf,offset){
-    var buf = new Int32Array(cbuf.buffer,offset+cbuf.byteOffset);
+    var buf = new Uint32Array(cbuf.buffer,offset+cbuf.byteOffset);
     this.buf = buf;
     this.name = int2tag(buf[0]);
     this.size = buf[1];
     this.childrenSize = buf[2];
     this.readSubOffset = 0;
     if(this.size>0)
-        this.data = new Int32Array(buf.buffer,buf.byteOffset+12,this.size/4);
+        this.data = new Uint32Array(buf.buffer,buf.byteOffset+12,this.size/4);
     if(this.childrenSize>0)
-        this.childrenBuf = new Int32Array(buf.buffer,buf.byteOffset+12+this.size,this.childrenSize/4);
+        this.childrenBuf = new Uint32Array(buf.buffer,buf.byteOffset+12+this.size,this.childrenSize/4);
 }
 
 Chunk.prototype.readSubChunk = function(){
@@ -135,15 +136,15 @@ Object.assign(Vox.prototype,{
     getModelVolume : function(i){
         var module = this.modules[i];
         var volume = new Uint8Array(module.size_x*module.size_y*module.size_z);
-        volume.fill(0);
+        //volume.fill(0);
         var plane = module.size_x*module.size_y;
-        var line = module.size_y;
+        var line = module.size_x;
         for(let i = 0;i < module.xyzi.length;i++){
             let xyzi = module.xyzi[i];
             let x = xyzi&0xff;
             let y = (xyzi&0xff00)>>8;
             let z = (xyzi&0xff0000)>>16;
-            let idx = (xyzi&0xff000000)>>24;
+            let idx = (xyzi>>>24);
             volume[z * plane + y * line + x] = idx;
         }
         return volume;
