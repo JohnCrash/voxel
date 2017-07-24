@@ -2,6 +2,7 @@
  * parser vox format ArrayBuffer
  * https://github.com/ephtracy/voxel-model/blob/master/MagicaVoxel-file-format-vox.txt
  */
+var meshers = require("voxel").meshers;
 module.exports.Parser = VoxParser;
 
 function VoxParser(vox){
@@ -130,13 +131,17 @@ Object.assign(Vox.prototype,{
     },
 
     getModelSize : function(i){
+        if(i<0||i>=this.modules.length)
+            throw 'Array index is out of range';        
         return [this.modules[i].size_x,this.modules[i].size_y,this.modules[i].size_z];
     },
 
     getModelVolume : function(i){
+        if(i<0||i>=this.modules.length)
+            throw 'Array index is out of range';
+
         var module = this.modules[i];
         var volume = new Uint8Array(module.size_x*module.size_y*module.size_z);
-        //volume.fill(0);
         var plane = module.size_x*module.size_y;
         var line = module.size_x;
         for(let i = 0;i < module.xyzi.length;i++){
@@ -157,6 +162,28 @@ Object.assign(Vox.prototype,{
     getModelMesh : function(i){
         if(!THREE)throw 'You must import three.js';
 
+        var dims = this.getModelSize(i);
+        var volume = this.getModelVolume(i);
+        var mesh = meshers.greedy(volume,dims);
+        var geo = new THREE.Geometry();
+        for(let i = 0;i<mesh.vertices.length;i++){
+            var v = mesh.vertices[i];
+            geo.vertices.push(new THREE.Vector3(v[0],v[1],v[2]));
+        }
+        for(let i = 0;i<mesh.faces.length;i++){
+            var f = mesh.faces[i];
+            var rgba = this.palRGBA[f[4]];
+            var c = new THREE.Color(rgba.r,rgba.g,rgba.b);
+            var n = undefined;
+            geo.faces.push(new THREE.Face3(f[0],f[1],f[2],n,c));
+            geo.faces.push(new THREE.Face3(f[0],f[2],f[3],n,c));
+        }
+        geo.computeFaceNormals();
+        var material = new THREE.MeshLambertMaterial( { color: 0xffffff, morphTargets: true, vertexColors: THREE.FaceColors } );
+        var m = new THREE.Mesh(geo,material);
+        m.receiveShadow = true;
+        m.castShadow = true;
+        return m;
     }
 });
 

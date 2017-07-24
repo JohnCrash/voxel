@@ -48,18 +48,18 @@ function Game(opts){
     }
     //初始化灯和阴影
     if(this.opts&&opts.enableLight){
-        this.ambient = new THREE.AmbientLight( 0x444444 );
+        this.ambient = new THREE.AmbientLight( 0x606060 );
         this.scene.add(this.ambient);    
-        var light = new THREE.SpotLight( 0xffffff, 1, 0, Math.PI / 2 );
+        var light = new THREE.SpotLight( 0x505050, 1, 0, Math.PI / 2 );
         this.light = light;
         light.position.set( 0,0, 300 );
         light.target.position.set( 0, 0, 0 );
         if(opts.enableShaodw){
             light.castShadow = true;
             light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 50, 1, 120, 2500 ) );
-            light.shadow.bias = 0.0001;
-            light.shadow.mapSize.width = opts.SHADOW_MAP_WIDTH || 1024;
-            light.shadow.mapSize.height = opts.SHADOW_MAP_HEIGHT || 1024;
+            light.shadow.bias = 0.0002;
+            light.shadow.mapSize.width = opts.SHADOW_MAP_WIDTH || 1046;
+            light.shadow.mapSize.height = opts.SHADOW_MAP_HEIGHT || 1048;
 
             this.renderer.shadowMap.enabled = true;
             this.renderer.autoClear = false;
