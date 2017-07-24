@@ -159,7 +159,7 @@ Object.assign(Vox.prototype,{
         return this.palRGBA[i];
     },
 
-    getModelMesh : function(i){
+    getModelMesh : function(i,material){
         if(!THREE)throw 'You must import three.js';
 
         var dims = this.getModelSize(i);
@@ -179,8 +179,8 @@ Object.assign(Vox.prototype,{
             geo.faces.push(new THREE.Face3(f[0],f[2],f[3],n,c));
         }
         geo.computeFaceNormals();
-        var material = new THREE.MeshLambertMaterial( { color: 0xffffff, morphTargets: true, vertexColors: THREE.FaceColors } );
-        var m = new THREE.Mesh(geo,material);
+        var mat = material?material:new THREE.MeshPhongMaterial({ color: 0xffffff, shading: THREE.FlatShading, vertexColors: THREE.VertexColors, shininess: 0	} );
+        var m = new THREE.Mesh(geo,mat);
         m.receiveShadow = true;
         m.castShadow = true;
         return m;

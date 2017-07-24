@@ -14,8 +14,6 @@ module.exports = Game;
  * width,height : 固定的宽高，如果不提供
  * maxFrameSize : 最大的帧尺寸，帧尺寸指的是渲染真的尺寸，过大的尺寸导致低帧率
  * enableStats  : 打开帧率检测小窗口
- * enableLight  : 打开默认灯
- * enableShaodw : 打开阴影
  */
 function Game(opts){
     this.opts = opts || {};
@@ -46,29 +44,11 @@ function Game(opts){
         this.stats = new Stats();
         document.body.appendChild( this.stats.dom );
     }
-    //初始化灯和阴影
-    if(this.opts&&opts.enableLight){
-        this.ambient = new THREE.AmbientLight( 0x606060 );
-        this.scene.add(this.ambient);    
-        var light = new THREE.SpotLight( 0x505050, 1, 0, Math.PI / 2 );
-        this.light = light;
-        light.position.set( 0,0, 300 );
-        light.target.position.set( 0, 0, 0 );
-        if(opts.enableShaodw){
-            light.castShadow = true;
-            light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 50, 1, 120, 2500 ) );
-            light.shadow.bias = 0.0002;
-            light.shadow.mapSize.width = opts.SHADOW_MAP_WIDTH || 1046;
-            light.shadow.mapSize.height = opts.SHADOW_MAP_HEIGHT || 1048;
 
-            this.renderer.shadowMap.enabled = true;
-            this.renderer.autoClear = false;
-            this.renderer.shadowMap.enabled = true;
-            this.renderer.shadowMap.type = THREE.PCFShadowMap;
-        }
-        this.scene.add( light );
-    }
-    //打开反走样
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.autoClear = false;
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = THREE.PCFShadowMap;
 }
 
 inherits(Game,EventEmitter);
@@ -131,4 +111,83 @@ Game.prototype.resume=function(){
  */
 Game.prototype.updateOptions=function(opts){
 
+}
+
+/**
+ * 加入一个聚光灯(类似手电筒)
+ * color        灯的颜色
+ * intensity    灯的强度
+ * distance     最大照射距离
+ * angle        聚光灯发生角度
+ * penumbera    边缘衰减(0-1)
+ * decay        衰减
+ * enableShadow 打开灯阴影
+ * shadow.bias        阴影贴图偏差,默认是0,取一个小的值如0.0001有助于得到较好的阴影
+ * shadowMapWidth     阴影图的宽度
+ * shadowMapHeight    阴影图的高度
+ */
+Game.prototype.addSpotLight=function(t){
+    var light = new THREE.SpotLight( t.color||0x909090, 
+        t.intensity||1, t.distance||0, 
+        t.angle||Math.PI/4, t.penumbra||0.01, t.decay||1 );
+    if(t.enableShadow){
+        light.castShadow = true;
+        light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 35, 1, 120, 10000 ) );
+        light.shadow.bias = t.bias||0;
+        light.shadow.mapSize.width = t.shadowMapWidth || 1024;
+        light.shadow.mapSize.height = t.shadowMapHeight || 1024;        
+    }
+    this.scene.add(light);
+    return light;
+}
+
+/**
+ * 加入环境灯(不能投射阴影)
+ */
+Game.prototype.addAmbientLight=function(color){
+    var light = new THREE.AmbientLight(color||0x606060);
+    this.scene.add(light);
+    return light;
+}
+
+/**
+ * 加入半球灯(不能投射阴影)
+ * skyColor     天空颜色
+ * groundColor  地面颜色
+ * intensity    灯强度
+ */
+Game.prototype.addHemiSphereLight=function(skyColor,groundColor,intensity){
+    var light = new THREE.HemisphereLight( skyColor||0xffffff, groundColor||0xffffff, intensity||0.6 );
+    this.scene.add(light);
+    return light;
+}
+
+/**
+ * 加入方向灯
+ */
+Game.prototype.addDirectionaLight=function(t){
+    var light = new THREE.DirectionalLight( t.color||0xffffff,t.intensity||1 );
+    light.position.set( -1, 1.75, 1 );
+    light.position.multiplyScalar( 50 );
+    if(t.enableShadow){
+        light.castShadow = true;
+        light.shadow.mapSize.width = t.shadowMapWidth || 1024;
+        light.shadow.mapSize.height = t.shadowMapHeight || 1024;              
+        var d = t.shadowRound||50;
+        light.shadow.camera.left = -d;
+        light.shadow.camera.right = d;
+        light.shadow.camera.top = d;
+        light.shadow.camera.bottom = -d;
+        light.shadow.camera.far = 3500;
+        light.shadow.bias = t.bias||0;
+    }
+    this.scene.add(light);
+    return light;
+}
+
+/**
+ * 删除灯
+ */
+Game.prototype.removeLight=function(light){
+    this.scene.remove(light);
 }
