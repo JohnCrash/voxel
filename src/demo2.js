@@ -26,6 +26,10 @@ function initTest(){
         hemiIntensity : 0.6,
         enableDirectLight : true,
         enableSpotLight : false,
+        "场景文件" : function(){
+            console.log('scene json!');
+            $('#json').modal('show');
+        },
         open : function(){
             fetch(`vox/${this.file}.vox`).then(function(response){
                 return response.arrayBuffer();
@@ -187,6 +191,8 @@ function initTest(){
     'menger','monu1','monu9','monu10','nature','shelf','teapot',
     'anim/deer','anim/horse','anim/T-Rex','chr/chr_fox',
     'chr/chr_gumi','chr/chr_man','chr/chr_poem']);
+    gui_vox.add(vox,'场景文件');
+
     vox.model = '3x3x3';
 }
 
@@ -222,7 +228,7 @@ game.on('init',function(){
     this.camera.position.z = 200;
     this.camera.rotation.x = Math.PI/6;
 
-    initTest();    
+    initTest();
 });
 
 game.run();

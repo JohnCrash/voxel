@@ -1,1 +1,1 @@
-require('./demo2');
+require('./simple');
