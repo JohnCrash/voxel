@@ -25,6 +25,7 @@ function sqlQuery(query,cb,ep){
     ep(err);
   });
 }
+
 /**
  * 使用动态编译javascript
  */
@@ -41,6 +42,13 @@ router.get(/.*\.js$/,function(req,res){
     var msg = err.toString().replace(/\\/g,"/");
     res.send(`document.body.innerHTML = "<h2>${msg}</h2>";`);
   });
+});
+
+/**
+ * 使用动态编译javascript
+ */
+router.get(/.*\.appcache$/,function(req,res){
+  res.send('ok');
 });
 
 module.exports = router;

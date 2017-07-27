@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm test",
-    "start": "beefy src/test.js:bundle.js 3000 --cwd public --live"
+    "start": "node server/www"
   },
   "repository": {
     "type": "git",

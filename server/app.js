@@ -20,9 +20,16 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+/*
+app.use(function(req,res,next){
+  if(req.url.match(/.*\.appcache$/)){
+    res.header("MIME-Type", "text/cache-manifest");
+  }
+  next();
+});
+*/
 app.use(express.static(path.join(__dirname, '../public')));
 
-app.use(express.static('static'));
 app.use('/', index);
 app.use('/users', users);
 
