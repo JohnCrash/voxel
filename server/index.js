@@ -30,7 +30,7 @@ function sqlQuery(query,cb,ep){
  * 使用动态编译javascript
  */
 router.get(/.*\.js$/,function(req,res){
-  var stream = browserify(`src${req.url}`)
+  var stream = browserify(`src${req.url}`,{debug:true})
       .transform("babelify", {presets: ["es2015"]})
       .bundle();
   stream.pipe(res);
@@ -45,10 +45,19 @@ router.get(/.*\.js$/,function(req,res){
 });
 
 /**
- * 使用动态编译javascript
+ * 枚举资源文件
  */
-router.get(/.*\.appcache$/,function(req,res){
-  res.send('ok');
+router.get('/resources',function(req,res){
+  fs.readdir(`${upload}/scene`,function(err,files){
+    if(err){
+      res.json({err:err});
+    }else{
+      res.json({files:files});
+    }
+  });
 });
 
+/**
+ * 
+ */
 module.exports = router;

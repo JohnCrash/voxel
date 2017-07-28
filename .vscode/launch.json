@@ -10,10 +10,17 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Launch Chrome against localhost",
+            "name": "Debug client",
             "url": "http://localhost:3000",
             "webRoot": "${workspaceRoot}"
         },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Debug editor",
+            "url": "http://localhost:3000/editor.html",
+            "webRoot": "${workspaceRoot}"
+        },        
         {
             "type": "chrome",
             "request": "attach",

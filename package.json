@@ -35,6 +35,7 @@
     "express": "^4.15.3",
     "interact": "0.0.3",
     "jade": "^1.11.0",
+    "jquery": "^3.2.1",
     "kb-controls": "^0.2.0",
     "morgan": "^1.8.2",
     "mssql": "^4.0.4",

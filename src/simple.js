@@ -1,8 +1,10 @@
+var $ = require('jquery');
 var Game = require("./game");
 require("whatwg-fetch");
 var voxparser = require("./vox").Parser;
 
-var game = new Game({enableStats:true,
+var game = new Game({
+    enableStats:true,
     enableAA:false,
     enableLight:true,
     enableShaodw:true});
@@ -10,6 +12,39 @@ var scene = game.scene;
 var light1;
 var light2;
 var hemiLight;
+
+function initEditor(){
+    var dialogStyle = `
+        position:fixed;
+        top:10%;
+        left:20%;
+        bottom:10%;
+        z-index:1050;
+        width:60%;
+        height:80%;
+        background-color: #ffffff;
+        border: 1px solid #999;
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        -webkit-border-radius: 6px;
+        -moz-border-radius: 6px;
+        border-radius: 6px;
+        outline: none;
+        -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+        -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+        -webkit-background-clip: padding-box;
+        -moz-background-clip: padding-box;
+        background-clip: padding-box;
+        display: block;
+    `;
+    $('body').append(`<div style="${dialogStyle}">
+        <div>
+            <h3>场景文件</h3>
+            <textarea style="width:100%;bottom:0px;">Hello world!
+            </textarea>
+        </div>
+    </div>`);
+}
 
 function initTest(){
     /**
@@ -72,7 +107,6 @@ game.on('init',function(){
     this.camera.position.y = -100;
     this.camera.position.z = 200;
     this.camera.rotation.x = Math.PI/6;
-
     initTest();
 });
 
