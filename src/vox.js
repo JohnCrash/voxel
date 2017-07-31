@@ -83,6 +83,8 @@ function VoxParser(vox){
             a : (c>>>24)/255,
         });
     }
+    this.volumes = new Array(this.modules.length);
+    this.geometrys = new Array(this.modules.length);
     return vox;
 }
 
@@ -139,6 +141,7 @@ Object.assign(Vox.prototype,{
     getModelVolume : function(i){
         if(i<0||i>=this.modules.length)
             throw 'Array index is out of range';
+        if(this.volumes[i])return this.volumes[i];
 
         var module = this.modules[i];
         var volume = new Uint8Array(module.size_x*module.size_y*module.size_z);
@@ -152,6 +155,7 @@ Object.assign(Vox.prototype,{
             let idx = (xyzi>>>24);
             volume[z * plane + y * line + x] = idx;
         }
+        this.volumes[i] = volume;
         return volume;
     },
 
@@ -159,13 +163,14 @@ Object.assign(Vox.prototype,{
         return this.palRGBA[i];
     },
 
-    getModelMesh : function(i,material){
+    getModelGeometry(i){
         if(!THREE)throw 'You must import three.js';
+        if(this.geometrys[i])return this.geometrys[i];
 
         var dims = this.getModelSize(i);
         var volume = this.getModelVolume(i);
         var mesh = meshers.greedy(volume,dims);
-        var geo = new THREE.Geometry();
+        var geo = new THREE.BufferGeometry();
         for(let i = 0;i<mesh.vertices.length;i++){
             var v = mesh.vertices[i];
             geo.vertices.push(new THREE.Vector3(v[0],v[1],v[2]));
@@ -179,6 +184,12 @@ Object.assign(Vox.prototype,{
             geo.faces.push(new THREE.Face3(f[0],f[2],f[3],n,c));
         }
         geo.computeFaceNormals();
+        this.geometrys[i] = geo;
+        return geo;
+    },
+
+    getModelMesh : function(i,material){
+        var geo = getModelGeometry(i);
         var mat = material?material:new THREE.MeshPhongMaterial({ color: 0xffffff, shading: THREE.FlatShading, vertexColors: THREE.VertexColors, shininess: 0	} );
         var m = new THREE.Mesh(geo,mat);
         m.receiveShadow = true;

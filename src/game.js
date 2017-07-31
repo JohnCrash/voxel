@@ -122,6 +122,7 @@ Game.prototype.updateOptions=function(opts){
  * penumbera    边缘衰减(0-1)
  * decay        衰减
  * enableShadow 打开灯阴影
+ * castShadow   投射阴影
  * shadow.bias        阴影贴图偏差,默认是0,取一个小的值如0.0001有助于得到较好的阴影
  * shadowMapWidth     阴影图的宽度
  * shadowMapHeight    阴影图的高度
@@ -131,7 +132,7 @@ Game.prototype.addSpotLight=function(t){
         t.intensity||1, t.distance||0, 
         t.angle||Math.PI/4, t.penumbra||0.01, t.decay||1 );
     if(t.enableShadow){
-        light.castShadow = true;
+        light.castShadow = t.castShadow;
         light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 35, 1, 120, 10000 ) );
         light.shadow.bias = t.bias||0;
         light.shadow.mapSize.width = t.shadowMapWidth || 1024;
