@@ -159,6 +159,10 @@ class ItemUI{
     }
 };
 
+class ItemEditUI{
+
+};
+
 class Edit{
     constructor(){
         this.curVoxFile = '3x3x3';
@@ -171,12 +175,20 @@ class Edit{
         lightTool.add(this,'加入环境灯');
         lightTool.add(this,'加入半球灯');
         lightTool.add(this,'坐标轴');
+
         let sceneTool = gui.addFolder('场景工具');
         sceneTool.add(this,'保存场景');
         sceneTool.add(this,'加入模型');
         fetchJson('/resources',(json)=>{
             sceneTool.add(this,'模型文件',json.files);
         });
+
+        let itemTool = gui.addFolder('角色与物品工具');
+        fetchJson('/items',(json)=>{
+            sceneTool.add(this,'模型文件',json.files);
+        });        
+        itemTool.add(this,'保存物品');
+        itemTool.add(this,'动作');
     } 
     '加入方向灯'(){
         let light = sceneManager.addDirectionaLight();
