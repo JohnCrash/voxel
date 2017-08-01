@@ -58,19 +58,16 @@ class SceneManager extends EventEmitter{
      */
     loadLight(lights){
         this.clearLight();
-        for(let i=0;i<lights;i++){
-            var light = lights[i];
-            var lgt;
+        for(let light of lights){
             switch(light.type){
                 case 'spot':
-                    lgt = this.game.addSpotLight(light);
+                    this.addSpotLight(light);
                 case 'direct':
-                    lgt = this.game.addDirectionaLight(light);
+                    this.addDirectionaLight(light);
                 case 'hemi':
-                    lgt = this.game.addHemiSphereLight(light.skyColor,light.groundColor,light.intensity);
+                    this.addHemiSphereLight(light);
                     break;
             }
-            if(lgt)this.lights.push(lgt);
         }
         return true;
     }
@@ -97,6 +94,39 @@ class SceneManager extends EventEmitter{
         this.items = [];
     }
 
+    addSpotLight(t){
+        let light = this.game.addSpotLight(t);
+        this.lights.push(light);
+        return light;
+    }
+
+    addAmbientLight(t){
+        let light = this.game.addAmbientLight(t);
+        this.lights.push(light);
+        return light;        
+    }
+
+    addHemiSphereLight(t){
+        let light = this.game.addHemiSphereLight(t);
+        this.lights.push(light);
+        return light;
+    }
+
+    addDirectionaLight(t){
+        let light = this.game.addDirectionaLight(t);
+        this.lights.push(light);
+        return light;
+    }
+
+    removeLight(light){
+        for(let i=0;i<this.lights.length;i++){
+            if(this.lights[i] == light){
+                this.lights.splice(i);
+                this.game.removeLight(light);
+                break;
+            }
+        }
+    }
     /**
      * 见场景当前状态保存下来
      */

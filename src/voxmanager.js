@@ -1,10 +1,10 @@
 /**
  * 场景中要出现的物体
  */
-import {fetchBin} from 'fetch';
-var voxparser = require('vox');
+import {fetchBin} from './fetch';
+var voxparser = require('./vox');
 
-class VoxManager{
+class VoxManager_{
     constructor(){
         this.voxs = {};
     }
@@ -55,4 +55,4 @@ class VoxManager{
 };
 
 //singleton in es6
-export let VoxManager = new VoxManager();
+export let VoxManager = new VoxManager_();

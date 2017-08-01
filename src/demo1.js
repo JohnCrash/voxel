@@ -20,7 +20,7 @@ function initTest(){
     var vox = {
         speed : 200,
         phong : true,
-        file : "3x3x3",
+        file : "doom",
         open : function(){
             fetch(`vox/${this.file}.vox`).then(function(response){
                 return response.arrayBuffer();
@@ -127,7 +127,7 @@ function initTest(){
     'menger','monu1','monu9','monu10','nature','shelf','teapot',
     'anim/deer','anim/horse','anim/T-Rex','chr/chr_fox',
     'chr/chr_gumi','chr/chr_man','chr/chr_poem']);
-    vox.model = '3x3x3';
+    vox.model = 'doom';
 }
 
 game.on('init',function(){

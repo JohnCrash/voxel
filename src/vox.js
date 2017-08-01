@@ -83,8 +83,8 @@ function VoxParser(vox){
             a : (c>>>24)/255,
         });
     }
-    this.volumes = new Array(this.modules.length);
-    this.geometrys = new Array(this.modules.length);
+    vox.volumes = new Array(vox.modules.length);
+    vox.geometrys = new Array(vox.modules.length);
     return vox;
 }
 
@@ -163,14 +163,14 @@ Object.assign(Vox.prototype,{
         return this.palRGBA[i];
     },
 
-    getModelGeometry(i){
+    getModelGeometry : function(i){
         if(!THREE)throw 'You must import three.js';
         if(this.geometrys[i])return this.geometrys[i];
 
         var dims = this.getModelSize(i);
         var volume = this.getModelVolume(i);
         var mesh = meshers.greedy(volume,dims);
-        var geo = new THREE.BufferGeometry();
+        var geo = new THREE.Geometry();
         for(let i = 0;i<mesh.vertices.length;i++){
             var v = mesh.vertices[i];
             geo.vertices.push(new THREE.Vector3(v[0],v[1],v[2]));
@@ -188,12 +188,10 @@ Object.assign(Vox.prototype,{
         return geo;
     },
 
-    getModelMesh : function(i,material){
-        var geo = getModelGeometry(i);
+    createModelMesh : function(i,material){
+        var geo = this.getModelGeometry(i);
         var mat = material?material:new THREE.MeshPhongMaterial({ color: 0xffffff, shading: THREE.FlatShading, vertexColors: THREE.VertexColors, shininess: 0	} );
         var m = new THREE.Mesh(geo,mat);
-        m.receiveShadow = true;
-        m.castShadow = true;
         return m;
     }
 });

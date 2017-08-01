@@ -66,7 +66,7 @@ function initTest(){
     }).then(function(req){
         var vox = voxparser(req);
         var material = new THREE.MeshPhongMaterial({ color: 0xffffff, shading: THREE.FlatShading, vertexColors: THREE.VertexColors, shininess: 0	} );
-        var mesh = vox.getModelMesh(0,material);
+        var mesh = vox.createModelMesh(0,material);
         var size = vox.getModelSize(0);
         mesh.position.x -= size[0]/2;
         mesh.position.y -= size[1]/2;

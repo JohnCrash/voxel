@@ -128,15 +128,19 @@ Game.prototype.updateOptions=function(opts){
  * shadowMapHeight    阴影图的高度
  */
 Game.prototype.addSpotLight=function(t){
+    t = t || {};
     var light = new THREE.SpotLight( t.color||0x909090, 
-        t.intensity||1, t.distance||0, 
+        t.intensity||1, t.distance||200, 
         t.angle||Math.PI/4, t.penumbra||0.01, t.decay||1 );
+    light.distance = t.distance || 200;
     if(t.enableShadow){
         light.castShadow = t.castShadow;
         light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 35, 1, 120, 10000 ) );
         light.shadow.bias = t.bias||0;
         light.shadow.mapSize.width = t.shadowMapWidth || 1024;
-        light.shadow.mapSize.height = t.shadowMapHeight || 1024;        
+        light.shadow.mapSize.height = t.shadowMapHeight || 1024;
+        light.shadow.camera.near = 10;
+        light.shadow.camera.far = 200;
     }
     this.scene.add(light);
     return light;
@@ -145,8 +149,9 @@ Game.prototype.addSpotLight=function(t){
 /**
  * 加入环境灯(不能投射阴影)
  */
-Game.prototype.addAmbientLight=function(color){
-    var light = new THREE.AmbientLight(color||0x606060);
+Game.prototype.addAmbientLight=function(t){
+    t = t || {};
+    var light = new THREE.AmbientLight(t.color||0x606060);
     this.scene.add(light);
     return light;
 }
@@ -157,8 +162,9 @@ Game.prototype.addAmbientLight=function(color){
  * groundColor  地面颜色
  * intensity    灯强度
  */
-Game.prototype.addHemiSphereLight=function(skyColor,groundColor,intensity){
-    var light = new THREE.HemisphereLight( skyColor||0xffffff, groundColor||0xffffff, intensity||0.6 );
+Game.prototype.addHemiSphereLight=function(t){
+    t = t || {};
+    var light = new THREE.HemisphereLight( t.skyColor||0xffffff, t.groundColor||0xffffff, t.intensity||0.6 );
     this.scene.add(light);
     return light;
 }
@@ -167,6 +173,7 @@ Game.prototype.addHemiSphereLight=function(skyColor,groundColor,intensity){
  * 加入方向灯
  */
 Game.prototype.addDirectionaLight=function(t){
+    t = t || {};
     var light = new THREE.DirectionalLight( t.color||0xffffff,t.intensity||1 );
     light.position.set( -1, 1.75, 1 );
     light.position.multiplyScalar( 50 );

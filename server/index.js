@@ -40,7 +40,10 @@ router.get(/.*\.js$/,function(req,res){
      * 这段代码负责在浏览器上创建一个节点并显示错误信息
      */
     var msg = err.toString().replace(/\\/g,"/");
-    res.send(`document.body.innerHTML = "<h2>${msg}</h2>";`);
+    msg = msg.replace(/"/g,"&quot;");
+    console.log(msg);
+    if(!res.headersSent) //这里仅展示一个错误信息
+      res.send(`document.body.innerHTML = "<h2>${msg}</h2>";`);
   });
 });
 
