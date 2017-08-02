@@ -28,4 +28,14 @@ function fetchText(s,cb,errcb){
     });
 }
 
-export {fetchBin,fetchJson,fetchText}
+function postJson(s,b,cb,errcb){
+    fetch(s,{method:'POST',
+    headers: {'Content-Type': 'application/json'},
+    body : JSON.stringify(b)})
+    .then(response=>response.json())
+    .then(json=>cb(json))
+    .catch(err=>{
+        errcb?errcb(err):log(err);
+    });    
+}
+export {fetchBin,fetchJson,fetchText,postJson}

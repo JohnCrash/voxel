@@ -2,7 +2,7 @@
  * 使用dat.GUI实现一个简单场景编辑器
  */
 var Game = require("./game");
-import {fetchJson} from './fetch';
+import {fetchJson,postJson} from './fetch';
 import SceneManager from './scenemanager';
 import log from './log';
 
@@ -14,6 +14,7 @@ let game = new Game({enableStats:false,
 let sceneManager = new SceneManager(game);
 let gui = new dat.GUI();
 let lightID = 1;
+let itemID = 1;
 let helpers = [];
 
 function addHelper(h){
@@ -83,12 +84,13 @@ function addColor(ui,c,name){
     ui.addColor(new ColorUI(c),name);
 }
 
-function removeFolder(gui,ui){
+function removeFolder(ui){
     if(ui.domElement){
         let folder = ui.domElement.parentElement||ui.domElement.parentNode;
         if(folder){
             let parent = folder.parentElement||folder.parentNode;
-            parent.removeChild(folder);  
+            if(parent)
+                parent.removeChild(folder);  
         }
     }
 }
@@ -132,7 +134,7 @@ class LightUI{
     '删除此灯'(){
         sceneManager.removeLight(this.light);
         removeHelper(this.helper);
-        removeFolder(gui,this.ui);
+        removeFolder(this.ui);
     }
     get '打开辅助线'(){
         return this.helper.visible;
@@ -141,10 +143,10 @@ class LightUI{
         this.helper.visible = value;
     }
     get '投射阴影'(){
-        return this.light.castShadow;
+        return this.light.castShadow?true:false;
     }
     set '投射阴影'(value){
-        this.light.castShadow = value;
+        this.light.castShadow = value?true:false;
     }    
     get '灯光强度'(){
         return this.light.intensity;
@@ -156,7 +158,47 @@ class LightUI{
 
 class ItemUI{
     constructor(item){
+        this.item = item;
+        let name = item.name?item.name:`物品${itemID++}`;
+        let ui = this.ui = gui.addFolder(name);
+        addPosition(ui,item.position);
+        ui.add(this,'面向',0,2*Math.PI).step(0.1);
+        ui.add(this,'投射阴影');
+        ui.add(this,'可见');
+        ui.add(this,'动作',item.actions.map(item=>item.name));
+        ui.add(this,'删除此物品');
     }
+    '删除此物品'(){
+        sceneManager.removeItem(this.item);
+        removeFolder(this.ui);
+    }
+    get '可见'(){
+        return this.item.visible;
+    }
+    set '可见'(value){
+        this.item.visible = value?true:false;
+    }
+    get '投射阴影'(){
+        return this.item.castShadow?true:false;
+    }
+    set '投射阴影'(value){
+        this.item.castShadow = value?true:false;
+    }
+    get '面向'(){
+        return this.item.rotation.z;
+    }
+    set '面向'(value){
+        this.item.rotation.z = value;
+    }
+    get '动作'(){
+        if(this.item.curAction && this.item.curAction.name)
+            return this.item.curAction.name;
+        else
+            return 'undefined';
+    }
+    set '动作'(value){
+        this.item.doAction(value);
+    }    
 };
 
 class ItemEditUI{
@@ -165,30 +207,50 @@ class ItemEditUI{
 
 class Edit{
     constructor(){
-        this.curVoxFile = '3x3x3';
+        this.selVoxFile = '3x3x3.vox';
+        this.selItemFile = '';
+        this.selSceneFile = '';
+        this.selEnvFile = '';
+        this['场景名称:'] = '';
+        this['环境名:'] = '';
         this.lightUI = [];
+        this.itemUI = [];
         this.axisHelper = new THREE.AxisHelper( 200 );
         game.scene.add(this.axisHelper);
+        
         let lightTool = gui.addFolder('灯光工具');
+        lightTool.add(this,'坐标轴');
         lightTool.add(this,'加入方向灯');
         lightTool.add(this,'加入聚光灯');
         lightTool.add(this,'加入环境灯');
         lightTool.add(this,'加入半球灯');
-        lightTool.add(this,'坐标轴');
+        lightTool.add(this,'创建环境');
+        lightTool.add(this,'环境名:');
 
         let sceneTool = gui.addFolder('场景工具');
         sceneTool.add(this,'保存场景');
-        sceneTool.add(this,'加入模型');
-        fetchJson('/resources',(json)=>{
-            sceneTool.add(this,'模型文件',json.files);
+        sceneTool.add(this,'场景名称:');
+        sceneTool.add(this,'刷新列表');
+        fetchJson('/list?dir=scene/vox',(json)=>{
+            let files = json.files.filter(item=>item.match(/.*\.vox$/));
+            sceneTool.add(this,'加入模型');
+            sceneTool.add(this,'模型文件:',files);
         });
-
-        let itemTool = gui.addFolder('角色与物品工具');
-        fetchJson('/items',(json)=>{
-            sceneTool.add(this,'模型文件',json.files);
+        fetchJson('/list?dir=scene/item',(json)=>{
+            let files = json.files.filter(item=>item.match(/.*\.item$/));
+            sceneTool.add(this,'加入物品');
+            sceneTool.add(this,'物品:',files);
+        });
+        fetchJson('/list?dir=scene',(json)=>{
+            let files = json.files.filter(item=>item.match(/.*\.scene$/));
+            sceneTool.add(this,'加载场景');
+            sceneTool.add(this,'场景:',files);
+        });
+        fetchJson('/list?dir=scene/env',(json)=>{
+            let files = json.files.filter(item=>item.match(/.*\.env$/));
+            sceneTool.add(this,'加载环境');
+            sceneTool.add(this,'环境:',files);
         });        
-        itemTool.add(this,'保存物品');
-        itemTool.add(this,'动作');
     } 
     '加入方向灯'(){
         let light = sceneManager.addDirectionaLight();
@@ -202,24 +264,101 @@ class Edit{
     }
     '加入环境灯'(){
         this.addLightUI(sceneManager.addAmbientLight());
-    }    
+    }
     '加入半球灯'(){
         this.addLightUI(sceneManager.addHemiSphereLight());
     }
+    '创建环境'(){ //将当前场景中的灯光和视角保存为一个文件
+        let name = this['环境名:'];
+        if(name){
+            let json = sceneManager.toJson();
+            let exp = {
+                camera : json.camera,
+                light : json.light
+            };
+            postJson(`/save?file=scene/env/${name}.env`,exp,(json)=>{
+                if(json.result==='ok'){//成功
+                    this['刷新列表']();
+                    window.alert(`成功将该环境保存到文件'${name}.env'中.`);
+                }else{//失败
+                    window.alert(json.result);
+                }
+            });
+        }else{
+            window.alert(`请填写环境名.`);
+        }
+    }
     '保存场景'(){
     }
+    '加载场景'(){
+    }
+    '加载环境'(){
+        let name = this.selEnvFile;
+        if(name){
+            fetchJson(`/load?file=scene/env/${name}`,(json)=>{
+                if(json.result==='ok'){
+                    sceneManager.loadEnv(json.content);
+                    this.rebuildGUI();
+                }else if(json.result){
+                    window.alert(json.result);
+                }
+            });
+        }
+    }
+    '刷新列表'(){
+    }
     '加入模型'(){
+        let name = this.selVoxFile;
+        if(name){
+            this.itemUI.push(new ItemUI(sceneManager.addItem({
+                file : `scene/vox/${name}`,
+                visible : true,
+                castShadow : true,
+                receiveShadow : false
+            })));
+        }
+    }
+    '加入物品'(){
+        let name = this.selItemFile;
+        if(name){
+
+        }
     }
     addLightUI(light){
         this.lightUI.push(new LightUI(light));
     }
-    get '模型文件'(){
-        return this.curVoxFile;
+    rebuildGUI(){ //从场景重建gui
+        //删除现有的gui folder
+        for(let light of this.lightUI)
+            light['删除此灯']();
+        for(let light of sceneManager.lights){
+            this.addLightUI(light);
+        }
     }
-    set '模型文件'(value){
-        this.curVoxFile = value;
-        log(value);
-    }         
+    get '模型文件:'(){
+        return this.selVoxFile;
+    }
+    set '模型文件:'(value){
+        this.selVoxFile = value;
+    }    
+    get '物品:'(){
+        return this.selItemFile;
+    }
+    set '物品:'(value){
+        this.selItemFile = value;
+    }
+    get '场景:'(){
+        return this.selSceneFile;
+    }
+    set '场景:'(value){
+        this.selSceneFile = value;
+    }    
+    get '环境:'(){
+        return this.selEnvFile;
+    }
+    set '环境:'(value){
+        this.selEnvFile = value;
+    }    
     get '坐标轴'(){
         return this.axisHelper.visible;
     }

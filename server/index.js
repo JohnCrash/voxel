@@ -50,8 +50,8 @@ router.get(/.*\.js$/,function(req,res){
 /**
  * 枚举资源文件
  */
-router.get('/resources',function(req,res){
-  fs.readdir(`${upload}/scene`,function(err,files){
+router.get('/list',function(req,res){
+  fs.readdir(`${upload}/${req.query['dir']}`,function(err,files){
     if(err){
       res.json({err:err});
     }else{
@@ -61,6 +61,39 @@ router.get('/resources',function(req,res){
 });
 
 /**
- * 
+ * 将json保存到指定的文件中，不能覆盖
  */
+router.post('/save',function(req,res){
+  let filename = upload+req.query['file'];
+  if(!fs.existsSync(filename)){
+    let json = req.body;
+    let jsonStr = JSON.stringify(json);
+    fs.writeFile(filename,jsonStr,(err)=>{
+      if(err){
+        res.json({result:err.toString()});
+      }else{
+        res.json({result:'ok'});
+      }
+    });
+  }else{
+    res.json({result:`'${filename}'文件已经存在.`});
+  }
+});
+
+/**
+ * 读取json文件
+ */
+router.get('/load',function(req,res){
+  let filename = upload+req.query['file'];
+
+  fs.readFile(filename,(err,data)=>{
+    if(err){
+      res.json({result:err.toString()});
+    }else{
+      let s = data.toString();
+      res.json({result:'ok',content:JSON.parse(s)});
+    }
+  });
+});
+
 module.exports = router;

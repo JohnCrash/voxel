@@ -12,6 +12,7 @@ class SceneManager extends EventEmitter{
         this.meshs = [];    //场景出现Mesh
         this.items = [];    //场景中物体
         this.players = [];  //场景中玩家包括npc
+        game.on('update',dt=>this.update(dt));
     }
 
     /**
@@ -62,10 +63,15 @@ class SceneManager extends EventEmitter{
             switch(light.type){
                 case 'spot':
                     this.addSpotLight(light);
+                    break;
                 case 'direct':
                     this.addDirectionaLight(light);
+                    break;
                 case 'hemi':
                     this.addHemiSphereLight(light);
+                    break;
+                case 'ambient':
+                    this.addAmbientLight(light);
                     break;
             }
         }
@@ -80,6 +86,11 @@ class SceneManager extends EventEmitter{
         return true;
     }
 
+    loadEnv(env){
+        this.loadCamera(env.camera);
+        this.loadLight(env.light);
+    }
+    
     clearLight(){
         for(let i=0;i<this.lights.length;i++){
             this.game.scene.remove(this.lights[i]);
@@ -135,9 +146,9 @@ class SceneManager extends EventEmitter{
             description:this.description,
             script:this.script,
             camera:{
-                position:{x:this.game.camera.positon.x,
-                    y:this.game.camera.positon.y,
-                    z:this.game.camera.positon.z},
+                position:{x:this.game.camera.position.x,
+                    y:this.game.camera.position.y,
+                    z:this.game.camera.position.z},
                 rotation:{x:this.game.camera.rotation.x,
                     y:this.game.camera.rotation.y,
                     z:this.game.camera.rotation.z}                   
@@ -151,13 +162,12 @@ class SceneManager extends EventEmitter{
                 lgt = {type : 'spot',
                     color : color(light.color),
                     position : position(light.position),
-                    rotation : position(light.roration),
+                    rotation : position(light.rotation),
                     intensity : light.intensity,
                     distance : light.distance,
                     angle : light.angle,
-                    penumbera : light.penumbera,
+                    penumbra : light.penumbra,
                     decay : light.decay,
-                    enableShadow : light.enableShadow,
                     castShadow : light.castShadow,
                     bias : light.shadow.bias,
                     shadowMapWidth : light.shadow.mapSize.width,
@@ -167,7 +177,7 @@ class SceneManager extends EventEmitter{
                 lgt = {type : 'direct',
                     color : color(light.color),
                     position : position(light.position),
-                    rotation : position(light.roration),
+                    rotation : position(light.rotation),
                     castShadow : light.castShadow,
                     bias : light.shadow.bias,
                     shadowRound : light.shadow.camera.right,
@@ -179,14 +189,18 @@ class SceneManager extends EventEmitter{
                     skyColor : color(light.color),
                     groundColor : color(light.groundColor),
                     position : position(light.position),
-                    rotation : position(light.roration),                    
+                    rotation : position(light.rotation),                    
                     intensity : light.intensity
                 };
+            }else if(light.isAmbientLight){
+                lgt = {type : 'ambient',
+                    color : color(light.color)
+                }
             }else continue;
             json.light.push(lgt);
         }
         for(let item of this.items){
-            jsom.item.push(item.toJson());
+            json.item.push(item.toJson());
         }
         function color(c){
             return {
@@ -202,8 +216,34 @@ class SceneManager extends EventEmitter{
                 z : p.z
             }
         }
+        return json;
     }
     toString(){
+    }
+    /**
+     * 加入一个物品
+     */
+    addItem(t){
+        let item = new Item(this,t);
+        this.items.push(item);
+        return item;
+    }
+    removeItem(item){
+        for(let i=0;i<this.items.length;i++){
+            if(this.items[i] == item){
+                this.items.splice(i);
+                this.game.scene.remove(item);
+                break;
+            }
+        } 
+    }
+    /**
+     * 更新场景
+     */
+    update(dt){
+        for(let item of this.items){
+            item.update(dt);
+        }
     }
 };
 

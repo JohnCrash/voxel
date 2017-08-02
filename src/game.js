@@ -7,6 +7,12 @@ var Observer = require("./observer");
 
 module.exports = Game;
 
+function Color(c){
+    if(c===+c)
+        return new THREE.Color(c);
+    else
+        return new THREE.Color(c.r,c.g,c.b);
+}
 /**
  * 构造函数
  * @param {*} opts 
@@ -129,19 +135,21 @@ Game.prototype.updateOptions=function(opts){
  */
 Game.prototype.addSpotLight=function(t){
     t = t || {};
-    var light = new THREE.SpotLight( t.color||0x909090, 
+    var light = new THREE.SpotLight( Color(t.color||0x909090), 
         t.intensity||1, t.distance||200, 
         t.angle||Math.PI/4, t.penumbra||0.01, t.decay||1 );
     light.distance = t.distance || 200;
-    if(t.enableShadow){
-        light.castShadow = t.castShadow;
-        light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 35, 1, 120, 10000 ) );
-        light.shadow.bias = t.bias||0;
-        light.shadow.mapSize.width = t.shadowMapWidth || 1024;
-        light.shadow.mapSize.height = t.shadowMapHeight || 1024;
-        light.shadow.camera.near = 10;
-        light.shadow.camera.far = 200;
-    }
+
+    light.castShadow = t.castShadow;
+    light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 35, 1, 120, 10000 ) );
+    light.shadow.bias = t.bias||0;
+    light.shadow.mapSize.width = t.shadowMapWidth || 1024;
+    light.shadow.mapSize.height = t.shadowMapHeight || 1024;
+    light.shadow.camera.near = 10;
+    light.shadow.camera.far = 200;
+
+    if(t.position)light.position.set(t.position.x,t.position.y,t.position.z);
+    if(t.rotation)light.rotation.set(t.rotation.x,t.rotation.y,t.rotation.z);
     this.scene.add(light);
     return light;
 }
@@ -151,7 +159,7 @@ Game.prototype.addSpotLight=function(t){
  */
 Game.prototype.addAmbientLight=function(t){
     t = t || {};
-    var light = new THREE.AmbientLight(t.color||0x606060);
+    var light = new THREE.AmbientLight(Color(t.color||0x606060));
     this.scene.add(light);
     return light;
 }
@@ -164,8 +172,11 @@ Game.prototype.addAmbientLight=function(t){
  */
 Game.prototype.addHemiSphereLight=function(t){
     t = t || {};
-    var light = new THREE.HemisphereLight( t.skyColor||0xffffff, t.groundColor||0xffffff, t.intensity||0.6 );
-    this.scene.add(light);
+    var light = new THREE.HemisphereLight( Color(t.skyColor||0xffffff), Color(t.groundColor||0xffffff), t.intensity||0.6 );
+
+    if(t.position)light.position.set(t.position.x,t.position.y,t.position.z);
+    if(t.rotation)light.rotation.set(t.rotation.x,t.rotation.y,t.rotation.z);     
+    this.scene.add(light);   
     return light;
 }
 
@@ -174,21 +185,23 @@ Game.prototype.addHemiSphereLight=function(t){
  */
 Game.prototype.addDirectionaLight=function(t){
     t = t || {};
-    var light = new THREE.DirectionalLight( t.color||0xffffff,t.intensity||1 );
+    var light = new THREE.DirectionalLight( Color(t.color||0xffffff),t.intensity||1 );
     light.position.set( -1, 1.75, 1 );
     light.position.multiplyScalar( 50 );
-    if(t.enableShadow){
-        light.castShadow = true;
-        light.shadow.mapSize.width = t.shadowMapWidth || 1024;
-        light.shadow.mapSize.height = t.shadowMapHeight || 1024;              
-        var d = t.shadowRound||50;
-        light.shadow.camera.left = -d;
-        light.shadow.camera.right = d;
-        light.shadow.camera.top = d;
-        light.shadow.camera.bottom = -d;
-        light.shadow.camera.far = 3500;
-        light.shadow.bias = t.bias||0;
-    }
+
+    light.castShadow = true;
+    light.shadow.mapSize.width = t.shadowMapWidth || 1024;
+    light.shadow.mapSize.height = t.shadowMapHeight || 1024;              
+    var d = t.shadowRound||50;
+    light.shadow.camera.left = -d;
+    light.shadow.camera.right = d;
+    light.shadow.camera.top = d;
+    light.shadow.camera.bottom = -d;
+    light.shadow.camera.far = 3500;
+    light.shadow.bias = t.bias||0;
+
+    if(t.position)light.position.set(t.position.x,t.position.y,t.position.z);
+    if(t.rotation)light.rotation.set(t.rotation.x,t.rotation.y,t.rotation.z);
     this.scene.add(light);
     return light;
 }

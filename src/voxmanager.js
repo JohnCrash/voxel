@@ -2,7 +2,7 @@
  * 场景中要出现的物体
  */
 import {fetchBin} from './fetch';
-var voxparser = require('./vox');
+var voxparser = require('./vox').Parser;
 
 class VoxManager_{
     constructor(){
@@ -21,7 +21,7 @@ class VoxManager_{
             }
         }
         if(b){
-            cb(); //全部的文件都存在
+            cb(false); //全部的文件都存在
             return;
         }
         let count = 0;

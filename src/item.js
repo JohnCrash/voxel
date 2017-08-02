@@ -24,18 +24,93 @@
 import {VoxManager} from './voxmanager';
 import log from './log';
 
+class Position{
+    constructor(p,item){
+        this.p = p;
+        this.item = item;
+    }
+    get x(){
+        return this.p.x;
+    }
+    set x(v){
+        this.p.x = v;
+        if(this.item.curMesh)this.item.curMesh.position.x = v;
+    }
+    get y(){
+        return this.p.y;
+    }
+    set y(v){
+        this.p.y = v;
+        if(this.item.curMesh)this.item.curMesh.position.y = v;
+    }
+    get z(){
+        return this.p.z;
+    }
+    set z(v){
+        this.p.z = v;
+        if(this.item.curMesh)this.item.curMesh.position.z = v;
+    }  
+    set(x,y,z){
+        this.p.x = x;
+        this.p.y = y;
+        this.p.z = z;
+        if(this.item.curMesh)this.item.curMesh.position.set(x,y,z);
+    }
+    get(){
+        return this.p;
+    }
+};
+
+class Rotation{
+    constructor(p,item){
+        this.p = p;
+        this.item = item;
+    }
+    get x(){
+        return this.p.x;
+    }
+    set x(v){
+        this.p.x = v;
+        if(this.item.curMesh)this.item.curMesh.rotation.x = v;
+    }
+    get y(){
+        return this.p.y;
+    }
+    set y(v){
+        this.p.y = v;
+        if(this.item.curMesh)this.item.curMesh.rotation.y = v;
+    }
+    get z(){
+        return this.p.z;
+    }
+    set z(v){
+        this.p.z = v;
+        if(this.item.curMesh)this.item.curMesh.rotation.z = v;
+    }   
+    set(x,y,z){
+        this.p.x = x;
+        this.p.y = y;
+        this.p.z = z;
+        if(this.item.curMesh)this.item.curMesh.rotation.set(x,y,z);
+    } 
+    get(){
+        return this.p;
+    }            
+};
+
 class Item{
-    constructor(scene,json){
-        this.scene = scene;
+    constructor(sceneManager,json){
+        this.sceneManager = sceneManager;
+        this.scene = sceneManager.game.scene;
         this.fromJson(json);
     }
     fromJson(j){
         let json = j || {};
-        this.position = json.position?new THREE.Vector3(json.position.x,json.position.y,json.position.z):new THREE.Vector3();
-        this.rotation = json.rotation?new THREE.Euler(json.rotation.x,json.rotation.y,json.rotation.z):new THREE.Euler();
+        this.position = new Position(json.position?new THREE.Vector3(json.position.x,json.position.y,json.position.z):new THREE.Vector3(),this);
+        this.rotation = new Rotation(json.rotation?new THREE.Euler(json.rotation.x,json.rotation.y,json.rotation.z):new THREE.Euler(),this);
         this.name = json.name;
-        this.visible = json.visible;
-        this.castShadow = json.castShadow;
+        this._visible = json.visible;
+        this.castShadow = json._castShadow;
         this.receiveShadow = json.receiveShadow;
         this.file = json.file;
         this.loadedDoAction = 'idle';
@@ -49,12 +124,13 @@ class Item{
                 loop : true,
             }];
         }
-        VoxManager.loadVox(this.file,(iserr)=>{
+        VoxManager.loadVox([this.file],(iserr)=>{
             if(!iserr){
                 this.vox = VoxManager.getVox(this.file);
                 this.mesh = new Array(this.vox.getModelNum());
                 for(let i=0;i<this.mesh.length;i++){
                     this.mesh[i] = this.vox.createModelMesh(i);
+                    this.mesh[i].castShadow = json._castShadow;
                 }
                 this.doAction(this.loadedDoAction);
             }
@@ -65,8 +141,8 @@ class Item{
         json.position = {x:this.position.x,y:this.position.y,z:this.position.z};
         json.rotation = {x:this.rotation.x,y:this.rotation.y,z:this.rotation.z};
         json.name = this.name;
-        json.visible = this.visible;
-        json.castShadow = this.castShadow;
+        json.visible = this._visible;
+        json.castShadow = this._castShadow;
         json.receiveShadow = this.receiveShadow;
         json.file = this.file;
         json.actions = this.actions;
@@ -94,7 +170,7 @@ class Item{
      * curIndex     当前显示的mesh
      */
     update(dt){
-        if(this.visible && this.curAction){
+        if(this._visible && this.curAction){
             let a = this.curAction
             if(a.acc > a.delay){
                 a.acc = 0;
@@ -106,11 +182,11 @@ class Item{
                 let i = a.sequece[this.curIndex];
                 if(i < this.mesh.length && i >= 0){
                     if(this.curMesh !== this.mesh[i]){
-                        if(this.curMesh)this.scene.game.remove(this.curMesh); //remove old
-                        this.curMesh = a.sequece[this.curIndex];
-                        this.curMesh.position = this.position;
-                        this.curMesh.roration = this.roration;
-                        this.scene.game.add(this.curMesh);
+                        if(this.curMesh)this.scene.remove(this.curMesh); //remove old
+                        this.curMesh = this.mesh[i];
+                        this.scene.add(this.curMesh);
+                        this.curMesh.position.set(this.position.x,this.position.y,this.position.z);
+                        this.curMesh.rotation.set(this.rotation.x,this.rotation.y,this.rotation.z);                        
                     }
                 }else{
                     log(`Item '${this.name}' action '${a.name}', action sequece out of range`);
@@ -120,17 +196,34 @@ class Item{
             }
         }
     }
-    isVisible(){
-        return this.visible;
+    get visible(){
+        return this._visible;
     }
-    setVisible(b){
+    set visible(b){
         if(!b){
-            if(this.curMesh)this.scene.game.remove(this.curMesh);
+            if(this.curMesh){
+                this.scene.remove(this.curMesh);
+                this.curMesh = null;
+            }
         }
-        this.visible = b;
+        this._visible = b;
+    }
+    get castShadow(){
+        return this._castShadow;
+    }
+    set castShadow(value){
+        if(this._castShadow!=value){
+            this._castShadow = value;
+            for(let i=0;i<this.mesh.length;i++){
+                this.mesh[i].castShadow = value;
+            }
+        }
     }
     destroy(){
-        if(this.curMesh)this.scene.game.remove(this.curMesh);
+        if(this.curMesh){
+            this.scene.remove(this.curMesh);
+            this.curMesh = null;
+        }
     }
 };
 
