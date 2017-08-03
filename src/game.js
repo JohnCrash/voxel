@@ -140,6 +140,8 @@ Game.prototype.addSpotLight=function(t){
         t.angle||Math.PI/4, t.penumbra||0.01, t.decay||1 );
     light.distance = t.distance || 200;
 
+    light.name = t.name || '';
+    
     light.castShadow = t.castShadow;
     light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 35, 1, 120, 10000 ) );
     light.shadow.bias = t.bias||0;
@@ -160,6 +162,9 @@ Game.prototype.addSpotLight=function(t){
 Game.prototype.addAmbientLight=function(t){
     t = t || {};
     var light = new THREE.AmbientLight(Color(t.color||0x606060));
+    
+    light.name = t.name || '';
+
     this.scene.add(light);
     return light;
 }
@@ -173,6 +178,8 @@ Game.prototype.addAmbientLight=function(t){
 Game.prototype.addHemiSphereLight=function(t){
     t = t || {};
     var light = new THREE.HemisphereLight( Color(t.skyColor||0xffffff), Color(t.groundColor||0xffffff), t.intensity||0.6 );
+
+    light.name = t.name || '';
 
     if(t.position)light.position.set(t.position.x,t.position.y,t.position.z);
     if(t.rotation)light.rotation.set(t.rotation.x,t.rotation.y,t.rotation.z);     
@@ -188,6 +195,8 @@ Game.prototype.addDirectionaLight=function(t){
     var light = new THREE.DirectionalLight( Color(t.color||0xffffff),t.intensity||1 );
     light.position.set( -1, 1.75, 1 );
     light.position.multiplyScalar( 50 );
+
+    light.name = t.name || '';
 
     light.castShadow = true;
     light.shadow.mapSize.width = t.shadowMapWidth || 1024;

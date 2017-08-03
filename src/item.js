@@ -110,7 +110,7 @@ class Item{
         this.rotation = new Rotation(json.rotation?new THREE.Euler(json.rotation.x,json.rotation.y,json.rotation.z):new THREE.Euler(),this);
         this.name = json.name;
         this._visible = json.visible;
-        this.castShadow = json._castShadow;
+        this._castShadow = json.castShadow;
         this.receiveShadow = json.receiveShadow;
         this.file = json.file;
         this.loadedDoAction = 'idle';
@@ -130,7 +130,7 @@ class Item{
                 this.mesh = new Array(this.vox.getModelNum());
                 for(let i=0;i<this.mesh.length;i++){
                     this.mesh[i] = this.vox.createModelMesh(i);
-                    this.mesh[i].castShadow = json._castShadow;
+                    this.mesh[i].castShadow = json.castShadow;
                 }
                 this.doAction(this.loadedDoAction);
             }
@@ -214,8 +214,10 @@ class Item{
     set castShadow(value){
         if(this._castShadow!=value){
             this._castShadow = value;
-            for(let i=0;i<this.mesh.length;i++){
-                this.mesh[i].castShadow = value;
+            if(this.mesh){
+                for(let i=0;i<this.mesh.length;i++){
+                    this.mesh[i].castShadow = value;
+                }
             }
         }
     }

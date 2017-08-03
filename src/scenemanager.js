@@ -42,8 +42,8 @@ class SceneManager extends EventEmitter{
     loadFromJson(json){
         this.description = json.description;
         this.script = json.script;
-        this.loadCamera(jsom.camera);
-        this.loadLight(jsom.light);
+        this.loadCamera(json.camera);
+        this.loadLight(json.light);
         this.loadItem(json.item);
     }
 
@@ -132,7 +132,7 @@ class SceneManager extends EventEmitter{
     removeLight(light){
         for(let i=0;i<this.lights.length;i++){
             if(this.lights[i] == light){
-                this.lights.splice(i);
+                this.lights.splice(i,1);
                 this.game.removeLight(light);
                 break;
             }
@@ -160,6 +160,7 @@ class SceneManager extends EventEmitter{
             let lgt;
             if(light.isSpotLight){
                 lgt = {type : 'spot',
+                    name : light.name,
                     color : color(light.color),
                     position : position(light.position),
                     rotation : position(light.rotation),
@@ -175,6 +176,7 @@ class SceneManager extends EventEmitter{
                 };
             }else if(light.isDirectionalLight){
                 lgt = {type : 'direct',
+                    name : light.name,
                     color : color(light.color),
                     position : position(light.position),
                     rotation : position(light.rotation),
@@ -186,6 +188,7 @@ class SceneManager extends EventEmitter{
                 };
             }else if(light.isHemisphereLight){
                 lgt = {type : 'hemi',
+                    name : light.name,
                     skyColor : color(light.color),
                     groundColor : color(light.groundColor),
                     position : position(light.position),
@@ -194,6 +197,7 @@ class SceneManager extends EventEmitter{
                 };
             }else if(light.isAmbientLight){
                 lgt = {type : 'ambient',
+                    name : light.name,
                     color : color(light.color)
                 }
             }else continue;
@@ -230,12 +234,12 @@ class SceneManager extends EventEmitter{
     }
     removeItem(item){
         for(let i=0;i<this.items.length;i++){
-            if(this.items[i] == item){
-                this.items.splice(i);
-                this.game.scene.remove(item);
+            if(this.items[i] === item){
+                this.items.splice(i,1);
+                item.destroy();
                 break;
             }
-        } 
+        }
     }
     /**
      * 更新场景
