@@ -111,7 +111,7 @@ class Item{
         this.name = json.name;
         this._visible = json.visible;
         this._castShadow = json.castShadow;
-        this.receiveShadow = json.receiveShadow;
+        this._receiveShadow = json.receiveShadow;
         this.file = json.file;
         this.loadedDoAction = 'idle';
         if(json.actions){
@@ -131,6 +131,7 @@ class Item{
                 for(let i=0;i<this.mesh.length;i++){
                     this.mesh[i] = this.vox.createModelMesh(i);
                     this.mesh[i].castShadow = json.castShadow;
+                    this.mesh[i].receiveShadow = json.receiveShadow;
                 }
                 this.doAction(this.loadedDoAction);
             }
@@ -143,7 +144,7 @@ class Item{
         json.name = this.name;
         json.visible = this._visible;
         json.castShadow = this._castShadow;
-        json.receiveShadow = this.receiveShadow;
+        json.receiveShadow = this._receiveShadow;
         json.file = this.file;
         json.actions = this.actions;
         return json;
@@ -217,6 +218,19 @@ class Item{
             if(this.mesh){
                 for(let i=0;i<this.mesh.length;i++){
                     this.mesh[i].castShadow = value;
+                }
+            }
+        }
+    }
+    get receiveShadow(){
+        return this._receiveShadow;
+    }
+    set receiveShadow(value){
+        if(this._receiveShadow!=value){
+            this._receiveShadow = value;
+            if(this.mesh){
+                for(let i=0;i<this.mesh.length;i++){
+                    this.mesh[i].receiveShadow = value;
                 }
             }
         }

@@ -5,6 +5,7 @@ var Game = require("./game");
 import {fetchJson,postJson} from './fetch';
 import SceneManager from './scenemanager';
 import log from './log';
+import {yesno} from './dialog';
 
 let game = new Game({enableStats:false,
     enableAA:false,
@@ -123,6 +124,18 @@ function checkFolderName(name){
     return name;
 }
 
+//确定name是否在list中，并弹出对话来确定执行cb
+function resolve(name,list,cb){
+    if(list.filter(item=>item===`${name}.scene`).length){
+        cb();
+//        yesno('提示',`已经存在一个‘${name}’文件，是否要覆盖它?`,(b)=>{
+//            if(b==='ok')cb();
+//        });
+    }else{
+        cb();
+    }
+}
+
 class LightUI{
     constructor(light){
         this.light = light;
@@ -142,6 +155,7 @@ class LightUI{
             addPosition(ui,light.position);
             ui.add(this,'投射阴影');
             ui.add(this,'灯光强度',0,2).step(0.1);
+            ui.add(this,'投射范围',50,500);
             this.helper = new THREE.DirectionalLightHelper(light,5);
             addHelper(this.helper);
         }else if(light.isAmbientLight){
@@ -180,10 +194,10 @@ class LightUI{
         this.helper.visible = value;
     }
     get '投射阴影'(){
-        return this.light.castShadow?true:false;
+        return !!this.light.castShadow;
     }
     set '投射阴影'(value){
-        this.light.castShadow = value?true:false;
+        this.light.castShadow = !!value;
     }    
     get '灯光强度'(){
         return this.light.intensity;
@@ -191,6 +205,16 @@ class LightUI{
     set '灯光强度'(value){
         this.light.intensity = value;
     }
+    get '投射范围'(){
+        return this.light.shadow.camera.right;
+    }
+    set '投射范围'(d){
+        this.light.shadow.camera.left = -d;
+        this.light.shadow.camera.right = d;
+        this.light.shadow.camera.top = d;
+        this.light.shadow.camera.bottom = -d;
+        this.light.shadow.camera.updateProjectionMatrix();
+    }    
 };
 
 class ItemUI{
@@ -203,14 +227,36 @@ class ItemUI{
         addPosition(ui,item.position);
         ui.add(this,'面向',0,2*Math.PI).step(0.1);
         ui.add(this,'投射阴影');
+        ui.add(this,'接受阴影');
         ui.add(this,'可见');
         ui.add(this,'动作',item.actions.map(item=>item.name));
         ui.add(this,'删除此物品');
     }
     '删除此物品'(){
-        sceneManager.removeItem(this.item);
-        removeFolder(this.ui,this.item.name);
-        this.item = null;
+        if(this.item){
+            sceneManager.removeItem(this.item);
+            removeFolder(this.ui,this.item.name);
+            this.item = null;
+        }
+    }
+    get '接受阴影'(){
+        return this.item.receiveShadow;
+    }
+    set '接受阴影'(value){
+        if(this.item.receiveShadow!==value){
+            this.item.receiveShadow = !!value;
+            //fixbug:在调整物体是否接受阴影时无效果
+            //反转一下灯的castShadow可以解决
+            function switchCastShadow(){
+                for(let light of game.scene.children){
+                    if(light.isDirectionalLight||light.isSpotLight){
+                        light.castShadow = !light.castShadow;
+                    }
+                }
+            }
+            switchCastShadow();
+            setTimeout(()=>{switchCastShadow();},20);
+        }
     }
     get '名称:'(){
         return this.item.name;
@@ -223,13 +269,13 @@ class ItemUI{
         return this.item.visible;
     }
     set '可见'(value){
-        this.item.visible = value?true:false;
+        this.item.visible = !!value;
     }
     get '投射阴影'(){
-        return this.item.castShadow?true:false;
+        return !!this.item.castShadow;
     }
     set '投射阴影'(value){
-        this.item.castShadow = value?true:false;
+        this.item.castShadow = !!value;
     }
     get '面向'(){
         return this.item.rotation.z;
@@ -266,6 +312,7 @@ class Edit{
         game.scene.add(this.axisHelper);
         
         let lightTool = gui.addFolder('灯光工具');
+        lightTool.add(this,'性能监测');
         lightTool.add(this,'坐标轴');
         lightTool.add(this,'加入方向灯');
         lightTool.add(this,'加入聚光灯');
@@ -276,6 +323,7 @@ class Edit{
 
         let sceneTool = gui.addFolder('场景工具');
         this.sceneTool = sceneTool;
+        sceneTool.add(this,'清空场景');
         sceneTool.add(this,'保存场景');
         sceneTool.add(this,'场景名称:');
         sceneTool.add(this,'刷新列表');
@@ -283,23 +331,32 @@ class Edit{
             let files = json.files.filter(item=>item.match(/.*\.vox$/));
             this.voxButton = sceneTool.add(this,'加入模型');
             this.voxListUI = sceneTool.add(this,'模型文件:',files);
+            this.voxList = files;
         });
         fetchJson('/list?dir=scene/item',(json)=>{
             let files = json.files.filter(item=>item.match(/.*\.item$/));
             this.itemButton = sceneTool.add(this,'加入物品');
             this.itemListUI = sceneTool.add(this,'物品:',files);
+            this.itemList = files;
         });
         fetchJson('/list?dir=scene',(json)=>{
             let files = json.files.filter(item=>item.match(/.*\.scene$/));
             this.sceneButton = sceneTool.add(this,'加载场景');
             this.sceneListUI = sceneTool.add(this,'场景:',files);
+            this.sceneList = files;
         });
         fetchJson('/list?dir=scene/env',(json)=>{
             let files = json.files.filter(item=>item.match(/.*\.env$/));
             this.envButton = sceneTool.add(this,'加载环境');
             this.envListUI = sceneTool.add(this,'环境:',files);
+            this.envList = files;
         });        
-    } 
+    }
+    '清空场景'(){
+        sceneManager.clearLight();
+        sceneManager.clearItem();
+        this.rebuildGUI('scene');
+    }
     '加入方向灯'(){
         let light = sceneManager.addDirectionaLight();
         light.position.set(0,0,50);
@@ -324,14 +381,15 @@ class Edit{
                 camera : json.camera,
                 light : json.light
             };
-            postJson(`/save?file=scene/env/${name}.env`,exp,(json)=>{
-                if(json.result==='ok'){//成功
-                    this['刷新列表']('env');
-                    window.alert(`成功将该环境保存到文件'${name}.env'中.`);
-                }else{//失败
-                    window.alert(json.result);
-                }
-            });
+            resolve(name,this.envList,()=>
+                postJson(`/save?file=scene/env/${name}.env`,exp,(json)=>{
+                    if(json.result==='ok'){//成功
+                        this['刷新列表']('env');
+                        window.alert(`成功将该环境保存到文件'${name}.env'中.`);
+                    }else{//失败
+                        window.alert(json.result);
+                    }
+            }));
         }else{
             window.alert(`请填写环境名.`);
         }
@@ -340,14 +398,15 @@ class Edit{
         let name = this['场景名称:'];
         let json = sceneManager.toJson();
         if(name){
-            postJson(`/save?file=scene/${name}.scene`,json,(json)=>{
-                if(json.result==='ok'){
-                    this['刷新列表']('scene');
-                    window.alert(`成功将该场景保存到文件'${name}.scene'中.`);
-                }else{//失败
-                    window.alert(json.result);
-                }
-            });
+            resolve(name,this.sceneList,()=>
+                postJson(`/save?file=scene/${name}.scene`,json,(json)=>{
+                    if(json.result==='ok'){
+                        this['刷新列表']('scene');
+                        window.alert(`成功将该场景保存到文件'${name}.scene'中.`);
+                    }else{//失败
+                        window.alert(json.result);
+                    }
+            }));
         }
     }
     '加载场景'(){
@@ -356,8 +415,8 @@ class Edit{
             fetchJson(`/load?file=scene/${name}`,(json)=>{
                 if(json.result==='ok'){
                     sceneManager.loadFromJson(json.content);
-                    this.rebuildGUI();
-                    this['场景名称:'] = name.replace(/(.*)\.scene$/,$1=>$1);
+                    this.rebuildGUI('scene');
+                    this['场景名称:'] = name.replace(/(.*)\.scene$/,($1,$2)=>$2);
                 }else if(json.result){
                     window.alert(json.result);
                 }
@@ -370,7 +429,7 @@ class Edit{
             fetchJson(`/load?file=scene/env/${name}`,(json)=>{
                 if(json.result==='ok'){
                     sceneManager.loadEnv(json.content);
-                    this.rebuildGUI();
+                    this.rebuildGUI('env');
                     this['环境名:'] = name.replace(/(.*)\.env$/,$1=>$1);
                 }else if(json.result){
                     window.alert(json.result);
@@ -386,6 +445,7 @@ class Edit{
                 let files = json.files.filter(item=>item.match(/.*\.env$/));
                 this.envButton = this.sceneTool.add(this,'加载环境');
                 this.envListUI = this.sceneTool.add(this,'环境:',files);
+                this.EnvList = files;
             }); 
         }
         if(!t || t==='scene'){
@@ -395,6 +455,7 @@ class Edit{
                 let files = json.files.filter(item=>item.match(/.*\.scene$/));
                 this.sceneButton = this.sceneTool.add(this,'加载场景');
                 this.sceneListUI = this.sceneTool.add(this,'场景:',files);
+                this.SceneList = files;
             });              
         }
         if(!t || t==='item'){
@@ -404,6 +465,7 @@ class Edit{
                 let files = json.files.filter(item=>item.match(/.*\.item$/));
                 this.itemButton = this.sceneTool.add(this,'加入物品');
                 this.itemListUI = this.sceneTool.add(this,'物品:',files);
+                this.ItemList = files;
             });                                         
         }
         if(!t || t==='vox'){
@@ -413,6 +475,7 @@ class Edit{
                 let files = json.files.filter(item=>item.match(/.*\.vox$/));
                 this.voxButton = this.sceneTool.add(this,'加入模型');
                 this.voxListUI = this.sceneTool.add(this,'模型文件:',files);
+                this.VoxList = files;
             });            
         }         
     }
@@ -430,27 +493,49 @@ class Edit{
     '加入物品'(){
         let name = this.selItemFile;
         if(name){
-
+            fetchJson(`/load?file=scene/item/${name}`,(json)=>{
+                if(json.result==='ok'){
+                    this.itemUI.push(new ItemUI(sceneManager.addItem(json.content)));
+                }else if(json.result){
+                    window.alert(json.result);
+                }
+            });
         }
     }
     addLightUI(light){
         this.lightUI.push(new LightUI(light));
     }
-    rebuildGUI(){ //从场景重建gui
+    rebuildGUI(t){ //从场景重建gui
         //删除现有的gui folder
-        for(let light of this.lightUI)
-            light['删除此灯']();
-        for(let item of this.itemUI)
-            item['删除此物品']();
-        this.lightUI = [];
-        this.itemUI = [];
-        for(let light of sceneManager.lights){
-            this.addLightUI(light);
+        if(t==='scene'||t==='env'){
+            for(let light of this.lightUI)
+                light['删除此灯']();
+            this.lightUI = [];
+            for(let light of sceneManager.lights){
+                this.addLightUI(light);
+            }
         }
-        for(let item of sceneManager.items){
-            this.itemUI.push(new ItemUI(item));
-        }
+        if(t==='scene'){
+            for(let item of this.itemUI)
+                item['删除此物品']();
+            this.itemUI = [];
+            for(let item of sceneManager.items){
+                this.itemUI.push(new ItemUI(item));
+            }            
+        }        
     }
+    get '性能监测'(){
+        if(game.stats && game.stats.dom){
+            return !(game.stats.dom.style.display==='none');
+        }else return false;
+    }
+    set '性能监测'(value){
+        if(!(game.stats && game.stats.dom)){
+            game.stats = new Stats();
+            document.body.appendChild( game.stats.dom );
+        }
+        game.stats.dom.style.display = value?'inline':'none';
+    }    
     get '模型文件:'(){
         return this.selVoxFile;
     }
@@ -487,7 +572,7 @@ let edit = new Edit();
 
 game.on('init',function(){
     //创建地面
-    var geometry = new THREE.PlaneBufferGeometry( 300, 300, 32 );
+    var geometry = new THREE.PlaneBufferGeometry( 30000, 30000, 32 );
     var planeMaterial = new THREE.MeshPhongMaterial( { color: 0xffdd99 } );
     var plane = new THREE.Mesh( geometry, planeMaterial );
     plane.receiveShadow = true;

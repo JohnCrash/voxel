@@ -171,9 +171,13 @@ Object.assign(Vox.prototype,{
         var volume = this.getModelVolume(i);
         var mesh = meshers.greedy(volume,dims);
         var geo = new THREE.Geometry();
+        var offx = dims[0]/2;
+        var offy = dims[1]/2;
         for(let i = 0;i<mesh.vertices.length;i++){
             var v = mesh.vertices[i];
-            geo.vertices.push(new THREE.Vector3(v[0],v[1],v[2]));
+            //将中心轴放置在物体的正中间
+            
+            geo.vertices.push(new THREE.Vector3(v[0]-offx,v[1]-offy,v[2]));
         }
         for(let i = 0;i<mesh.faces.length;i++){
             var f = mesh.faces[i];

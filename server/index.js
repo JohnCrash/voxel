@@ -65,19 +65,16 @@ router.get('/list',function(req,res){
  */
 router.post('/save',function(req,res){
   let filename = upload+req.query['file'];
-  if(!fs.existsSync(filename)){
-    let json = req.body;
-    let jsonStr = JSON.stringify(json);
-    fs.writeFile(filename,jsonStr,(err)=>{
-      if(err){
-        res.json({result:err.toString()});
-      }else{
-        res.json({result:'ok'});
-      }
-    });
-  }else{
-    res.json({result:`'${filename}'文件已经存在.`});
-  }
+
+  let json = req.body;
+  let jsonStr = JSON.stringify(json,null,'\t');
+  fs.writeFile(filename,jsonStr,(err)=>{
+    if(err){
+      res.json({result:err.toString()});
+    }else{
+      res.json({result:'ok'});
+    }
+  });
 });
 
 /**
