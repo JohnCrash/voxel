@@ -39,12 +39,12 @@ class SceneManager extends EventEmitter{
      * script
      * 当加载完全结束是调用cb(true),如果失败调用cb(false)
      */
-    loadFromJson(json){
+    loadFromJson(json,cb){
         this.description = json.description;
         this.script = json.script;
         this.loadCamera(json.camera);
         this.loadLight(json.light);
-        this.loadItem(json.item);
+        this.loadItem(json.item,cb);
     }
 
     loadCamera(camera){
@@ -78,10 +78,25 @@ class SceneManager extends EventEmitter{
         return true;
     }
 
-    loadItem(items){
+    loadItem(items,cb){
         this.clearItem();
         for(let i=0;i<items.length;i++){
             this.items.push(new Item(this,items[i]));
+        }
+        if(cb){
+            let id = setInterval(()=>{
+                for(let item of this.items){
+                    if(item.state==='loading')
+                        return;
+                    else if(item.state==='error'){
+                        clearInterval(id);
+                        cb(true);
+                        return;
+                    }
+                }
+                clearInterval(id);
+                cb(false);
+            },20);
         }
         return true;
     }

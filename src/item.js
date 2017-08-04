@@ -22,6 +22,7 @@
  *  ]
  */
 import {VoxManager} from './voxmanager';
+import {ItemTemplate} from './itemtemplate'
 import log from './log';
 
 class Position{
@@ -98,6 +99,9 @@ class Rotation{
     }            
 };
 
+class ItemTemplateManager{
+};
+
 class Item{
     constructor(sceneManager,json){
         this.sceneManager = sceneManager;
@@ -108,34 +112,60 @@ class Item{
         let json = j || {};
         this.position = new Position(json.position?new THREE.Vector3(json.position.x,json.position.y,json.position.z):new THREE.Vector3(),this);
         this.rotation = new Rotation(json.rotation?new THREE.Euler(json.rotation.x,json.rotation.y,json.rotation.z):new THREE.Euler(),this);
-        this.name = json.name;
+        this.name = json.name || '';
         this._visible = json.visible;
         this._castShadow = json.castShadow;
         this._receiveShadow = json.receiveShadow;
-        this.file = json.file;
         this.loadedDoAction = 'idle';
-        if(json.actions){
-            this.actions = json.actions;
-        }else{
-            this.actions = [{
-                name : 'idle',
-                sequece : json.loop || [0],
-                delay : json.delay || 0,
-                loop : true,
-            }];
-        }
-        VoxManager.loadVox([this.file],(iserr)=>{
-            if(!iserr){
-                this.vox = VoxManager.getVox(this.file);
-                this.mesh = new Array(this.vox.getModelNum());
-                for(let i=0;i<this.mesh.length;i++){
-                    this.mesh[i] = this.vox.createModelMesh(i);
-                    this.mesh[i].castShadow = json.castShadow;
-                    this.mesh[i].receiveShadow = json.receiveShadow;
+        this.state = 'loading';
+        let load = ()=>{
+            VoxManager.loadVox([this.file],(iserr)=>{
+                if(!iserr){
+                    this.vox = VoxManager.getVox(this.file);
+                    this.mesh = new Array(this.vox.getModelNum());
+                    for(let i=0;i<this.mesh.length;i++){
+                        this.mesh[i] = this.vox.createModelMesh(i);
+                        this.mesh[i].castShadow = this._castShadow;
+                        this.mesh[i].receiveShadow = this._receiveShadow;
+                    }
+                    this.doAction(this.loadedDoAction);
+                    this.state = 'ready';
+                }else{
+                    this.state = 'error';
                 }
-                this.doAction(this.loadedDoAction);
+            });
+        };
+        if(json.template){//物品是通过模板创建出来的
+            this.template = json.template;
+            ItemTemplate.load(json.template,(iserr,template)=>{
+                if(!iserr){
+                    if(this.name===''){
+                        this.name = template.name || '';
+                    }
+                    this._visible = template.visible || false;
+                    this._castShadow = template.castShadow || false;
+                    this._receiveShadow = template.receiveShadow || false;
+                    this.file = template.file;
+                    this.actions = template.actions;
+                    load();
+                }else{
+                    this.state = 'error';
+                }
+            });
+        }else{
+            this.file = json.file;
+            if(json.actions){
+                this.actions = json.actions;
+            }else{
+                this.actions = [{
+                    name : 'idle',
+                    sequece : json.loop || [0],
+                    delay : json.delay || 0,
+                    loop : true,
+                }];
             }
-        });
+            load();
+        }
     }
     toJson(){
         let json = {};
@@ -145,8 +175,12 @@ class Item{
         json.visible = this._visible;
         json.castShadow = this._castShadow;
         json.receiveShadow = this._receiveShadow;
-        json.file = this.file;
-        json.actions = this.actions;
+        if(this.template){
+            json.template = this.template;
+        }else{
+            json.file = this.file;
+            json.actions = this.actions;
+        }
         return json;
     }
     doAction(name){

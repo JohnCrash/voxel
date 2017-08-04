@@ -414,9 +414,14 @@ class Edit{
         if(name){
             fetchJson(`/load?file=scene/${name}`,(json)=>{
                 if(json.result==='ok'){
-                    sceneManager.loadFromJson(json.content);
-                    this.rebuildGUI('scene');
-                    this['场景名称:'] = name.replace(/(.*)\.scene$/,($1,$2)=>$2);
+                    sceneManager.loadFromJson(json.content,(iserr)=>{
+                        if(!iserr){
+                            this.rebuildGUI('scene');
+                            this['场景名称:'] = name.replace(/(.*)\.scene$/,($1,$2)=>$2);
+                        }else{
+                            window.alert(`'scene/${name}'加载错误.`);
+                        }
+                    });
                 }else if(json.result){
                     window.alert(json.result);
                 }
@@ -493,13 +498,18 @@ class Edit{
     '加入物品'(){
         let name = this.selItemFile;
         if(name){
-            fetchJson(`/load?file=scene/item/${name}`,(json)=>{
-                if(json.result==='ok'){
-                    this.itemUI.push(new ItemUI(sceneManager.addItem(json.content)));
-                }else if(json.result){
-                    window.alert(json.result);
+            let item = sceneManager.addItem({
+                            template : `scene/item/${name}`,
+                            visible : true,
+                            castShadow : true,
+                            receiveShadow : false
+                        });
+            let id = setInterval(()=>{
+                if(item.state!=='loading'){
+                    this.itemUI.push(new ItemUI(item));
+                    clearInterval(id);
                 }
-            });
+            },100);
         }
     }
     addLightUI(light){
