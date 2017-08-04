@@ -29,7 +29,7 @@ class VoxManager_{
         for(let i=0;i<files.length;i++){
             let file = files[i];
             if(!this.voxs[file]){ //还未开始加载
-                this.voxs[file] = {cbs:[cb]};
+                this.voxs[file] = {cbs:[cb],state:'loading'};
             }else if(this.voxs[file] && this.voxs[file].err){ //重新加载以前失败过的
                 this.voxs[file].err = null;
             }else{ //正在加载还未返回，将回调加入到列表中
@@ -39,15 +39,22 @@ class VoxManager_{
             count++;
             fetchBin(file,(data)=>{
                 this.voxs[file].vox = voxparser(data);
-                if(!(--count))
-                    for(let cb of this.voxs[file].cbs) //调用所有请求该文件的回调
+                this.voxs[file].state='ready';
+                if(!(--count)){
+                    for(let cb of this.voxs[file].cbs){ //调用所有请求该文件的回调
                         cb(b);
+                    }
+                    this.voxs[file].cbs = undefined;
+                }
             },(err)=>{
                 this.voxs[file].err = err;
+                this.voxs[file].state='error';
                 b = true;
                 if(!(--count)){
-                    for(let cb of this.voxs[file].cbs) //调用所有请求该文件的回调
+                    for(let cb of this.voxs[file].cbs){ //调用所有请求该文件的回调
                         cb(b);
+                    }
+                    this.voxs[file].cbs = undefined;
                 }
             });
         }

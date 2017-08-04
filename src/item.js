@@ -23,6 +23,8 @@
  */
 import {VoxManager} from './voxmanager';
 import {ItemTemplate} from './itemtemplate'
+import {ScriptManager} from './scriptmanager';
+
 import log from './log';
 
 class Position{
@@ -147,6 +149,11 @@ class Item{
                     this._receiveShadow = template.receiveShadow || false;
                     this.file = template.file;
                     this.actions = template.actions;
+                    this.script = template.script;
+                    if(template.live && typeof template.live==='function'){
+                        this.live = template.live.bind(this);
+                        if(this.live)this.live('init');
+                    }
                     load();
                 }else{
                     this.state = 'error';
@@ -154,6 +161,7 @@ class Item{
             });
         }else{
             this.file = json.file;
+            this.script = json.script;
             if(json.actions){
                 this.actions = json.actions;
             }else{
@@ -189,7 +197,7 @@ class Item{
                 if(this.actions[i].name === name){
                     let action = this.actions[i];
                     if(this.vox){ //已经加载
-                        action.acc = 0;
+                        this.acc = 0;
                         this.curAction = action;
                         this.curIndex = 0;
                     }else{ //未完成vox的加载
@@ -207,8 +215,8 @@ class Item{
     update(dt){
         if(this._visible && this.curAction){
             let a = this.curAction
-            if(a.acc > a.delay){
-                a.acc = 0;
+            if(this.acc > a.delay){
+                this.acc = 0;
                 if(this.curIndex+1<a.sequece.length){
                     this.curIndex++;
                 }else if(a.loop){
@@ -227,9 +235,10 @@ class Item{
                     log(`Item '${this.name}' action '${a.name}', action sequece out of range`);
                 }
             }else{
-                a.acc += dt;
+                this.acc += dt;
             }
         }
+        if(this.live)this.live('update',dt);
     }
     get visible(){
         return this._visible;
@@ -271,6 +280,7 @@ class Item{
     }
     destroy(){
         if(this.curMesh){
+            if(this.live)this.live('release');
             this.scene.remove(this.curMesh);
             this.curMesh = null;
         }
