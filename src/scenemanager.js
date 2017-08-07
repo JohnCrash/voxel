@@ -42,9 +42,14 @@ class SceneManager extends EventEmitter{
     loadFromJson(json,cb){
         this.description = json.description;
         this.script = json.script;
+        this.loadSkybox(json.skybox);
         this.loadCamera(json.camera);
         this.loadLight(json.light);
         this.loadItem(json.item,cb);
+    }
+
+    loadSkybox(t){
+        this.game.addSphereSkybox(t);
     }
 
     loadCamera(camera){
@@ -102,6 +107,7 @@ class SceneManager extends EventEmitter{
     }
 
     loadEnv(env){
+        this.loadSkybox(env.skybox);
         this.loadCamera(env.camera);
         this.loadLight(env.light);
     }
@@ -168,6 +174,7 @@ class SceneManager extends EventEmitter{
                     y:this.game.camera.rotation.y,
                     z:this.game.camera.rotation.z}                   
             },
+            skybox:this.game.skyboxToJson(),
             light:[],
             item:[]
         };

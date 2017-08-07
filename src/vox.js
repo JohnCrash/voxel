@@ -158,17 +158,45 @@ Object.assign(Vox.prototype,{
         this.volumes[i] = volume;
         return volume;
     },
+    /**
+     * 考虑有水的情况
+     */
+    getModelVolumeWater : function(i,waterIndex){
+        if(i<0||i>=this.modules.length)
+            throw 'Array index is out of range';
+        var module = this.modules[i];
+        var volume = new Uint8Array(module.size_x*module.size_y*module.size_z);
+        var water = new Uint8Array(module.size_x*module.size_y*module.size_z);
+        var plane = module.size_x*module.size_y;
+        var line = module.size_x;
+        for(let i = 0;i < module.xyzi.length;i++){
+            let xyzi = module.xyzi[i];
+            let x = xyzi&0xff;
+            let y = (xyzi&0xff00)>>8;
+            let z = (xyzi&0xff0000)>>16;
+            let idx = (xyzi>>>24);
+            if(idx===waterIndex){
+                water[z * plane + y * line + x] = idx;
+            }else
+                volume[z * plane + y * line + x] = idx;
+        }
+
+        return {volume:volume,water:water};
+    }
+
+    getModelGeometryWater : function(i,waterIndex){
+        if(!THREE)throw 'You must import three.js';
+
+        return geo;
+    },
 
     getPalRGBA : function(i){
         return this.palRGBA[i];
     },
 
-    getModelGeometry : function(i){
+    createGeometry : function(volume,dims){
         if(!THREE)throw 'You must import three.js';
-        if(this.geometrys[i])return this.geometrys[i];
 
-        var dims = this.getModelSize(i);
-        var volume = this.getModelVolume(i);
         var mesh = meshers.greedy(volume,dims);
         var geo = new THREE.Geometry();
         var offx = dims[0]/2;
@@ -176,7 +204,6 @@ Object.assign(Vox.prototype,{
         for(let i = 0;i<mesh.vertices.length;i++){
             var v = mesh.vertices[i];
             //将中心轴放置在物体的正中间
-            
             geo.vertices.push(new THREE.Vector3(v[0]-offx,v[1]-offy,v[2]));
         }
         for(let i = 0;i<mesh.faces.length;i++){
@@ -189,12 +216,23 @@ Object.assign(Vox.prototype,{
         }
         geo.computeFaceNormals();
         this.geometrys[i] = geo;
-        return geo;
+        return geo;        
+    },
+
+    getModelGeometry : function(i){
+        if(this.geometrys[i])return this.geometrys[i];
+
+        var dims = this.getModelSize(i);
+        var volume = this.getModelVolume(i);
+        return createGeometry(volume,dims);
     },
 
     createModelMesh : function(i,material){
         var geo = this.getModelGeometry(i);
-        var mat = material?material:new THREE.MeshPhongMaterial({ color: 0xffffff, shading: THREE.FlatShading, vertexColors: THREE.VertexColors, shininess: 0	} );
+        var mat = material?material:new THREE.MeshPhongMaterial({ color: 0xffffff,
+             shading: THREE.FlatShading, 
+             vertexColors: THREE.VertexColors,
+             shininess: 0} );
         var m = new THREE.Mesh(geo,mat);
         return m;
     }

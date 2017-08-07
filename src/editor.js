@@ -318,6 +318,16 @@ class Edit{
         lightTool.add(this,'加入聚光灯');
         lightTool.add(this,'加入环境灯');
         lightTool.add(this,'加入半球灯');
+        
+        //调节天空盒参数
+        lightTool.addColor(this,'天空颜色');
+        lightTool.addColor(this,'地面颜色');
+        lightTool.add(this,'天空球半径',100,1000);
+        lightTool.add(this,'雾的近点',0.1,5).step(0.01);
+        lightTool.add(this,'雾的远点',0.1,5).step(0.01);
+        lightTool.add(this,'偏移',-100,100);
+        lightTool.add(this,'指数',0.1,1).step(0.1);
+
         lightTool.add(this,'创建环境');
         lightTool.add(this,'环境名:');
 
@@ -325,7 +335,7 @@ class Edit{
         this.sceneTool = sceneTool;
         sceneTool.add(this,'清空场景');
         sceneTool.add(this,'保存场景');
-        sceneTool.add(this,'场景名称:');
+        this.sceneNameUI = sceneTool.add(this,'场景名称:');
         sceneTool.add(this,'刷新列表');
         fetchJson('/list?dir=scene/vox',(json)=>{
             let files = json.files.filter(item=>item.match(/.*\.vox$/));
@@ -378,6 +388,7 @@ class Edit{
         if(name){
             let json = sceneManager.toJson();
             let exp = {
+                skybox : json.skybox,
                 camera : json.camera,
                 light : json.light
             };
@@ -418,6 +429,7 @@ class Edit{
                         if(!iserr){
                             this.rebuildGUI('scene');
                             this['场景名称:'] = name.replace(/(.*)\.scene$/,($1,$2)=>$2);
+                            this.sceneNameUI.updateDisplay();
                         }else{
                             window.alert(`'scene/${name}'加载错误.`);
                         }
@@ -575,23 +587,77 @@ class Edit{
     }
     set '坐标轴'(value){
         this.axisHelper.visible = value;
-    }            
+    }
+    get '天空颜色'(){
+        return '#'+game.skybox.opts.skyColor.getHexString();
+    }
+    set '天空颜色'(c){
+        game.skybox.opts.skyColor.setStyle(c);
+    }    
+    get '地面颜色'(){
+        return '#'+game.skybox.opts.groundColor.getHexString();
+    }
+    set '地面颜色'(c){
+        game.skybox.ground.material.color.setStyle(c);
+        game.skybox.opts.groundColor.setStyle(c);
+        game.skybox.fog.color.setStyle(c);
+    }
+    get '天空球半径'(){
+        return game.skybox.opts.raduis;
+    }
+    set '天空球半径'(v){
+        game.skybox.opts.raduis = v;
+        
+        let sky = new THREE.Mesh( new THREE.SphereGeometry( v, 32, 15 ),
+        game.skybox.skyMaterial );
+        game.scene.remove(game.skybox.sky);
+        game.skybox.sky = sky;
+        game.scene.add(game.skybox.sky);
+    }
+    get '雾的近点'(){
+        return game.skybox.opts.fogNear;
+    }
+    set '雾的近点'(v){
+        game.skybox.opts.fogNear = v;
+        game.skybox.fog.near = v*game.skybox.opts.raduis;
+    }    
+    get '雾的远点'(){
+        return game.skybox.opts.fogFar;
+    }
+    set '雾的远点'(v){
+        game.skybox.opts.fogFar = v;
+        game.skybox.fog.far = v*game.skybox.opts.raduis;
+    }
+    get '偏移'(){
+        return game.skybox.opts.offset;
+    }
+    set '偏移'(v){
+        game.skybox.opts.offset = v;
+        game.skybox.uniforms.offset.value = v;
+    }    
+    get '指数'(){
+        return game.skybox.opts.exponent;
+    }
+    set '指数'(v){
+        game.skybox.opts.exponent = v;
+        game.skybox.uniforms.exponent.value = v;
+    }       
 };
 
-let edit = new Edit();
-
 game.on('init',function(){
-    //创建地面
-    var geometry = new THREE.PlaneBufferGeometry( 30000, 30000, 32 );
-    var planeMaterial = new THREE.MeshPhongMaterial( { color: 0xffdd99 } );
-    var plane = new THREE.Mesh( geometry, planeMaterial );
-    plane.receiveShadow = true;
-    plane.position.z = -0.1;
-    this.scene.add( plane );    
+    //加入一个天空盒
+    this.addSphereSkybox({
+        skyColor    : 0x0077ff,
+        groundColor : 0xca8e38,
+        raduis      : 300,
+    });
+
     //初始化视角
     this.camera.position.y = -100;
     this.camera.position.z = 200;
     this.camera.rotation.x = Math.PI/6;
+
+    let edit = new Edit();
 });
 
 game.on('update',function(dt){

@@ -221,3 +221,98 @@ Game.prototype.addDirectionaLight=function(t){
 Game.prototype.removeLight=function(light){
     this.scene.remove(light);
 }
+
+Game.prototype.removeSkybox=function(){
+    if(this.skybox){
+        this.scene.remove(this.skybox.sky);
+        this.scene.remove(this.skybox.ground);
+    }
+}
+Game.prototype.skyboxToJson=function(){
+    if(this.skybox && this.skybox.opts){
+        return {
+            skyColor : color(this.skybox.opts.skyColor),
+            groundColor : color(this.skybox.opts.groundColor),
+            offset : this.skybox.opts.offset,
+            raduis : this.skybox.opts.raduis,
+            exponent : this.skybox.opts.exponent,
+            fogNear : this.skybox.opts.fogNear,
+            fogFar : this.skybox.opts.fogFar
+        };
+    }else return {};
+    function color(c){
+        return {
+            r : c.r,
+            g : c.g,
+            b : c.b
+        }
+    }    
+}
+/**
+ * 创建一个球形天空盒
+ * raduis       天空球半径
+ * skyColor     天空颜色
+ * groundColor  地面颜色
+ */
+Game.prototype.addSphereSkybox=function(t){
+    this.removeSkybox();
+    
+    let opts = {
+        groundColor : Color((t&&t.groundColor)||0xca8e38),
+        specular    : 0x050505,
+        skyColor    : Color((t&&t.skyColor)||0x0077ff),
+        offset      : (t&&t.offset)||0,
+        raduis      : (t&&t.raduis)||400,
+        exponent    : (t&&t.exponent)||0.6,
+        fogNear     : (t&&t.fogNear)||1,
+        fogFar      : (t&&t.fogFar)||2
+    };
+    this.skybox = {opts:opts};
+
+    this.scene.fog = new THREE.Fog( opts.groundColor, opts.fogNear*opts.raduis, opts.fogFar*opts.raduis );
+    var groundGeo = new THREE.PlaneBufferGeometry( 5000, 5000 );
+    var groundMat = new THREE.MeshPhongMaterial( { color: opts.groundColor, specular: opts.specular } );
+
+    var ground = new THREE.Mesh( groundGeo, groundMat );
+    this.scene.add( ground );
+    ground.position.z = -0.1;
+    ground.receiveShadow = true;
+
+    var vertexShader = `
+	    varying vec3 vWorldPosition;
+        void main() {
+            vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
+            vWorldPosition = worldPosition.xyz;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+        }    
+    `;
+    var fragmentShader = `
+        uniform vec3 topColor;
+        uniform vec3 bottomColor;
+        uniform float offset;
+        uniform float exponent;
+        varying vec3 vWorldPosition;
+        void main() {
+            float h = normalize( vWorldPosition + offset ).z;
+            gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent ), 0.0 ) ), 1.0 );
+        }
+    `;
+    var uniforms = {
+        topColor:    { value: opts.skyColor },
+        bottomColor: { value: opts.groundColor },
+        offset:      { value: opts.offset },
+        exponent:    { value: opts.exponent }
+    };
+
+    var skyGeo = new THREE.SphereGeometry( opts.raduis, 32, 15 );
+    var skyMat = new THREE.ShaderMaterial( { vertexShader: vertexShader, fragmentShader: fragmentShader, uniforms: uniforms, side: THREE.BackSide } );
+    var sky = new THREE.Mesh( skyGeo, skyMat );
+    this.scene.add( sky );
+
+    this.skybox.sky = sky;
+    this.skybox.skyMaterial = skyMat;
+    this.skybox.ground = ground;
+    this.skybox.groundMaterial = groundMat;
+    this.skybox.uniforms = uniforms;
+    this.skybox.fog = this.scene.fog;
+}
