@@ -126,9 +126,27 @@ class Item{
                     this.vox = VoxManager.getVox(this.file);
                     this.mesh = new Array(this.vox.getModelNum());
                     for(let i=0;i<this.mesh.length;i++){
-                        this.mesh[i] = this.vox.createModelMesh(i);
-                        this.mesh[i].castShadow = this._castShadow;
-                        this.mesh[i].receiveShadow = this._receiveShadow;
+                        if(json.water===+json.water){
+                            this.water = json.water;
+                            this.waterOpacity = json.waterOpacity;
+                            this.mesh[i] = this.vox.createModelGroupWater(i,json.water);
+                            let soild = this.mesh[i].children[0];
+                            let water = this.mesh[i].children[1];
+                            if(soild){
+                                soild.castShadow = this._castShadow;
+                                soild.receiveShadow = this._receiveShadow;                                
+                            }
+                            if(water){
+                                water.castShadow = false;
+                                water.receiveShadow = this._receiveShadow;
+                                if(json.waterOpacity!==undefined)
+                                    water.material.opacity = json.waterOpacity;
+                            }                            
+                        }else{
+                            this.mesh[i] = this.vox.createModelMesh(i);
+                            this.mesh[i].castShadow = this._castShadow;
+                            this.mesh[i].receiveShadow = this._receiveShadow;
+                        }
                     }
                     this.doAction(this.loadedDoAction);
                     this.state = 'ready';
@@ -189,6 +207,8 @@ class Item{
             json.file = this.file;
             json.actions = this.actions;
         }
+        json.water = this.water;
+        json.waterOpacity = this.waterOpacity;
         return json;
     }
     doAction(name){
@@ -205,6 +225,34 @@ class Item{
                     }
                 }
             }
+        }
+    }
+    //物品包含水,设置水的索引
+    setWaterIndex(water){
+        this.water = water;
+        for(let i=0;i<this.mesh.length;i++){
+            this.mesh[i] = this.vox.createModelGroupWater(i,water);
+            this.mesh[i].castShadow = this._castShadow;
+            this.mesh[i].receiveShadow = this._receiveShadow;
+            let soild = this.mesh[i].children[1];
+            let water = this.mesh[i].children[1];
+            if(soild){
+                soild.castShadow = this._castShadow;
+                soild.receiveShadow = this._receiveShadow;                                
+            }
+            if(water){
+                water.castShadow = false;
+                water.receiveShadow = this._receiveShadow;                                
+            }              
+        }        
+    }
+    setWaterOpacity(o){
+        this.waterOpacity = o;
+        for(let i=0;i<this.mesh.length;i++){
+            let water = this.mesh[i].children[1];
+            if(water && water.material){
+                water.material.opacity = o;                      
+            }              
         }
     }
     /**
@@ -229,7 +277,7 @@ class Item{
                         this.curMesh = this.mesh[i];
                         this.scene.add(this.curMesh);
                         this.curMesh.position.set(this.position.x,this.position.y,this.position.z);
-                        this.curMesh.rotation.set(this.rotation.x,this.rotation.y,this.rotation.z);                        
+                        this.curMesh.rotation.set(this.rotation.x,this.rotation.y,this.rotation.z);
                     }
                 }else{
                     log(`Item '${this.name}' action '${a.name}', action sequece out of range`);

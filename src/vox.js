@@ -84,6 +84,7 @@ function VoxParser(vox){
         });
     }
     vox.volumes = new Array(vox.modules.length);
+    vox.waters = new Array(vox.modules.length);
     vox.geometrys = new Array(vox.modules.length);
     return vox;
 }
@@ -164,6 +165,10 @@ Object.assign(Vox.prototype,{
     getModelVolumeWater : function(i,waterIndex){
         if(i<0||i>=this.modules.length)
             throw 'Array index is out of range';
+
+        if(this.waterIndex === waterIndex && this.volumes[i] && this.waters[i]){
+            return {volume:this.volumes[i],water:this.waters[i]};
+        }
         var module = this.modules[i];
         var volume = new Uint8Array(module.size_x*module.size_y*module.size_z);
         var water = new Uint8Array(module.size_x*module.size_y*module.size_z);
@@ -180,14 +185,34 @@ Object.assign(Vox.prototype,{
             }else
                 volume[z * plane + y * line + x] = idx;
         }
-
+        this.volumes[i] = volume;
+        this.waters[i] = water;
+        this.waterIndex = waterIndex;
         return {volume:volume,water:water};
-    }
+    },
 
-    getModelGeometryWater : function(i,waterIndex){
-        if(!THREE)throw 'You must import three.js';
+    createModelGroupWater : function(i,waterIndex,material,waterMaterial){
+        var v = this.getModelVolumeWater(i,waterIndex);
+        var dims = this.getModelSize(i);
+        var vg = this.createGeometry(v.volume,dims);
+        var vw = this.createGeometry(v.water,dims);
 
-        return geo;
+        var mat1 = material?material:new THREE.MeshPhongMaterial({ color: 0xffffff,
+             shading: THREE.FlatShading, 
+             vertexColors: THREE.VertexColors,
+             shininess: 0} );
+        var mat2 = waterMaterial?waterMaterial:new THREE.MeshPhongMaterial({ color: 0xffffff,
+             shading: THREE.FlatShading, 
+             vertexColors: THREE.VertexColors,
+             shininess: 0,
+             opacity: 0.5,
+             transparent : true} );             
+        var m1 = new THREE.Mesh(vg,mat1);
+        var m2 = new THREE.Mesh(vw,mat2);
+        var g = new THREE.Group();
+        g.add(m1);
+        g.add(m2);
+        return g;
     },
 
     getPalRGBA : function(i){
@@ -215,7 +240,6 @@ Object.assign(Vox.prototype,{
             geo.faces.push(new THREE.Face3(f[0],f[2],f[3],n,c));
         }
         geo.computeFaceNormals();
-        this.geometrys[i] = geo;
         return geo;        
     },
 
@@ -224,7 +248,9 @@ Object.assign(Vox.prototype,{
 
         var dims = this.getModelSize(i);
         var volume = this.getModelVolume(i);
-        return createGeometry(volume,dims);
+        var geo = this.createGeometry(volume,dims);
+        this.geometrys[i] = geo;
+        return geo;
     },
 
     createModelMesh : function(i,material){

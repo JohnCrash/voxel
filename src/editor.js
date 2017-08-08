@@ -229,6 +229,8 @@ class ItemUI{
         ui.add(this,'投射阴影');
         ui.add(this,'接受阴影');
         ui.add(this,'可见');
+        ui.add(this,'水的索引');
+        ui.add(this,'水的透明度',0,1).step(0.1);
         ui.add(this,'动作',item.actions.map(item=>item.name));
         ui.add(this,'删除此物品');
     }
@@ -238,6 +240,24 @@ class ItemUI{
             removeFolder(this.ui,this.item.name);
             this.item = null;
         }
+    }
+    get '水的透明度'(){
+        return this.item.waterOpacity?this.item.waterOpacity:0.5;
+    }
+    set '水的透明度'(v){
+        if(v>=0&&v<=1){
+            this.item.setWaterOpacity(v);
+        }
+    }    
+    get '水的索引'(){
+        return this.item.water?this.item.water.toString():'';
+    }
+    set '水的索引'(s){
+        let v = Number(s);
+        if(v>=0&&v<256)
+            this.item.setWaterIndex(v);
+        else
+            log('invalied water index '+v);
     }
     get '接受阴影'(){
         return this.item.receiveShadow;
