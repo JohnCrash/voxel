@@ -8,7 +8,7 @@ import log from './log';
 import {yesno} from './dialog';
 
 let game = new Game({enableStats:false,
-    enableAA:false,
+    enableAA:true,
     enableLight:true,
     enableShaodw:true});
 
@@ -156,6 +156,7 @@ class LightUI{
             ui.add(this,'投射阴影');
             ui.add(this,'灯光强度',0,2).step(0.1);
             ui.add(this,'投射范围',50,500);
+            ui.add(this,'bias',-0.01,0.01).step(0.00001);
             this.helper = new THREE.DirectionalLightHelper(light,5);
             addHelper(this.helper);
         }else if(light.isAmbientLight){
@@ -180,6 +181,12 @@ class LightUI{
         removeHelper(this.helper);
         removeFolder(this.ui,this.light.name);
     }
+    get 'bias'(){
+        return this.light.shadow.bias;
+    }
+    set 'bias'(v){
+        this.light.shadow.bias = v;
+    }    
     get '名称:'(){
         return this.light.name;
     }

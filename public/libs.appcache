@@ -20,12 +20,8 @@ vox/teapot.vox
 vox/anim/deer.vox
 vox/anim/horse.vox
 vox/anim/T-Rex.vox
-codeflask.js
-prism.js
-codeflask.css
-prism.css
 
 NETWORK:
-demo2.js
+demo1.js
 simple.js
 index.html

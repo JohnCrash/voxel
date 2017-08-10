@@ -60,6 +60,10 @@ class ItemTemplate_{
 //singleton in es6
 export let ItemTemplate = new ItemTemplate_();
 
+/**
+ * 加一个全局函数addItemEvent
+ * 此函数用于注册物品的物品的脚本函数
+ */
 window.addItemEvent = function(name,func){
     ItemTemplate.addItemEvent(name,func);
 }
