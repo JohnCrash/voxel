@@ -8,7 +8,7 @@ import log from './log';
 import {yesno} from './dialog';
 
 let game = new Game({enableStats:false,
-    enableAA:true,
+    enableAA:false,
     enableLight:true,
     enableShaodw:true});
 
@@ -327,6 +327,7 @@ class ItemEditUI{
 
 class Edit{
     constructor(){
+        this.smaa = false;
         this.selVoxFile = '3x3x3.vox';
         this.selItemFile = '';
         this.selSceneFile = '';
@@ -341,6 +342,7 @@ class Edit{
         let lightTool = gui.addFolder('灯光工具');
         lightTool.add(this,'性能监测');
         lightTool.add(this,'坐标轴');
+        lightTool.add(this,'SMAA');
         lightTool.add(this,'加入方向灯');
         lightTool.add(this,'加入聚光灯');
         lightTool.add(this,'加入环境灯');
@@ -388,6 +390,20 @@ class Edit{
             this.envListUI = sceneTool.add(this,'环境:',files);
             this.envList = files;
         });        
+    }
+    get SMAA(){
+        return this.smaa;
+    }
+    set SMAA(b){
+        if(this.smaaPass){
+            game.removePass(this.smaaPass);
+            this.smaaPass = undefined;
+        }else{
+            var size = game.renderer.getSize();
+            this.smaaPass = new THREE.SMAAPass( size.width, size.height );
+            game.addPass(this.smaaPass);
+        }
+        this.smaa = b;
     }
     '清空场景'(){
         sceneManager.clearLight();

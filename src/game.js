@@ -1,6 +1,12 @@
 /**
  * 初始化一个THREE环境，包括创建场景，摄像机，灯光等等...
  */
+require('./postprocessing/EffectComposer');
+require('./postprocessing/RenderPass');
+require('./postprocessing/ShaderPass');
+require('./shaders/CopyShader');
+require('./shaders/SMAAShader');
+require('./postprocessing/SMAAPass');
 var EventEmitter = require("events");
 var inherits = require("inherits");
 var Observer = require("./observer");
@@ -68,10 +74,11 @@ Game.prototype.setSize = function(w,h){
     this.camera.aspect = w/h;
     this.camera.updateProjectionMatrix();
     if(this.opts.maxFrameSize && w > this.opts.maxFrameSize){
-        this.renderer.setSize( this.opts.maxFrameSize,this.opts.maxFrameSize*h/w,false );
-    }else{
-        this.renderer.setSize( w,h,false );
+        w = this.opts.maxFrameSize;
+        h = this.opts.maxFrameSize*h/w;
     }
+    this.renderer.setSize( w,h,false );
+    if(this.composer)this.composer.setSize(w,h);
     this.emit('resize',w,h);
 };
 
@@ -91,7 +98,10 @@ Game.prototype.run=function(){
         var nt = Date.now();
         if(!this.paused){
             this.emit('update',nt - t);
-            this.renderer.render( this.scene, this.camera );
+            if(this.composer)
+                this.composer.render();
+            else
+                this.renderer.render( this.scene, this.camera );
         }
         t = nt;
     }.bind(this);
@@ -315,4 +325,36 @@ Game.prototype.addSphereSkybox=function(t){
     this.skybox.groundMaterial = groundMat;
     this.skybox.uniforms = uniforms;
     this.skybox.fog = this.scene.fog;
+}
+
+/**
+ * 加入多pass渲染
+ */
+Game.prototype.addPass=function(pass){
+    if(this.composer===undefined){
+        this.composer = new THREE.EffectComposer(this.renderer);
+        this.composer.addPass(new THREE.RenderPass(this.scene,this.camera));
+    }
+    for(let i=0;i<this.composer.passes.length;i++){
+        this.composer.passes[i].renderToScreen = false;
+    }
+    pass.renderToScreen = true;
+    this.composer.addPass(pass);
+}
+
+Game.prototype.removePass=function(pass){
+    if(this.composer){
+        for(let i=0;i<this.composer.passes.length;i++){
+            if(this.composer.passes[i]===pass){
+                this.composer.passes.splice(i,1);
+                break;
+            }
+        }
+        let len = this.composer.passes.length;
+        if(len<=1){
+            this.composer = undefined;
+        }else{
+            this.composer.passes[len-1].renderToScreen = true;
+        }
+    }
 }
