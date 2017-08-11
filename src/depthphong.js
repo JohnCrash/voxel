@@ -14,7 +14,7 @@
     }
     enableZFog(b){
         if(b===false)
-            this.uniforms.zfogLow.value = this.uniforms.zfogHigh.value = 0;        
+            this.uniforms.zfogLow.value = this.uniforms.zfogHigh.value = -9000;        
         this.zfogEnabled = b;
         this.needsUpdate = true;
     }

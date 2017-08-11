@@ -31,6 +31,7 @@ class VoxManager_{
             if(!this.voxs[file]){ //还未开始加载
                 this.voxs[file] = {cbs:[cb],state:'loading'};
             }else if(this.voxs[file] && this.voxs[file].err){ //重新加载以前失败过的
+                this.voxs[file].cbs = [cb];
                 this.voxs[file].err = null;
             }else{ //正在加载还未返回，将回调加入到列表中
                 this.voxs[file].cbs.push(cb);

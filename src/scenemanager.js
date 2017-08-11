@@ -185,14 +185,13 @@ class SceneManager extends EventEmitter{
     }
     loadZFog(json){
         if(json && this.soildMaterial){
+            this.enableZFog(true);
             let fogUniforms = this.soildMaterial.uniforms;
             if(json.color)fogUniforms.zfogColor.value.set(json.color.r,json.color.g,json.color.b);
             fogUniforms.zfogHigh.value = json.high || 100.0;
             fogUniforms.zfogLow.value = json.low || 0.0;
-            this.enableZFog(true);
         }else{
             this.enableZFog(false);
-            this.soildMaterial.enableZFog(false);
         }
     }
     zfogToJson(){

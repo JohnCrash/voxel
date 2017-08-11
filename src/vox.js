@@ -46,11 +46,11 @@ function VoxParser(vox){
                     break;
                 case 'MATT':{
                     vox.matts = vox.matts || new Array(256);
-                    var dv = new DataView(chunk.buf,0);
+                    //var dv = new DataView(chunk.buf,0);
                     var matt = {
                         id : chunk.data[0],
                         materialType : chunk.data[1],
-                        materialWeght : dv.getFloat32(2*4),
+                        materialWeght : chunk.data[2],//dv.getFloat32(2*4),
                         propertyBits : chunk.data[3],
                         normalizedValues : []
                     };
@@ -58,9 +58,9 @@ function VoxParser(vox){
                         vox.matts[matt.id] = matt;
                     else
                         throw '';
-                    var n = chunk.size/4 - 4*4;
+                    var n = chunk.size/4 - 4;
                     for(let i=0;i<n;i++){
-                        matt.normalizedValues.push(dv.getFloat32((4+i)*4));
+                        matt.normalizedValues.push(chunk.data[4+i]);
                     }
                 }
                     break;
