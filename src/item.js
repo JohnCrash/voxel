@@ -230,13 +230,15 @@ class Item{
         }
     }
     //物品包含水,设置水的索引
-    setWaterIndex(water){
-        this.water = water;
+    setWaterIndex(waterIndex){
+        this.water = waterIndex;
         for(let i=0;i<this.mesh.length;i++){
-            this.mesh[i] = this.vox.createModelGroupWater(i,water);
+            this.mesh[i] = this.vox.createModelGroupWater(i,waterIndex,
+                                this.sceneManager.soildMaterial,
+                                this.sceneManager.waterMaterial);
             this.mesh[i].castShadow = this._castShadow;
             this.mesh[i].receiveShadow = this._receiveShadow;
-            let soild = this.mesh[i].children[1];
+            let soild = this.mesh[i].children[0];
             let water = this.mesh[i].children[1];
             if(soild){
                 soild.castShadow = this._castShadow;
@@ -253,7 +255,7 @@ class Item{
         for(let i=0;i<this.mesh.length;i++){
             let water = this.mesh[i].children[1];
             if(water && water.material){
-                water.material.opacity = o;                      
+                water.material.opacity = o;
             }              
         }
     }
@@ -311,6 +313,11 @@ class Item{
             if(this.mesh){
                 for(let i=0;i<this.mesh.length;i++){
                     this.mesh[i].castShadow = value;
+                    let child = this.mesh[i].children;
+                    let soild = child[0];
+                    let water = child[1];
+                    if(soild)soild.castShadow = value;
+                    if(water)soild.castShadow = value;
                 }
             }
         }
@@ -324,6 +331,11 @@ class Item{
             if(this.mesh){
                 for(let i=0;i<this.mesh.length;i++){
                     this.mesh[i].receiveShadow = value;
+                    let child = this.mesh[i].children;
+                    let soild = child[0];
+                    let water = child[1];
+                    if(soild)soild.receiveShadow = value;
+                    if(water)soild.receiveShadow = value;                    
                 }
             }
         }

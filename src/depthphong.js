@@ -13,8 +13,16 @@
         };
     }
     enableZFog(b){
-        if(b===false)
-            this.uniforms.zfogLow.value = this.uniforms.zfogHigh.value = -9000;        
+        if(b===false){
+            this.zfogLow = this.uniforms.zfogLow.value;
+            this.zfogHigh = this.uniforms.zfogHigh.value;
+            this.uniforms.zfogLow.value = this.uniforms.zfogHigh.value = -9000;
+        }else{
+            if(this.zfogLow===+this.zfogLow && this.zfogHigh===+this.zfogHigh){
+                this.uniforms.zfogLow.value = this.zfogLow;
+                this.uniforms.zfogHigh.value = this.zfogHigh;
+            }
+        }
         this.zfogEnabled = b;
         this.needsUpdate = true;
     }
