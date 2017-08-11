@@ -58,7 +58,6 @@ function Game(opts){
         this.stats = new Stats();
         document.body.appendChild( this.stats.dom );
     }
-
     this.renderer.shadowMap.enabled = true;
     this.renderer.autoClear = false;
     this.renderer.shadowMap.enabled = true;
@@ -253,7 +252,7 @@ Game.prototype.skyboxToJson=function(){
             fogNear : this.skybox.opts.fogNear,
             fogFar : this.skybox.opts.fogFar
         };
-    }else return {};
+    }else return undefined;
     function color(c){
         return {
             r : c.r,

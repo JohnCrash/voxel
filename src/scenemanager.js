@@ -2,6 +2,8 @@
  * 游戏关卡对象场景
  */
 import {Item} from './item';
+import {ZDepthPhongMaterial} from './depthphong';
+
 var EventEmitter = require("events");
 
 class SceneManager extends EventEmitter{
@@ -12,6 +14,19 @@ class SceneManager extends EventEmitter{
         this.meshs = [];    //场景出现Mesh
         this.items = [];    //场景中物体
         this.players = [];  //场景中玩家包括npc
+        this.zfog = true;
+        
+        this.soildMaterial = new ZDepthPhongMaterial({ color: 0xffffff,
+             shading: THREE.FlatShading, 
+             vertexColors: THREE.VertexColors,
+             shininess: 0} );
+        this.waterMaterial = new ZDepthPhongMaterial({ color: 0xffffff,
+             shading: THREE.FlatShading, 
+             vertexColors: THREE.VertexColors,
+             shininess: 0,
+             opacity: 0.5,
+             transparent : true} );
+        this.enableZFog(true);
         game.on('update',dt=>this.update(dt));
     }
 
@@ -43,6 +58,7 @@ class SceneManager extends EventEmitter{
         this.description = json.description;
         this.script = json.script;
         this.loadSkybox(json.skybox);
+        this.loadZFog(json.zfog);
         this.loadCamera(json.camera);
         this.loadLight(json.light);
         this.loadItem(json.item,cb);
@@ -53,8 +69,10 @@ class SceneManager extends EventEmitter{
             if(t.type==='sphere')
                 this.game.addSphereSkybox(t);
             else if(t.type==='zfog'){
-                
+
             }
+        }else{
+            this.game.removeSkybox();
         }
     }
 
@@ -165,6 +183,37 @@ class SceneManager extends EventEmitter{
             }
         }
     }
+    loadZFog(json){
+        if(json && this.soildMaterial){
+            let fogUniforms = this.soildMaterial.uniforms;
+            if(json.color)fogUniforms.zfogColor.value.set(json.color.r,json.color.g,json.color.b);
+            fogUniforms.zfogHigh.value = json.high || 100.0;
+            fogUniforms.zfogLow.value = json.low || 0.0;
+            this.enableZFog(true);
+        }else{
+            this.enableZFog(false);
+            this.soildMaterial.enableZFog(false);
+        }
+    }
+    zfogToJson(){
+        if(this.soildMaterial){
+            let fogUniforms = this.soildMaterial.uniforms
+            return {
+                color : fogUniforms.zfogColor.value.toJSON(),
+                high : fogUniforms.zfogHigh.value,
+                low : fogUniforms.zfogLow.value
+            };
+        }
+    }
+    enableZFog(b){
+        if(this.soildMaterial){
+            let fogUniforms = this.soildMaterial.uniforms;
+            this.game.renderer.autoClear = b;
+            if(fogUniforms)
+                this.game.renderer.setClearColor(fogUniforms.zfogColor.value.getHex());
+            this.soildMaterial.enableZFog(b);
+        }
+    }
     /**
      * 见场景当前状态保存下来
      */
@@ -184,6 +233,8 @@ class SceneManager extends EventEmitter{
             light:[],
             item:[]
         };
+        if(this.zfog)json.zfog = this.zfogToJson();
+
         for(let light of this.lights){
             let lgt;
             if(light.isSpotLight){
@@ -276,13 +327,6 @@ class SceneManager extends EventEmitter{
         for(let item of this.items){
             item.update(dt);
         }
-    }
-    /**
-     * 默认材质
-     */
-    setMaterial(mat,waterMat){
-        this.soildMaterial = mat;
-        this.waterMaterial = waterMat;
     }
 };
 

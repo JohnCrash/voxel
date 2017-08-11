@@ -12,7 +12,7 @@ THREE.DepthZFogShader = {
     vertexShader: `
 #define PHONG
 varying vec3 vViewPosition;
-varying vec3 Position;
+varying vec4 Position;
 #ifndef FLAT_SHADED
 	varying vec3 vNormal;
 #endif
@@ -49,7 +49,7 @@ void main() {
 	#include <logdepthbuf_vertex>
 	#include <clipping_planes_vertex>
 
-    Position = position;
+    Position = modelMatrix*vec4(position,1.0);
 	vViewPosition = - mvPosition.xyz;
 
 	#include <worldpos_vertex>
@@ -60,13 +60,15 @@ void main() {
     `,
 
 	fragmentShader: `#define PHONG
-varying vec3 Position;
+varying vec4 Position;
 uniform vec3 diffuse;
 uniform vec3 emissive;
 uniform vec3 specular;
 uniform float shininess;
 uniform float opacity;
-
+uniform vec3 zfogColor;
+uniform float zfogHigh;
+uniform float zfogLow;
 #include <common>
 #include <packing>
 #include <dithering_pars_fragment>
@@ -126,6 +128,6 @@ void main() {
 	#include <fog_fragment>
 	#include <premultiplied_alpha_fragment>
 	#include <dithering_fragment>
-    gl_FragColor.rgb = mix(vec3(0.0,0.0,1.0),gl_FragColor.rgb,smoothstep(0.0,80.5,Position.z));
+    gl_FragColor.rgb = mix(zfogColor,gl_FragColor.rgb,smoothstep(zfogLow,zfogHigh,Position.z));
 }`
 };

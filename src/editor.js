@@ -336,6 +336,7 @@ class Edit{
         this['环境名:'] = '';
         this.lightUI = [];
         this.itemUI = [];
+        this.zfog = true;
         this.axisHelper = new THREE.AxisHelper( 200 );
         game.scene.add(this.axisHelper);
         
@@ -357,6 +358,11 @@ class Edit{
         lightTool.add(this,'雾的远点',0.1,5).step(0.01);
         lightTool.add(this,'偏移',-100,100);
         lightTool.add(this,'指数',0.1,1).step(0.1);
+        
+        lightTool.add(this,'打开ZFog');
+        lightTool.addColor(this,'ZFog的颜色');
+        lightTool.add(this,'ZFog高面',-1000,1000);
+        lightTool.add(this,'ZFog低面',-1000,1000);
 
         lightTool.add(this,'创建环境');
         lightTool.add(this,'环境名:');
@@ -694,7 +700,55 @@ class Edit{
     set '指数'(v){
         game.skybox.opts.exponent = v;
         game.skybox.uniforms.exponent.value = v;
-    }       
+    }  
+    get '打开ZFog'(){
+        if(sceneManager.soildMaterial){
+            return sceneManager.soildMaterial.isZFog();
+        }else return false;
+    }
+    set '打开ZFog'(v){
+        if(sceneManager.soildMaterial){
+            sceneManager.zfog = v;
+            sceneManager.soildMaterial.enableZFog(v);
+        }        
+    }     
+    get 'ZFog的颜色'(){
+        if(sceneManager.soildMaterial){
+            let fogUniforms = sceneManager.soildMaterial.uniforms;
+            return '#'+fogUniforms.zfogColor.value.getHexString();
+        }else return '#000000';
+    }
+    set 'ZFog的颜色'(v){
+        if(sceneManager.soildMaterial){
+            let fogUniforms = sceneManager.soildMaterial.uniforms;
+            fogUniforms.zfogColor.value.setStyle(v);
+            game.renderer.setClearColor(fogUniforms.zfogColor.value.getHex());
+        }    
+    } 
+    get 'ZFog高面'(){
+        if(sceneManager.soildMaterial){
+            let fogUniforms = sceneManager.soildMaterial.uniforms;
+            return fogUniforms.zfogHigh.value;
+        }else return 0;
+    }
+    set 'ZFog高面'(v){
+        if(sceneManager.soildMaterial){
+            let fogUniforms = sceneManager.soildMaterial.uniforms;
+            fogUniforms.zfogHigh.value = v;
+        }
+    } 
+    get 'ZFog低面'(){
+        if(sceneManager.soildMaterial){
+            let fogUniforms = sceneManager.soildMaterial.uniforms;
+            return fogUniforms.zfogLow.value;
+        }else return 0;
+    }
+    set 'ZFog低面'(v){
+        if(sceneManager.soildMaterial){
+            let fogUniforms = sceneManager.soildMaterial.uniforms;
+            fogUniforms.zfogLow.value = v;
+        }
+    }
 };
 
 game.on('init',function(){
