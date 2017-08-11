@@ -206,7 +206,7 @@ Object.assign(Vox.prototype,{
              vertexColors: THREE.VertexColors,
              shininess: 0,
              opacity: 0.5,
-             transparent : true} );             
+             transparent : true} );
         var m1 = new THREE.Mesh(vg,mat1);
         var m2 = new THREE.Mesh(vw,mat2);
         var g = new THREE.Group();

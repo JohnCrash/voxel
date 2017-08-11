@@ -349,6 +349,7 @@ class Edit{
         lightTool.add(this,'加入半球灯');
         
         //调节天空盒参数
+        lightTool.add(this,'打开天空球');
         lightTool.addColor(this,'天空颜色');
         lightTool.addColor(this,'地面颜色');
         lightTool.add(this,'天空球半径',100,1000);
@@ -390,7 +391,7 @@ class Edit{
             this.envListUI = sceneTool.add(this,'环境:',files);
             this.envList = files;
         });        
-    }
+    }  
     get SMAA(){
         return this.smaa;
     }
@@ -631,6 +632,15 @@ class Edit{
     set '坐标轴'(value){
         this.axisHelper.visible = value;
     }
+    get '打开天空球'(){
+        return !!game.skybox.sky;
+    }
+    set '打开天空球'(e){
+        if(e)
+            game.addSphereSkybox(game.skybox);
+        else
+            game.removeSkybox();
+    }    
     get '天空颜色'(){
         return '#'+game.skybox.opts.skyColor.getHexString();
     }

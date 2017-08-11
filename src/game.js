@@ -7,6 +7,8 @@ require('./postprocessing/ShaderPass');
 require('./shaders/CopyShader');
 require('./shaders/SMAAShader');
 require('./postprocessing/SMAAPass');
+require('./shaders/sphereskybox');
+require('./shaders/depthphong');
 var EventEmitter = require("events");
 var inherits = require("inherits");
 var Observer = require("./observer");
@@ -236,10 +238,12 @@ Game.prototype.removeSkybox=function(){
     if(this.skybox){
         this.scene.remove(this.skybox.sky);
         this.scene.remove(this.skybox.ground);
+        this.skybox.sky = null;
+        this.skybox.ground = null;
     }
 }
 Game.prototype.skyboxToJson=function(){
-    if(this.skybox && this.skybox.opts){
+    if(this.skybox && this.skybox.sky && this.skybox.opts){
         return {
             skyColor : color(this.skybox.opts.skyColor),
             groundColor : color(this.skybox.opts.groundColor),
@@ -288,25 +292,6 @@ Game.prototype.addSphereSkybox=function(t){
     ground.position.z = -0.1;
     ground.receiveShadow = true;
 
-    var vertexShader = `
-	    varying vec3 vWorldPosition;
-        void main() {
-            vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
-            vWorldPosition = worldPosition.xyz;
-            gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-        }    
-    `;
-    var fragmentShader = `
-        uniform vec3 topColor;
-        uniform vec3 bottomColor;
-        uniform float offset;
-        uniform float exponent;
-        varying vec3 vWorldPosition;
-        void main() {
-            float h = normalize( vWorldPosition + offset ).z;
-            gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h , 0.0), exponent ), 0.0 ) ), 1.0 );
-        }
-    `;
     var uniforms = {
         topColor:    { value: opts.skyColor },
         bottomColor: { value: opts.groundColor },
@@ -315,7 +300,11 @@ Game.prototype.addSphereSkybox=function(t){
     };
 
     var skyGeo = new THREE.SphereGeometry( opts.raduis, 32, 15 );
-    var skyMat = new THREE.ShaderMaterial( { vertexShader: vertexShader, fragmentShader: fragmentShader, uniforms: uniforms, side: THREE.BackSide } );
+    var skyMat = new THREE.ShaderMaterial( { 
+        vertexShader: THREE.SphereSkyboxShader.vertexShader, 
+        fragmentShader: THREE.SphereSkyboxShader.fragmentShader, 
+        uniforms: uniforms, 
+        side: THREE.BackSide } );
     var sky = new THREE.Mesh( skyGeo, skyMat );
     this.scene.add( sky );
 

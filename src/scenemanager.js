@@ -49,7 +49,13 @@ class SceneManager extends EventEmitter{
     }
 
     loadSkybox(t){
-        this.game.addSphereSkybox(t);
+        if(t){
+            if(t.type==='sphere')
+                this.game.addSphereSkybox(t);
+            else if(t.type==='zfog'){
+                
+            }
+        }
     }
 
     loadCamera(camera){
@@ -270,6 +276,13 @@ class SceneManager extends EventEmitter{
         for(let item of this.items){
             item.update(dt);
         }
+    }
+    /**
+     * 默认材质
+     */
+    setMaterial(mat,waterMat){
+        this.soildMaterial = mat;
+        this.waterMaterial = waterMat;
     }
 };
 
