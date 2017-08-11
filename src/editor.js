@@ -722,31 +722,37 @@ class Edit{
         if(sceneManager.soildMaterial){
             let fogUniforms = sceneManager.soildMaterial.uniforms;
             fogUniforms.zfogColor.value.setStyle(v);
+            fogUniforms = sceneManager.waterMaterial.uniforms;
+            fogUniforms.zfogColor.value.setStyle(v);
             game.renderer.setClearColor(fogUniforms.zfogColor.value.getHex());
         }    
     } 
     get 'ZFog高面'(){
-        if(sceneManager.soildMaterial){
+        if(sceneManager.soildMaterial &&　sceneManager.zfog){
             let fogUniforms = sceneManager.soildMaterial.uniforms;
             return fogUniforms.zfogHigh.value;
         }else return 0;
     }
     set 'ZFog高面'(v){
-        if(sceneManager.soildMaterial){
+        if(sceneManager.soildMaterial &&　sceneManager.zfog){
             let fogUniforms = sceneManager.soildMaterial.uniforms;
+            fogUniforms.zfogHigh.value = v;
+            fogUniforms = sceneManager.waterMaterial.uniforms;
             fogUniforms.zfogHigh.value = v;
         }
     } 
     get 'ZFog低面'(){
-        if(sceneManager.soildMaterial){
+        if(sceneManager.soildMaterial &&　sceneManager.zfog){
             let fogUniforms = sceneManager.soildMaterial.uniforms;
             return fogUniforms.zfogLow.value;
         }else return 0;
     }
     set 'ZFog低面'(v){
-        if(sceneManager.soildMaterial){
+        if(sceneManager.soildMaterial &&　sceneManager.zfog){
             let fogUniforms = sceneManager.soildMaterial.uniforms;
             fogUniforms.zfogLow.value = v;
+            fogUniforms = sceneManager.waterMaterial.uniforms;
+            fogUniforms.zfogLow.value = v;            
         }
     }
 };

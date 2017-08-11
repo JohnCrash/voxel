@@ -24,7 +24,6 @@
             }
         }
         this.zfogEnabled = b;
-        this.needsUpdate = true;
     }
     isZFog(){
         return this.zfogEnabled;
