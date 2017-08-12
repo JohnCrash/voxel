@@ -190,6 +190,10 @@ class SceneManager extends EventEmitter{
             if(json.color)fogUniforms.zfogColor.value.set(json.color.r,json.color.g,json.color.b);
             fogUniforms.zfogHigh.value = json.high || 100.0;
             fogUniforms.zfogLow.value = json.low || 0.0;
+            fogUniforms = this.waterMaterial.uniforms;
+            if(json.color)fogUniforms.zfogColor.value.set(json.color.r,json.color.g,json.color.b);
+            fogUniforms.zfogHigh.value = json.high || 100.0;
+            fogUniforms.zfogLow.value = json.low || 0.0;            
         }else{
             this.enableZFog(false);
         }
@@ -211,6 +215,7 @@ class SceneManager extends EventEmitter{
             if(fogUniforms)
                 this.game.renderer.setClearColor(fogUniforms.zfogColor.value.getHex());
             this.soildMaterial.enableZFog(b);
+            this.waterMaterial.enableZFog(b);
         }
     }
     /**

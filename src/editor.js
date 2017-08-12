@@ -710,6 +710,7 @@ class Edit{
         if(sceneManager.soildMaterial){
             sceneManager.zfog = v;
             sceneManager.soildMaterial.enableZFog(v);
+            sceneManager.waterMaterial.enableZFog(v);
         }        
     }     
     get 'ZFog的颜色'(){
