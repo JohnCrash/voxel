@@ -237,10 +237,21 @@ class ItemUI{
         ui.add(this,'接受阴影');
         ui.add(this,'可见');
         ui.add(this,'水的索引');
-        ui.add(this,'水的透明度',0,1).step(0.1);
+        ui.add(this,'地面');
+        //ui.add(this,'水的透明度',0,1).step(0.1);
         ui.add(this,'动作',item.actions.map(item=>item.name));
         ui.add(this,'删除此物品');
     }
+    get '地面'(){
+        if(this.item){
+            return this.item.ground;
+        }else return false;
+    }
+    set '地面'(b){
+        if(this.item){
+            this.item.ground = b;
+        }
+    }    
     '删除此物品'(){
         if(this.item){
             sceneManager.removeItem(this.item);
@@ -328,6 +339,9 @@ class PhongEditUI{
         this.title = title;
         let ui = this.ui = gui.addFolder(title);
         //addColor(ui,material.color,'color');
+        if(title==='打开水材质界面'){
+            ui.add(this,'水的索引');
+        }
         ui.addColor(this,'color');
         ui.addColor(this,'emissive');
         ui.addColor(this,'specular');
@@ -336,6 +350,12 @@ class PhongEditUI{
         ui.add(material,'transparent');
         ui.add(material,'opacity',0,1).step(0.1);
         ui.add(this,'关闭');
+    }
+    get '水的索引'(){
+        return sceneManager.waterIndex;
+    }
+    set '水的索引'(v){
+        sceneManager.waterIndex = v;
     }
     get color(){
         return '#'+this.material.color.getHexString();

@@ -116,6 +116,7 @@ class Item{
         this.rotation = new Rotation(json.rotation?new THREE.Euler(json.rotation.x,json.rotation.y,json.rotation.z):new THREE.Euler(),this);
         this.name = json.name || '';
         this._visible = json.visible;
+        this.ground = !!json.ground;
         this._castShadow = json.castShadow;
         this._receiveShadow = json.receiveShadow;
         this.loadedDoAction = 'idle';
@@ -201,6 +202,7 @@ class Item{
         json.rotation = {x:this.rotation.x,y:this.rotation.y,z:this.rotation.z};
         json.name = this.name;
         json.visible = this._visible;
+        json.ground = this.ground;
         json.castShadow = this._castShadow;
         json.receiveShadow = this._receiveShadow;
         if(this.template){
