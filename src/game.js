@@ -244,6 +244,7 @@ Game.prototype.removeSkybox=function(){
 Game.prototype.skyboxToJson=function(){
     if(this.skybox && this.skybox.sky && this.skybox.opts){
         return {
+            type : 'sphere',
             skyColor : color(this.skybox.opts.skyColor),
             groundColor : color(this.skybox.opts.groundColor),
             offset : this.skybox.opts.offset,
@@ -267,7 +268,7 @@ Game.prototype.skyboxToJson=function(){
  * skyColor     天空颜色
  * groundColor  地面颜色
  */
-Game.prototype.addSphereSkybox=function(t){
+Game.prototype.addSkybox=function(t){
     this.removeSkybox();
     
     let opts = {

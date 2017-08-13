@@ -6,6 +6,20 @@ import {ZDepthPhongMaterial} from './depthphong';
 
 var EventEmitter = require("events");
 
+function color(c){
+    return {
+        r : c.r,
+        g : c.g,
+        b : c.b
+    }
+}
+function position(p){
+    return {
+        x : p.x,
+        y : p.y,
+        z : p.z
+    }
+}
 class SceneManager extends EventEmitter{
     constructor(game){
         super();
@@ -15,8 +29,13 @@ class SceneManager extends EventEmitter{
         this.items = [];    //场景中物体
         this.players = [];  //场景中玩家包括npc
         this.zfog = true;
-        
-        this.soildMaterial = new ZDepthPhongMaterial({ color: 0xffffff,
+
+        this.setBackgroundColor(0);
+        this.itemMaterial = new ZDepthPhongMaterial({ color: 0xffffff,
+             shading: THREE.FlatShading, 
+             vertexColors: THREE.VertexColors,
+             shininess: 0} );
+        this.groundMaterial = new ZDepthPhongMaterial({ color: 0xffffff,
              shading: THREE.FlatShading, 
              vertexColors: THREE.VertexColors,
              shininess: 0} );
@@ -29,7 +48,14 @@ class SceneManager extends EventEmitter{
         this.enableZFog(true);
         game.on('update',dt=>this.update(dt));
     }
-
+    setBackgroundColor(c){
+        this.bgcolor = new THREE.Color(c);
+        this.game.renderer.autoClear = true;
+        this.game.renderer.setClearColor(c);
+    }
+    getBackgroundColor(){
+        return this.bgcolor;
+    }
     /**
      * 删除场景全部的对象
      */
@@ -57,7 +83,9 @@ class SceneManager extends EventEmitter{
     loadFromJson(json,cb){
         this.description = json.description;
         this.script = json.script;
+        if(json.bgcolor)this.setBackgroundColor(json.bgcolor);
         this.loadSkybox(json.skybox);
+        this.loadMaterial(json.material);
         this.loadZFog(json.zfog);
         this.loadCamera(json.camera);
         this.loadLight(json.light);
@@ -66,11 +94,7 @@ class SceneManager extends EventEmitter{
 
     loadSkybox(t){
         if(t){
-            if(t.type==='sphere')
-                this.game.addSphereSkybox(t);
-            else if(t.type==='zfog'){
-
-            }
+            this.game.addSkybox(t);
         }else{
             this.game.removeSkybox();
         }
@@ -129,9 +153,18 @@ class SceneManager extends EventEmitter{
         }
         return true;
     }
-
-    loadEnv(env){
+    loadMaterial(material){
+        if(material){
+            this.itemMaterial.setValues(material.item);
+            this.groundMaterial.setValues(material.ground);
+            this.waterMaterial.setValues(material.water);
+        }
+    }
+    loadEnv(env){ 
+        if(env.bgcolor)this.setBackgroundColor(env.bgcolor);
         this.loadSkybox(env.skybox);
+        this.loadMaterial(env.material);
+        this.loadZFog(env.zfog);
         this.loadCamera(env.camera);
         this.loadLight(env.light);
     }
@@ -184,37 +217,38 @@ class SceneManager extends EventEmitter{
         }
     }
     loadZFog(json){
-        if(json && this.soildMaterial){
+        if(json && this.groundMaterial){
             this.enableZFog(true);
-            let fogUniforms = this.soildMaterial.uniforms;
-            if(json.color)fogUniforms.zfogColor.value.set(json.color.r,json.color.g,json.color.b);
+            let fogUniforms = this.groundMaterial.uniforms;
+            if(json.color)fogUniforms.zfogColor.value.setRGB(json.color.r,json.color.g,json.color.b);
             fogUniforms.zfogHigh.value = json.high || 100.0;
             fogUniforms.zfogLow.value = json.low || 0.0;
             fogUniforms = this.waterMaterial.uniforms;
-            if(json.color)fogUniforms.zfogColor.value.set(json.color.r,json.color.g,json.color.b);
+            if(json.color)fogUniforms.zfogColor.value.setRGB(json.color.r,json.color.g,json.color.b);
             fogUniforms.zfogHigh.value = json.high || 100.0;
-            fogUniforms.zfogLow.value = json.low || 0.0;            
+            fogUniforms.zfogLow.value = json.low || 0.0;    
+            fogUniforms = this.itemMaterial.uniforms;
+            if(json.color)fogUniforms.zfogColor.value.setRGB(json.color.r,json.color.g,json.color.b);
+            fogUniforms.zfogHigh.value = json.high || 100.0;
+            fogUniforms.zfogLow.value = json.low || 0.0;                       
         }else{
             this.enableZFog(false);
         }
     }
     zfogToJson(){
-        if(this.soildMaterial){
-            let fogUniforms = this.soildMaterial.uniforms
+        if(this.groundMaterial){
+            let fogUniforms = this.groundMaterial.uniforms
             return {
-                color : fogUniforms.zfogColor.value.toJSON(),
+                color : color(fogUniforms.zfogColor.value),
                 high : fogUniforms.zfogHigh.value,
                 low : fogUniforms.zfogLow.value
             };
         }
     }
     enableZFog(b){
-        if(this.soildMaterial){
-            let fogUniforms = this.soildMaterial.uniforms;
-            this.game.renderer.autoClear = b;
-            if(fogUniforms)
-                this.game.renderer.setClearColor(fogUniforms.zfogColor.value.getHex());
-            this.soildMaterial.enableZFog(b);
+        if(this.groundMaterial){
+            this.groundMaterial.enableZFog(b);
+            this.itemMaterial.enableZFog(b);
             this.waterMaterial.enableZFog(b);
         }
     }
@@ -225,6 +259,7 @@ class SceneManager extends EventEmitter{
         let json = {
             description:this.description,
             script:this.script,
+            bgcolor : this.getBackgroundColor().toJSON(),
             camera:{
                 position:{x:this.game.camera.position.x,
                     y:this.game.camera.position.y,
@@ -234,6 +269,11 @@ class SceneManager extends EventEmitter{
                     z:this.game.camera.rotation.z}                   
             },
             skybox:this.game.skyboxToJson(),
+            material:{
+                item:this.itemMaterial.toJSON(),
+                ground:this.groundMaterial.toJSON(),
+                water:this.waterMaterial.toJSON()
+            },
             light:[],
             item:[]
         };
@@ -288,20 +328,6 @@ class SceneManager extends EventEmitter{
         }
         for(let item of this.items){
             json.item.push(item.toJson());
-        }
-        function color(c){
-            return {
-                r : c.r,
-                g : c.g,
-                b : c.b
-            }
-        }
-        function position(p){
-            return {
-                x : p.x,
-                y : p.y,
-                z : p.z
-            }
         }
         return json;
     }

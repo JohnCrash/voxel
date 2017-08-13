@@ -130,13 +130,13 @@ class Item{
                             this.water = json.water;
                             this.waterOpacity = json.waterOpacity;
                             this.mesh[i] = this.vox.createModelGroupWater(i,json.water,
-                                this.sceneManager.soildMaterial,
+                                this.sceneManager.groundMaterial,
                                 this.sceneManager.waterMaterial);
-                            let soild = this.mesh[i].children[0];
+                            let ground = this.mesh[i].children[0];
                             let water = this.mesh[i].children[1];
-                            if(soild){
-                                soild.castShadow = this._castShadow;
-                                soild.receiveShadow = this._receiveShadow;                                
+                            if(ground){
+                                ground.castShadow = this._castShadow;
+                                ground.receiveShadow = this._receiveShadow;
                             }
                             if(water){
                                 water.castShadow = false;
@@ -145,7 +145,7 @@ class Item{
                                     water.material.opacity = json.waterOpacity;
                             }                            
                         }else{
-                            this.mesh[i] = this.vox.createModelMesh(i,this.sceneManager.soildMaterial);
+                            this.mesh[i] = this.vox.createModelMesh(i,this.sceneManager.itemMaterial);
                             this.mesh[i].castShadow = this._castShadow;
                             this.mesh[i].receiveShadow = this._receiveShadow;
                         }
@@ -234,15 +234,15 @@ class Item{
         this.water = waterIndex;
         for(let i=0;i<this.mesh.length;i++){
             this.mesh[i] = this.vox.createModelGroupWater(i,waterIndex,
-                                this.sceneManager.soildMaterial,
+                                this.sceneManager.groundMaterial,
                                 this.sceneManager.waterMaterial);
             this.mesh[i].castShadow = this._castShadow;
             this.mesh[i].receiveShadow = this._receiveShadow;
-            let soild = this.mesh[i].children[0];
+            let ground = this.mesh[i].children[0];
             let water = this.mesh[i].children[1];
-            if(soild){
-                soild.castShadow = this._castShadow;
-                soild.receiveShadow = this._receiveShadow;                                
+            if(ground){
+                ground.castShadow = this._castShadow;
+                ground.receiveShadow = this._receiveShadow;                                
             }
             if(water){
                 water.castShadow = false;

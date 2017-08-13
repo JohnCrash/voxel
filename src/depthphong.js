@@ -29,13 +29,11 @@
         return this.zfogEnabled;
     }
     onBeforeCompile(shader){
-        if(this.zfogEnabled){
-            shader.uniforms.zfogColor = this.uniforms.zfogColor;
-            shader.uniforms.zfogHigh = this.uniforms.zfogHigh;
-            shader.uniforms.zfogLow = this.uniforms.zfogLow;
-            shader.vertexShader = THREE.DepthZFogShader.vertexShader;
-            shader.fragmentShader = THREE.DepthZFogShader.fragmentShader;
-        }
+        shader.uniforms.zfogColor = this.uniforms.zfogColor;
+        shader.uniforms.zfogHigh = this.uniforms.zfogHigh;
+        shader.uniforms.zfogLow = this.uniforms.zfogLow;
+        shader.vertexShader = THREE.DepthZFogShader.vertexShader;
+        shader.fragmentShader = THREE.DepthZFogShader.fragmentShader;
     }
  };
 

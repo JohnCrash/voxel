@@ -321,6 +321,48 @@ class ItemUI{
     }    
 };
 
+//材质编辑界面
+class PhongEditUI{
+    constructor(title,material){
+        this.material = material;
+        this.title = title;
+        let ui = this.ui = gui.addFolder(title);
+        //addColor(ui,material.color,'color');
+        ui.addColor(this,'color');
+        ui.addColor(this,'emissive');
+        ui.addColor(this,'specular');
+        ui.add(material,'shininess',0,100);
+        ui.add(material,'wireframe');
+        ui.add(material,'transparent');
+        ui.add(material,'opacity',0,1).step(0.1);
+        ui.add(this,'关闭');
+    }
+    get color(){
+        return '#'+this.material.color.getHexString();
+    }
+    set color(c){
+        this.material.color.setStyle(c);
+    }
+    get emissive(){
+        return '#'+this.material.emissive.getHexString();
+    }
+    set emissive(c){
+        this.material.emissive.setStyle(c);
+    }
+    get specular(){
+        return '#'+this.material.specular.getHexString();
+    }
+    set specular(c){
+        this.material.specular.setStyle(c);
+    }
+        
+    '关闭'(){
+        removeFolder(this.ui,this.title);
+        this.ui = null;
+        this.title = null;
+    }
+};
+
 class ItemEditUI{
 
 };
@@ -336,11 +378,12 @@ class Edit{
         this['环境名:'] = '';
         this.lightUI = [];
         this.itemUI = [];
+        this.uis = [];
         this.zfog = true;
         this.axisHelper = new THREE.AxisHelper( 200 );
         game.scene.add(this.axisHelper);
         
-        let lightTool = gui.addFolder('灯光工具');
+        let lightTool = gui.addFolder('环境工具');
         lightTool.add(this,'性能监测');
         lightTool.add(this,'坐标轴');
         lightTool.add(this,'SMAA');
@@ -348,21 +391,29 @@ class Edit{
         lightTool.add(this,'加入聚光灯');
         lightTool.add(this,'加入环境灯');
         lightTool.add(this,'加入半球灯');
-        
+
+        //打开实体材质调节
+        //打开水材质调节
+        lightTool.add(this,'打开对象材质界面');
+        lightTool.add(this,'打开地面材质界面');
+        lightTool.add(this,'打开水材质界面');
+
         //调节天空盒参数
-        lightTool.add(this,'打开天空球');
-        lightTool.addColor(this,'天空颜色');
-        lightTool.addColor(this,'地面颜色');
-        lightTool.add(this,'天空球半径',100,1000);
-        lightTool.add(this,'雾的近点',0.1,5).step(0.01);
-        lightTool.add(this,'雾的远点',0.1,5).step(0.01);
-        lightTool.add(this,'偏移',-100,100);
-        lightTool.add(this,'指数',0.1,1).step(0.1);
+        this.uis.push(lightTool.add(this,'打开天空球'));
+        this.uis.push(lightTool.addColor(this,'天空颜色'));
+        this.uis.push(lightTool.addColor(this,'地面颜色'));
+        this.uis.push(lightTool.add(this,'天空球半径',100,1000));
+        this.uis.push(lightTool.add(this,'雾的近点',0.1,5).step(0.01));
+        this.uis.push(lightTool.add(this,'雾的远点',0.1,5).step(0.01));
+        this.uis.push(lightTool.add(this,'偏移',-100,100));
+        this.uis.push(lightTool.add(this,'指数',0.1,1).step(0.1));
         
-        lightTool.add(this,'打开ZFog');
-        lightTool.addColor(this,'ZFog的颜色');
-        lightTool.add(this,'ZFog高面',-1000,1000);
-        lightTool.add(this,'ZFog低面',-1000,1000);
+        this.uis.push(lightTool.addColor(this,'背景颜色'));
+
+        this.uis.push(lightTool.add(this,'打开ZFog'));
+        this.uis.push(lightTool.addColor(this,'ZFog的颜色'));
+        this.uis.push(lightTool.add(this,'ZFog高面',-1000,1000));
+        this.uis.push(lightTool.add(this,'ZFog低面',-1000,1000));
 
         lightTool.add(this,'创建环境');
         lightTool.add(this,'环境名:');
@@ -412,6 +463,18 @@ class Edit{
         }
         this.smaa = b;
     }
+    '打开对象材质界面'(){
+        if(!this.itemMaterialUI)
+            this.itemMaterialUI = new PhongEditUI('物体材质',sceneManager.itemMaterial);    
+    }
+    '打开地面材质界面'(){
+        if(!this.groundMaterialUI)
+            this.groundMaterialUI = new PhongEditUI('地面材质',sceneManager.groundMaterial);
+    }
+    '打开水材质界面'(){
+        if(!this.waterMaterialUI)
+            this.waterMaterialUI = new PhongEditUI('水材质',sceneManager.waterMaterial);
+    }
     '清空场景'(){
         sceneManager.clearLight();
         sceneManager.clearItem();
@@ -438,7 +501,10 @@ class Edit{
         if(name){
             let json = sceneManager.toJson();
             let exp = {
+                bgcolor : json.bgcolor,
                 skybox : json.skybox,
+                material : json.material,
+                zfog : json.zfog,
                 camera : json.camera,
                 light : json.light
             };
@@ -580,6 +646,8 @@ class Edit{
     rebuildGUI(t){ //从场景重建gui
         //删除现有的gui folder
         if(t==='scene'||t==='env'){
+            for(let ui of this.uis)
+                ui.updateDisplay();
             for(let light of this.lightUI)
                 light['删除此灯']();
             this.lightUI = [];
@@ -643,7 +711,7 @@ class Edit{
     }
     set '打开天空球'(e){
         if(e)
-            game.addSphereSkybox(game.skybox);
+            game.addSkybox(game.skybox);
         else
             game.removeSkybox();
     }    
@@ -702,65 +770,77 @@ class Edit{
         game.skybox.uniforms.exponent.value = v;
     }  
     get '打开ZFog'(){
-        if(sceneManager.soildMaterial){
-            return sceneManager.soildMaterial.isZFog();
+        if(sceneManager.groundMaterial){
+            return sceneManager.groundMaterial.isZFog();
         }else return false;
     }
     set '打开ZFog'(v){
-        if(sceneManager.soildMaterial){
+        if(sceneManager.groundMaterial){
             sceneManager.zfog = v;
-            sceneManager.soildMaterial.enableZFog(v);
+            sceneManager.itemMaterial.enableZFog(v);
+            sceneManager.groundMaterial.enableZFog(v);
             sceneManager.waterMaterial.enableZFog(v);
         }        
+    }    
+    get '背景颜色'(){
+        return '#'+sceneManager.getBackgroundColor().getHexString();
+    }
+    set '背景颜色'(v){
+        sceneManager.setBackgroundColor(v);
     }     
     get 'ZFog的颜色'(){
-        if(sceneManager.soildMaterial){
-            let fogUniforms = sceneManager.soildMaterial.uniforms;
+        if(sceneManager.groundMaterial){
+            let fogUniforms = sceneManager.groundMaterial.uniforms;
             return '#'+fogUniforms.zfogColor.value.getHexString();
         }else return '#000000';
     }
     set 'ZFog的颜色'(v){
-        if(sceneManager.soildMaterial){
-            let fogUniforms = sceneManager.soildMaterial.uniforms;
+        if(sceneManager.groundMaterial){
+            let fogUniforms = sceneManager.groundMaterial.uniforms;
             fogUniforms.zfogColor.value.setStyle(v);
             fogUniforms = sceneManager.waterMaterial.uniforms;
             fogUniforms.zfogColor.value.setStyle(v);
-            game.renderer.setClearColor(fogUniforms.zfogColor.value.getHex());
+            fogUniforms = sceneManager.itemMaterial.uniforms;
+            fogUniforms.zfogColor.value.setStyle(v);
         }    
     } 
     get 'ZFog高面'(){
-        if(sceneManager.soildMaterial &&　sceneManager.zfog){
-            let fogUniforms = sceneManager.soildMaterial.uniforms;
+        if(sceneManager.groundMaterial &&　sceneManager.zfog){
+            let fogUniforms = sceneManager.groundMaterial.uniforms;
             return fogUniforms.zfogHigh.value;
         }else return 0;
     }
     set 'ZFog高面'(v){
-        if(sceneManager.soildMaterial &&　sceneManager.zfog){
-            let fogUniforms = sceneManager.soildMaterial.uniforms;
+        if(sceneManager.groundMaterial &&　sceneManager.zfog){
+            let fogUniforms = sceneManager.groundMaterial.uniforms;
             fogUniforms.zfogHigh.value = v;
             fogUniforms = sceneManager.waterMaterial.uniforms;
             fogUniforms.zfogHigh.value = v;
+            fogUniforms = sceneManager.itemMaterial.uniforms;
+            fogUniforms.zfogHigh.value = v;         
         }
     } 
     get 'ZFog低面'(){
-        if(sceneManager.soildMaterial &&　sceneManager.zfog){
-            let fogUniforms = sceneManager.soildMaterial.uniforms;
+        if(sceneManager.groundMaterial &&　sceneManager.zfog){
+            let fogUniforms = sceneManager.groundMaterial.uniforms;
             return fogUniforms.zfogLow.value;
         }else return 0;
     }
     set 'ZFog低面'(v){
-        if(sceneManager.soildMaterial &&　sceneManager.zfog){
-            let fogUniforms = sceneManager.soildMaterial.uniforms;
+        if(sceneManager.groundMaterial &&　sceneManager.zfog){
+            let fogUniforms = sceneManager.groundMaterial.uniforms;
             fogUniforms.zfogLow.value = v;
             fogUniforms = sceneManager.waterMaterial.uniforms;
-            fogUniforms.zfogLow.value = v;            
+            fogUniforms.zfogLow.value = v;   
+            fogUniforms = sceneManager.itemMaterial.uniforms;
+            fogUniforms.zfogLow.value = v;                     
         }
     }
 };
 
 game.on('init',function(){
     //加入一个天空盒
-    this.addSphereSkybox({
+    this.addSkybox({
         skyColor    : 0x0077ff,
         groundColor : 0xca8e38,
         raduis      : 300,
