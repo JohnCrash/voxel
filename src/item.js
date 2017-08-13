@@ -26,6 +26,7 @@ import {ItemTemplate} from './itemtemplate'
 import {ScriptManager} from './scriptmanager';
 
 import log from './log';
+var aabb = require('aabb-3d');
 
 class Position{
     constructor(p,item){
@@ -281,6 +282,12 @@ class Item{
                     if(this.curMesh !== this.mesh[i]){
                         if(this.curMesh)this.scene.remove(this.curMesh); //remove old
                         this.curMesh = this.mesh[i];
+                        this.curDim = this.vox.getModelSize(i);
+                        if(this.water){
+                            this.curVox = this.vox.getModelVolumeWater(i,this.water).volume;
+                        }else{
+                            this.curVox = this.vox.getModelVolume(i);
+                        }
                         this.scene.add(this.curMesh);
                         this.curMesh.position.set(this.position.x,this.position.y,this.position.z);
                         this.curMesh.rotation.set(this.rotation.x,this.rotation.y,this.rotation.z);
@@ -347,6 +354,37 @@ class Item{
             if(this.live)this.live('release');
             this.scene.remove(this.curMesh);
             this.curMesh = null;
+        }
+    }
+    aabb(){
+        if(this.curDim)
+            return aabb([x1:this.position.x-this.curDim[0]/2,y1:this.position.y-this.curDim[1]/2,z1:this.position.z],
+                [this.position.x+this.curDim[0]/2,this.position.y+this.curDim[1]/2,this.position.z+this.curDim[2]]);
+        else return aabb([0,0,0],[0,0,0]);
+    }
+    /**
+     * 该对象和另一个对象进行碰撞测试(算法忽略旋转)
+     */
+    collision(item){
+        //this.curVox 当前对象的体素
+        //this.curDim 当前对象的体素尺寸
+        //中心点在体素的地面中心位置
+        let ab1 = this.aabb();
+        let ab2 = item.aabb();
+        let u = ab1.union(ab2)
+        if((u!==null)&&((u.width()==0)||(u.height()==0)||(u.depth()==0))){//AABB相交
+            if(!(this.ground || item.ground)){ 
+                return u;//都不是地面的碰撞，简单的返回两个物体aabb盒的交集
+            }
+            let ground = this.ground?this:item;
+            let obj = this.ground?item:this;
+            //两个体素之间的偏移,相对于本体素的下角
+            let p = {x:ground.position.x-obj.position.x,
+            y:ground.position.y-obj.position.y,
+            z:ground.position.z-obj.position.z};
+
+        }else{
+            return false;//不相交
         }
     }
 };
