@@ -53,12 +53,18 @@ class Position{
     set z(v){
         this.p.z = v;
         if(this.item.curMesh)this.item.curMesh.position.z = v;
-    }  
+    }
     set(x,y,z){
         this.p.x = x;
         this.p.y = y;
         this.p.z = z;
         if(this.item.curMesh)this.item.curMesh.position.set(x,y,z);
+    }
+    add(x,y,z){
+        this.p.x += x;
+        this.p.y += y;
+        this.p.z += z;
+        if(this.item.curMesh)this.item.curMesh.position.set(this.p.x,this.p.y,this.p.z);
     }
     get(){
         return this.p;
@@ -118,6 +124,10 @@ class Item{
         this.name = json.name || '';
         this._visible = json.visible;
         this.ground = !!json.ground;
+        this.collision = !!json.collision;//是否碰撞
+        this.fixed = !!json.fixed;//是否是一个固定对象
+        this.gravity = !!json.gravity;//是否受重力影响
+        this.velocity = json.velocity?new THREE.Vector3(json.velocity.x,json.velocity.y,json.velocity.z):new THREE.Vector3();
         this._castShadow = json.castShadow;
         this._receiveShadow = json.receiveShadow;
         this.loadedDoAction = 'idle';
@@ -132,7 +142,7 @@ class Item{
                             this.water = json.water;
                             this.waterOpacity = json.waterOpacity;
                             this.mesh[i] = this.vox.createModelGroupWater(i,json.water,
-                                this.sceneManager.groundMaterial,
+                                this.ground?this.sceneManager.groundMaterial:this.sceneManager.itemMaterial,
                                 this.sceneManager.waterMaterial);
                             let ground = this.mesh[i].children[0];
                             let water = this.mesh[i].children[1];
@@ -204,6 +214,13 @@ class Item{
         json.name = this.name;
         json.visible = this._visible;
         json.ground = this.ground;
+        
+        json.collision = !!this.collision;
+        json.fixed = !!this.fixed;
+        json.gravity = !!this.gravity;
+
+        json.velocity = {x:this.velocity.x,y:this.velocity.y,z:this.velocity.z};
+
         json.castShadow = this._castShadow;
         json.receiveShadow = this._receiveShadow;
         if(this.template){
@@ -234,10 +251,10 @@ class Item{
     }
     //物品包含水,设置水的索引
     setWaterIndex(waterIndex){
-        this.water = waterIndex;
+        this.water = waterIndex>=0?waterIndex:this.water;
         for(let i=0;i<this.mesh.length;i++){
             this.mesh[i] = this.vox.createModelGroupWater(i,waterIndex,
-                                this.sceneManager.groundMaterial,
+                                this.ground?this.sceneManager.groundMaterial:this.sceneManager.itemMaterial,
                                 this.sceneManager.waterMaterial);
             this.mesh[i].castShadow = this._castShadow;
             this.mesh[i].receiveShadow = this._receiveShadow;
@@ -356,36 +373,133 @@ class Item{
             this.curMesh = null;
         }
     }
+    /**
+     * 处理碰撞时发生的物理
+     * 任何碰撞都导致速度为零，如果发生重叠就沿着速度的反方向返回。
+     */
+    collisionPhysic(item,ab){
+        let x = this.velocity.x;
+        let y = this.velocity.y;
+        let z = this.velocity.z;
+        if(this.fixed||this.ground){
+            this.velocity.set(0,0,0);
+        }else if(x!=0||y!=0||z!=0){
+            if(x>0)
+                x = 1;
+            else if(x<0)
+                x = -1;
+            else
+                x = 0;
+            if(y>0)
+                y = 1;
+            else if(x<0)
+                y = -1;
+            else
+                y = 0;
+            if(z>0)
+                z = 1;
+            else if(z<0)
+                z = -1;
+            else
+                z = 0;
+            this.position.x -= x*ab.width();
+            this.position.y -= y*ab.height();
+            this.position.z -= z*ab.depth();
+            this.velocity.set(0,0,0);
+        }
+    }
+    /**
+     * 当物体发生碰撞时被调用
+     * item为另一个物体，ab是两个物体碰撞交集aabb盒
+     */
+    onCollision(item,ab){
+    }
     aabb(){
-        if(this.curDim)
-            return aabb([x1:this.position.x-this.curDim[0]/2,y1:this.position.y-this.curDim[1]/2,z1:this.position.z],
-                [this.position.x+this.curDim[0]/2,this.position.y+this.curDim[1]/2,this.position.z+this.curDim[2]]);
+        if(this.curDim){
+            return aabb([this.position.x-this.curDim[0]/2,this.position.y-this.curDim[1]/2,this.position.z],
+                [this.curDim[0],this.curDim[1],this.curDim[2]]);
+        }
         else return aabb([0,0,0],[0,0,0]);
+    }
+    aabbcub(){ //取短边为碰撞盒的边
+        if(this.curDim){
+            let w = Math.min(this.curDim[0],this.curDim[1]);
+            return aabb([this.position.x-w/2,this.position.y-w/2,this.position.z],
+                [w,w,this.curDim[2]]);
+        }
+        else return aabb([0,0,0],[0,0,0]);        
     }
     /**
      * 该对象和另一个对象进行碰撞测试(算法忽略旋转)
      */
-    collision(item){
+    collisionFunc(item){
         //this.curVox 当前对象的体素
         //this.curDim 当前对象的体素尺寸
         //中心点在体素的地面中心位置
-        let ab1 = this.aabb();
-        let ab2 = item.aabb();
+        let ab1 = this.aabbcub();
+        let ab2 = item.aabbcub();
         let u = ab1.union(ab2)
-        if((u!==null)&&((u.width()==0)||(u.height()==0)||(u.depth()==0))){//AABB相交
+        if((u!==null)&&((u.width()>0)||(u.height()>0)||(u.depth()>0))){//AABB相交
             if(!(this.ground || item.ground)){ 
                 return u;//都不是地面的碰撞，简单的返回两个物体aabb盒的交集
             }
-            let ground = this.ground?this:item;
-            let obj = this.ground?item:this;
+            let ground,obj,objAABB;
+            if(this.ground){
+                ground = this;
+                obj = item;
+                objAABB = ab2;
+            }else{
+                ground = item;
+                obj = this;
+                objAABB = ab1;
+            }
             //两个体素之间的偏移,相对于本体素的下角
-            let p = {x:ground.position.x-obj.position.x,
-            y:ground.position.y-obj.position.y,
-            z:ground.position.z-obj.position.z};
-
-        }else{
-            return false;//不相交
+            let p = new THREE.Vector3(obj.position.x-ground.position.x+ground.curDim[0]/2,
+                                    obj.position.y-ground.position.y+ground.curDim[1]/2,
+                                    obj.position.z-ground.position.z);
+            let groundVox = ground.curVox;
+            let groundX = ground.curDim[0];
+            let groundPlane = ground.curDim[0]*ground.curDim[1];
+            let groundVoxMaxIndex = groundPlane*ground.curDim[2];
+            //为了速度考虑，这里仅仅测试obj的侧面外壳
+            let edge = []; //obj的底边
+            for(let x = -obj.curDim[0]/2;x<=obj.curDim[0]/2;x++){
+                edge.push({x:x,y:-obj.curDim[1]/2});
+                edge.push({x:x,y:obj.curDim[1]/2});
+            }
+            for(let y = -obj.curDim[1]/2+1;y<=obj.curDim[1]/2-1;y++){
+                edge.push({x:-obj.curDim[0]/2,y:y});
+                edge.push({x:obj.curDim[0]/2,y:y});
+            }
+            let vmin = {x:ground.curDim[0],y:ground.curDim[1],z:ground.curDim[2]};
+            let vmax = {x:0,y:0,z:0};
+            for(let z = 0;z<obj.curDim[2];z++){
+                for(let pt of edge){
+                    let vx = Math.floor(p.x+pt.x);
+                    let vy = Math.floor(p.y+pt.y);
+                    let vz = Math.floor(p.z+z);
+                    let inx = vx+vy*groundX+vz*groundPlane;
+                    if(inx < groundVoxMaxIndex && inx>=0 && groundVox[inx]!=0){
+                        vmin.x = Math.min(vmin.x,vx);
+                        vmin.y = Math.min(vmin.y,vy);
+                        vmin.z = Math.min(vmin.z,vz);
+                        vmax.x = Math.max(vmax.x,vx);
+                        vmax.y = Math.max(vmax.y,vy);
+                        vmax.z = Math.max(vmax.z,vz);
+                    }
+                }
+            }
+            if(vmax.x!=0 && vmin.x!=ground.curDim[0]){
+                //构造碰撞体并返回交集
+                let voxaabb = aabb([ground.position.x-ground.curDim[0]/2+vmin.x,
+                        ground.position.y-ground.curDim[1]/2+vmin.y,
+                        ground.position.y+vmin.z],
+                        [vmax.x-vmin.x+1,vmax.y-vmin.y+1,vmax.z-vmin.z+1]);
+                return voxaabb.union(objAABB);
+            }
         }
+
+        return null;//不相交
     }
 };
 

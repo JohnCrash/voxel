@@ -5,6 +5,7 @@ import {Item} from './item';
 import {ZDepthPhongMaterial} from './depthphong';
 
 var EventEmitter = require("events");
+var aabb = require('aabb-3d');
 
 function color(c){
     return {
@@ -29,6 +30,7 @@ class SceneManager extends EventEmitter{
         this.items = [];    //场景中物体
         this.players = [];  //场景中玩家包括npc
         this.zfog = true;
+        this.gravity = -98;//重力加速度
 
         this.setBackgroundColor(0);
         this.itemMaterial = new ZDepthPhongMaterial({ color: 0xffffff,
@@ -354,9 +356,46 @@ class SceneManager extends EventEmitter{
      * 更新场景
      */
     update(dt){
+        let dts = dt/1000.0;
+        //更新物体
         for(let item of this.items){
+            if(this.physical){
+                //重力处理
+                if(item.gravity){
+                    item.velocity.z += (this.gravity*dts);
+                }
+                //处理位移
+                if(!item.fixed && !item.ground){
+                    item.position.add(item.velocity.x*dts,item.velocity.y*dts,item.velocity.z*dts);
+                }
+            }
             item.update(dt);
         }
+        //碰撞处理
+        for(let i=0;i<this.items.length;i++){
+            let item1 = this.items[i];
+            if(item1.collision||item1.ground){
+                for(let j=i+1;j<this.items.length;j++){
+                    let item2 = this.items[j];
+                    if(item2.collision||item2.ground){
+                        let ab = item1.collisionFunc(item2);
+                        if(ab){
+                            this.collision(item1,item2,ab);
+                            item1.onCollision(item2,ab);
+                            item2.onCollision(item1,ab);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    /**
+     * 两个物体发生碰转
+     */
+    collision(item1,item2,ab){
+        item1.collisionPhysic(item2,ab);
+        item2.collisionPhysic(item2,ab);
+        this.emit('collision',item1,item2,ab);
     }
 };
 

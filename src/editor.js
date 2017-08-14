@@ -230,6 +230,7 @@ class ItemUI{
         let name = checkFolderName(item.name || `物品${itemID++}`);
         let ui = this.ui = gui.addFolder(name);
         item.name = name;
+        this.aabb = false;
         ui.add(this,'名称:');
         addPosition(ui,item.position);
         ui.add(this,'面向',0,2*Math.PI).step(0.1);
@@ -238,9 +239,30 @@ class ItemUI{
         ui.add(this,'可见');
         ui.add(this,'水的索引');
         ui.add(this,'地面');
+        ui.add(this,'是否可碰撞');
+        ui.add(this,'是否固定');
+        ui.add(this,'是否受重力影响');
         //ui.add(this,'水的透明度',0,1).step(0.1);
         ui.add(this,'动作',item.actions.map(item=>item.name));
         ui.add(this,'删除此物品');
+    }
+    get '是否可碰撞'(){
+        return this.item.collision;
+    }
+    set '是否可碰撞'(b){
+        this.item.collision = b;
+    }
+    get '是否固定'(){
+        return this.item.fixed;
+    }
+    set '是否固定'(b){
+        this.item.fixed = b;
+    }
+    get '是否受重力影响'(){
+        return this.item.gravity;
+    }
+    set '是否受重力影响'(b){
+        this.item.gravity = b;
     }
     get '地面'(){
         if(this.item){
@@ -250,6 +272,7 @@ class ItemUI{
     set '地面'(b){
         if(this.item){
             this.item.ground = b;
+            this.item.setWaterIndex(-1);
         }
     }    
     '删除此物品'(){
@@ -440,6 +463,8 @@ class Edit{
 
         let sceneTool = gui.addFolder('场景工具');
         this.sceneTool = sceneTool;
+        sceneTool.add(this,'打开重力');
+        sceneTool.add(this,'重力加速度',0,1000).step(0.1);
         sceneTool.add(this,'清空场景');
         sceneTool.add(this,'保存场景');
         this.sceneNameUI = sceneTool.add(this,'场景名称:');
@@ -469,6 +494,18 @@ class Edit{
             this.envList = files;
         });        
     }  
+    get '打开重力'(){
+        return !!sceneManager.physical;
+    }
+    set '打开重力'(b){
+        sceneManager.physical = b;
+    }   
+    get '重力加速度'(){
+        return -sceneManager.gravity;
+    }
+    set '重力加速度'(g){
+        sceneManager.gravity = -g;
+    }
     get SMAA(){
         return this.smaa;
     }
