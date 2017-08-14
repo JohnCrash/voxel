@@ -423,6 +423,7 @@ class Item{
     }
     aabbcub(){ //取短边为碰撞盒的边
         if(this.curDim){
+            if(this.ground)return this.aabb();
             let w = Math.min(this.curDim[0],this.curDim[1]);
             return aabb([this.position.x-w/2,this.position.y-w/2,this.position.z],
                 [w,w,this.curDim[2]]);
@@ -463,13 +464,14 @@ class Item{
             let groundVoxMaxIndex = groundPlane*ground.curDim[2];
             //为了速度考虑，这里仅仅测试obj的侧面外壳
             let edge = []; //obj的底边
-            for(let x = -obj.curDim[0]/2;x<=obj.curDim[0]/2;x++){
-                edge.push({x:x,y:-obj.curDim[1]/2});
-                edge.push({x:x,y:obj.curDim[1]/2});
+            let w = Math.min(obj.curDim[0],obj.curDim[1]);
+            for(let x = -w/2;x<=w/2;x++){
+                edge.push({x:x,y:-w/2});
+                edge.push({x:x,y:w/2});
             }
-            for(let y = -obj.curDim[1]/2+1;y<=obj.curDim[1]/2-1;y++){
-                edge.push({x:-obj.curDim[0]/2,y:y});
-                edge.push({x:obj.curDim[0]/2,y:y});
+            for(let y = -w/2+1;y<=w/2-1;y++){
+                edge.push({x:-w/2,y:y});
+                edge.push({x:w/2,y:y});
             }
             let vmin = {x:ground.curDim[0],y:ground.curDim[1],z:ground.curDim[2]};
             let vmax = {x:0,y:0,z:0};
