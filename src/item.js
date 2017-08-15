@@ -384,22 +384,33 @@ class Item{
     onCollision(item,ab,dt){
     }
     aabb(){
-        if(this.curDim){
-            return aabb([this.position.x-this.curDim[0]/2,this.position.y-this.curDim[1]/2,this.position.z],
-                [this.curDim[0],this.curDim[1],this.curDim[2]]);
-        }
-        else return aabb([0,0,0],[0,0,0]);
+        return aabb([this.position.x-this.curDim[0]/2,this.position.y-this.curDim[1]/2,this.position.z],
+            [this.curDim[0],this.curDim[1],this.curDim[2]]);
     }
     collisionAABB(){
-        if(this.curDim){
-            if(this.ground)return this.aabb();
-            let x,y,z;
-            
-            z = this.curDim[2];
-            return aabb([this.position.x-x/2,this.position.y-y/2,z],
-                [x,y,z]);
+        if(this.ground)return this.aabb();
+        let w = this.collisionWidth();
+        let z = this.curDim[2];
+        return aabb([this.position.x-w/2,this.position.y-w/2,z],
+            [w,w,z]);
+    }
+    collisionWidth(){
+        return Math.floor((this.curDim[0]+this.curDim[1])/2);
+    }
+    collisionEdge(){
+        if(this._edge)return this._edge;
+        let edge = [];
+        let w12 = this.collisionWidth()/2;
+        for(let x = -w12;x<w12;x++){
+            edge.push({x:x,y:-w12});
+            edge.push({x:x,y:w12-1});
         }
-        else return aabb([0,0,0],[0,0,0]);
+        for(let y = -w12+1;y<w12-1;y++){
+            edge.push({x:-w12,y:y});
+            edge.push({x:w12-1,y:y});
+        }
+        this._edge = edge;
+        return edge;
     }
     /**
      * 该对象和另一个对象进行碰撞测试(算法忽略旋转)
@@ -408,6 +419,7 @@ class Item{
         //this.curVox 当前对象的体素
         //this.curDim 当前对象的体素尺寸
         //中心点在体素的地面中心位置
+        if(!this.curDim || !item.curDim)return null;
         let ab1 = this.collisionAABB();
         let ab2 = item.collisionAABB();
         let u = ab1.union(ab2)
@@ -434,18 +446,7 @@ class Item{
             let groundPlane = ground.curDim[0]*ground.curDim[1];
             let groundVoxMaxIndex = groundPlane*ground.curDim[2];
             //为了速度考虑，这里仅仅测试obj的侧面外壳
-            let edge = []; //obj的底边
-            let size12 = Math.min(obj.curDim[0],obj.curDim[1])/2;
-            for(let x = -w12;x<w12;x++){
-                edge.push({x:x,y:-w12});
-                edge.push({x:x,y:w12-1});
-            }
-         
-            for(let y = -w12+1;y<w12-1;y++){
-                edge.push({x:-w12,y:y});
-                edge.push({x:w12-1,y:y});
-            }
-
+            let edge = obj.collisionEdge();
             let vmin = {x:ground.curDim[0],y:ground.curDim[1],z:ground.curDim[2]};
             let vmax = {x:0,y:0,z:0};
             for(let z = 0;z<obj.curDim[2];z++){
