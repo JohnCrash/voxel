@@ -421,7 +421,7 @@ class Item{
         }
         else return aabb([0,0,0],[0,0,0]);
     }
-    aabbcub(){ //取短边为碰撞盒的边
+    collisionAABB(){ //取短边为碰撞盒的边
         if(this.curDim){
             if(this.ground)return this.aabb();
             let w = Math.min(this.curDim[0],this.curDim[1]);
@@ -437,8 +437,8 @@ class Item{
         //this.curVox 当前对象的体素
         //this.curDim 当前对象的体素尺寸
         //中心点在体素的地面中心位置
-        let ab1 = this.aabbcub();
-        let ab2 = item.aabbcub();
+        let ab1 = this.collisionAABB();
+        let ab2 = item.collisionAABB();
         let u = ab1.union(ab2)
         if((u!==null)&&((u.width()>0)||(u.height()>0)||(u.depth()>0))){//AABB相交
             if(!(this.ground || item.ground)){ 
@@ -464,15 +464,17 @@ class Item{
             let groundVoxMaxIndex = groundPlane*ground.curDim[2];
             //为了速度考虑，这里仅仅测试obj的侧面外壳
             let edge = []; //obj的底边
-            let w = Math.min(obj.curDim[0],obj.curDim[1]);
-            for(let x = -w/2;x<=w/2;x++){
-                edge.push({x:x,y:-w/2});
-                edge.push({x:x,y:w/2});
+            let w12 = Math.min(obj.curDim[0],obj.curDim[1])/2;
+            for(let x = -w12;x<w12;x++){
+                edge.push({x:x,y:-w12});
+                edge.push({x:x,y:w12-1});
             }
-            for(let y = -w/2+1;y<=w/2-1;y++){
-                edge.push({x:-w/2,y:y});
-                edge.push({x:w/2,y:y});
+         
+            for(let y = -w12+1;y<w12-1;y++){
+                edge.push({x:-w12,y:y});
+                edge.push({x:w12-1,y:y});
             }
+
             let vmin = {x:ground.curDim[0],y:ground.curDim[1],z:ground.curDim[2]};
             let vmax = {x:0,y:0,z:0};
             for(let z = 0;z<obj.curDim[2];z++){
