@@ -445,15 +445,16 @@ class SceneManager extends EventEmitter{
             let d = Math.sqrt(x*x+y*y);
             let X = x/d;
             let Y = y/d;
+            x = item.position.x;
+            y = item.position.y;
             let t = 0.5;
             let b = 0.5;
             let n = 10; //做10次二分逼近碰撞点
             while(n--){
-                item.position.x = X*t + item.position.op.x;
-                item.position.y = Y*t + item.position.op.y;
+                item.position.x = X*t*x + (1-t)*item.position.op.x;
+                item.position.y = Y*t*y + (1-t)*item.position.op.y;
                 ab = ground.collisionFunc(item);
-                d = ab.depth();
-                if(ab && d<1){
+                if(ab && ab.depth()<1){
                     t = t+b/2;//不碰撞,向前(远离op)
                 }else{
                     t = t-b/2;//靠近op
