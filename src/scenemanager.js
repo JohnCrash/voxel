@@ -425,12 +425,7 @@ class SceneManager extends EventEmitter{
     collisionGroundZ(ground,item,ab,dt){
         if(ab.depth()>0){
             item.velocity.set(0,0,0);
-          //  do{
-                item.position.z += ab.depth(); //一次顶到最上面
-          //      if(ab.depth() < 1)
-          //          break;
-          //      ab = ground.collisionFunc(item);
-          //  }while(ab);
+            item.position.z += ab.depth(); //一次顶到最上面
         }
     }
     /**
