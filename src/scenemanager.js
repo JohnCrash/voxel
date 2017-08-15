@@ -440,27 +440,30 @@ class SceneManager extends EventEmitter{
     collisionGroundXY(ground,item,ab,dt){
         let x = item.position.x-item.position.op.x;
         let y = item.position.y-item.position.op.y;
-
         if(x!=0||y!=0){
-            let d = Math.sqrt(x*x+y*y);
-            let X = x/d;
-            let Y = y/d;
             x = item.position.x;
             y = item.position.y;
             let t = 0.5;
             let b = 0.5;
             let n = 10; //做10次二分逼近碰撞点
+            let lx,ly;
+            lx = item.position.op.x;
+            ly = item.position.op.y;
             while(n--){
-                item.position.x = X*t*x + (1-t)*item.position.op.x;
-                item.position.y = Y*t*y + (1-t)*item.position.op.y;
+                item.position.x = t*x + (1-t)*item.position.op.x;
+                item.position.y = t*y + (1-t)*item.position.op.y;
                 ab = ground.collisionFunc(item);
-                if(ab && ab.depth()<1){
+                if(!ab || ab.depth()<1){
                     t = t+b/2;//不碰撞,向前(远离op)
+                    lx = item.position.x;
+                    ly = item.position.y;
                 }else{
                     t = t-b/2;//靠近op
                 }
                 b = b/2;
             }
+            item.position.x = lx;
+            item.position.y = ly;
         }
     }
     //物体和物体之间发生了碰撞

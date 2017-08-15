@@ -390,14 +390,16 @@ class Item{
         }
         else return aabb([0,0,0],[0,0,0]);
     }
-    collisionAABB(){ //取短边为碰撞盒的边
+    collisionAABB(){
         if(this.curDim){
             if(this.ground)return this.aabb();
-            let w = Math.min(this.curDim[0],this.curDim[1]);
-            return aabb([this.position.x-w/2,this.position.y-w/2,this.position.z],
-                [w,w,this.curDim[2]]);
+            let x,y,z;
+            
+            z = this.curDim[2];
+            return aabb([this.position.x-x/2,this.position.y-y/2,z],
+                [x,y,z]);
         }
-        else return aabb([0,0,0],[0,0,0]);        
+        else return aabb([0,0,0],[0,0,0]);
     }
     /**
      * 该对象和另一个对象进行碰撞测试(算法忽略旋转)
@@ -433,7 +435,7 @@ class Item{
             let groundVoxMaxIndex = groundPlane*ground.curDim[2];
             //为了速度考虑，这里仅仅测试obj的侧面外壳
             let edge = []; //obj的底边
-            let w12 = Math.min(obj.curDim[0],obj.curDim[1])/2;
+            let size12 = Math.min(obj.curDim[0],obj.curDim[1])/2;
             for(let x = -w12;x<w12;x++){
                 edge.push({x:x,y:-w12});
                 edge.push({x:x,y:w12-1});
