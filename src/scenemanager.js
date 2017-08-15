@@ -352,50 +352,119 @@ class SceneManager extends EventEmitter{
             }
         }
     }
+    //返回地面Item
+    getGroundItem(){
+        for(let item of this.items){
+            if(item.ground)
+                return item;
+        }
+        return null;
+    }
     /**
      * 更新场景
      */
     update(dt){
         let dts = dt/1000.0;
-        //更新物体
+        let groundItem = this.getGroundItem();
+
+        if(!groundItem){//没有地面，直接简单更新
+            for(let item of this.items){
+                item.update(dt);
+            }
+            return;
+        }
+
+        //如果物体在xy方向上有位移处理就到无xy碰撞的位置，如果物体在xy方向上没有位移就不进行处理
         for(let item of this.items){
-            if(this.physical){
-                //重力处理
-                if(item.gravity){
-                    item.velocity.z += (this.gravity*dts);
-                }
-                //处理位移
-                if(!item.fixed && !item.ground){
-                    item.position.add(item.velocity.x*dts,item.velocity.y*dts,item.velocity.z*dts);
+            item.update(dt);
+            if(!item.ground && item.collision){
+                let ab = groundItem.collisionFunc(item);
+                if(ab){
+                    this.collisionGroundXY(groundItem,item,ab,dt);
                 }
             }
-            item.update(dt);
         }
-        //碰撞处理
-        for(let i=0;i<this.items.length;i++){
-            let item1 = this.items[i];
-            if(item1.collision||item1.ground){
-                for(let j=i+1;j<this.items.length;j++){
-                    let item2 = this.items[j];
-                    if(item2.collision||item2.ground){
-                        let ab = item1.collisionFunc(item2);
-                        if(ab){
-                            this.collision(item1,item2,ab);
-                            item1.onCollision(item2,ab);
-                            item2.onCollision(item1,ab);
-                        }
+        //处理z方向的碰撞
+        for(let item of this.items){
+            if(!item.ground){
+                if(this.physical){
+                    if(item.gravity){ //受重力影响
+                        item.velocity.z += (this.gravity*dts);
+                    }
+                    if(!item.fixed){ //固定物体不能移动
+                        item.position.add(item.velocity.x*dts,item.velocity.y*dts,item.velocity.z*dts);
+                    }                    
+                }
+                if(item.collision){
+                    let ab = groundItem.collisionFunc(item);
+                    if(ab){
+                        this.collisionGroundZ(groundItem,item,ab,dt);
                     }
                 }
             }
         }
+        //处理位移
+        //item1.position.reset();
+        //处理物体之间的碰撞排除地面
+        for(let item1 of this.items){
+            if(!item1.ground){
+                for(let item2 of this.items){
+                    if(!item2.ground){
+                        let ab = item1.collisionFunc(item2);
+                        if(ab)this.collision(item1,item2,ab,dt);
+                    }
+                }
+                item1.position.reset(); //重置老的位置
+            }
+        }
+    }
+    
+    /**
+     * 处理物体和地面的关系，如果碰撞就直接往上找到最顶的位置
+     */
+    collisionGroundZ(ground,item,ab,dt){
+        if(ab.depth()>0){
+            item.velocity.set(0,0,0);
+          //  do{
+                item.position.z += ab.depth(); //一次顶到最上面
+          //      if(ab.depth() < 1)
+          //          break;
+          //      ab = ground.collisionFunc(item);
+          //  }while(ab);
+        }
     }
     /**
-     * 两个物体发生碰转
+     * 处理XY方向上的碰撞，如果XY方向物体有移动就将其调整物体的XY使之在XY方向上没有碰撞
+     * 如果XY方向上没有移动就忽略
      */
-    collision(item1,item2,ab){
-        item1.collisionPhysic(item2,ab);
-        item2.collisionPhysic(item2,ab);
-        this.emit('collision',item1,item2,ab);
+    collisionGroundXY(ground,item,ab,dt){
+        let x = item.position.x-item.position.op.x;
+        let y = item.position.y-item.position.op.y;
+
+        if(x!=0||y!=0){
+            let d = Math.sqrt(x*x+y*y);
+            let X = x/d;
+            let Y = y/d;
+            let t = 0.5;
+            let b = 0.5;
+            let n = 10; //做10次二分逼近碰撞点
+            while(n--){
+                item.position.x = X*t + item.position.op.x;
+                item.position.y = Y*t + item.position.op.y;
+                ab = ground.collisionFunc(item);
+                d = ab.depth();
+                if(ab && d<1){
+                    t = t+b/2;//不碰撞,向前(远离op)
+                }else{
+                    t = t-b/2;//靠近op
+                }
+                b = b/2;
+            }
+        }
+    }
+    //物体和物体之间发生了碰撞
+    collision(item1,item2,ab,dt){
+        this.emit('collision',item1,item2,ab,dt);
     }
 };
 

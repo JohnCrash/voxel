@@ -31,7 +31,11 @@ var aabb = require('aabb-3d');
 class Position{
     constructor(p,item){
         this.p = p;
+        this.op = {x:p.x,y:p.y,z:p.z}; //老的位置
         this.item = item;
+    }
+    reset(){
+        this.op = {x:this.p.x,y:this.p.y,z:this.p.z};
     }
     get x(){
         return this.p.x;
@@ -374,45 +378,10 @@ class Item{
         }
     }
     /**
-     * 处理碰撞时发生的物理
-     * 任何碰撞都导致速度为零，如果发生重叠就沿着速度的反方向返回。
-     */
-    collisionPhysic(item,ab){
-        let x = this.velocity.x;
-        let y = this.velocity.y;
-        let z = this.velocity.z;
-        if(this.fixed||this.ground){
-            this.velocity.set(0,0,0);
-        }else if(x!=0||y!=0||z!=0){
-            if(x>0)
-                x = 1;
-            else if(x<0)
-                x = -1;
-            else
-                x = 0;
-            if(y>0)
-                y = 1;
-            else if(x<0)
-                y = -1;
-            else
-                y = 0;
-            if(z>0)
-                z = 1;
-            else if(z<0)
-                z = -1;
-            else
-                z = 0;
-            this.position.x -= x*ab.width();
-            this.position.y -= y*ab.height();
-            this.position.z -= z*ab.depth();
-            this.velocity.set(0,0,0);
-        }
-    }
-    /**
      * 当物体发生碰撞时被调用
      * item为另一个物体，ab是两个物体碰撞交集aabb盒
      */
-    onCollision(item,ab){
+    onCollision(item,ab,dt){
     }
     aabb(){
         if(this.curDim){
