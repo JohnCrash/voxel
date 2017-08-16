@@ -271,6 +271,9 @@ class ItemUI{
     }
     set '地面'(b){
         if(this.item){
+            //只能有一个地面
+            for(let item of sceneManager.items)
+                item.ground = undefined;
             this.item.ground = b;
             this.item.setWaterIndex(-1);
         }
@@ -463,7 +466,7 @@ class Edit{
 
         let sceneTool = gui.addFolder('场景工具');
         this.sceneTool = sceneTool;
-        sceneTool.add(this,'打开重力');
+        sceneTool.add(this,'开始游戏');
         sceneTool.add(this,'重力加速度',0,1000).step(0.1);
         sceneTool.add(this,'清空场景');
         sceneTool.add(this,'保存场景');
@@ -494,11 +497,12 @@ class Edit{
             this.envList = files;
         });        
     }  
-    get '打开重力'(){
-        return !!sceneManager.physical;
+    get '开始游戏'(){
+        return !sceneManager._pause;
     }
-    set '打开重力'(b){
+    set '开始游戏'(b){
         sceneManager.physical = b;
+        sceneManager._pause = !b;
     }   
     get '重力加速度'(){
         return -sceneManager.gravity;

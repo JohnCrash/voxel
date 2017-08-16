@@ -378,10 +378,25 @@ class Item{
         }
     }
     /**
-     * 当物体发生碰撞时被调用
+     * 当物体开始下落或者着地会被调用
+     * b true悬空,false着陆
+     * 如果是着陆z代表下落高度
+     */
+    onFall(b,z){
+      //  console.log(`${this.name} ${b} (${z})`);
+    }
+    /**
+     * 当物体发生碰撞时被调用(注意不是和地面)
      * item为另一个物体，ab是两个物体碰撞交集aabb盒
      */
     onCollision(item,ab,dt){
+        //console.log(`${this.name} 和 ${item.name} 发生碰撞`);
+    }
+    /**
+     * 如果物体被地面阻拦该函数将被调用
+     */
+    onCollisionWall(){
+       //console.log(`${this.name} 撞墙了`);
     }
     aabb(){
         if(this.curDim){
@@ -397,7 +412,8 @@ class Item{
             [w,w,this.curDim[2]]);      
     }
     collisionWidth(){
-        return Math.floor((this.curDim[0]+this.curDim[1])/2);
+        //return Math.floor((this.curDim[0]+this.curDim[1])/2);
+        return Math.min(this.curDim[0],this.curDim[1]);
     }    
     collisionEdge(){
         if(this._edge)return this._edge;
@@ -444,20 +460,25 @@ class Item{
                                     obj.position.y-ground.position.y+ground.curDim[1]/2,
                                     obj.position.z-ground.position.z);
             let groundVox = ground.curVox;
-            let groundX = ground.curDim[0];
-            let groundPlane = ground.curDim[0]*ground.curDim[1];
-            let groundVoxMaxIndex = groundPlane*ground.curDim[2];
+            let dx = ground.curDim[0];
+            let dy = ground.curDim[1];
+            let dz = ground.curDim[2];
+            let groundPlane = dx*dy;
+            let groundVoxMaxIndex = groundPlane*dz;
             //为了速度考虑，这里仅仅测试obj的侧面外壳
             let edge = obj.collisionEdge();
 
-            let vmin = {x:ground.curDim[0],y:ground.curDim[1],z:ground.curDim[2]};
+            let vmin = {x:dx,y:dy,z:dz};
             let vmax = {x:0,y:0,z:0};
             for(let z = 0;z<obj.curDim[2];z++){
                 for(let pt of edge){
                     let vx = Math.floor(p.x+pt.x);
+                    if(vx<0 || vx>=dx)continue;
                     let vy = Math.floor(p.y+pt.y);
+                    if(vy<0 || vy>=dy)continue;
                     let vz = Math.floor(p.z+z);
-                    let inx = vx+vy*groundX+vz*groundPlane;
+                    if(vz<0 || vz>=dz)continue;
+                    let inx = vx+vy*dx+vz*groundPlane;
                     if(inx < groundVoxMaxIndex && inx>=0 && groundVox[inx]!=0){
                         vmin.x = Math.min(vmin.x,vx);
                         vmin.y = Math.min(vmin.y,vy);
@@ -468,10 +489,10 @@ class Item{
                     }
                 }
             }
-            if(vmax.x!=0 && vmin.x!=ground.curDim[0]){
+            if(vmax.x!=0 && vmin.x!=dx){
                 //构造碰撞体并返回交集
-                let voxaabb = aabb([ground.position.x-ground.curDim[0]/2+vmin.x,
-                        ground.position.y-ground.curDim[1]/2+vmin.y,
+                let voxaabb = aabb([ground.position.x-dx/2+vmin.x,
+                        ground.position.y-dy/2+vmin.y,
                         ground.position.y+vmin.z],
                         [vmax.x-vmin.x+1,vmax.y-vmin.y+1,vmax.z-vmin.z+1]);
                 return voxaabb.union(objAABB);

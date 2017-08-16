@@ -31,6 +31,7 @@ class SceneManager extends EventEmitter{
         this.players = [];  //场景中玩家包括npc
         this.zfog = true;
         this.gravity = -98;//重力加速度
+        this._pause = true; //默认暂停
 
         this.setBackgroundColor(0);
         this.itemMaterial = new ZDepthPhongMaterial({ color: 0xffffff,
@@ -49,6 +50,9 @@ class SceneManager extends EventEmitter{
              transparent : true} );
         this.enableZFog(true);
         game.on('update',dt=>this.update(dt));
+    }
+    pause(b){
+        this._pause = b;
     }
     setBackgroundColor(c){
         this.bgcolor = new THREE.Color(c);
@@ -367,7 +371,7 @@ class SceneManager extends EventEmitter{
         let dts = dt/1000.0;
         let groundItem = this.getGroundItem();
 
-        if(!groundItem){//没有地面，直接简单更新
+        if(this._pause || !groundItem){//没有地面，直接简单更新
             for(let item of this.items){
                 item.update(dt);
             }
@@ -387,19 +391,21 @@ class SceneManager extends EventEmitter{
         //处理z方向的碰撞
         for(let item of this.items){
             if(!item.ground){
-                if(this.physical){
-                    if(item.gravity){ //受重力影响
-                        item.velocity.z += (this.gravity*dts);
+                if(item.collision){
+                    let ab = groundItem.collisionFunc(item);
+                    if(ab && ab.depth()>=1){
+                        continue; //xy过来还有约束，不做重力处理和抬升
                     }
-                    if(!item.fixed){ //固定物体不能移动
-                        item.position.add(item.velocity.x*dts,item.velocity.y*dts,item.velocity.z*dts);
-                    }                    
+                }
+                if(this.physical){
+                    if(item.gravity && !item.fixed){ //受重力影响
+                        item.velocity.z += (this.gravity*dts);
+                        item.position.add(item.velocity.x*dts,item.velocity.y*dts,item.velocity.z*dts);                         
+                    }                
                 }
                 if(item.collision){
                     let ab = groundItem.collisionFunc(item);
-                    if(ab){
-                        this.collisionGroundZ(groundItem,item,ab,dt);
-                    }
+                    this.collisionGroundZ(groundItem,item,ab,dt);
                 }
             }
         }
@@ -407,9 +413,9 @@ class SceneManager extends EventEmitter{
         //item1.position.reset();
         //处理物体之间的碰撞排除地面
         for(let item1 of this.items){
-            if(!item1.ground){
+            if(!item1.ground && item1.collision){
                 for(let item2 of this.items){
-                    if(!item2.ground){
+                    if(item1!==item2 && !item2.ground && item2.collision){
                         let ab = item1.collisionFunc(item2);
                         if(ab)this.collision(item1,item2,ab,dt);
                     }
@@ -423,9 +429,21 @@ class SceneManager extends EventEmitter{
      * 处理物体和地面的关系，如果碰撞就直接往上找到最顶的位置
      */
     collisionGroundZ(ground,item,ab,dt){
-        if(ab.depth()>0){
+        if(ab && ab.depth()>0){//着陆
             item.velocity.set(0,0,0);
             item.position.z += ab.depth(); //一次顶到最上面
+            if(item.fallState){
+                item.fallState = false;
+                item.onFall('fall',item.position.z-item.fallZ);
+                this.emit('fall',item,ab,dt);
+            }
+        }else{//悬空
+            if(!item.fallState){
+                item.fallZ = item.position.z;
+                item.fallState = true;
+                item.onFall('floating',0);
+                this.emit('floating',item,ab,dt);
+            }
         }
     }
     /**
@@ -442,6 +460,8 @@ class SceneManager extends EventEmitter{
             let b = 0.5;
             let n = 10; //做10次二分逼近碰撞点
             let lx,ly;
+            let isc = false;
+            let isnotify = false;
             lx = item.position.op.x;
             ly = item.position.op.y;
             while(n--){
@@ -454,15 +474,33 @@ class SceneManager extends EventEmitter{
                     ly = item.position.y;
                 }else{
                     t = t-b/2;//靠近op
+                    isc = true;//表示发生过碰撞
                 }
                 b = b/2;
             }
+            if(!isc){ //上述测试都没有发生碰撞,将逼近点直接指向目的地(t=1)
+                item.position.x = x;
+                item.position.y = y;
+                ab = ground.collisionFunc(item);
+                if(!ab || ab.depth()<1){//还是没不发生碰撞
+                    lx = x;
+                    ly = y;
+                }else{//最后发生碰撞
+                    isnotify = true;
+                }
+            }else{//发生碰撞
+                isnotify = true;
+            }
             item.position.x = lx;
             item.position.y = ly;
+            if(isnotify)item.onCollisionWall();
         }
     }
     //物体和物体之间发生了碰撞
     collision(item1,item2,ab,dt){
+        //通知他们彼此
+        item1.onCollision(item2,ab,dt);
+        item2.onCollision(item1,ab,dt);
         this.emit('collision',item1,item2,ab,dt);
     }
 };
