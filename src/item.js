@@ -127,6 +127,7 @@ class Item{
         this.rotation = new Rotation(json.rotation?new THREE.Euler(json.rotation.x,json.rotation.y,json.rotation.z):new THREE.Euler(),this);
         this.name = json.name || '';
         this._visible = json.visible;
+        this._collisionWidth = json.collisionWidth; //可以手动指定一个碰撞宽度
         this.ground = !!json.ground;
         this.collision = !!json.collision;//是否碰撞
         this.fixed = !!json.fixed;//是否是一个固定对象
@@ -182,7 +183,22 @@ class Item{
                     if(this.name===''){
                         this.name = template.name || '';
                     }
+                    //模板覆盖对象的属性
                     this._visible = template.visible || false;
+
+                    if(template.collisionWidth)
+                        this._collisionWidth = template.collisionWidth;                    
+                    if(template.collision!==undefined)
+                        this.collision = !!template.collision;//是否碰撞
+                    if(template.fixed!==undefined)
+                        this.fixed = !!template.fixed;//是否是一个固定对象
+                    if(template.gravity!==undefined)
+                        this.gravity = !!template.gravity;//是否受重力影响
+                    if(template.velocity)
+                        this.velocity = new THREE.Vector3(template.velocity.x,template.velocity.y,template.velocity.z);
+                    if(template.specificGravity)
+                        this.specificGravity = template.specificGravity;
+
                     this._castShadow = template.castShadow || false;
                     this._receiveShadow = template.receiveShadow || false;
                     this.file = template.file;
@@ -415,9 +431,14 @@ class Item{
         return aabb([this.position.x-w/2,this.position.y-w/2,this.position.z],
             [w,w,this.curDim[2]]);      
     }
+    /**
+     * 确保collisionWidth是一个静态值，因为如果根据动画来变动将导致碰撞检测的不一致，而发生抖动。
+     */
     collisionWidth(){
-        //return Math.floor((this.curDim[0]+this.curDim[1])/2);
-        return Math.min(this.curDim[0],this.curDim[1]);
+        if(this._collisionWidth)return this._collisionWidth;
+        this._collisionWidth = Math.floor((this.curDim[0]+this.curDim[1])/2);
+        //Math.min(this.curDim[0],this.curDim[1]);
+        return this._collisionWidth;
     }    
     collisionEdge(){
         if(this._edge)return this._edge;
