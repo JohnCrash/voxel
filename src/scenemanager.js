@@ -430,14 +430,22 @@ class SceneManager extends EventEmitter{
     collisionGroundWater(ground,item,ab,dt){
         if(ab && ab.depth()>0){ //在水里
             let H = item.aabb().depth();
+            let d = ab.depth();
             if(H>0 && item.specificGravity>0){
-                let d = ab.depth();
                 let A = 3;
                 item._floatingF = -this.gravity * d/(H * item.specificGravity) - A*item.velocity.z*d/(H *item.specificGravity);
                 //item.velocity.z *= ab.depth()/H; //这里假设速度在水中会衰减
             }else item._floatingF = 0;
+            if(!item.swimState){
+                item.swimState = true;
+                item.onSwiming(true,d);
+            }
         }else{//出水
             item._floatingF = 0;
+            if(item.swimState){
+                item.swimState = false;
+                item.onSwiming(false,0);
+            }
         }
     }
     /**

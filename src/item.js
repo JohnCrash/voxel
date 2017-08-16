@@ -402,22 +402,27 @@ class Item{
      * 当物体开始下落或者着地会被调用
      * b true悬空,false着陆
      * 如果是着陆z代表下落高度
+     * 另外任何时候都可以通过fallState来检查是否在下坠
      */
     onFall(b,z){
-      //  console.log(`${this.name} ${b} (${z})`);
     }
     /**
      * 当物体发生碰撞时被调用(注意不是和地面)
      * item为另一个物体，ab是两个物体碰撞交集aabb盒
      */
     onCollision(item,ab,dt){
-        //console.log(`${this.name} 和 ${item.name} 发生碰撞`);
     }
     /**
      * 如果物体被地面阻拦该函数将被调用
      */
     onCollisionWall(){
-       //console.log(`${this.name} 撞墙了`);
+    }
+    /**
+     * 当物体掉入水中
+     * b=true在入水，b=false出水,z物体在水中的深度
+     * * 另外任何时候都可以通过swimState来检查是否在游泳
+     */
+    onSwiming(b,z){
     }
     aabb(){
         if(this.curDim){
