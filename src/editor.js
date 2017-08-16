@@ -244,7 +244,14 @@ class ItemUI{
         ui.add(this,'是否受重力影响');
         //ui.add(this,'水的透明度',0,1).step(0.1);
         ui.add(this,'动作',item.actions.map(item=>item.name));
+        ui.add(this,'比重',0,1).step(0.1);
         ui.add(this,'删除此物品');
+    }
+    get '比重'(){
+        return this.item.specificGravity;
+    }
+    set '比重'(c){
+        this.item.specificGravity = c;
     }
     get '是否可碰撞'(){
         return this.item.collision;

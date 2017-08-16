@@ -241,6 +241,7 @@ class Item{
         json.fixed = !!this.fixed;
         json.gravity = !!this.gravity;
 
+        json.specificGravity = this.specificGravity;
         json.velocity = {x:this.velocity.x,y:this.velocity.y,z:this.velocity.z};
 
         json.castShadow = this._castShadow;

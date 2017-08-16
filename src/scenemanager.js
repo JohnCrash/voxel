@@ -398,10 +398,7 @@ class SceneManager extends EventEmitter{
                     }
                 }
                 if(this.physical && item.gravity && !item.fixed){ //受重力影响
-                    item.velocity.z += ((this.gravity-item._floatingF)*dts);
-                    if(item._floatingF>0){
-                        console.log(`F = ${this.gravity+item._floatingF} V=${item.velocity.z}`);
-                    }
+                    item.velocity.z += ((this.gravity+item._floatingF)*dts);
                     item.position.add(item.velocity.x*dts,item.velocity.y*dts,item.velocity.z*dts);
                 }
                 if(item.collision){
@@ -434,9 +431,10 @@ class SceneManager extends EventEmitter{
         if(ab && ab.depth()>0){ //在水里
             let H = item.aabb().depth();
             if(H>0 && item.specificGravity>0){
-                item._floatingF = -this.gravity * ab.depth()/(H * item.specificGravity);
+                let d = ab.depth();
+                let A = 3;
+                item._floatingF = -this.gravity * d/(H * item.specificGravity) - A*item.velocity.z*d/(H *item.specificGravity);
                 //item.velocity.z *= ab.depth()/H; //这里假设速度在水中会衰减
-                console.log(`f = ${item._floatingF }  v= ${item.velocity.z}`);
             }else item._floatingF = 0;
         }else{//出水
             item._floatingF = 0;
