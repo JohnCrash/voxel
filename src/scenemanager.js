@@ -397,13 +397,13 @@ class SceneManager extends EventEmitter{
                         continue; //xy过来还有约束，不做重力处理和抬升
                     }
                 }
-                if(this.physical){
-                    if(item.gravity && !item.fixed){ //受重力影响
-                        item.velocity.z += (this.gravity*dts);
-                        item.position.add(item.velocity.x*dts,item.velocity.y*dts,item.velocity.z*dts);                         
-                    }                
+                if(this.physical && item.gravity && !item.fixed){ //受重力影响
+                    item.velocity.z += ((this.gravity-item._floatingF)*dts);
+                    item.position.add(item.velocity.x*dts,item.velocity.y*dts,item.velocity.z*dts);
                 }
                 if(item.collision){
+                    //let ab = groundItem.collisionFunc(item,true);
+                    //this.collisionGroundWater(groundItem,item,ab,dt);
                     let ab = groundItem.collisionFunc(item);
                     this.collisionGroundZ(groundItem,item,ab,dt);
                 }
@@ -424,7 +424,21 @@ class SceneManager extends EventEmitter{
             }
         }
     }
-    
+    /**
+     * 如果和水发生碰撞
+     */    
+    collisionGroundWater(ground,item,ab,dt){
+        if(ab && ab.depth()>0){ //在水里
+            let H = item.aabb().depth();
+            if(H>0 && item.specificGravity>0){
+                item._floatingF = -this.gravity * ab.depth()/(H * item.specificGravity);
+                item.velocity.z *= (1-ab.depth()/(2*H));
+            }else item._floatingF = 0;
+            //这里假设速度在水中会衰减
+        }else{//出水
+            item._floatingF = 0;
+        }
+    }
     /**
      * 处理物体和地面的关系，如果碰撞就直接往上找到最顶的位置
      */

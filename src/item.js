@@ -134,6 +134,8 @@ class Item{
         this.velocity = json.velocity?new THREE.Vector3(json.velocity.x,json.velocity.y,json.velocity.z):new THREE.Vector3();
         this._castShadow = json.castShadow;
         this._receiveShadow = json.receiveShadow;
+        this._floatingF = 0; //浮力
+        this.specificGravity = json.specificGravity || 0.2; //比重
         this.loadedDoAction = 'idle';
         this.state = 'loading';
         let load = ()=>{
@@ -305,7 +307,9 @@ class Item{
                         this.curMesh = this.mesh[i];
                         this.curDim = this.vox.getModelSize(i);
                         if(this.water){
-                            this.curVox = this.vox.getModelVolumeWater(i,this.water).volume;
+                            let m = this.vox.getModelVolumeWater(i,this.water);
+                            this.curVox = m.volume;
+                            this.curWaterVox = m.water;
                         }else{
                             this.curVox = this.vox.getModelVolume(i);
                         }
@@ -432,8 +436,9 @@ class Item{
     }    
     /**
      * 该对象和另一个对象进行碰撞测试(算法忽略旋转)
+     * water = true仅仅和水进行碰撞
      */
-    collisionFunc(item){
+    collisionFunc(item,water){
         //this.curVox 当前对象的体素
         //this.curDim 当前对象的体素尺寸
         //中心点在体素的地面中心位置
@@ -459,7 +464,8 @@ class Item{
             let p = new THREE.Vector3(obj.position.x-ground.position.x+ground.curDim[0]/2,
                                     obj.position.y-ground.position.y+ground.curDim[1]/2,
                                     obj.position.z-ground.position.z);
-            let groundVox = ground.curVox;
+            let groundVox = water?ground.curWaterVox:ground.curVox;
+            if(!groundVox)return null;
             let dx = ground.curDim[0];
             let dy = ground.curDim[1];
             let dz = ground.curDim[2];
