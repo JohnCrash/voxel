@@ -24,7 +24,7 @@ function Color(c){
 /**
  * 构造函数
  * @param {*} opts 
- * canvas : 使用给定的节点
+ * canvas : 使用给定的节点,不给出宽高将以canvas父节点的大小来初始化
  * width,height : 固定的宽高，如果不提供
  * maxFrameSize : 最大的帧尺寸，帧尺寸指的是渲染真的尺寸，过大的尺寸导致低帧率
  * enableStats  : 打开帧率检测小窗口
@@ -33,6 +33,7 @@ function Game(opts){
     this.opts = opts || {};
     this.scene = new THREE.Scene();    
     if(this.opts.canvas){
+        this.canvas = opts.canvas;
         this.renderer = new THREE.WebGLRenderer({canvas:opts.canvas,antialias:this.opts.enableAA});
     }else{
         this.renderer = new THREE.WebGLRenderer({antialias:this.opts.enableAA});
@@ -45,10 +46,24 @@ function Game(opts){
         width = opts.width;
         height = opts.height;
     }else{
-        width = window.innerWidth;
-        height = window.innerHeight;
+        if(this.canvas){
+            let parent = this.canvas.parentNode;
+            width = parent.clientWidth;
+            height = parent.clientHeight;
+        }else{
+            width = window.innerWidth;
+            height = window.innerHeight;
+        }
         window.onresize = function(){
-            this.setSize(window.innerWidth,window.innerHeight);
+            if(this.canvas){
+                let parent = this.canvas.parentNode;
+                width = parent.clientWidth;
+                height = parent.clientHeight;
+            }else{
+                width = window.innerWidth;
+                height = window.innerHeight;
+            }            
+            this.setSize(width,height);
         }.bind(this);
     }
     this.camera = new THREE.PerspectiveCamera( 30, width / height, 0.1, 1000 );

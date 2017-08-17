@@ -84,7 +84,7 @@ class SceneManager extends EventEmitter{
      * item
      * description
      * script
-     * 当加载完全结束是调用cb(true),如果失败调用cb(false)
+     * 当加载完全结束时调用cb(true),如果失败调用cb(false)
      */
     loadFromJson(json,cb){
         this.description = json.description;
