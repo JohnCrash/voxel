@@ -445,7 +445,7 @@ class Item{
         this._collisionWidth = Math.floor((this.curDim[0]+this.curDim[1])/2);
         //Math.min(this.curDim[0],this.curDim[1]);
         return this._collisionWidth;
-    }    
+    }
     collisionEdge(){
         if(this._edge)return this._edge;
         let edge = [];

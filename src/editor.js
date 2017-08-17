@@ -1,11 +1,11 @@
 /**
  * 使用dat.GUI实现一个简单场景编辑器
  */
-var Game = require("./game");
-import {fetchJson,postJson} from './fetch';
-import SceneManager from './scenemanager';
-import log from './log';
-import {yesno} from './dialog';
+var Game = require("./vox/game");
+import {fetchJson,postJson} from './vox/fetch';
+import SceneManager from './vox/scenemanager';
+import log from './vox/log';
+import {yesno} from './vox/dialog';
 
 let game = new Game({enableStats:false,
     enableAA:false,
