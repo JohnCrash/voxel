@@ -88,6 +88,7 @@ class SceneManager extends EventEmitter{
      */
     loadFromJson(json,cb){
         this.description = json.description;
+        this.markdownDescription = json.markdownDescription;
         this.script = json.script;
         if(json.bgcolor)this.setBackgroundColor(json.bgcolor);
         this.loadSkybox(json.skybox);

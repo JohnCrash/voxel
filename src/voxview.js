@@ -19,6 +19,8 @@ class VoxView extends Component{
             enableShaodw:true,
             canvas:this.canvas});
         this.sceneManager = new SceneManager(this.game);
+        this.game.observer = true;
+        this.game.camera.rotation.order = 'ZXY';
         this.game.run();
         this.load(this.props.level);
     }
