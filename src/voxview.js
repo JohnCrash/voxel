@@ -3,6 +3,7 @@ var Game = require("./vox/game");
 import {fetchJson,postJson} from './vox/fetch';
 import SceneManager from './vox/scenemanager';
 import log from './vox/log';
+import {MessageBox} from './ui/messagebox';
 
 /**
  * VoxView的属性
@@ -22,11 +23,11 @@ class VoxView extends Component{
         this.game.observer = true;
         this.game.camera.rotation.order = 'ZXY';
         this.game.run();
-        this.load(this.props.level);
+        this.load(this.props.file);
     }
     componentWillReceiveProps(nextProps){
-        if(this.props.level!=nextProps.level)
-            this.load(nextProps.level);
+        if(this.props.file!=nextProps.file)
+            this.load(nextProps.file);
     }
     load(file){
         fetchJson(`/load?file=scene/${file}.scene`,(json)=>{
@@ -44,6 +45,10 @@ class VoxView extends Component{
             }
         });
     }
+    RotationLeft(){
+    }
+    RotationRight(){            
+    }    
     render(){
         return <canvas ref={canvas=>this.canvas=canvas}>
             </canvas>;

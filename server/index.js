@@ -31,7 +31,7 @@ function sqlQuery(query,cb,ep){
  */
 router.get(/.*\.js$/,function(req,res){
   var stream = browserify(`src${req.url}`,{debug:true})
-      .transform("babelify", {presets: ["es2015","react"]})
+      .transform("babelify", {presets: ["es2015","es2016","es2017","react","stage-0"]})
       .bundle();
   stream.pipe(res);
   stream.on('error',(err)=>{
