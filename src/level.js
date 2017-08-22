@@ -13,6 +13,7 @@ import IconReplay from 'material-ui/svg-icons/av/replay';
 import IconRotateLeft from 'material-ui/svg-icons/image/rotate-left';
 import IconRotateRight from 'material-ui/svg-icons/image/rotate-right';
 import IconMenu from 'material-ui/svg-icons/navigation/menu';
+import IconStep from 'material-ui/svg-icons/maps/directions-walk';
 import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar';
 
 class Level extends Component{
@@ -30,7 +31,7 @@ class Level extends Component{
         },{width:"100%",maxWidth: 'none'});
     }
     Reset(){
-
+        this.blockview.reset();
     }
     RotationRight(){
         this.voxview.RotationRight();
@@ -47,12 +48,10 @@ class Level extends Component{
         this.setState({volumeOnOff:!this.state.volumeOnOff})
     }
     PlayPause(){
-        if(this.state.playPause){
-            //pause
-        }else{
-            //play
-        }        
-        this.setState({playPause:!this.state.playPause})
+        this.blockview.step();
+    }
+    Step(){
+        this.blockview.step();
     }
     render(){
         let {playPause,volumeOnOff,levelDesc} = this.state;
@@ -61,7 +60,7 @@ class Level extends Component{
                 <VoxView file={this.props.level} ref={ref=>this.voxview=ref}/>
             </div>
             <div style={{position:"absolute",left:"50%",top:"0px",right:"0px",bottom:"0px"}}>
-                <BlockView/>
+                <BlockView ref={ref=>this.blockview=ref}/>
             </div>
             <div style={{position:"absolute",display:"flex",flexDirection:"column",left:"0px",top:"70%",right:"50%",bottom:"0px"}}>
                 <Toolbar>
@@ -86,6 +85,9 @@ class Level extends Component{
                         <IconButton touch={true} onClick={this.PlayPause.bind(this)}>
                             {playPause?<IconPlayArrow />:<IconPause />}
                         </IconButton>
+                        <IconButton touch={true} onClick={this.Step.bind(this)}>
+                            <IconStep />
+                        </IconButton>                        
                     </ToolbarGroup>
                 </Toolbar>
                 <div style={{width:"100%",height:"100%",overflowY: "auto"}}>

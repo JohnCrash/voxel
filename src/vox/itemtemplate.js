@@ -47,7 +47,7 @@ class ItemTemplate_{
     getErr(file){
         return this.itemTemplates[file] && this.itemTemplates[file].err;
     }
-    addItemEvent(name,func){
+    regItemEvent(name,func){
         for(let file in this.itemTemplates){
             let json = this.itemTemplates[file].json;
             if(json){
@@ -64,6 +64,6 @@ export let ItemTemplate = new ItemTemplate_();
  * 加一个全局函数addItemEvent
  * 此函数用于注册物品的物品的脚本函数
  */
-window.addItemEvent = function(name,func){
-    ItemTemplate.addItemEvent(name,func);
+window.regItemEvent = function(name,func){
+    ItemTemplate.regItemEvent(name,func);
 }
