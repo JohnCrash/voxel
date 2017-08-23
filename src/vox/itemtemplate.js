@@ -50,7 +50,7 @@ class ItemTemplate_{
     regItemEvent(name,func){
         for(let file in this.itemTemplates){
             let json = this.itemTemplates[file].json;
-            if(json){
+            if(json && json.name === name){
                 json.live = func;
             }
         }

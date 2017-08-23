@@ -4,6 +4,7 @@ import {fetchJson,postJson} from './vox/fetch';
 import SceneManager from './vox/scenemanager';
 import log from './vox/log';
 import {MessageBox} from './ui/messagebox';
+import BlocklyInterface from './vox/blocklyinterface';
 
 /**
  * VoxView的属性
@@ -30,10 +31,12 @@ class VoxView extends Component{
             this.load(nextProps.file);
     }
     load(file){
+        BlocklyInterface.blocklyEvent('SceneReset');
         fetchJson(`/load?file=scene/${file}.scene`,(json)=>{
             if(json.result==='ok'){
                 this.sceneManager.loadFromJson(json.content,(iserr)=>{
                     if(!iserr){
+                        BlocklyInterface.blocklyEvent('SceneReady');
                         this.sceneManager.physical = true;
                         this.sceneManager.pause(false);
                     }else{

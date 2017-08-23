@@ -24,6 +24,7 @@
 import {VoxManager} from './voxmanager';
 import {ItemTemplate} from './itemtemplate'
 import {ScriptManager} from './scriptmanager';
+import BlocklyInterface from './blocklyinterface';
 
 import log from './log';
 var aabb = require('aabb-3d');
@@ -405,17 +406,20 @@ class Item{
      * 另外任何时候都可以通过fallState来检查是否在下坠
      */
     onFall(b,z){
+        if(this.live)this.live('fall',b,z);
     }
     /**
      * 当物体发生碰撞时被调用(注意不是和地面)
      * item为另一个物体，ab是两个物体碰撞交集aabb盒
      */
     onCollision(item,ab,dt){
+        if(this.live)this.live('collision',ab,dt);
     }
     /**
      * 如果物体被地面阻拦该函数将被调用
      */
     onCollisionWall(){
+        if(this.live)this.live('wall');
     }
     /**
      * 当物体掉入水中
@@ -423,6 +427,7 @@ class Item{
      * * 另外任何时候都可以通过swimState来检查是否在游泳
      */
     onSwiming(b,z){
+        if(this.live)this.live('swiming',b,z);
     }
     aabb(){
         if(this.curDim){
@@ -534,6 +539,18 @@ class Item{
 
         return null;//不相交
     }
+
+    injectBlocklyFunction(name,func){
+        BlocklyInterface.injectBlocklyFunction(name,func);
+    }
+
+    blocklyStop(name,func){
+        BlocklyInterface.blocklyStop();
+    }
+
+    blocklyContinue(name,func){
+        BlocklyInterface.blocklyContinue();
+    }    
 };
 
 export {Item};

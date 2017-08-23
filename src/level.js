@@ -45,10 +45,17 @@ class Level extends Component{
         }else{
             //on
         }
-        this.setState({volumeOnOff:!this.state.volumeOnOff})
+        this.setState({volumeOnOff:!this.state.volumeOnOff});
     }
     PlayPause(){
-        this.blockview.step();
+        if(this.state.playPause){
+            this.blockview.run(0,()=>{
+                this.setState({playPause:true});
+            });
+        }else{
+            this.blockview.reset();
+        }
+        this.setState({playPause:!this.state.playPause});
     }
     Step(){
         this.blockview.step();
@@ -60,7 +67,7 @@ class Level extends Component{
                 <VoxView file={this.props.level} ref={ref=>this.voxview=ref}/>
             </div>
             <div style={{position:"absolute",left:"50%",top:"0px",right:"0px",bottom:"0px"}}>
-                <BlockView ref={ref=>this.blockview=ref}/>
+                <BlockView ref={ref=>this.blockview=ref} file={`scene/${this.props.level}.toolbox`}/>
             </div>
             <div style={{position:"absolute",display:"flex",flexDirection:"column",left:"0px",top:"70%",right:"50%",bottom:"0px"}}>
                 <Toolbar>
