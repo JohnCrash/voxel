@@ -31,6 +31,7 @@ class Level extends Component{
         },{width:"100%",maxWidth: 'none'});
     }
     Reset(){
+        this.voxview.reset();
         this.blockview.reset();
     }
     RotationRight(){

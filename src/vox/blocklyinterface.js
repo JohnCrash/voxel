@@ -33,7 +33,7 @@ export default class BlocklyInterface{
      * 向Blockly执行环境中注入代码
      */
     static injectBlocklyFunction(name,func){
-        injectFunctions.append({name,func});
+        injectFunctions.push({name,func});
     }
 
     static initBlocklyInterface(interpreter, scope){

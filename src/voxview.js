@@ -48,6 +48,9 @@ class VoxView extends Component{
             }
         });
     }
+    reset(){
+        this.load(this.props.file);
+    }
     RotationLeft(){
     }
     RotationRight(){            

@@ -262,16 +262,25 @@ class Item{
             for(let i = 0;i<this.actions.length;i++){
                 if(this.actions[i].name === name){
                     let action = this.actions[i];
+                    console.log(`doAction ${action.name}`);
                     if(this.vox){ //已经加载
-                        this.acc = 0;
                         this.curAction = action;
-                        this.curIndex = 0;
+                        if(typeof action.curIndex === 'undefined'){
+                            action.acc = 0;
+                            action.curIndex = 0;
+                        }
                     }else{ //未完成vox的加载
                         this.loadedDoAction = name||'idle';
                     }
                 }
             }
         }
+    }
+    currentActionName(){
+        if(this.curAction){
+            return this.curAction.name;
+        }
+        return '';
     }
     //物品包含水,设置水的索引
     setWaterIndex(waterIndex){
@@ -311,14 +320,14 @@ class Item{
     update(dt){
         if(this._visible && this.curAction){
             let a = this.curAction
-            if(this.acc > a.delay){
-                this.acc = 0;
-                if(this.curIndex+1<a.sequece.length){
-                    this.curIndex++;
+            if(a.acc > a.delay){
+                a.acc = 0;
+                if(a.curIndex+1<a.sequece.length){
+                    a.curIndex++;
                 }else if(a.loop){
-                    this.curIndex = 0;
+                    a.curIndex = 0;
                 }
-                let i = a.sequece[this.curIndex];
+                let i = a.sequece[a.curIndex];
                 if(i < this.mesh.length && i >= 0){
                     if(this.curMesh !== this.mesh[i]){
                         if(this.curMesh)this.scene.remove(this.curMesh); //remove old
@@ -339,7 +348,7 @@ class Item{
                     log(`Item '${this.name}' action '${a.name}', action sequece out of range`);
                 }
             }else{
-                this.acc += dt;
+                a.acc += dt;
             }
         }
         if(this.live)this.live('update',dt);
@@ -544,11 +553,11 @@ class Item{
         BlocklyInterface.injectBlocklyFunction(name,func);
     }
 
-    blocklyStop(name,func){
+    blocklyStop(){
         BlocklyInterface.blocklyStop();
     }
 
-    blocklyContinue(name,func){
+    blocklyContinue(){
         BlocklyInterface.blocklyContinue();
     }    
 };
