@@ -15,10 +15,12 @@ import IconRotateRight from 'material-ui/svg-icons/image/rotate-right';
 import IconMenu from 'material-ui/svg-icons/navigation/menu';
 import IconStep from 'material-ui/svg-icons/maps/directions-walk';
 import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar';
+import BlocklyInterface from './vox/blocklyinterface';
 
 class Level extends Component{
     constructor(props){
         super(props);
+        BlocklyInterface.setCurrentLevel(this);
         this.state={
             playPause:true,
             volumeOnOff:true,
@@ -33,6 +35,7 @@ class Level extends Component{
     Reset(){
         this.voxview.reset();
         this.blockview.reset();
+        setTimeout(()=>{this.setState({playPause:true})},100);
     }
     RotationRight(){
         this.voxview.RotationRight();
@@ -47,6 +50,14 @@ class Level extends Component{
             //on
         }
         this.setState({volumeOnOff:!this.state.volumeOnOff});
+    }
+    /**
+     * 当游戏失败时
+     */
+    onGameOver(){
+        MessageBox.show('ok',undefined,<MarkdownElement file={`scene/gameover.md`}/>,(result)=>{
+            this.Reset();
+        });
     }
     PlayPause(){
         if(this.state.playPause){

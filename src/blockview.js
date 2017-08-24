@@ -8,6 +8,7 @@ class BlockView extends Component{
         super(props);
         this._freeze = false;
         this.highlightPause = false;
+        this.pauseRun = false;
         BlocklyInterface.setCurrentBlockView(this);
     }
     componentDidMount(){
@@ -84,6 +85,12 @@ class BlockView extends Component{
     isRunning(){
         return !!this.myInterpreter;
     }
+    pause(){
+        this.pauseRun = true;
+    }
+    continue(){
+        this.pauseRun = false;
+    }
     /**
      * 单步执行,代码开始时调用cb('begin'),结束时调用cb('end')
      */
@@ -104,7 +111,7 @@ class BlockView extends Component{
             if(cb)cb('begin');
             return;
         }
-        if(this.freeze)return;
+        if(this.freeze || this.pauseRun)return;
         this.highlightPause = false;
         do{
             try{
@@ -127,6 +134,8 @@ class BlockView extends Component{
     reset(){
         this.workspace.highlightBlock(null);
         this.myInterpreter = null;
+        this.pauseRun = false;
+        this.freeze = false;
         if(this.runID){
             clearInterval(this.runID);
             this.runID = undefined;

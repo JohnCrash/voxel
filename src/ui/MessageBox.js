@@ -30,7 +30,7 @@ class MessageBox extends Component{
         });
     }
     handleClose(result){
-        this.setState({open: false});
+        this.setState({open: false,type:'',title:'',content:''});
         if(MessageBox.globalCB){
             MessageBox.globalCB(result);
             MessageBox.globalCB = null;
@@ -65,13 +65,13 @@ class MessageBox extends Component{
                     label="确定"
                     primary={true}
                     onClick={this.handleClose.bind(this,'ok')}/>];
-                break;                
+                break;
         }
         return <div>
             <Dialog
             title={this.state.title}
             actions={actions}
-            modal={false}
+            modal={true}
             open={this.state.open}
             autoScrollBodyContent={true}
             contentStyle={this.state.style}

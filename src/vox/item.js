@@ -262,7 +262,6 @@ class Item{
             for(let i = 0;i<this.actions.length;i++){
                 if(this.actions[i].name === name){
                     let action = this.actions[i];
-                    console.log(`doAction ${action.name}`);
                     if(this.vox){ //已经加载
                         this.curAction = action;
                         if(typeof action.curIndex === 'undefined'){
@@ -559,7 +558,11 @@ class Item{
 
     blocklyContinue(){
         BlocklyInterface.blocklyContinue();
-    }    
+    }
+    
+    blocklyEvent(event){
+        BlocklyInterface.blocklyEvent(event);
+    }
 };
 
 export {Item};
