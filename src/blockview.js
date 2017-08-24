@@ -39,8 +39,13 @@ class BlockView extends Component{
     initWorkspace(){
         if(this.workspace)
             this.workspace.dispose();
-        this.workspace = Blockly.inject(this.blockDiv,
-            {toolbox: this.toolboxXML});
+        try{
+            this.workspace = Blockly.inject(this.blockDiv,
+                {toolbox: this.toolboxXML});
+        }catch(e){
+            this.workspace = Blockly.inject(this.blockDiv);
+            console.log(`Can not inject blocly workspace \n${e}`);
+        }
         this.workspace.addChangeListener((event)=>{
             this.reset();
             if(this.runComplateCB)this.runComplateCB();

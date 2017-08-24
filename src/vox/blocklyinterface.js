@@ -73,6 +73,12 @@ export default class BlocklyInterface{
             if(currentBlockView)
                 currentBlockView.pause();
             isNotifyDead = true;
+        }else if(!isNotifyDead && event==='MissionCompleted'){
+            if(currentLevel)
+                currentLevel.onCompleted();
+            if(currentBlockView)
+                currentBlockView.pause();
+            isNotifyDead = true;
         }
     }
 };

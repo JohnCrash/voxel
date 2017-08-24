@@ -4,6 +4,9 @@ class TextManager_{
     constructor(){
         this.texts = {};
     }
+    reset(){
+        this.texts = {};
+    }    
     load(file,cb){
         let s = this.texts[file];
         if(s && s.state==='ready'){

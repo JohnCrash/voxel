@@ -5,6 +5,12 @@ class ItemTemplate_{
     constructor(){
         this.itemTemplates = {};
     }
+    /**
+     * 清空模板
+     */
+    reset(){
+        this.itemTemplates = {};
+    }
     load(file,cb){
         let s = this.itemTemplates[file];
         if(s && s.state==='ready'){

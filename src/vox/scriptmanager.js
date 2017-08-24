@@ -4,6 +4,20 @@
 class ScriptManager_{
     constructor(){
         this.scripts = {};
+        this.scriptNode = [];
+    }
+    /**
+     * 将脚本节点全部清空
+     */
+    reset(){
+        this.scripts = {};
+        let head = document.getElementsByTagName('head')[0];
+        if(head){
+            for(let node of this.scriptNode){
+                head.removeChild(node);
+            }
+            this.scriptNode = [];
+        }
     }
     load(js,cb){
         let s = this.scripts[js];
@@ -36,6 +50,7 @@ class ScriptManager_{
                 s.cbs = undefined;
             }
             head.appendChild(script);
+            this.scriptNode.push(script);
         }
     }
 };

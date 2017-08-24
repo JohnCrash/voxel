@@ -16,6 +16,9 @@ import IconMenu from 'material-ui/svg-icons/navigation/menu';
 import IconStep from 'material-ui/svg-icons/maps/directions-walk';
 import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar';
 import BlocklyInterface from './vox/blocklyinterface';
+import {ScriptManager} from './vox/scriptmanager';
+import {TextManager} from './ui/textmanager';
+import {ItemTemplate} from './vox/itemtemplate';
 
 class Level extends Component{
     constructor(props){
@@ -33,9 +36,14 @@ class Level extends Component{
         },{width:"100%",maxWidth: 'none'});
     }
     Reset(){
+        //重新加载全部资源
+        ItemTemplate.reset();
+        TextManager.reset();
+        ScriptManager.reset();
+
         this.voxview.reset();
         this.blockview.reset();
-        setTimeout(()=>{this.setState({playPause:true})},100);
+        this.setState({playPause:true});
     }
     RotationRight(){
         this.voxview.RotationRight();
@@ -58,6 +66,12 @@ class Level extends Component{
         MessageBox.show('ok',undefined,<MarkdownElement file={`scene/gameover.md`}/>,(result)=>{
             this.Reset();
         });
+    }
+    /**
+     * 当游戏过关
+     */    
+    onCompleted(){
+
     }
     PlayPause(){
         if(this.state.playPause){

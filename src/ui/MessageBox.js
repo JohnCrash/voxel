@@ -20,14 +20,28 @@ class MessageBox extends Component{
     static globalNode = null;
     static globalCB = null;
     static show(type,title,content,result,style){
-        MessageBox.globalCB = result;
-        MessageBox.globalNode.setState({
-            open:true,
-            type:type,
-            title:title,
-            content:content,
-            style:style
-        });
+        if(MessageBox.globalNode.state.open){
+            MessageBox.globalNode.handleClose();
+            setTimeout(function() {
+                MessageBox.globalCB = result;
+                MessageBox.globalNode.setState({
+                    open:true,
+                    type:type,
+                    title:title,
+                    content:content,
+                    style:style
+                });                
+            }, 1000);
+        }else{
+            MessageBox.globalCB = result;
+            MessageBox.globalNode.setState({
+                open:true,
+                type:type,
+                title:title,
+                content:content,
+                style:style
+            });
+        }
     }
     handleClose(result){
         this.setState({open: false,type:'',title:'',content:''});

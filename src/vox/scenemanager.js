@@ -87,6 +87,7 @@ class SceneManager extends EventEmitter{
      * 当加载完全结束时调用cb(true),如果失败调用cb(false)
      */
     loadFromJson(json,cb){
+        this.pause(true); //加载的时候暂停更新
         this.description = json.description;
         this.markdownDescription = json.markdownDescription;
         this.script = json.script;

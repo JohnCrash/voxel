@@ -8,6 +8,9 @@ class VoxManager_{
     constructor(){
         this.voxs = {};
     }
+    reset(){
+        this.voxs = {};
+    }
     /*
      * 加载成功或者失败都调用cb(iserr),成功cb(false),失败cb(true)
      * 失败可以遍历
