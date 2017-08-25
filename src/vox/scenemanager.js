@@ -33,6 +33,7 @@ class SceneManager extends EventEmitter{
         this.zfog = true;
         this.gravity = -98;//重力加速度
         this._pause = true; //默认暂停
+        this._editor = false; //编辑状态
         //初始化声音监听
         this.audioListener = new THREE.AudioListener();
         game.camera.add(this.audioListener);
@@ -590,6 +591,15 @@ class SceneManager extends EventEmitter{
     }
     enablePhysical(b){
         this.physical = !!b;
+    }
+    /**
+     * 旋转摄像机
+     */
+    rotateLeft(){
+
+    }
+    rotateRight(){
+
     }
 };
 

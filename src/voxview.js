@@ -58,8 +58,10 @@ class VoxView extends Component{
         this.load(this.props.file);
     }
     RotationLeft(){
+        this.sceneManager.rotateLeft();
     }
-    RotationRight(){            
+    RotationRight(){
+        this.sceneManager.rotateRight();
     }    
     render(){
         return <canvas ref={canvas=>this.canvas=canvas}>

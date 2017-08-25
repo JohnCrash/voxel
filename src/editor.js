@@ -13,6 +13,7 @@ let game = new Game({enableStats:false,
     enableShaodw:true});
 
 let sceneManager = new SceneManager(game);
+sceneManager._editor = true;
 let gui = new dat.GUI();
 let lightID = 1;
 let itemID = 1;

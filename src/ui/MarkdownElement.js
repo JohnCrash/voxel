@@ -50,7 +50,16 @@ class MarkdownElement extends Component {
       },
     });
   }
-
+  componentWillReceiveProps(nextProps){
+    if(this.props.file!=nextProps.file){
+      TextManager.load(nextProps.file,(iserr,text)=>{
+        if(!iserr)
+          this.setState({text});
+      })
+    }else if(this.props.text!=nextProps.text){
+      this.setState({text:nextProps.text});
+    }
+  }
   render() {
     const {
       style,

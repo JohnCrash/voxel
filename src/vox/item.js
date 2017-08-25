@@ -126,6 +126,9 @@ class Item{
 
         this.fromJson(json);
     }
+    removeSelf(){
+        this.sceneManager.removeItem(this);
+    }
     fromJson(j){
         let json = j || {};
         this.position = new Position(json.position?new THREE.Vector3(json.position.x,json.position.y,json.position.z):new THREE.Vector3(),this);
@@ -174,6 +177,7 @@ class Item{
                             this.mesh[i].receiveShadow = this._receiveShadow;
                         }
                     }
+                    this.curDim = this.vox.getModelSize(0); //给以默认尺寸
                     this.doAction(this.loadedDoAction);
                     this.state = 'ready';
                 }else{
@@ -272,6 +276,10 @@ class Item{
                         if(typeof action.curIndex === 'undefined'){
                             action.acc = 0;
                             action.curIndex = 0;
+                        }
+                        if(!action.loop){
+                            action.acc = 0;
+                            action.curIndex = 0;   
                         }
                     }else{ //未完成vox的加载
                         this.loadedDoAction = name||'idle';
@@ -419,20 +427,20 @@ class Item{
      * 另外任何时候都可以通过fallState来检查是否在下坠
      */
     onFall(b,z){
-        if(this.live)this.live('fall',b,z);
+        if(this.live && !this.sceneManager._editor)this.live('fall',b,z);
     }
     /**
      * 当物体发生碰撞时被调用(注意不是和地面)
      * item为另一个物体，ab是两个物体碰撞交集aabb盒
      */
     onCollision(item,ab,dt){
-        if(this.live)this.live('collision',ab,dt);
+        if(this.live && !this.sceneManager._editor)this.live('collision',ab,dt);
     }
     /**
      * 如果物体被地面阻拦该函数将被调用
      */
     onCollisionWall(){
-        if(this.live)this.live('wall');
+        if(this.live && !this.sceneManager._editor)this.live('wall');
     }
     /**
      * 当物体掉入水中
@@ -440,7 +448,7 @@ class Item{
      * * 另外任何时候都可以通过swimState来检查是否在游泳
      */
     onSwiming(b,z){
-        if(this.live)this.live('swiming',b,z);
+        if(this.live && !this.sceneManager._editor)this.live('swiming',b,z);
     }
     aabb(){
         if(this.curDim){

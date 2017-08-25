@@ -71,7 +71,9 @@ class Level extends Component{
      * 当游戏过关
      */    
     onCompleted(){
-
+        MessageBox.show('ok',undefined,<MarkdownElement file={`scene/missioncompleted.md`}/>,(result)=>{
+            this.Reset();
+        });
     }
     PlayPause(){
         if(this.state.playPause){
@@ -79,7 +81,7 @@ class Level extends Component{
                 this.setState({playPause:true});
             });
         }else{
-            this.blockview.reset();
+            this.Reset();
         }
         this.setState({playPause:!this.state.playPause});
     }
