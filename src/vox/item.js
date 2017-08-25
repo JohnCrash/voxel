@@ -281,6 +281,8 @@ class Item{
                             action.acc = 0;
                             action.curIndex = 0;   
                         }
+                        let i = action.sequece[action.curIndex];
+                        this.meshFrame(i);
                     }else{ //未完成vox的加载
                         this.loadedDoAction = name||'idle';
                     }
@@ -324,6 +326,27 @@ class Item{
             }              
         }
     }
+    meshFrame(i){
+        if(i < this.mesh.length && i >= 0){
+            if(this.curMesh !== this.mesh[i]){
+                if(this.curMesh)this.scene.remove(this.curMesh); //remove old
+                this.curMesh = this.mesh[i];
+                this.curDim = this.vox.getModelSize(i);
+                if(this.water){
+                    let m = this.vox.getModelVolumeWater(i,this.water);
+                    this.curVox = m.volume;
+                    this.curWaterVox = m.water;
+                }else{
+                    this.curVox = this.vox.getModelVolume(i);
+                }
+                this.scene.add(this.curMesh);
+                this.curMesh.position.set(this.position.x,this.position.y,this.position.z);
+                this.curMesh.rotation.set(this.rotation.x,this.rotation.y,this.rotation.z);
+            }
+        }else{
+            log(`Item '${this.name}' action '${a.name}', action sequece out of range`);
+        }
+    }
     /**
      * 加载到场景的每一个Item会被定时调用update
      * curAction    当前对象
@@ -340,25 +363,7 @@ class Item{
                     a.curIndex = 0;
                 }
                 let i = a.sequece[a.curIndex];
-                if(i < this.mesh.length && i >= 0){
-                    if(this.curMesh !== this.mesh[i]){
-                        if(this.curMesh)this.scene.remove(this.curMesh); //remove old
-                        this.curMesh = this.mesh[i];
-                        this.curDim = this.vox.getModelSize(i);
-                        if(this.water){
-                            let m = this.vox.getModelVolumeWater(i,this.water);
-                            this.curVox = m.volume;
-                            this.curWaterVox = m.water;
-                        }else{
-                            this.curVox = this.vox.getModelVolume(i);
-                        }
-                        this.scene.add(this.curMesh);
-                        this.curMesh.position.set(this.position.x,this.position.y,this.position.z);
-                        this.curMesh.rotation.set(this.rotation.x,this.rotation.y,this.rotation.z);
-                    }
-                }else{
-                    log(`Item '${this.name}' action '${a.name}', action sequece out of range`);
-                }
+                this.meshFrame(i);
             }else{
                 a.acc += dt;
             }
