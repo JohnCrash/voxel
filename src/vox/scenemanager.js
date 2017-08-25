@@ -592,14 +592,23 @@ class SceneManager extends EventEmitter{
     enablePhysical(b){
         this.physical = !!b;
     }
+    rotateCamera(t){
+        let x = this.game.camera.position.x;
+        let y = this.game.camera.position.y;
+        let d = Math.sqrt(x*x+y*y);
+        let a = Math.atan2(y,x)+t;
+        this.game.camera.position.x = d*Math.cos(a);
+        this.game.camera.position.y = d*Math.sin(a);
+        this.game.camera.rotation.z += t;
+    }
     /**
      * 旋转摄像机
      */
     rotateLeft(){
-
+        this.rotateCamera(-90/4*Math.PI/180);
     }
     rotateRight(){
-
+        this.rotateCamera(15*Math.PI/180);
     }
 };
 
