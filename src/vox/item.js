@@ -25,6 +25,7 @@ import {VoxManager} from './voxmanager';
 import {ItemTemplate} from './itemtemplate'
 import {ScriptManager} from './scriptmanager';
 import BlocklyInterface from './blocklyinterface';
+import {AudioManager} from './audiomanager';
 
 import log from './log';
 var aabb = require('aabb-3d');
@@ -120,6 +121,9 @@ class Item{
     constructor(sceneManager,json){
         this.sceneManager = sceneManager;
         this.scene = sceneManager.game.scene;
+        //默认每个Item有一个声音
+        this.audio = new THREE.Audio(this.sceneManager.audioListener);
+
         this.fromJson(json);
     }
     fromJson(j){
@@ -133,7 +137,7 @@ class Item{
         this.collision = !!json.collision;//是否碰撞
         this.fixed = !!json.fixed;//是否是一个固定对象
         this.gravity = !!json.gravity;//是否受重力影响
-        this.velocity = json.velocity?new THREE.Vector3(json.velocity.x,json.velocity.y,json.velocity.z):new THREE.Vector3();
+        this.velocity = new THREE.Vector3(); //确保起始速度为0
         this._castShadow = json.castShadow;
         this._receiveShadow = json.receiveShadow;
         this._floatingF = 0; //浮力
@@ -195,15 +199,16 @@ class Item{
                         this.fixed = !!template.fixed;//是否是一个固定对象
                     if(template.gravity!==undefined)
                         this.gravity = !!template.gravity;//是否受重力影响
-                    if(template.velocity)
-                        this.velocity = new THREE.Vector3(template.velocity.x,template.velocity.y,template.velocity.z);
                     if(template.specificGravity)
                         this.specificGravity = template.specificGravity;
 
                     this._castShadow = template.castShadow || false;
                     this._receiveShadow = template.receiveShadow || false;
                     this.file = template.file;
-                    this.actions = template.actions;
+                    this.actions = [];
+                    for(let a of template.actions){
+                        this.actions.push({...a});
+                    }
                     this.script = template.script;
                     if(template.live && typeof template.live==='function'){
                         this.live = template.live.bind(this);
@@ -243,7 +248,6 @@ class Item{
         json.gravity = !!this.gravity;
 
         json.specificGravity = this.specificGravity;
-        json.velocity = {x:this.velocity.x,y:this.velocity.y,z:this.velocity.z};
 
         json.castShadow = this._castShadow;
         json.receiveShadow = this._receiveShadow;
@@ -264,6 +268,7 @@ class Item{
                     let action = this.actions[i];
                     if(this.vox){ //已经加载
                         this.curAction = action;
+                        this.playSound(action.sound,action.loop,action.volume);
                         if(typeof action.curIndex === 'undefined'){
                             action.acc = 0;
                             action.curIndex = 0;
@@ -547,21 +552,49 @@ class Item{
 
         return null;//不相交
     }
-
+    /**
+     * 向Blockly注入函数
+     */
     injectBlocklyFunction(name,func){
         BlocklyInterface.injectBlocklyFunction(name,func);
     }
-
+    /**
+     * 暂停Blockly的执行
+     */
     blocklyStop(){
         BlocklyInterface.blocklyStop();
     }
-
+    /**
+     * 继续Blockly的执行
+     */
     blocklyContinue(){
         BlocklyInterface.blocklyContinue();
     }
-    
+    /**
+     * 向blockly发送事件
+     */
     blocklyEvent(event){
         BlocklyInterface.blocklyEvent(event);
+    }
+    /**
+     * 播放声音
+     */
+    playSound(file,loop,volume){
+        if(file){
+            if(this.sceneManager.isMute())return;
+            AudioManager.load(file,(b,buffer)=>{
+                if(!b){
+                    this.audio.setBuffer(buffer);
+                    this.audio.setLoop(!!loop);
+                    this.audio.setVolume(volume||1.0);
+                    this.audio.play();
+                }else{
+                    try{this.audio.stop();}catch(e){}
+                }
+            });
+        }else{
+            try{this.audio.stop();}catch(e){}
+        }
     }
 };
 

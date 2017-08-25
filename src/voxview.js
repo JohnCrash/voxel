@@ -16,7 +16,7 @@ class VoxView extends Component{
     }
     componentDidMount(){
         this.game = new Game({enableStats:false,
-            enableAA:false,
+            enableAA:true,
             enableLight:true,
             enableShaodw:true,
             canvas:this.canvas});
@@ -27,8 +27,12 @@ class VoxView extends Component{
         this.load(this.props.file);
     }
     componentWillReceiveProps(nextProps){
-        if(this.props.file!=nextProps.file)
+        if(this.props.file!=nextProps.file){
             this.load(nextProps.file);
+        }else if(this.props.mute!=nextProps.mute){
+            this.sceneManager.muteMusic(nextProps.mute);
+            this.sceneManager.muteSound(nextProps.mute);
+        }
     }
     load(file){
         BlocklyInterface.blocklyEvent('SceneReset');
@@ -37,7 +41,9 @@ class VoxView extends Component{
                 this.sceneManager.loadFromJson(json.content,(iserr)=>{
                     if(!iserr){
                         BlocklyInterface.blocklyEvent('SceneReady');
-                        this.sceneManager.physical = true;
+                        this.sceneManager.enablePhysical(true);
+                        this.sceneManager.muteMusic(this.props.mute);
+                        this.sceneManager.muteSound(this.props.mute);
                         this.sceneManager.pause(false);
                     }else{
                         log(`'${file}' load error.`);

@@ -3,6 +3,7 @@
  */
 import {Item} from './item';
 import {ZDepthPhongMaterial} from './depthphong';
+import {AudioManager} from './audiomanager';
 
 var EventEmitter = require("events");
 var aabb = require('aabb-3d');
@@ -32,6 +33,12 @@ class SceneManager extends EventEmitter{
         this.zfog = true;
         this.gravity = -98;//重力加速度
         this._pause = true; //默认暂停
+        //初始化声音监听
+        this.audioListener = new THREE.AudioListener();
+        game.camera.add(this.audioListener);
+        this.music = new THREE.Audio(this.audioListener);
+        this._muteSound = true;
+        this._muteMusic = true;
 
         this.setBackgroundColor(0);
         this.itemMaterial = new ZDepthPhongMaterial({ color: 0xffffff,
@@ -87,10 +94,14 @@ class SceneManager extends EventEmitter{
      * 当加载完全结束时调用cb(true),如果失败调用cb(false)
      */
     loadFromJson(json,cb){
+        this.muteMusic(true); //关闭声音
+        this.muteSound(true);
         this.pause(true); //加载的时候暂停更新
         this.description = json.description;
         this.markdownDescription = json.markdownDescription;
         this.script = json.script;
+        this.musicFile = json.music||'';
+        this.musicLoop = !!json.loop;
         if(json.bgcolor)this.setBackgroundColor(json.bgcolor);
         this.loadSkybox(json.skybox);
         this.loadMaterial(json.material);
@@ -267,6 +278,8 @@ class SceneManager extends EventEmitter{
         let json = {
             description:this.description,
             script:this.script,
+            music:this.musicFile,
+            loop:this.musicLoop,
             bgcolor : this.getBackgroundColor().toJSON(),
             camera:{
                 position:{x:this.game.camera.position.x,
@@ -528,7 +541,56 @@ class SceneManager extends EventEmitter{
         item2.onCollision(item1,ab,dt);
         this.emit('collision',item1,item2,ab,dt);
     }
+    /**
+     * 播放场景背景音乐
+     */
+    playMusic(file,loop){
+        AudioManager.load(file,(b,buffer)=>{
+            if(!b){
+                this.music.setBuffer(buffer);
+                this.music.setLoop(!!this.musicLoop);
+                this.music.play();
+            }
+        });             
+    }
+    stopMusic(){
+        if(this.music){
+            try{
+                this.music.stop();
+            }catch(e){
+            }
+        }
+    }
+    musicVolume(v){
+        if(this.music){
+            this.music.setVolume(v);
+        }
+    }
+    //是否静音
+    isMute(){
+        return this._muteSound;
+    }
+    //打开关闭声音
+    muteSound(b){
+        if(this._muteSound!==!!b){
+            this._muteSound = b;
+            if(b){//关闭全部正在播放的声音
+            }
+        }
+    }
+    muteMusic(b){
+        if(this._muteMusic!==!!b){
+            this._muteMusic = b;
+            if(b){
+                this.stopMusic();
+            }else{
+                this.playMusic(this.musicFile,this.musicLoop);
+            }
+        }
+    }
+    enablePhysical(b){
+        this.physical = !!b;
+    }
 };
 
-//singleton
 export default SceneManager;

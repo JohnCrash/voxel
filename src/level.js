@@ -87,10 +87,10 @@ class Level extends Component{
         this.blockview.step();
     }
     render(){
-        let {playPause,volumeOnOff,levelDesc} = this.state;
+        let {playPause,volumeOnOff,levelDesc,mute} = this.state;
         return <div>
             <div style={{position:"absolute",left:"0px",top:"0px",right:"50%",bottom:"30%"}}>
-                <VoxView file={this.props.level} ref={ref=>this.voxview=ref}/>
+                <VoxView file={this.props.level} ref={ref=>this.voxview=ref} mute={!volumeOnOff}/>
             </div>
             <div style={{position:"absolute",left:"50%",top:"0px",right:"0px",bottom:"0px"}}>
                 <BlockView ref={ref=>this.blockview=ref} file={`scene/${this.props.level}.toolbox`}/>

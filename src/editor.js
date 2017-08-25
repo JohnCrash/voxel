@@ -428,6 +428,7 @@ class Edit{
         this.selSceneFile = '';
         this.selEnvFile = '';
         this['场景名称:'] = '';
+        this['声音:'] = '';
         this['环境名:'] = '';
         this.lightUI = [];
         this.itemUI = [];
@@ -478,6 +479,7 @@ class Edit{
         sceneTool.add(this,'清空场景');
         sceneTool.add(this,'保存场景');
         this.sceneNameUI = sceneTool.add(this,'场景名称:');
+        this.musicUI = sceneTool.add(this,'声音:');
         sceneTool.add(this,'刷新列表');
         fetchJson('/list?dir=scene/vox',(json)=>{
             let files = json.files.filter(item=>item.match(/.*\.vox$/));
@@ -591,6 +593,8 @@ class Edit{
     }
     '保存场景'(){
         let name = this['场景名称:'];
+        sceneManager.musicFile = this['声音:'];
+        sceneManager.musicLoop = true;
         let json = sceneManager.toJson();
         if(name){
             resolve(name,this.sceneList,()=>
@@ -613,6 +617,8 @@ class Edit{
                         if(!iserr){
                             this.rebuildGUI('scene');
                             this['场景名称:'] = name.replace(/(.*)\.scene$/,($1,$2)=>$2);
+                            this['声音:'] = sceneManager.musicFile || '';
+                            this.musicUI.updateDisplay();
                             this.sceneNameUI.updateDisplay();
                         }else{
                             window.alert(`'scene/${name}'加载错误.`);
