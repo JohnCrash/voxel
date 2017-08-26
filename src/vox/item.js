@@ -423,6 +423,11 @@ class Item{
             if(this.live)this.live('release');
             this.scene.remove(this.curMesh);
             this.curMesh = null;
+            this.curAction = null;
+            this.actions = null;
+            this.vox = null;
+            this.live = null;
+            this.mesh = null;
         }
     }
     /**
