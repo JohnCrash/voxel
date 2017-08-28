@@ -444,7 +444,7 @@ class Item{
      * item为另一个物体，ab是两个物体碰撞交集aabb盒
      */
     onCollision(item,ab,dt){
-        if(this.live && !this.sceneManager._editor)this.live('collision',ab,dt);
+        if(this.live && !this.sceneManager._editor)this.live('collision',item,ab,dt);
     }
     /**
      * 如果物体被地面阻拦该函数将被调用

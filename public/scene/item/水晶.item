@@ -1,0 +1,28 @@
+{
+	"position":{
+		"x":0,
+		"y":0,
+		"z":0
+	},
+	"rotation":{
+		"x":0,
+		"y":0,
+		"z":0
+	},
+	"name":"水晶",
+	"visible":true,
+	"castShadow":true,
+	"receiveShadow":false,
+	"file":"scene/vox/obj_crystal.vox",
+	"actions":[
+		{
+			"name":"idle",
+			"sequece":[
+				0
+			],
+			"delay":0,
+			"loop":true
+		}
+	],
+	"script":"scene/item/水晶.js"
+}

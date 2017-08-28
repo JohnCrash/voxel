@@ -1,0 +1,37 @@
+{
+	"position":{
+		"x":0,
+		"y":0,
+		"z":0
+	},
+	"rotation":{
+		"x":0,
+		"y":0,
+		"z":4.9
+	},
+	"name":"霸王龙",
+	"visible":true,
+	"collisionWidth" : 12,
+	"castShadow":true,
+	"receiveShadow":false,
+	"file":"scene/vox/T-Rex.vox",
+	"actions":[
+		{
+			"name":"idle",
+			"sequece":[
+				0
+			],
+			"delay":0,
+			"loop":true
+		},
+		{
+			"name":"run",
+			"sequece":[
+				0,1,2,3,4,5,6,7
+			],
+			"delay":200,
+			"loop":true
+		}
+	],
+	"script":"scene/item/恐龙.js"
+}

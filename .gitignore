@@ -64,7 +64,6 @@ node_modules
 public/examples/
 public/build/
 public/libs/
-public/scene/
 public/blockly/
 public/closure-library/
 dist/
