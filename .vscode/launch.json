@@ -11,14 +11,14 @@
             "type": "chrome",
             "request": "launch",
             "name": "Debug client",
-            "url": "http://localhost:3000/level.html",
+            "url": "http://localhost:3000/leveldbg.html",
             "webRoot": "${workspaceRoot}"
         },
         {
             "type": "chrome",
             "request": "launch",
             "name": "Debug editor",
-            "url": "http://localhost:3000/editor.html",
+            "url": "http://localhost:3000/editordbg.html",
             "webRoot": "${workspaceRoot}"
         },        
         {

@@ -927,6 +927,33 @@ game.on('init',function(){
     this.camera.rotation.x = Math.PI/6;
 
     let edit = new Edit();
+    function loadScene(){
+        let name = window.location.hash.substr(1);
+        if(name){
+            fetchJson(`/load?file=scene/${name}.scene`,(json)=>{
+                if(json.result==='ok'){
+                    sceneManager.loadFromJson(json.content,(iserr)=>{
+                        if(!iserr){
+                            edit.rebuildGUI('scene');
+                            edit['场景名称:'] = name.replace(/(.*)\.scene$/,($1,$2)=>$2);
+                            edit['声音:'] = sceneManager.musicFile || '';
+                            edit.musicUI.updateDisplay();
+                            edit.sceneNameUI.updateDisplay();
+                        }else{
+                            window.alert(`'scene/${name}'加载错误.`);
+                        }
+                    });
+                }else if(json.result){
+                    window.alert(json.result);
+                }
+            });
+        }  
+    }
+    /**
+     * 为页面加入参数
+     */
+    window.addEventListener('hashchange',loadScene);
+    loadScene();
 });
 
 game.on('update',function(dt){

@@ -3,6 +3,13 @@ import VoxView from './voxview';
 import BlocklyInterface from './vox/blocklyinterface';
 import {TextManager} from './ui/textmanager';
 
+function parserXML(id,text){
+    let result;
+    let regx = new RegExp(`<xml\\s+id="${id}">([^]*)<\/xml>`,"g");
+    text.replace(regx,(a,t)=>{result = a});
+    return result;
+}
+
 class BlockView extends Component{
     constructor(props){
         super(props);
@@ -13,25 +20,24 @@ class BlockView extends Component{
     }
     componentDidMount(){
         if(this.props.file){
-            TextManager.load(this.props.file,(iserr,text)=>{
-                if(!iserr){
-                    this.toolboxXML = text;
-                    BlocklyInterface.blocklyEvent('BlocklyToolboxReady');
-                }
-              });
+            this.load(this.props.file);
         }else{
             this.toolboxXML = this.props.toolbox;
         }
     }
     componentWillReceiveProps(nextProps){
         if(this.props.file!=nextProps.file){
-            TextManager.load(nextProps.file,(iserr,text)=>{
-                if(!iserr){
-                    this.toolboxXML = text;
-                    BlocklyInterface.blocklyEvent('BlocklyToolboxReady');
-                }
-              });
+            this.load(nextProps.file);
         }
+    }
+    load(file){
+        TextManager.load(file,(iserr,text)=>{
+            if(!iserr){
+                this.toolboxXML = parserXML('toolbox',text);
+                this.defaultXML = parserXML('default',text);
+                BlocklyInterface.blocklyEvent('BlocklyToolboxReady');
+            }
+          });
     }
     /**
      * 当toolboxXML被载入并且voxview加载结束后在初始化workspace
@@ -51,6 +57,10 @@ class BlockView extends Component{
             if(this.runComplateCB)this.runComplateCB();
             this.runComplateCB = undefined;                        
         });
+        if(this.defaultXML){
+            let dom = Blockly.Xml.textToDom(this.defaultXML);
+            Blockly.Xml.domToWorkspace(dom,this.workspace);
+        }
     }
     /**
      * 向执行环境注入代码

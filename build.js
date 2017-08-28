@@ -21,5 +21,5 @@ function build(src,des){
   }));  
 }
 
-build('src/levelindex.js','public/levelindex.js');
-build('src/editor.js','public/editor.js');
+build('src/levelindex.js','public/levelindex_compress.js');
+build('src/editor.js','public/editor_compress.js');

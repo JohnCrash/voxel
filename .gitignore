@@ -68,3 +68,5 @@ public/scene/
 public/blockly/
 public/closure-library/
 dist/
+public/editor_compress.js
+public/levelindex_compress.js
