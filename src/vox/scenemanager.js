@@ -473,15 +473,15 @@ class SceneManager extends EventEmitter{
             item.position.z += ab.depth(); //一次顶到最上面
             if(item.fallState){
                 item.fallState = false;
-                item.onFall('fall',item.position.z-item.fallZ);
-                this.emit('fall',item,ab,dt);
+                item.onFall(false,item.position.z-item.fallZ);
+                this.emit('fall',false,item,item.position.z-item.fallZ);
             }
         }else{//悬空
             if(!item.fallState){
                 item.fallZ = item.position.z;
                 item.fallState = true;
-                item.onFall('floating',0);
-                this.emit('floating',item,ab,dt);
+                item.onFall(true,0);
+                this.emit('floating',true,item,0);
             }
         }
     }

@@ -213,6 +213,7 @@ class Item{
                     for(let a of template.actions){
                         this.actions.push({...a});
                     }
+                    this.typeName = template.name;
                     this.script = template.script;
                     if(template.live && typeof template.live==='function'){
                         this.live = template.live.bind(this);

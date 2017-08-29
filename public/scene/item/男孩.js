@@ -55,6 +55,7 @@ function initItemBlockly(item){
 			this._obstructItem = i;
 			this.currentAction='idle';
 			this.blocklyContinue();
+			console.log('blocklyContinue collision obstruct');
 		}
 	}
 	function eqAngle(a1,a2){ //
@@ -194,13 +195,12 @@ function initItemBlockly(item){
 		if(item._isobstruct && !eqAngle(item.rotation.z-Math.PI,item.forwardAngle)){
 			item.velocity.z = JUMP_SPEED;
 			item.doAction('jump');
-			console.log('blocklyStop 111');
+			console.log('blocklyStop jump collision');
+			item.currentAction = 'jump';
+			item.forwardT = 1;
+			item.forwardBegin = {x:item.position.x,y:item.position.y};
+			item.forwardEnd = {x:item.position.x,y:item.position.y};
 			item.blocklyStop();
-			setTimeout(function(){
-				console.log('blocklyContinue 111');
-				item.doAction('idle');
-				item.blocklyContinue();
-			},300);			
 			return;
 		}
 		console.log('blocklyStop 3');
@@ -226,9 +226,8 @@ function initItemBlockly(item){
 		item.velocity.z = JUMP_SPEED;
 		var g = item.sceneManager.gravity;
 		item.speed = SPEED/JUMP_STEP;//Math.abs(d*g)/(2*JUMP_SPEED);
-		console.log('jump');
 		item.doAction('jump');
-		console.log(`jump ${item.speed} ----`);
+		console.log(`jump ${item.speed}`);
 	});
 
 	// 移除障碍栅栏
@@ -251,6 +250,13 @@ function initItemBlockly(item){
 	  return code;
 	};
 	item.injectBlocklyFunction('unlock',function(){
+		if(item._obstructItem){
+			if(item._obstructItem.typeName!=='栅栏'){
+				item.blocklyStop();	
+				setTimeout(function(){item.blocklyEvent('WrongAction');},1000);
+				return;
+			}
+		}
 		if(item._isobstruct && eqAngle(item.rotation.z,item.forwardAngle)){
 			console.log('blocklyStop 2');
 			item.blocklyStop();
@@ -261,7 +267,7 @@ function initItemBlockly(item){
 				console.log('unlock');
 				item._obstructItem.unlock();
 				
-				item.currentAction = 'forward';				
+				item.currentAction = 'forward';
 				let d = STEP - calcD(item);
 				item.forwardBegin = {x:item.position.x,y:item.position.y};
 				item.forwardEnd = {
@@ -277,13 +283,66 @@ function initItemBlockly(item){
 			console.log('blocklyStop 1');
 			item.doAction('remove_cones');
 			item.blocklyStop();
-			setTimeout(function(){item.blocklyContinue();},300);
+			setTimeout(function(){
+				item.blocklyContinue();
+				console.log('blocklyContinue unlock remove_cones');
+			},300);
+		}
+	});		
+	
+	// 打开宝箱
+	Blockly.Blocks['open_box'] = {
+	  init: function() {
+		this.appendDummyInput()
+			.appendField(" 打开宝箱 ");
+		this.setInputsInline(true);
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(true, null);
+		this.setColour(300);
+	 this.setTooltip("");
+	 this.setHelpUrl("");
+	  }
+	};	
+	Blockly.JavaScript['open_box'] = function(block) {
+	  // TODO: Assemble JavaScript into code variable.
+	  var code = 'openbox();\n';
+	  return code;
+	};	
+	item.injectBlocklyFunction('openbox',function(){
+		if(item._obstructItem){
+			if(item._obstructItem.typeName!=='盒子'){
+				item.blocklyStop();	
+				setTimeout(function(){item.blocklyEvent('WrongAction');},1000);
+				return;
+			}
+		}
+		
+		if(item._isobstruct && item.usekey && eqAngle(item.rotation.z,item.forwardAngle)){
+			console.log('blocklyStop 21');
+			item.blocklyStop();
+			console.log('remove_cones');
+			item.doAction('remove_cones');
+			setTimeout(function(){
+				console.log('open box');
+				item.usekey(item._obstructItem);
+				console.log('blocklyContinue 21');
+				item.blocklyContinue();
+				//item.doAction('hail'); //欢呼
+			},800);
+		}else{
+			console.log('blocklyStop 12');
+			item.doAction('remove_cones');
+			item.blocklyStop();
+			setTimeout(function(){
+				item.blocklyContinue();
+				console.log('blocklyContinue remove_cones');
+			},300);
 		}
 	});		
 }
 
 regItemEvent('男孩',
-function(event,dt){
+function(event,dt,z){
 	switch(event){
 		case 'init':
 			this.idleAcc = 0;
@@ -294,6 +353,17 @@ function(event,dt){
 			console.log(`${this.name} 退出`);
 			break;
 		case 'swiming':
+			break;
+		case 'fall':
+			console.log(`fall ${dt}`);
+			if(this.currentAction==='jump' && !dt){
+				let t = 1;
+				if(this._isobstruct)this._isobstruct = false;
+				this.currentAction = '';
+				this.idleAcc = 0;
+				this.blocklyContinue();
+				console.log('blocklyContinue fall');
+			}
 			break;
 		case 'collision':
 			break;
@@ -313,11 +383,13 @@ function(event,dt){
 				var t = this.forwardT;
 				if(t>=1){
 					t = 1;
-					if(this._isobstruct)this._isobstruct = false;
-					this.currentAction = '';
-					this.idleAcc = 0;
-					this.blocklyContinue();
-					console.log('blocklyContinue 2');
+					if(this.currentAction!='jump'){ //不落地不可以再次跳跃
+						if(this._isobstruct)this._isobstruct = false;
+						this.currentAction = '';
+						this.idleAcc = 0;
+						this.blocklyContinue();
+						console.log(`blocklyContinue 2 ${this.currentAction}`);
+					}
 				}
 				//console.log(`${t} ${this.speed} ${dt}`);
 				this.position.x = this.forwardEnd.x*t + this.forwardBegin.x*(1-t);

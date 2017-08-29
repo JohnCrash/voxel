@@ -2,7 +2,7 @@
 	
 var SPEED = 1/20;
 
-regItemEvent('栅栏',
+regItemEvent('地板开关_绿色',
 function(event,dt){
 	switch(event){
 		case 'collision':
@@ -16,17 +16,17 @@ function(event,dt){
 			break;
 		case 'init':
 			console.log(`${this.name} 登场`);
-			this.unlock = function(){
-				this.currentAction = 'unlock';
+			this.drop = function(){
+				this.currentAction = 'drop';
 				this.collision = false; 
-				this.gravity = false;				
+				this.gravity = false;
 			}
 			break;
 		case 'release':
 			console.log(`${this.name} 退出`);
 			break;
 		case 'update':
-			if(this.currentAction === 'unlock'){
+			if(this.currentAction === 'drop'){
 				this.position.z -= SPEED * dt;
 				if(this.position.z < -50){
 					this.removeSelf();

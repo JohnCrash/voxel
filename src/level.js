@@ -75,6 +75,14 @@ class Level extends Component{
             this.Reset();
         });
     }
+    /**
+     * 当游戏失败,错误的动作用
+     */
+    onWrongAction(){
+        MessageBox.show('ok',undefined,<MarkdownElement file={`scene/wrongaction.md`}/>,(result)=>{
+            this.Reset();
+        });
+    } 
     PlayPause(){
         if(this.state.playPause){
             this.blockview.run(0,()=>{
