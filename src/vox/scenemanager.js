@@ -419,7 +419,7 @@ class SceneManager extends EventEmitter{
         //处理z方向的碰撞
         for(let item of this.items){
             if(!item.ground){
-                if(item.collision){
+                if(item.collision && item.collisionWithGround){
                     let ab = groundItem.collisionFunc(item);
                     if(ab && ab.depth()>=1){
                         continue; //xy过来还有约束，不做重力处理和抬升
@@ -429,7 +429,7 @@ class SceneManager extends EventEmitter{
                     item.velocity.z += ((this.gravity+item._floatingF)*dts);
                     item.position.add(item.velocity.x*dts,item.velocity.y*dts,item.velocity.z*dts);
                 }
-                if(item.collision){
+                if(item.collision && item.collisionWithGround){
                     let ab = groundItem.collisionFunc(item,true);
                     this.collisionGroundWater(groundItem,item,ab,dt);
                     ab = groundItem.collisionFunc(item);

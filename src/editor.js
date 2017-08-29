@@ -234,7 +234,7 @@ class ItemUI{
         this.aabb = false;
         ui.add(this,'名称:');
         addPosition(ui,item.position);
-        ui.add(this,'面向',0,2*Math.PI).step(0.1);
+        ui.add(this,'面向',0,2*Math.PI).step(0.01);
         ui.add(this,'投射阴影');
         ui.add(this,'接受阴影');
         ui.add(this,'可见');

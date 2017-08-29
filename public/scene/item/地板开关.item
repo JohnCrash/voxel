@@ -9,11 +9,11 @@
 		"y":0,
 		"z":0
 	},
-	"name":"地板_红色",
+	"name":"地板开关",
 	"visible":true,
 	"castShadow":true,
 	"receiveShadow":false,
-	"file":"scene/vox/obj_red_floor.vox",
+	"file":"scene/vox/obj_floor_switch.vox",
 	"actions":[
 		{
 			"name":"idle",
@@ -24,5 +24,5 @@
 			"loop":false
 		}
 	],
-	"script":"scene/item/地板_红色.js"
+	"script":"scene/item/地板开关.js"
 }

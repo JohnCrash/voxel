@@ -123,7 +123,7 @@ class Item{
         this.scene = sceneManager.game.scene;
         //默认每个Item有一个声音
         this.audio = new THREE.Audio(this.sceneManager.audioListener);
-
+        this.collisionWithGround = true; //默认都可以与地面发生碰撞
         this.fromJson(json);
     }
     removeSelf(){
