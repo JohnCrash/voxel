@@ -1,0 +1,148 @@
+{
+	"bgcolor": 8642805,
+	"camera": {
+		"position": {
+			"x": 86.67226766668414,
+			"y": 42.80802333015335,
+			"z": 49.185546024889724
+		},
+		"rotation": {
+			"x": 1.1484266478122758,
+			"y": 0,
+			"z": 2.012946403966813
+		}
+	},
+	"material": {
+		"item": {
+			"metadata": {
+				"version": 4.5,
+				"type": "Material",
+				"generator": "Material.toJSON"
+			},
+			"uuid": "8214E871-E8A5-4ADE-B5CB-830ED1CB82A5",
+			"type": "MeshPhongMaterial",
+			"color": 16777215,
+			"emissive": 0,
+			"specular": 1118481,
+			"shininess": 0,
+			"shading": 1,
+			"vertexColors": 2,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"skinning": false,
+			"morphTargets": false,
+			"dithering": false
+		},
+		"ground": {
+			"metadata": {
+				"version": 4.5,
+				"type": "Material",
+				"generator": "Material.toJSON"
+			},
+			"uuid": "97D2599E-26B3-4A5B-A8BC-E42E48F4817F",
+			"type": "MeshPhongMaterial",
+			"color": 16777215,
+			"emissive": 0,
+			"specular": 1118481,
+			"shininess": 33.53437876960193,
+			"shading": 1,
+			"vertexColors": 2,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"skinning": false,
+			"morphTargets": false,
+			"dithering": false
+		},
+		"water": {
+			"metadata": {
+				"version": 4.5,
+				"type": "Material",
+				"generator": "Material.toJSON"
+			},
+			"uuid": "623677CD-4D96-489F-A213-02FDD2475CA2",
+			"type": "MeshPhongMaterial",
+			"color": 12961221,
+			"emissive": 5716409,
+			"specular": 8684676,
+			"shininess": 74.3408581768051,
+			"shading": 1,
+			"vertexColors": 2,
+			"opacity": 0.7000000000000001,
+			"transparent": true,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"skinning": false,
+			"morphTargets": false,
+			"dithering": false
+		}
+	},
+	"light": [
+		{
+			"type": "direct",
+			"name": "方向灯2",
+			"color": {
+				"r": 1,
+				"g": 1,
+				"b": 1
+			},
+			"position": {
+				"x": -66.2438336856942,
+				"y": 114.1649048625793,
+				"z": 136.71599718111338
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"castShadow": true,
+			"bias": 0,
+			"shadowRound": 50,
+			"shadowMapWidth": 1024,
+			"shadowMapHeight": 1024
+		}
+	],
+	"item": [
+		{
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "物品1",
+			"visible": true,
+			"ground": true,
+			"castShadow": true,
+			"receiveShadow": false,
+			"file": "scene/vox/finalMap.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true
+				}
+			],
+			"water": 79
+		}
+	],
+	"zfog": {
+		"color": {
+			"r": 0.5137254901960784,
+			"g": 0.8784313725490196,
+			"b": 0.9607843137254902
+		},
+		"high": 30,
+		"low": 0
+	}
+}

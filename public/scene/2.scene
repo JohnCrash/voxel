@@ -1,0 +1,139 @@
+{
+	"camera": {
+		"position": {
+			"x": -28.68391410776895,
+			"y": -82.33033497078445,
+			"z": 130.28497893950762
+		},
+		"rotation": {
+			"x": 0.8313585003666325,
+			"y": 0,
+			"z": -0.5032366009916978
+		}
+	},
+	"light": [
+		{
+			"type": "hemi",
+			"name": "半球灯1",
+			"skyColor": {
+				"r": 0.4666666666666667,
+				"g": 0.5333333333333333,
+				"b": 0.8431372549019608
+			},
+			"groundColor": {
+				"r": 0.7137254901960784,
+				"g": 0.3254901960784314,
+				"b": 0.3254901960784314
+			},
+			"position": {
+				"x": -42.56419093572299,
+				"y": 23.608478373255252,
+				"z": 67.7235912459073
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"intensity": 0.9
+		},
+		{
+			"type": "direct",
+			"name": "方向灯2",
+			"color": {
+				"r": 1,
+				"g": 1,
+				"b": 1
+			},
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 133.89626055488543
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"castShadow": false,
+			"bias": 0,
+			"shadowRound": 100,
+			"shadowMapWidth": 1024,
+			"shadowMapHeight": 1024
+		}
+	],
+	"item": [
+		{
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "物品1",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": true,
+			"file": "scene/vox/空地图.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true,
+					"acc": 17
+				}
+			]
+		},
+		{
+			"position": {
+				"x": 5,
+				"y": -20.506634499396796,
+				"z": 60
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 4.5
+			},
+			"name": "霸王龙",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": true,
+			"file": "scene/vox/T-Rex.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true,
+					"acc": 16
+				},
+				{
+					"name": "run",
+					"sequece": [
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7
+					],
+					"delay": 200,
+					"loop": true,
+					"acc": 33
+				}
+			]
+		}
+	]
+}

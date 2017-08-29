@@ -7,7 +7,7 @@ function(event,dt){
 			//this.playSound('scene/audio/effect/正确的宝石声音.ogg');
 			{
 				let item = dt;
-				if(item.obstruct){
+				if(item.obstruct && this.currentAction !== 'unlock'){
 					item.obstruct(this);
 				}
 			}
@@ -15,7 +15,10 @@ function(event,dt){
 		case 'init':
 			console.log(`${this.name} 登场`);
 			this.unlock = function(){
+				//console.log('栅栏 unlock');
 				this.currentAction = 'unlock';
+				this.collision = false; 
+				this.gravity = false;				
 			}
 			break;
 		case 'release':
@@ -24,6 +27,7 @@ function(event,dt){
 		case 'update':
 			if(this.currentAction === 'unlock'){
 				this.position.z -= SPEED * dt;
+				//console.log(`栅栏 down ${dt}`);
 				if(this.position.z < -50){
 					this.removeSelf();
 				}

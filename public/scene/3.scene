@@ -1,0 +1,299 @@
+{
+	"camera": {
+		"position": {
+			"x": -61.21399171531645,
+			"y": -210.19553433118634,
+			"z": 177.48482895152765
+		},
+		"rotation": {
+			"x": 1.11293828635505,
+			"y": 0,
+			"z": -0.2111848394913143
+		}
+	},
+	"skybox": {
+		"skyColor": {
+			"r": 0,
+			"g": 0.4666666666666667,
+			"b": 1
+		},
+		"groundColor": {
+			"r": 0.8509803921568627,
+			"g": 0.6941176470588235,
+			"b": 0.47058823529411764
+		},
+		"offset": 0,
+		"raduis": 400,
+		"exponent": 0.6,
+		"fogNear": 1,
+		"fogFar": 1.5
+	},
+	"light": [
+		{
+			"type": "hemi",
+			"name": "半球灯1",
+			"skyColor": {
+				"r": 0.5333333333333333,
+				"g": 0.5803921568627451,
+				"b": 0.8313725490196079
+			},
+			"groundColor": {
+				"r": 0.4588235294117647,
+				"g": 0.8627450980392157,
+				"b": 0.7490196078431373
+			},
+			"position": {
+				"x": -42.56419093572299,
+				"y": 23.608478373255252,
+				"z": 67.7235912459073
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"intensity": 0.9
+		},
+		{
+			"type": "direct",
+			"name": "方向灯1",
+			"color": {
+				"r": 0.6235294117647059,
+				"g": 0.6235294117647059,
+				"b": 0.6235294117647059
+			},
+			"position": {
+				"x": 0,
+				"y": 1.5509219369291714,
+				"z": 67.7235912459073
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"castShadow": true,
+			"bias": 0,
+			"shadowRound": 100,
+			"shadowMapWidth": 1024,
+			"shadowMapHeight": 1024
+		}
+	],
+	"item": [
+		{
+			"position": {
+				"x": 3.0867686816486772,
+				"y": 83.69359518150749,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 53.50000000001942
+			},
+			"name": "霸王龙",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/恐龙.item"
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": 45.666034809581106,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "物品1",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": false,
+			"file": "scene/vox/8x8x8.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true,
+					"acc": 0
+				}
+			]
+		},
+		{
+			"position": {
+				"x": 38.92151486404584,
+				"y": 35.88958463309445,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 51.75200000001728
+			},
+			"name": "霸王龙1",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/恐龙.item"
+		},
+		{
+			"position": {
+				"x": 5.313169981122477,
+				"y": 3.0642782882155806,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 50.478000000015726
+			},
+			"name": "霸王龙2",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/恐龙.item"
+		},
+		{
+			"position": {
+				"x": -38.963396065773665,
+				"y": 42.441193771058046,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 48.758000000013624
+			},
+			"name": "霸王龙3",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/恐龙.item"
+		},
+		{
+			"position": {
+				"x": 24.374320691539644,
+				"y": 78.41188410997464,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 21.431999999999
+			},
+			"name": "霸王龙4",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/恐龙.item"
+		},
+		{
+			"position": {
+				"x": 39.08395651795946,
+				"y": 62.05211971591204,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 20.92799999999928
+			},
+			"name": "霸王龙5",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/恐龙.item"
+		},
+		{
+			"position": {
+				"x": 33.39524065667297,
+				"y": 12.997987820572416,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 19.73799999999994
+			},
+			"name": "霸王龙6",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/恐龙.item"
+		},
+		{
+			"position": {
+				"x": -14.26346072921302,
+				"y": 0.049156111723689735,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 18.5480000000006
+			},
+			"name": "霸王龙7",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/恐龙.item"
+		},
+		{
+			"position": {
+				"x": -35.5241095121937,
+				"y": 15.581406855356493,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 17.944000000000933
+			},
+			"name": "霸王龙8",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/恐龙.item"
+		},
+		{
+			"position": {
+				"x": -42.65049494797802,
+				"y": 53.05344649894218,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 17.05000000000143
+			},
+			"name": "霸王龙9",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/恐龙.item"
+		},
+		{
+			"position": {
+				"x": -32.27610244132909,
+				"y": 71.76700139916849,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 16.5600000000017
+			},
+			"name": "霸王龙10",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/恐龙.item"
+		}
+	]
+}

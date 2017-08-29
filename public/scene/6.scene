@@ -1,0 +1,111 @@
+{
+	"camera": {
+		"position": {
+			"x": -179.72153405336314,
+			"y": -51.784685004669626,
+			"z": 204.86539472176258
+		},
+		"rotation": {
+			"x": 0.9587675357622218,
+			"y": 0,
+			"z": -1.2211486999786998
+		}
+	},
+	"skybox": {
+		"skyColor": {
+			"r": 0,
+			"g": 0.4666666666666667,
+			"b": 1
+		},
+		"groundColor": {
+			"r": 0.8509803921568627,
+			"g": 0.6941176470588235,
+			"b": 0.47058823529411764
+		},
+		"offset": 0,
+		"raduis": 491.1425124935378,
+		"exponent": 0.6,
+		"fogNear": 1.1500000000000001,
+		"fogFar": 1.58
+	},
+	"light": [
+		{
+			"type": "hemi",
+			"name": "半球灯1",
+			"skyColor": {
+				"r": 1,
+				"g": 1,
+				"b": 1
+			},
+			"groundColor": {
+				"r": 1,
+				"g": 1,
+				"b": 1
+			},
+			"position": {
+				"x": 0,
+				"y": 1,
+				"z": 111.83870411855924
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"intensity": 1
+		},
+		{
+			"type": "direct",
+			"name": "方向灯2",
+			"color": {
+				"r": 1,
+				"g": 1,
+				"b": 1
+			},
+			"position": {
+				"x": 0,
+				"y": 45.666034809581106,
+				"z": 111.83870411855924
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"castShadow": true,
+			"bias": 0,
+			"shadowRound": 181.05290367051526,
+			"shadowMapWidth": 1024,
+			"shadowMapHeight": 1024
+		}
+	],
+	"item": [
+		{
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "物品2",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": true,
+			"file": "scene/vox/空地图.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true
+				}
+			]
+		}
+	]
+}

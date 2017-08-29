@@ -1,0 +1,223 @@
+{
+	"camera": {
+		"position": {
+			"x": 157.29115401351586,
+			"y": -157.03398069673372,
+			"z": 151.72838896351968
+		},
+		"rotation": {
+			"x": 1.0966485466697813,
+			"y": 0,
+			"z": 0.7534004604442278
+		}
+	},
+	"light": [
+		{
+			"type": "direct",
+			"name": "方向灯1",
+			"color": {
+				"r": 0.5490196078431373,
+				"g": 0.5490196078431373,
+				"b": 0.5490196078431373
+			},
+			"position": {
+				"x": -20.506634499396796,
+				"y": 23.608478373255252,
+				"z": 111.83870411855924
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"castShadow": true,
+			"bias": 0,
+			"shadowRound": 50,
+			"shadowMapWidth": 1024,
+			"shadowMapHeight": 1024
+		},
+		{
+			"type": "hemi",
+			"name": "半球灯2",
+			"skyColor": {
+				"r": 1,
+				"g": 1,
+				"b": 1
+			},
+			"groundColor": {
+				"r": 0.4588235294117647,
+				"g": 0.4588235294117647,
+				"b": 0.4588235294117647
+			},
+			"position": {
+				"x": 325.3664716010592,
+				"y": -27.53400186046008,
+				"z": -5.477722269115134
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"intensity": 1
+		}
+	],
+	"item": [
+		{
+			"position": {
+				"x": 10,
+				"y": 10,
+				"z": 84
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 4.9
+			},
+			"name": "主角",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": false,
+			"file": "scene/vox/人物.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true,
+					"acc": 53
+				}
+			]
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": 50,
+				"z": 60
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 5
+			},
+			"name": "配角",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": false,
+			"file": "scene/vox/人物.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true,
+					"acc": 53
+				}
+			]
+		},
+		{
+			"position": {
+				"x": -10,
+				"y": 5,
+				"z": 76
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 2.7
+			},
+			"name": "傻瓜",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": false,
+			"file": "scene/vox/人物.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true,
+					"acc": 53
+				}
+			]
+		},
+		{
+			"position": {
+				"x": -23,
+				"y": 24,
+				"z": 67.7235912459073
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 5.6000000000000005
+			},
+			"name": "霸王龙",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": false,
+			"file": "scene/vox/T-Rex.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true,
+					"acc": 53
+				},
+				{
+					"name": "run",
+					"sequece": [
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7
+					],
+					"delay": 200,
+					"loop": true,
+					"acc": 83
+				}
+			]
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "地面",
+			"visible": true,
+			"castShadow": true,
+			"receiveShadow": true,
+			"file": "scene/vox/空地图.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true,
+					"acc": 53
+				}
+			]
+		}
+	]
+}

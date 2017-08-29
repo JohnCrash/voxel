@@ -1,0 +1,336 @@
+{
+	"music": "scene/audio/Acheron.ogg",
+	"loop": true,
+	"bgcolor": 12064451,
+	"camera": {
+		"position": {
+			"x": 7.4089078946897615,
+			"y": -273.3298368754331,
+			"z": 181.9846446162019
+		},
+		"rotation": {
+			"x": 1.1763519158441764,
+			"y": 0,
+			"z": 0.035488361457221736
+		}
+	},
+	"skybox": {
+		"type": "sphere",
+		"skyColor": {
+			"r": 0,
+			"g": 0.4666666666666667,
+			"b": 1
+		},
+		"groundColor": {
+			"r": 0.8509803921568627,
+			"g": 0.6941176470588235,
+			"b": 0.47058823529411764
+		},
+		"offset": 0,
+		"raduis": 491.1425124935378,
+		"exponent": 0.6,
+		"fogNear": 1.1500000000000001,
+		"fogFar": 1.58
+	},
+	"material": {
+		"item": {
+			"metadata": {
+				"version": 4.5,
+				"type": "Material",
+				"generator": "Material.toJSON"
+			},
+			"uuid": "14BEF6B0-D828-4196-9FA0-D46B238E7CE8",
+			"type": "MeshPhongMaterial",
+			"color": 16777215,
+			"emissive": 0,
+			"specular": 1118481,
+			"shininess": 0,
+			"shading": 1,
+			"vertexColors": 2,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"skinning": false,
+			"morphTargets": false,
+			"dithering": false
+		},
+		"ground": {
+			"metadata": {
+				"version": 4.5,
+				"type": "Material",
+				"generator": "Material.toJSON"
+			},
+			"uuid": "107BB399-EE8C-4201-A968-F4B9321F3A05",
+			"type": "MeshPhongMaterial",
+			"color": 16777215,
+			"emissive": 0,
+			"specular": 1118481,
+			"shininess": 0,
+			"shading": 1,
+			"vertexColors": 2,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"skinning": false,
+			"morphTargets": false,
+			"dithering": false
+		},
+		"water": {
+			"metadata": {
+				"version": 4.5,
+				"type": "Material",
+				"generator": "Material.toJSON"
+			},
+			"uuid": "790D81B7-9001-4B11-9748-F25D2B10D828",
+			"type": "MeshPhongMaterial",
+			"color": 16777215,
+			"emissive": 0,
+			"specular": 1118481,
+			"shininess": 0,
+			"shading": 1,
+			"vertexColors": 2,
+			"opacity": 0.5,
+			"transparent": true,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"skinning": false,
+			"morphTargets": false,
+			"dithering": false
+		}
+	},
+	"light": [
+		{
+			"type": "direct",
+			"name": "方向灯1",
+			"color": {
+				"r": 0.5490196078431373,
+				"g": 0.5490196078431373,
+				"b": 0.5490196078431373
+			},
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 50
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"castShadow": true,
+			"bias": 0,
+			"shadowRound": 235.95554023780804,
+			"shadowMapWidth": 1024,
+			"shadowMapHeight": 1024
+		},
+		{
+			"type": "hemi",
+			"name": "半球灯2",
+			"skyColor": {
+				"r": 0.8117647058823529,
+				"g": 0.8117647058823529,
+				"b": 0.8117647058823529
+			},
+			"groundColor": {
+				"r": 0.45098039215686275,
+				"g": 0.5372549019607843,
+				"b": 0.9294117647058824
+			},
+			"position": {
+				"x": 0,
+				"y": 1,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"intensity": 0.6
+		}
+	],
+	"item": [
+		{
+			"position": {
+				"x": 10,
+				"y": 10,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 4.9
+			},
+			"name": "主角",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"velocity": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"castShadow": true,
+			"receiveShadow": false,
+			"file": "scene/vox/人物.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true,
+					"acc": 0,
+					"curIndex": 0
+				}
+			]
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": 23.608478373255252,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "配角",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"velocity": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"castShadow": true,
+			"receiveShadow": false,
+			"file": "scene/vox/人物.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true,
+					"acc": 0,
+					"curIndex": 0
+				}
+			]
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 2.7
+			},
+			"name": "物品1",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"velocity": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"castShadow": true,
+			"receiveShadow": false,
+			"file": "scene/vox/人物.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true,
+					"acc": 0,
+					"curIndex": 0
+				}
+			]
+		},
+		{
+			"position": {
+				"x": -20,
+				"y": 1,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "霸王龙",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"velocity": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"castShadow": true,
+			"receiveShadow": false,
+			"file": "scene/vox/T-Rex.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true,
+					"acc": 0,
+					"curIndex": 0
+				},
+				{
+					"name": "run",
+					"sequece": [
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7
+					],
+					"delay": 200,
+					"loop": true,
+					"acc": 67
+				}
+			]
+		}
+	],
+	"zfog": {
+		"color": {
+			"r": 0.6235294117647059,
+			"g": 0.6235294117647059,
+			"b": 0.6235294117647059
+		},
+		"high": -9000,
+		"low": -9000
+	}
+}

@@ -69,3 +69,8 @@ public/closure-library/
 dist/
 public/editor_compress.js
 public/levelindex_compress.js
+public/scene/vox/
+public/scene/doc/
+public/scene/audio/
+public/scene/image/
+public/scene/env/

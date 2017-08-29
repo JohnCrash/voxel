@@ -1,0 +1,283 @@
+{
+	"bgcolor": 0,
+	"camera": {
+		"position": {
+			"x": -58.003899396012145,
+			"y": -19.28066281939345,
+			"z": 62.118702982432424
+		},
+		"rotation": {
+			"x": 0.9267698328089786,
+			"y": 0,
+			"z": -1.2292935698213243
+		}
+	},
+	"material": {
+		"item": {
+			"metadata": {
+				"version": 4.5,
+				"type": "Material",
+				"generator": "Material.toJSON"
+			},
+			"uuid": "E1597EDB-5EA2-4BA2-B291-B4D08174AC14",
+			"type": "MeshPhongMaterial",
+			"color": 16777215,
+			"emissive": 0,
+			"specular": 1118481,
+			"shininess": 0,
+			"shading": 1,
+			"vertexColors": 2,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"skinning": false,
+			"morphTargets": false,
+			"dithering": false
+		},
+		"ground": {
+			"metadata": {
+				"version": 4.5,
+				"type": "Material",
+				"generator": "Material.toJSON"
+			},
+			"uuid": "A0A9E628-9A34-4499-B197-EF6CDFB239CF",
+			"type": "MeshPhongMaterial",
+			"color": 16777215,
+			"emissive": 0,
+			"specular": 1118481,
+			"shininess": 0,
+			"shading": 1,
+			"vertexColors": 2,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"skinning": false,
+			"morphTargets": false,
+			"dithering": false
+		},
+		"water": {
+			"metadata": {
+				"version": 4.5,
+				"type": "Material",
+				"generator": "Material.toJSON"
+			},
+			"uuid": "42BA233B-D389-40FC-902E-F9E6493370FA",
+			"type": "MeshPhongMaterial",
+			"color": 16777215,
+			"emissive": 0,
+			"specular": 1118481,
+			"shininess": 0,
+			"shading": 1,
+			"vertexColors": 2,
+			"opacity": 0.5,
+			"transparent": true,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"skinning": false,
+			"morphTargets": false,
+			"dithering": false
+		}
+	},
+	"light": [
+		{
+			"type": "direct",
+			"name": "方向灯1",
+			"color": {
+				"r": 0.5490196078431373,
+				"g": 0.5490196078431373,
+				"b": 0.5490196078431373
+			},
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 50
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"castShadow": true,
+			"bias": 0,
+			"shadowRound": 235.95554023780804,
+			"shadowMapWidth": 1024,
+			"shadowMapHeight": 1024
+		},
+		{
+			"type": "hemi",
+			"name": "半球灯2",
+			"skyColor": {
+				"r": 0.8117647058823529,
+				"g": 0.8117647058823529,
+				"b": 0.8117647058823529
+			},
+			"groundColor": {
+				"r": 0.45098039215686275,
+				"g": 0.5372549019607843,
+				"b": 0.9294117647058824
+			},
+			"position": {
+				"x": 0,
+				"y": 1,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"intensity": 0.6
+		}
+	],
+	"item": [
+		{
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "地面",
+			"visible": true,
+			"ground": true,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"velocity": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"castShadow": true,
+			"receiveShadow": false,
+			"file": "scene/vox/pool.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true
+				}
+			],
+			"water": 193
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": 15,
+				"z": 159.26708949964768
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "物品2",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"velocity": {
+				"x": 0,
+				"y": 0,
+				"z": -0.000001470379410548712
+			},
+			"castShadow": true,
+			"receiveShadow": false,
+			"file": "scene/vox/3x3x3.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true
+				}
+			]
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": -15,
+				"z": 7.9999999521080305
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 4.7
+			},
+			"name": "物品11",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.5,
+			"velocity": {
+				"x": 0,
+				"y": 0,
+				"z": -2.3501500890241764e-15
+			},
+			"castShadow": true,
+			"receiveShadow": false,
+			"file": "scene/vox/peplo.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true
+				}
+			]
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 91.613812544045
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "霸王龙",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.4,
+			"velocity": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/恐龙.item"
+		}
+	],
+	"zfog": {
+		"color": {
+			"r": 0,
+			"g": 0,
+			"b": 0
+		},
+		"high": 21.935938664393007,
+		"low": 0
+	}
+}
