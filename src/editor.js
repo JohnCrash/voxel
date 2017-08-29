@@ -279,9 +279,6 @@ class ItemUI{
     }
     set '地面'(b){
         if(this.item){
-            //只能有一个地面
-            for(let item of sceneManager.items)
-                item.ground = undefined;
             this.item.ground = b;
             this.item.setWaterIndex(-1);
         }

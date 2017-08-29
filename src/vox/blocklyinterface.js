@@ -21,17 +21,19 @@ export default class BlocklyInterface{
      * 当执行异步函数时，先停止blockly的执行
      * 等函数执行完成时调用blocklyContinue
      */
-    static blocklyStop(){
+    static blocklyStop(msg){
         if(currentBlockView)
             currentBlockView.freeze = true;
+        if(msg)console.log('stop '+msg);
     }
 
-    static blocklyContinue(){
+    static blocklyContinue(msg){
         if(currentBlockView){
             currentBlockView.freeze = false;
             if(currentBlockView.isRunning())
                 currentBlockView.step();
         }
+        if(msg)console.log('continue '+msg);
     }
 
     static clearInjectBlocklyFunction(){

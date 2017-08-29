@@ -50,12 +50,10 @@ function initItemBlockly(item){
 	
 	item.obstruct = function(i){
 		if(!this._isobstruct){
-			console.log('collision obstruct');
 			this._isobstruct = true;
 			this._obstructItem = i;
 			this.currentAction='idle';
-			this.blocklyContinue();
-			console.log('blocklyContinue collision obstruct');
+			this.blocklyContinue('collision obstruct');
 		}
 	}
 	function eqAngle(a1,a2){ //
@@ -69,17 +67,15 @@ function initItemBlockly(item){
 	}
 	item.injectBlocklyFunction('forward',function(step){
 		if(item._isobstruct && !eqAngle(item.rotation.z-Math.PI,item.forwardAngle)){
-			console.log('blocklyStop 10');
 			item.blocklyStop();
 			item.doAction('walk');
 			setTimeout(function(){
-				console.log('blocklyContinue 10');
 				item.doAction('idle');
-				item.blocklyContinue();
+				item.blocklyContinue('forward');
 			},300);
 			return;
 		}
-		console.log('blocklyStop 7');
+		
 		item.blocklyStop();
 		item.currentAction = 'forward';
 		
@@ -106,7 +102,6 @@ function initItemBlockly(item){
 		else
 			item.speed = SPEED;
 		
-		console.log(`forward ${item.speed} ${step}`);
 		item.doAction('walk');
 	});
 
@@ -129,16 +124,14 @@ function initItemBlockly(item){
 	};
 	
 	item.injectBlocklyFunction('turn_left',function(){
-		console.log('blocklyStop 5');
-		item.blocklyStop();
+		item.blocklyStop('turn_left');
 		item.currentAction = 'empty';
 		item.rotation.z += Math.PI/2;
 		item.doAction('walk');
 		setTimeout(function(){
 			item.currentAction = '';
 			item.idleAcc = 0;
-			console.log('blocklyContinue 4');
-			item.blocklyContinue();
+			item.blocklyContinue('turn_left');
 		},100);
 	});
 	//右转
@@ -160,16 +153,14 @@ function initItemBlockly(item){
 	};
 	
 	item.injectBlocklyFunction('turn_right',function(){
-		console.log('blocklyStop 4');
-		item.blocklyStop();
+		item.blocklyStop('turn_right');
 		item.currentAction = 'empty';
 		item.rotation.z -= Math.PI/2;
 		item.doAction('walk');
 		setTimeout(function(){
 			item.currentAction = '';
 			item.idleAcc = 0;
-			console.log('blocklyContinue 4');
-			item.blocklyContinue();
+			item.blocklyContinue('turn_right');
 		},100);
 	});	
 	//跳
@@ -195,16 +186,11 @@ function initItemBlockly(item){
 		if(item._isobstruct && !eqAngle(item.rotation.z-Math.PI,item.forwardAngle)){
 			item.velocity.z = JUMP_SPEED;
 			item.doAction('jump');
-			console.log('blocklyStop jump collision');
-			item.currentAction = 'jump';
-			item.forwardT = 1;
-			item.forwardBegin = {x:item.position.x,y:item.position.y};
-			item.forwardEnd = {x:item.position.x,y:item.position.y};
-			item.blocklyStop();
+			item.currentAction = 'jump2';
+			item.blocklyStop('jump2');
 			return;
 		}
-		console.log('blocklyStop 3');
-		item.blocklyStop();
+		item.blocklyStop('jump');
 		item.currentAction = 'jump';
 		if(item._isobstruct){//碰到栅栏退回
 			let d = calcD(item);
@@ -227,7 +213,6 @@ function initItemBlockly(item){
 		var g = item.sceneManager.gravity;
 		item.speed = SPEED/JUMP_STEP;//Math.abs(d*g)/(2*JUMP_SPEED);
 		item.doAction('jump');
-		console.log(`jump ${item.speed}`);
 	});
 
 	// 移除障碍栅栏
@@ -252,19 +237,16 @@ function initItemBlockly(item){
 	item.injectBlocklyFunction('unlock',function(){
 		if(item._obstructItem){
 			if(item._obstructItem.typeName!=='栅栏'){
-				item.blocklyStop();	
+				item.blocklyStop('unlock obstruct');	
 				setTimeout(function(){item.blocklyEvent('WrongAction');},1000);
 				return;
 			}
 		}
 		if(item._isobstruct && eqAngle(item.rotation.z,item.forwardAngle)){
-			console.log('blocklyStop 2');
-			item.blocklyStop();
+			item.blocklyStop('unlock');
 			
-			console.log('remove_cones');
 			item.doAction('remove_cones');
 			setTimeout(function(){
-				console.log('unlock');
 				item._obstructItem.unlock();
 				
 				item.currentAction = 'forward';
@@ -276,16 +258,14 @@ function initItemBlockly(item){
 				};
 				item.forwardT = 0;
 				item.speed = 2*SPEED;
-				console.log('walk');
+
 				item.doAction('walk');
 			},800);
 		}else{
-			console.log('blocklyStop 1');
 			item.doAction('remove_cones');
-			item.blocklyStop();
+			item.blocklyStop('unlock 2');
 			setTimeout(function(){
-				item.blocklyContinue();
-				console.log('blocklyContinue unlock remove_cones');
+				item.blocklyContinue('unlock 2');
 			},300);
 		}
 	});		
@@ -311,31 +291,25 @@ function initItemBlockly(item){
 	item.injectBlocklyFunction('openbox',function(){
 		if(item._obstructItem){
 			if(item._obstructItem.typeName!=='盒子'){
-				item.blocklyStop();	
+				item.blocklyStop('openbox obstruct');	
 				setTimeout(function(){item.blocklyEvent('WrongAction');},1000);
 				return;
 			}
 		}
 		
 		if(item._isobstruct && item.usekey && eqAngle(item.rotation.z,item.forwardAngle)){
-			console.log('blocklyStop 21');
-			item.blocklyStop();
-			console.log('remove_cones');
+			item.blocklyStop('openbox');
 			item.doAction('remove_cones');
 			setTimeout(function(){
-				console.log('open box');
 				item.usekey(item._obstructItem);
-				console.log('blocklyContinue 21');
-				item.blocklyContinue();
+				item.blocklyContinue('openbox usekey');
 				//item.doAction('hail'); //欢呼
 			},800);
 		}else{
-			console.log('blocklyStop 12');
 			item.doAction('remove_cones');
-			item.blocklyStop();
+			item.blocklyStop('openbox2');
 			setTimeout(function(){
-				item.blocklyContinue();
-				console.log('blocklyContinue remove_cones');
+				item.blocklyContinue('openbox2');
 			},300);
 		}
 	});		
@@ -355,14 +329,12 @@ function(event,dt,z){
 		case 'swiming':
 			break;
 		case 'fall':
-			console.log(`fall ${dt}`);
-			if(this.currentAction==='jump' && !dt){
+			if((this.currentAction==='jump'||this.currentAction==='jump2') && !dt){
 				let t = 1;
 				if(this._isobstruct)this._isobstruct = false;
 				this.currentAction = '';
 				this.idleAcc = 0;
-				this.blocklyContinue();
-				console.log('blocklyContinue fall');
+				this.blocklyContinue('fall');
 			}
 			break;
 		case 'collision':
@@ -372,8 +344,7 @@ function(event,dt,z){
 				if(this._isobstruct)this._isobstruct = false;
 				this.currentAction = '';
 				this.idleAcc = 0;
-				this.blocklyContinue();
-				console.log('blocklyContinue 1');
+				this.blocklyContinue('wall');
 			}
 			break;
 		case 'update':
@@ -387,8 +358,7 @@ function(event,dt,z){
 						if(this._isobstruct)this._isobstruct = false;
 						this.currentAction = '';
 						this.idleAcc = 0;
-						this.blocklyContinue();
-						console.log(`blocklyContinue 2 ${this.currentAction}`);
+						this.blocklyContinue('forward update');
 					}
 				}
 				//console.log(`${t} ${this.speed} ${dt}`);
@@ -399,12 +369,10 @@ function(event,dt,z){
 			}else if(this.currentActionName()!=='idle'){
 				//idle
 				this.idleAcc += dt;
-				//console.log(`${this.idleAcc} / ${dt}`);
 				if(this._isobstruct&&this.curAction.name==='remove_cones'){
-					//正在开栅栏
+				//正在开栅栏
 				}else if(this.idleAcc>300){
 					this.idleAcc = 0;
-					console.log('idle');
 					this.doAction('idle');
 				}
 			}

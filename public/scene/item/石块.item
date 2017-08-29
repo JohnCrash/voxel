@@ -1,0 +1,28 @@
+{
+	"position":{
+		"x":0,
+		"y":0,
+		"z":0
+	},
+	"rotation":{
+		"x":0,
+		"y":0,
+		"z":0
+	},
+	"name":"石块",
+	"visible":true,
+	"castShadow":true,
+	"receiveShadow":false,
+	"file":"scene/vox/obj_stone.vox",
+	"actions":[
+		{
+			"name":"idle",
+			"sequece":[
+				0,1
+			],
+			"delay":0,
+			"loop":false
+		}
+	],
+	"script":"scene/item/石块.js"
+}

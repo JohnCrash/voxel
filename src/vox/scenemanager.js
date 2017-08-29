@@ -372,13 +372,25 @@ class SceneManager extends EventEmitter{
             }
         }
     }
-    //返回地面Item
+    //可以有多个地面
     getGroundItem(){
+        let grounds = [];
         for(let item of this.items){
             if(item.ground)
-                return item;
+                grounds.push(item);
         }
-        return null;
+        if(grounds.length===0)
+            return null;
+        return {
+            collisionFunc : item=>{
+                let ab;
+                for(let ground of grounds){
+                    ab = ground.collisionFunc(item);
+                    if(ab)return ab;
+                }
+                return ab;
+            }
+        };
     }
     /**
      * 更新场景
