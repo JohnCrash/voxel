@@ -10,6 +10,7 @@
 		"z":0
 	},
 	"name":"男孩",
+	"type":"角色",
 	"visible":true,
 	"castShadow":true,
 	"receiveShadow":false,
@@ -48,6 +49,14 @@
 			"loop":false
 		},
 		{
+			"name":"collect_crystal",
+			"sequece":[
+				6,7,6,7,6,7
+			],
+			"delay":150,
+			"loop":false
+		},
+		{
 			"name":"remove_cones",
 			"sequece":[
 				6,7,6,7,6,7
@@ -56,5 +65,5 @@
 			"loop":false
 		}
 	],
-	"script":"scene/item/男孩.js"
+	"script":"scene/item/角色.js"
 }

@@ -4,10 +4,33 @@ var STEP = 17;
 var SPEED = 1;
 var JUMP_SPEED = 47;
 var JUMP_STEP = 1;
+var characters = [];
 
-function initItemBlockly(item){
+function initItemBlockly(_this){
 	if(typeof(Blockly)==='undefined')return;
-	item.forwardAngle = item.rotation.z;
+	_this.forwardAngle = _this.rotation.z;
+	
+	characters.push(_this);
+	appendCharacterDropdown=function(c){
+		if(characters.length>1){
+			var op = [];
+			for(var i=0;i<characters.length;i++){
+				op.push([characters[i].name,characters[i].name]);
+			}
+			c.appendField(new Blockly.FieldDropdown(op),"CHARCTER");
+		}
+		return c;
+	}
+	getItemByName=function(name){
+		if(name==='null'){
+			return characters[0];
+		}
+		for(var i=0;i<characters.length;i++){
+			if(name === characters[i].name)
+				return characters[i];
+		}
+		return null;
+	}
 	//开始
 	Blockly.Blocks['when_start'] = {
     init: function () {
@@ -29,9 +52,10 @@ function initItemBlockly(item){
 	Blockly.Blocks['forward'] = {
     init: function () {
         this.setColour(200);
-        this.appendValueInput("STEP")
-            .setCheck("Number")
+        appendCharacterDropdown(this.appendValueInput("STEP")
+            .setCheck("Number"))
             .appendField("向前移动");
+		
         this.appendDummyInput()
             .appendField("步");
         this.setInputsInline(true);
@@ -43,12 +67,13 @@ function initItemBlockly(item){
 	};
 	
 	Blockly.JavaScript['forward'] = function (block) {
+		var charcter_name = block.getFieldValue('CHARCTER');
 		var number_step = Blockly.JavaScript.valueToCode(block, 'STEP', Blockly.JavaScript.ORDER_ATOMIC);
-		var code = `forward(${number_step});\n`;
+		var code = `forward("${charcter_name}",${number_step});\n`;
 		return code;
 	};
 	
-	item.obstruct = function(i){
+	_this.obstruct = function(i){
 		if(!this._isobstruct){
 			this._isobstruct = true;
 			this._obstructItem = i;
@@ -65,7 +90,8 @@ function initItemBlockly(item){
 		let d = Math.sqrt((item.forwardBegin.x-item.position.x)*(item.forwardBegin.x-item.position.x)+(item.forwardBegin.y-item.position.y)*(item.forwardBegin.y-item.position.y));
 		return d - Math.floor(d/STEP)*STEP;
 	}
-	item.injectBlocklyFunction('forward',function(step){
+	_this.injectBlocklyFunction('forward',function(name,step){
+		var item = getItemByName(name);
 		if(item._isobstruct && !eqAngle(item.rotation.z-Math.PI,item.forwardAngle)){
 			item.blocklyStop();
 			item.doAction('walk');
@@ -100,7 +126,7 @@ function initItemBlockly(item){
 		if(step>0)
 			item.speed = SPEED/step;
 		else
-			item.speed = SPEED;
+			item.speed = SPEED/(2*Math.abs(step));
 		
 		item.doAction('walk');
 	});
@@ -109,7 +135,7 @@ function initItemBlockly(item){
 	Blockly.Blocks['turn_left'] = {
 	  init: function() {
 		this.setColour(160);
-		this.appendDummyInput()
+		appendCharacterDropdown(this.appendDummyInput())
 			.appendField("左转 90°")
 		this.setPreviousStatement(true, "null");
 		this.setNextStatement(true, "null");
@@ -118,12 +144,13 @@ function initItemBlockly(item){
 	};
 
 	Blockly.JavaScript['turn_left'] = function(block) {
-	  // TODO: Assemble JavaScript into code variable.
-	  var code = 'turn_left();\n';
+	  var charcter_name = block.getFieldValue('CHARCTER');
+	  var code = `turn_left("${charcter_name}");\n`;
 	  return code;
 	};
 	
-	item.injectBlocklyFunction('turn_left',function(){
+	_this.injectBlocklyFunction('turn_left',function(name){
+		var item = getItemByName(name);
 		item.blocklyStop('turn_left');
 		item.currentAction = 'empty';
 		item.rotation.z += Math.PI/2;
@@ -138,7 +165,7 @@ function initItemBlockly(item){
 	Blockly.Blocks['turn_right'] = {
 	  init: function() {
 		this.setColour(160);
-		this.appendDummyInput()
+		appendCharacterDropdown(this.appendDummyInput())
 			.appendField("右转 90°")
 		this.setPreviousStatement(true, "null");
 		this.setNextStatement(true, "null");
@@ -147,12 +174,13 @@ function initItemBlockly(item){
 	};
 
 	Blockly.JavaScript['turn_right'] = function(block) {
-	  // TODO: Assemble JavaScript into code variable.
-	  var code = 'turn_right();\n';
+	  var charcter_name = block.getFieldValue('CHARCTER');
+	  var code = `turn_right("${charcter_name}");\n`;
 	  return code;
 	};
 	
-	item.injectBlocklyFunction('turn_right',function(){
+	_this.injectBlocklyFunction('turn_right',function(name){
+		var item = getItemByName(name);
 		item.blocklyStop('turn_right');
 		item.currentAction = 'empty';
 		item.rotation.z -= Math.PI/2;
@@ -166,7 +194,7 @@ function initItemBlockly(item){
 	//跳
 	Blockly.Blocks['jump'] = {
 	  init: function() {
-		this.appendDummyInput()
+		appendCharacterDropdown(this.appendDummyInput())
 			.appendField("向前跳跃");
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
@@ -177,12 +205,13 @@ function initItemBlockly(item){
 	};
 
 	Blockly.JavaScript['jump'] = function(block) {
-	  // TODO: Assemble JavaScript into code variable.
-	  var code = 'jump();\n';
+	  var charcter_name = block.getFieldValue('CHARCTER');
+	  var code = `jump("${charcter_name}");\n`;
 	  return code;
 	};
 	
-	item.injectBlocklyFunction('jump',function(){
+	_this.injectBlocklyFunction('jump',function(name){
+		var item = getItemByName(name);
 		if(item._isobstruct && !eqAngle(item.rotation.z-Math.PI,item.forwardAngle)){
 			item.velocity.z = JUMP_SPEED;
 			item.doAction('jump');
@@ -210,7 +239,7 @@ function initItemBlockly(item){
 		}
 		item.forwardT = 0;
 		item.velocity.z = JUMP_SPEED;
-		var g = item.sceneManager.gravity;
+		//var g = item.sceneManager.gravity;
 		item.speed = SPEED/JUMP_STEP;//Math.abs(d*g)/(2*JUMP_SPEED);
 		item.doAction('jump');
 	});
@@ -218,7 +247,7 @@ function initItemBlockly(item){
 	// 移除障碍栅栏
 	Blockly.Blocks['remove_obstacle_fence'] = {
 	  init: function() {
-		this.appendDummyInput()
+		appendCharacterDropdown(this.appendDummyInput())
 			.appendField(" 移除障碍 ");
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
@@ -230,11 +259,12 @@ function initItemBlockly(item){
 	};
 
 	Blockly.JavaScript['remove_obstacle_fence'] = function(block) {
-	  // TODO: Assemble JavaScript into code variable.
-	  var code = 'unlock();\n';
+	  var charcter_name = block.getFieldValue('CHARCTER');
+	  var code = `unlock("${charcter_name}");\n`;
 	  return code;
 	};
-	item.injectBlocklyFunction('unlock',function(){
+	_this.injectBlocklyFunction('unlock',function(name){
+		var item = getItemByName(name);
 		if(item._obstructItem){
 			if(item._obstructItem.typeName!=='栅栏'){
 				item.blocklyStop('unlock obstruct');	
@@ -273,7 +303,7 @@ function initItemBlockly(item){
 	// 打开宝箱
 	Blockly.Blocks['open_box'] = {
 	  init: function() {
-		this.appendDummyInput()
+		appendCharacterDropdown(this.appendDummyInput())
 			.appendField(" 打开宝箱 ");
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
@@ -284,11 +314,12 @@ function initItemBlockly(item){
 	  }
 	};	
 	Blockly.JavaScript['open_box'] = function(block) {
-	  // TODO: Assemble JavaScript into code variable.
-	  var code = 'openbox();\n';
+	  var charcter_name = block.getFieldValue('CHARCTER');
+	  var code = `openbox("${charcter_name}");\n`;
 	  return code;
 	};	
-	item.injectBlocklyFunction('openbox',function(){
+	_this.injectBlocklyFunction('openbox',function(name){
+		var item = getItemByName(name);
 		if(item._obstructItem){
 			if(item._obstructItem.typeName!=='盒子'){
 				item.blocklyStop('openbox obstruct');	
@@ -315,7 +346,7 @@ function initItemBlockly(item){
 	});		
 }
 
-regItemEvent('男孩',
+regItemEvent('角色',
 function(event,dt,z){
 	switch(event){
 		case 'init':
@@ -324,14 +355,21 @@ function(event,dt,z){
 			console.log(`${this.name} 登场`);
 			break;
 		case 'release':
+			characters = [];
 			console.log(`${this.name} 退出`);
 			break;
 		case 'swiming':
 			break;
 		case 'fall':
+			if(!dt&&z&& Math.abs(z)>=15){
+				this.blocklyEvent('FallDead');
+			}
 			if((this.currentAction==='jump'||this.currentAction==='jump2') && !dt){
-				let t = 1;
 				if(this._isobstruct)this._isobstruct = false;
+				if(this.currentAction==='jump'){
+					this.position.x = this.forwardEnd.x;
+					this.position.y = this.forwardEnd.y;
+				}				
 				this.currentAction = '';
 				this.idleAcc = 0;
 				this.blocklyContinue('fall');

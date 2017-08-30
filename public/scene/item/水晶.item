@@ -21,7 +21,7 @@
 				0
 			],
 			"delay":0,
-			"loop":true
+			"loop":false
 		}
 	],
 	"script":"scene/item/水晶.js"

@@ -56,8 +56,11 @@ class ItemTemplate_{
     regItemEvent(name,func){
         for(let file in this.itemTemplates){
             let json = this.itemTemplates[file].json;
-            if(json && json.name === name){
-                json.live = func;
+            if(json){
+                if(json.type && json.type === name)
+                    json.live = func;
+                else if( json.name === name)
+                    json.live = func;
             }
         }
     }

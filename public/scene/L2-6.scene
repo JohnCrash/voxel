@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": -83.18111124130301,
-			"y": -121.07490398586195,
-			"z": 114.62438025366082
+			"x": -91.27026378472428,
+			"y": -132.82554377182137,
+			"z": 123.86997585453786
 		},
 		"rotation": {
-			"x": 1.0198540595820218,
+			"x": 1.0058914255660674,
 			"y": 0,
-			"z": -0.6062110268593567
+			"z": -0.6126105674500025
 		}
 	},
 	"material": {
@@ -155,8 +155,8 @@
 		{
 			"position": {
 				"x": 36,
-				"y": -20,
-				"z": 39.99999896900758
+				"y": -38,
+				"z": 40.000000218670436
 			},
 			"rotation": {
 				"x": 0,
@@ -171,14 +171,14 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/男孩.item"
 		},
 		{
 			"position": {
-				"x": -32,
-				"y": -20,
-				"z": 40.00000046430519
+				"x": 36,
+				"y": -2,
+				"z": 39.99999895767844
 			},
 			"rotation": {
 				"x": 0,
@@ -193,14 +193,14 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		},
 		{
 			"position": {
-				"x": 1,
-				"y": -53,
-				"z": 40.000000449403416
+				"x": 2,
+				"y": -2,
+				"z": 39.9999989659964
 			},
 			"rotation": {
 				"x": 0,
@@ -215,8 +215,52 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": -38,
+				"z": 40.00000144701464
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 625.2240619541654
+			},
+			"name": "钥匙",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/钥匙.item"
+		},
+		{
+			"position": {
+				"x": 2,
+				"y": 32,
+				"z": 40.00000120090307
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 4.71238898038469
+			},
+			"name": "盒子",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/盒子.item"
 		}
 	],
 	"zfog": {

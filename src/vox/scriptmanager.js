@@ -37,7 +37,8 @@ class ScriptManager_{
                 if(this.readyState==='complete'){
                     s.state = 'ready';
                     for(let i=0;i<s.cbs.length;i++){
-                        cb(false,s.module);
+                        let ccb = s.cbs[i];
+                        ccb(false,s.module);
                     }
                     s.cbs = undefined;
                 }
@@ -45,7 +46,8 @@ class ScriptManager_{
             script.onload=function(){
                 s.state = 'ready';
                 for(let i=0;i<s.cbs.length;i++){
-                    cb(false,s.module);
+                    let ccb = s.cbs[i];
+                    ccb(false,s.module);
                 }
                 s.cbs = undefined;
             }

@@ -10,6 +10,7 @@
 		"z":0
 	},
 	"name":"女孩",
+	"type":"角色",
 	"visible":true,
 	"castShadow":true,
 	"receiveShadow":false,
@@ -48,5 +49,5 @@
 			"loop":false
 		}
 	],
-	"script":"scene/item/女孩.js"
+	"script":"scene/item/角色.js"
 }

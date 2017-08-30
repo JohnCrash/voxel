@@ -349,7 +349,7 @@ class Item{
                 this.curMesh.rotation.set(this.rotation.x,this.rotation.y,this.rotation.z);
             }
         }else{
-            log(`Item '${this.name}' action '${a.name}', action sequece out of range`);
+            log(`Item '${this.name}' action '${i}', action sequece out of range`);
         }
     }
     /**
