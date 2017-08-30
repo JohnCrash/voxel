@@ -14,6 +14,7 @@ function(event,dt){
 			this._onoff = false;
 			this._offset = 0;
 			this.turnon = function(b){
+				if(this._onoff == !!b)return;
 				let d;
 				if(b){
 					this.currentAction = 'turn_on';

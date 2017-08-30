@@ -264,6 +264,8 @@ class Item{
         }
         json.water = this.water;
         json.waterOpacity = this.waterOpacity;
+        if(this.toJsonEx) //存储扩展信息
+            this.toJsonEx(json);
         return json;
     }
     doAction(name){

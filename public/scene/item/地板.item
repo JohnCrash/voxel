@@ -22,7 +22,31 @@
 			],
 			"delay":0,
 			"loop":false
-		}
+		},
+		{
+			"name":"green",
+			"sequece":[
+				0
+			],
+			"delay":0,
+			"loop":false
+		},
+		{
+			"name":"yellow",
+			"sequece":[
+				1
+			],
+			"delay":0,
+			"loop":false
+		},
+		{
+			"name":"red",
+			"sequece":[
+				2
+			],
+			"delay":0,
+			"loop":false
+		}		
 	],
 	"script":"scene/item/地板.js"
 }

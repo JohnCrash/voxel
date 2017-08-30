@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": 110.09588459511627,
-			"y": -77.68522811855232,
-			"z": 92.09517407075488
+			"x": 61.40539324997773,
+			"y": 86.44862159940422,
+			"z": 111.96001216125862
 		},
 		"rotation": {
-			"x": 1.1210831561976908,
+			"x": 0.9453866781635971,
 			"y": 0,
-			"z": 0.94480490174627
+			"z": 2.5691246589356598
 		}
 	},
 	"material": {
@@ -138,7 +138,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"file": "scene/vox/Level1-2.vox",
+			"file": "scene/vox/Level1-7.vox",
 			"actions": [
 				{
 					"name": "idle",
@@ -147,21 +147,21 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 33,
+					"acc": 0,
 					"curIndex": 0
 				}
 			]
 		},
 		{
 			"position": {
-				"x": -42,
-				"y": -8,
-				"z": 40.000001703795
+				"x": 17,
+				"y": 6,
+				"z": 40.00000004061582
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1.57
+				"z": 3.1
 			},
 			"name": "男孩",
 			"visible": true,
@@ -176,9 +176,31 @@
 		},
 		{
 			"position": {
-				"x": 47,
-				"y": -9,
-				"z": 40.0000000881047
+				"x": 17,
+				"y": -28,
+				"z": 39.99999968871037
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 301.1216558465904
+			},
+			"name": "金币",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/金币.item"
+		},
+		{
+			"position": {
+				"x": -30,
+				"y": 6,
+				"z": 39.999999577500645
 			},
 			"rotation": {
 				"x": 0,
@@ -193,7 +215,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/终点旗帜.item"
 		}
 	],

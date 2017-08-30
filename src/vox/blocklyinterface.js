@@ -93,6 +93,14 @@ export default class BlocklyInterface{
                 currentBlockView.pause();
             }
             isNotifyDead = true;            
+        }else if(!isNotifyDead && event==='FallDead'){
+            if(currentLevel)
+                currentLevel.onFallDead();
+            if(currentBlockView){
+                currentBlockView.freeze = true;
+                currentBlockView.pause();
+            }
+            isNotifyDead = true;
         }
     }
 };

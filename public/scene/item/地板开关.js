@@ -1,6 +1,6 @@
 (function(){
 	
-var SPEED = 1/10;
+var SPEED = 1/5;
 var DOWN = 0.9;
 
 regItemEvent('地板开关',
@@ -41,31 +41,26 @@ function(event,dt){
 				if(this._t>1){
 					this._t=1;
 					this.currentAction = '';
-					console.log('flat open');
 					//打开平板
 					this.turnFlat(true);
 				}
-				console.log(`drop ${this._t}`);
 				this.position.z = this._oldz - DOWN*this._t;
 			}else if(this.currentAction === 'floating'){
 				this._t += SPEED * dt;
 				if(this._t>1){
 					this._t=1;
 					this.currentAction = '';
-					console.log('flat close');
 					//关闭平板
 					this.turnFlat(false);
 				}
-				console.log(`floating ${this._t}`);
 				this.position.z = this._oldz + DOWN*this._t;
 			}else{
 				//idle
 				this.idleAcc += dt;
-				if(this.idleAcc>6000){
+				if(this.idleAcc>200){
 					this.idleAcc = 0;
 					this._t = 0;
 					this.currentAction = 'floating';
-					console.log('flat floating');
 				}	
 			}
 			break;

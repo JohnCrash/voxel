@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": 110.09588459511627,
-			"y": -77.68522811855232,
-			"z": 92.09517407075488
+			"x": -66.93643380932235,
+			"y": -89.78183087214244,
+			"z": 98.42323294950585
 		},
 		"rotation": {
-			"x": 1.1210831561976908,
+			"x": 1.0559241974565705,
 			"y": 0,
-			"z": 0.94480490174627
+			"z": -0.6376269533952553
 		}
 	},
 	"material": {
@@ -129,7 +129,7 @@
 				"y": 0,
 				"z": 0
 			},
-			"name": "地面",
+			"name": "地图",
 			"visible": true,
 			"ground": true,
 			"collision": false,
@@ -138,7 +138,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"file": "scene/vox/Level1-2.vox",
+			"file": "scene/vox/Level1-9.vox",
 			"actions": [
 				{
 					"name": "idle",
@@ -147,21 +147,21 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 33,
+					"acc": 0,
 					"curIndex": 0
 				}
 			]
 		},
 		{
 			"position": {
-				"x": -42,
-				"y": -8,
-				"z": 40.000001703795
+				"x": -28,
+				"y": -32,
+				"z": 39.99999931761603
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1.57
+				"z": 3.13
 			},
 			"name": "男孩",
 			"visible": true,
@@ -176,9 +176,9 @@
 		},
 		{
 			"position": {
-				"x": 47,
-				"y": -9,
-				"z": 40.0000000881047
+				"x": 8,
+				"y": -14,
+				"z": 35
 			},
 			"rotation": {
 				"x": 0,

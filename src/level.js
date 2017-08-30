@@ -83,6 +83,14 @@ class Level extends Component{
             this.Reset();
         });
     } 
+    /**
+     * 坠亡
+     */
+    onFallDead(){
+        MessageBox.show('ok',undefined,<MarkdownElement file={`scene/falldead.md`}/>,(result)=>{
+            this.Reset();
+        });
+    }     
     PlayPause(){
         if(this.state.playPause){
             this.blockview.run(0,()=>{

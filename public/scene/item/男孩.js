@@ -100,7 +100,7 @@ function initItemBlockly(item){
 		if(step>0)
 			item.speed = SPEED/step;
 		else
-			item.speed = SPEED;
+			item.speed = SPEED/(2*Math.abs(step));
 		
 		item.doAction('walk');
 	});
@@ -329,6 +329,9 @@ function(event,dt,z){
 		case 'swiming':
 			break;
 		case 'fall':
+			if(!dt&&z&& Math.abs(z)>=16){
+				this.blocklyEvent('FallDead');
+			}
 			if((this.currentAction==='jump'||this.currentAction==='jump2') && !dt){
 				if(this._isobstruct)this._isobstruct = false;
 				if(this.currentAction==='jump'){

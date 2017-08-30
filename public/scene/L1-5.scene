@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": -77.36532591148712,
-			"y": -110.00211555062121,
-			"z": 104.9402026032898
+			"x": -72.49754912140912,
+			"y": -101.74228023976244,
+			"z": 99.48560182475298
 		},
 		"rotation": {
-			"x": 1.0669779493858706,
+			"x": 1.0541788682045787,
 			"y": 0,
-			"z": -0.6399540590645804
+			"z": -0.6277367543006198
 		}
 	},
 	"material": {
@@ -171,7 +171,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/男孩.item"
 		},
 		{

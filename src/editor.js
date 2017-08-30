@@ -234,7 +234,7 @@ class ItemUI{
         this.aabb = false;
         ui.add(this,'名称:');
         addPosition(ui,item.position);
-        ui.add(this,'面向',0,2*Math.PI).step(0.01);
+        ui.add(this,'面向',0,2*Math.PI).step(Math.PI/2);
         ui.add(this,'投射阴影');
         ui.add(this,'接受阴影');
         ui.add(this,'可见');
@@ -247,6 +247,8 @@ class ItemUI{
         ui.add(this,'动作',item.actions.map(item=>item.name));
         ui.add(this,'比重',0,1).step(0.1);
         ui.add(this,'删除此物品');
+        if(item.editorUI) //扩展物品的编辑界面
+            item.editorUI(ui);
     }
     get '比重'(){
         return this.item.specificGravity;
