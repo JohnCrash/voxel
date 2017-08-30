@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": -55.02463696716221,
-			"y": -148.2696717847142,
-			"z": 121.0760533024229
+			"x": -76.65996334238949,
+			"y": -116.7698455550745,
+			"z": 111.61525182324645
 		},
 		"rotation": {
-			"x": 1.045452221944606,
+			"x": 1.0402162341886219,
 			"y": 0,
-			"z": -0.44273185358922146
+			"z": -0.6201736608753119
 		}
 	},
 	"material": {
@@ -138,7 +138,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"file": "scene/vox/Level1-10.vox",
+			"file": "scene/vox/Level2-3.vox",
 			"actions": [
 				{
 					"name": "idle",
@@ -154,9 +154,9 @@
 		},
 		{
 			"position": {
-				"x": 2,
-				"y": 10,
-				"z": 40
+				"x": -5,
+				"y": 48,
+				"z": 39.999999753478164
 			},
 			"rotation": {
 				"x": 0,
@@ -171,21 +171,21 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/男孩.item"
 		},
 		{
 			"position": {
-				"x": -31,
-				"y": -40,
-				"z": 44.000000370152854
+				"x": -4,
+				"y": 15,
+				"z": 39.9999993401824
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 524.8753094132353
+				"z": 1.5707963267948966
 			},
-			"name": "金币",
+			"name": "栅栏",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -193,21 +193,21 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/金币.item"
+			"receiveShadow": true,
+			"template": "scene/item/栅栏.item"
 		},
 		{
 			"position": {
-				"x": 2,
-				"y": -41,
-				"z": 44.00000075194315
+				"x": -4,
+				"y": -19,
+				"z": 39.999999197628846
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 403.5784170581243
+				"z": 1.5707963267948966
 			},
-			"name": "金币1",
+			"name": "栅栏1",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -215,14 +215,14 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/金币.item"
+			"receiveShadow": true,
+			"template": "scene/item/栅栏.item"
 		},
 		{
 			"position": {
-				"x": 40,
-				"y": -40,
-				"z": 43.999999777888895
+				"x": -2,
+				"y": -53,
+				"z": 40.0000009095539
 			},
 			"rotation": {
 				"x": 0,
@@ -237,7 +237,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/终点旗帜.item"
 		}
 	],

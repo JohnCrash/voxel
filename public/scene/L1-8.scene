@@ -9,9 +9,9 @@
 			"z": 96.5318015667345
 		},
 		"rotation": {
-			"x": 1.0565059738739024,
+			"x": 1.0553424210392395,
 			"y": 0,
-			"z": -0.6207554372926429
+			"z": -0.6475171524898894
 		}
 	},
 	"material": {
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 34,
 					"curIndex": 0
 				}
 			]
@@ -156,12 +156,12 @@
 			"position": {
 				"x": -35,
 				"y": -13,
-				"z": 39.999998307144956
+				"z": 39.999999548961696
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1.57
+				"z": 1.5707963267948966
 			},
 			"name": "男孩",
 			"visible": true,
@@ -171,14 +171,14 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/男孩.item"
 		},
 		{
 			"position": {
-				"x": 20,
+				"x": 35,
 				"y": -12,
-				"z": 48.00000113137208
+				"z": 47.99999971419563
 			},
 			"rotation": {
 				"x": 0,

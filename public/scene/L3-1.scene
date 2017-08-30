@@ -9,9 +9,9 @@
 			"z": 124.6842116175243
 		},
 		"rotation": {
-			"x": 0.9756390518648407,
+			"x": 0.9465502309982685,
 			"y": 0,
-			"z": -0.6638068921751648
+			"z": -0.631227412804604
 		}
 	},
 	"material": {
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 33,
+					"acc": 17,
 					"curIndex": 0
 				}
 			]
@@ -216,7 +216,8 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/地板开关.item"
+			"template": "scene/item/地板开关.item",
+			"flatColor": "yellow"
 		},
 		{
 			"position": {
@@ -238,7 +239,8 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/地板.item"
+			"template": "scene/item/地板.item",
+			"flatColor": "yellow"
 		},
 		{
 			"position": {

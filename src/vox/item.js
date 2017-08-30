@@ -147,6 +147,7 @@ class Item{
         this.specificGravity = json.specificGravity || 0.2; //比重
         this.loadedDoAction = 'idle';
         this.state = 'loading';
+
         let load = ()=>{
             VoxManager.loadVox([this.file],(iserr)=>{
                 if(!iserr){
@@ -179,6 +180,8 @@ class Item{
                     }
                     this.curDim = this.vox.getModelSize(0); //给以默认尺寸
                     this.doAction(this.loadedDoAction);
+                    if(this.loadEx) //加载扩展属性
+                        this.loadEx(json);                    
                     this.state = 'ready';
                 }else{
                     this.state = 'error';
@@ -253,7 +256,6 @@ class Item{
         json.gravity = !!this.gravity;
 
         json.specificGravity = this.specificGravity;
-
         json.castShadow = this._castShadow;
         json.receiveShadow = this._receiveShadow;
         if(this.template){

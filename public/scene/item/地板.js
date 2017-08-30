@@ -1,7 +1,7 @@
 (function(){
 	
-var SPEED = 1;
-var STEP = 17-2.5; 
+var SPEED = 4;
+var STEP = 17-2; 
 
 regItemEvent('地板',
 function(event,dt){
@@ -11,23 +11,46 @@ function(event,dt){
 			break;
 		case 'init':
 			console.log(`${this.name} 登场`);
+			this.flatColor = 'green'; //default color
+			this.toJsonEx = function(json){
+				json.flatColor = this.flatColor;
+			}
+			this.loadEx = function(json){
+				this.flatColor = json.flatColor || 'green';
+				this.doAction(this.flatColor);
+			}
+			this.editorUI = function(ui,itemUI,item){
+				Object.defineProperty(itemUI,"颜色",{
+					get:function(){
+						return item.flatColor;
+						},
+					set:function(v){
+						item.flatColor = v;
+						item.doAction(v);
+						}});
+				ui.add(itemUI,'颜色',['green','yellow','red']);
+				console.log('editorUI...');
+			}
+			
 			this._onoff = false;
-			this._offset = 0;
+			this._forwardPt = {x:this.position.x,y:this.position.y};
+			this._endPt = this.forwardEnd = {
+					x:this.position.x+Math.cos(this.rotation.z-Math.PI/2)*STEP,
+					y:this.position.y+Math.sin(this.rotation.z-Math.PI/2)*STEP
+				};
 			this.turnon = function(b){
 				if(this._onoff == !!b)return;
 				let d;
+				this.forwardBegin = {x:this.position.x,y:this.position.y};
 				if(b){
 					this.currentAction = 'turn_on';
-					d = STEP;				
+					d = STEP;
+					this.forwardEnd = this._endPt;
 				}else{
 					this.currentAction = 'turn_off';
 					d = -STEP;
-				}
-				this.forwardBegin = {x:this.position.x,y:this.position.y};
-				this.forwardEnd = {
-					x:this.position.x+Math.cos(this.rotation.z-Math.PI/2)*d,
-					y:this.position.y+Math.sin(this.rotation.z-Math.PI/2)*d
-				};									
+					this.forwardEnd = this._forwardPt;
+				}								
 				this.forwardT = 0;
 				this.speed = SPEED;
 				this._onoff = !!b;

@@ -248,7 +248,7 @@ class ItemUI{
         ui.add(this,'比重',0,1).step(0.1);
         ui.add(this,'删除此物品');
         if(item.editorUI) //扩展物品的编辑界面
-            item.editorUI(ui);
+            item.editorUI(ui,this,item);
     }
     get '比重'(){
         return this.item.specificGravity;

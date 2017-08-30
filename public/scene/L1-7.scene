@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 32,
 					"curIndex": 0
 				}
 			]
@@ -161,7 +161,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 3.1
+				"z": 3.141592653589793
 			},
 			"name": "男孩",
 			"visible": true,
@@ -183,7 +183,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 301.1216558465904
+				"z": 424.6710701343283
 			},
 			"name": "金币",
 			"visible": true,
@@ -193,19 +193,19 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/金币.item"
 		},
 		{
 			"position": {
-				"x": -30,
+				"x": -36,
 				"y": 6,
 				"z": 39.999999577500645
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 3.141592653589793
 			},
 			"name": "终点旗帜",
 			"visible": true,
@@ -215,7 +215,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/终点旗帜.item"
 		}
 	],

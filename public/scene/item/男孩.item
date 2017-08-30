@@ -40,6 +40,14 @@
 			"loop":false
 		},
 		{
+			"name":"jump_dead",
+			"sequece":[
+				3
+			],
+			"delay":150,
+			"loop":false
+		},
+		{
 			"name":"remove_cones",
 			"sequece":[
 				6,7,6,7,6,7

@@ -17,6 +17,27 @@ function(event,dt){
 			}
 			break;
 		case 'init':
+			this.flatColor = 'green'; //default color
+			this.toJsonEx = function(json){
+				json.flatColor = this.flatColor;
+			}
+			this.loadEx = function(json){
+				this.flatColor = json.flatColor || 'green';
+				this.doAction(this.flatColor);
+			}
+			this.editorUI = function(ui,itemUI,item){
+				Object.defineProperty(itemUI,"颜色",{
+					get:function(){
+						return item.flatColor;
+						},
+					set:function(v){
+						item.flatColor = v;
+						item.doAction(v);
+						}});
+				ui.add(itemUI,'颜色',['green','yellow','red']);
+				console.log('editorUI...');
+			}
+			
 			this._t = 0;
 			this._oldz = this.position.z;
 			this.currentAction = '';
@@ -25,7 +46,7 @@ function(event,dt){
 				var i;
 				for(i=0;i<this.sceneManager.items.length;i++){
 					var item = this.sceneManager.items[i];
-					if(item && item.typeName === '地板'){
+					if(item && item.typeName === '地板' && this.flatColor===item.flatColor){
 						item.turnon(b);
 					}
 				}
@@ -53,11 +74,11 @@ function(event,dt){
 					//关闭平板
 					this.turnFlat(false);
 				}
-				this.position.z = this._oldz + DOWN*this._t;
+				this.position.z = this._oldz + (DOWN-1)*this._t;
 			}else{
 				//idle
 				this.idleAcc += dt;
-				if(this.idleAcc>200){
+				if(this.idleAcc>100){
 					this.idleAcc = 0;
 					this._t = 0;
 					this.currentAction = 'floating';

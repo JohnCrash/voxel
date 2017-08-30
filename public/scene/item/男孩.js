@@ -329,7 +329,7 @@ function(event,dt,z){
 		case 'swiming':
 			break;
 		case 'fall':
-			if(!dt&&z&& Math.abs(z)>=16){
+			if(!dt&&z&& Math.abs(z)>=15){
 				this.blocklyEvent('FallDead');
 			}
 			if((this.currentAction==='jump'||this.currentAction==='jump2') && !dt){

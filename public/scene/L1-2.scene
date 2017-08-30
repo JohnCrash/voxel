@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 33,
+					"acc": 0,
 					"curIndex": 0
 				}
 			]
@@ -161,7 +161,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1.57
+				"z": 1.5707963267948966
 			},
 			"name": "男孩",
 			"visible": true,
