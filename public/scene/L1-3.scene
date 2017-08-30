@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": 127.50096453119158,
-			"y": -91.99325825856646,
-			"z": 102.91476564226176
+			"x": -79.85392302508093,
+			"y": -104.37114786855179,
+			"z": 104.82608121198915
 		},
 		"rotation": {
-			"x": 1.1193378269456968,
+			"x": 1.0646508437165447,
 			"y": 0,
-			"z": 0.937241808320961
+			"z": -0.5934119456780652
 		}
 	},
 	"material": {
@@ -129,7 +129,7 @@
 				"y": 0,
 				"z": 0
 			},
-			"name": "地面",
+			"name": "地图",
 			"visible": true,
 			"ground": true,
 			"collision": false,
@@ -138,7 +138,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"file": "scene/vox/Level1-2.vox",
+			"file": "scene/vox/Level1-3.vox",
 			"actions": [
 				{
 					"name": "idle",
@@ -147,21 +147,21 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 33,
+					"acc": 0,
 					"curIndex": 0
 				}
 			]
 		},
 		{
 			"position": {
-				"x": -42,
-				"y": -8,
-				"z": 40.000001703795
+				"x": -36,
+				"y": -17,
+				"z": 40.00000045153065
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1.57
+				"z": 3.15
 			},
 			"name": "男孩",
 			"visible": true,
@@ -171,14 +171,14 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/男孩.item"
 		},
 		{
 			"position": {
-				"x": 47,
-				"y": -9,
-				"z": 40.0000000881047
+				"x": 18,
+				"y": 1,
+				"z": 39.99999880944664
 			},
 			"rotation": {
 				"x": 0,
@@ -193,7 +193,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/终点旗帜.item"
 		}
 	],

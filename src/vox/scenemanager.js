@@ -200,6 +200,7 @@ class SceneManager extends EventEmitter{
         for(let i=0;i<this.items.length;i++){
             this.items[i].destroy();
         }
+        this._groundCollisions = null;
         this.items = [];
     }
 

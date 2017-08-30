@@ -60,14 +60,13 @@ function(event,dt){
 				this.position.z = this._oldz + DOWN*this._t;
 			}else{
 				//idle
-				/*
 				this.idleAcc += dt;
-				if(this.idleAcc>300){
+				if(this.idleAcc>6000){
 					this.idleAcc = 0;
 					this._t = 0;
 					this.currentAction = 'floating';
 					console.log('flat floating');
-				}		*/		
+				}	
 			}
 			break;
 	}

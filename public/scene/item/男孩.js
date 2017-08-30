@@ -210,7 +210,7 @@ function initItemBlockly(item){
 		}
 		item.forwardT = 0;
 		item.velocity.z = JUMP_SPEED;
-		var g = item.sceneManager.gravity;
+		//var g = item.sceneManager.gravity;
 		item.speed = SPEED/JUMP_STEP;//Math.abs(d*g)/(2*JUMP_SPEED);
 		item.doAction('jump');
 	});
@@ -330,8 +330,11 @@ function(event,dt,z){
 			break;
 		case 'fall':
 			if((this.currentAction==='jump'||this.currentAction==='jump2') && !dt){
-				let t = 1;
 				if(this._isobstruct)this._isobstruct = false;
+				if(this.currentAction==='jump'){
+					this.position.x = this.forwardEnd.x;
+					this.position.y = this.forwardEnd.y;
+				}				
 				this.currentAction = '';
 				this.idleAcc = 0;
 				this.blocklyContinue('fall');

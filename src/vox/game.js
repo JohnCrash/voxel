@@ -113,7 +113,7 @@ Game.prototype.run=function(){
         if(this.stats)this.stats.update();
         var nt = Date.now();
         if(!this.paused){
-            let dt = nt - t > 200?200:nt-t; //保证时间的连续
+            let dt = nt - t > 100?100:nt-t; //保证时间的连续
             this.emit('update',dt);
             if(this.composer)
                 this.composer.render();

@@ -506,9 +506,6 @@ class Item{
         //this.curVox 当前对象的体素
         //this.curDim 当前对象的体素尺寸
         //中心点在体素的地面中心位置
-        if(item.name==='地板'||this.name==='地板'){
-            console.log('');
-        }
         if(!this.curDim || !item.curDim)return null;
         let ab1 = this.collisionAABB();
         let ab2 = item.collisionAABB();
@@ -583,14 +580,14 @@ class Item{
     /**
      * 暂停Blockly的执行
      */
-    blocklyStop(){
-        BlocklyInterface.blocklyStop();
+    blocklyStop(msg){
+        BlocklyInterface.blocklyStop(msg);
     }
     /**
      * 继续Blockly的执行
      */
-    blocklyContinue(){
-        BlocklyInterface.blocklyContinue();
+    blocklyContinue(msg){
+        BlocklyInterface.blocklyContinue(msg);
     }
     /**
      * 向blockly发送事件
