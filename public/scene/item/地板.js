@@ -29,7 +29,6 @@ function(event,dt){
 						item.doAction(v);
 						}});
 				ui.add(itemUI,'颜色',['green','yellow','red']);
-				console.log('editorUI...');
 			}
 			
 			this._onoff = false;
