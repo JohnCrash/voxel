@@ -361,6 +361,7 @@ class SceneManager extends EventEmitter{
     addItem(t){
         let item = new Item(this,t);
         this.items.push(item);
+        this._groundCollisions = null;
         return item;
     }
     removeItem(item){
@@ -368,12 +369,16 @@ class SceneManager extends EventEmitter{
             if(this.items[i] === item){
                 this.items.splice(i,1);
                 item.destroy();
+                this._groundCollisions = null;
                 break;
             }
         }
     }
     //可以有多个地面
     getGroundItem(){
+        if(this._groundCollisions)
+            return this._groundCollisions;
+
         let grounds = [];
         for(let item of this.items){
             if(item.ground)
@@ -381,7 +386,8 @@ class SceneManager extends EventEmitter{
         }
         if(grounds.length===0)
             return null;
-        return {
+        this._groundCollisions = {
+            length :  grounds.length,
             collisionFunc : item=>{
                 let ab;
                 for(let ground of grounds){
@@ -391,6 +397,7 @@ class SceneManager extends EventEmitter{
                 return ab;
             }
         };
+        return this._groundCollisions;
     }
     /**
      * 更新场景

@@ -154,8 +154,8 @@
 		},
 		{
 			"position": {
-				"x": -38,
-				"y": -23,
+				"x": -37,
+				"y": -22,
 				"z": 44.00000165244511
 			},
 			"rotation": {
@@ -171,7 +171,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/男孩.item"
 		},
 		{
@@ -215,7 +215,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/地板开关.item"
 		},
 		{
@@ -243,7 +243,7 @@
 		{
 			"position": {
 				"x": 14,
-				"y": 20,
+				"y": 22,
 				"z": 43.99999854437664
 			},
 			"rotation": {
@@ -259,7 +259,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/女孩.item"
 		}
 	],
