@@ -375,7 +375,7 @@ function initItemBlockly(_this){
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
-		this.setColour(300);
+		this.setColour(54);
 	 this.setTooltip("");
 	 this.setHelpUrl("");
 	  }
@@ -440,7 +440,7 @@ function initItemBlockly(_this){
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
-		this.setColour(300);
+		this.setColour(270);
 	 this.setTooltip("");
 	 this.setHelpUrl("");
 	  }
@@ -457,7 +457,24 @@ function initItemBlockly(_this){
 			setTimeout(function(){item.blocklyEvent('WrongAction');},1000);	
 			return;
 		}
-		if(true){ //能不能丢
+		var ab = item.liftItem.aabb();
+		
+		var cc = item.sceneManager.createCollisionItem(
+		[item.liftItem.position.x+Math.cos(item.rotation.z-Math.PI/2)*STEP,
+		item.liftItem.position.y+Math.sin(item.rotation.z-Math.PI/2)*STEP,
+		item.liftItem.position.z-ab.depth()],
+		[ab.width(),ab.height(),ab.depth()]);
+		var iscollision = false;
+		for(var i=0;i<item.sceneManager.items.length;i++){
+			var it = item.sceneManager.items[i];
+			if(it.collision && it!==item.liftItem){
+				if(it.collisionFunc(cc)){
+					iscollision = true;
+					break;
+				}
+			}
+		}
+		if(!iscollision){ //能不能丢
 			item.blocklyStop('put down');
 			ItemAction(item,'put_down_item');
 
@@ -467,7 +484,7 @@ function initItemBlockly(_this){
 				item.liftItem.collision = true; 
 				
 				item.liftItem.currentAction = 'forward';
-				let d = STEP - calcD(item);
+				var d = STEP;
 				item.liftItem.forwardBegin = {x:item.position.x,y:item.position.y};
 				item.liftItem.forwardEnd = {
 					x:item.position.x+Math.cos(item.rotation.z-Math.PI/2)*d,

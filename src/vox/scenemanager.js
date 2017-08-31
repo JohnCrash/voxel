@@ -630,6 +630,16 @@ class SceneManager extends EventEmitter{
     rotateRight(){
         this.rotateCamera(15*Math.PI/180);
     }
+    /**
+     * 创建一个仅仅用于碰撞的物体
+     */
+    createCollisionItem(pt,size){
+        return {
+            collisionAABB:()=>{
+                return aabb(pt,size);
+            }
+        }
+    }
 };
 
 export default SceneManager;
