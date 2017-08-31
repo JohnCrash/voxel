@@ -65,6 +65,14 @@
 			"loop":false
 		},
 		{
+			"name":"put_down_item",
+			"sequece":[
+				7
+			],
+			"delay":150,
+			"loop":false
+		},
+		{
 			"name":"lift_up_item_idle",
 			"sequece":[
 				8
