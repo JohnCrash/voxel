@@ -288,13 +288,13 @@
 			},
 			"name": "地板1",
 			"visible": true,
-			"ground": false,
+			"ground": true,
 			"collision": true,
 			"fixed": false,
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/地板.item",
 			"flatColor": "green"
 		},
@@ -327,7 +327,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 33,
+					"acc": 17,
 					"curIndex": 0
 				}
 			]

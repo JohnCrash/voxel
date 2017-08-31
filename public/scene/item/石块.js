@@ -9,7 +9,7 @@ function(event,dt){
 			//this.playSound('scene/audio/effect/正确的宝石声音.ogg');
 			{
 				let item = dt;
-				if(item.obstruct && this.currentAction !== 'unlock'){
+				if(item.obstruct){
 					item.obstruct(this);
 				}
 			}

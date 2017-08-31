@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": -101.49596872366915,
-			"y": -135.7335285163884,
-			"z": 128.72104351133555
+			"x": -118.02524434237604,
+			"y": -157.60527538930413,
+			"z": 141.12930135593783
 		},
 		"rotation": {
-			"x": 1.1100294042683958,
+			"x": 1.0780317013151657,
 			"y": 0,
-			"z": -0.649262481741884
+			"z": -0.6480989289072213
 		}
 	},
 	"material": {
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 33,
+					"acc": 0,
 					"curIndex": 0
 				}
 			]
@@ -176,146 +176,14 @@
 		},
 		{
 			"position": {
-				"x": 32,
+				"x": -36,
 				"y": 50,
-				"z": 67.99999923386494
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "水晶1",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/水晶.item"
-		},
-		{
-			"position": {
-				"x": -32,
-				"y": 50,
-				"z": 67.9999988583983
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "水晶2",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/水晶.item"
-		},
-		{
-			"position": {
-				"x": 32,
-				"y": 0,
-				"z": 56.000000732206004
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "水晶3",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/水晶.item"
-		},
-		{
-			"position": {
-				"x": -35,
-				"y": 0,
-				"z": 56.000001253662276
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "水晶4",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/水晶.item"
-		},
-		{
-			"position": {
-				"x": 32,
-				"y": -52,
-				"z": 44.000001532226726
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "水晶5",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/水晶.item"
-		},
-		{
-			"position": {
-				"x": -35,
-				"y": -51,
-				"z": 44.0000004126149
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "水晶6",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/水晶.item"
-		},
-		{
-			"position": {
-				"x": 0,
-				"y": 16,
 				"z": 69.06272022551093
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 97.22286785064252
+				"z": 972.3135015079822
 			},
 			"name": "金币",
 			"visible": true,
@@ -327,6 +195,138 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/金币.item"
+		},
+		{
+			"position": {
+				"x": 32,
+				"y": 50,
+				"z": 70
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1149.95171651258
+			},
+			"name": "金币1",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/金币.item"
+		},
+		{
+			"position": {
+				"x": 32,
+				"y": 0,
+				"z": 60
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 696.186356813417
+			},
+			"name": "金币2",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/金币.item"
+		},
+		{
+			"position": {
+				"x": -35,
+				"y": 0,
+				"z": 60
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 598.969772148123
+			},
+			"name": "金币3",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/金币.item"
+		},
+		{
+			"position": {
+				"x": 32,
+				"y": -52,
+				"z": 50
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 533.1031405729832
+			},
+			"name": "金币4",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/金币.item"
+		},
+		{
+			"position": {
+				"x": -35,
+				"y": -51,
+				"z": 50
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 316.5091766638733
+			},
+			"name": "金币5",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/金币.item"
+		},
+		{
+			"position": {
+				"x": -50,
+				"y": -52,
+				"z": 45
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "终点旗帜",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/终点旗帜.item"
 		}
 	],
 	"zfog": {

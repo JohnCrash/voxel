@@ -18,6 +18,8 @@
 	<block type="jump"></block>
 	<block type="remove_obstacle_fence"></block>
 	<block type="open_box"></block>
+	<block type="lift_up"></block>
+	<block type="put_down"></block>
 </xml>
 
 <xml id="default">

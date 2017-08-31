@@ -120,40 +120,6 @@
 	"item": [
 		{
 			"position": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "地面",
-			"visible": true,
-			"ground": true,
-			"collision": false,
-			"fixed": false,
-			"gravity": false,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"file": "scene/vox/Level2-1.vox",
-			"actions": [
-				{
-					"name": "idle",
-					"sequece": [
-						0
-					],
-					"delay": 0,
-					"loop": true,
-					"acc": 0,
-					"curIndex": 0
-				}
-			]
-		},
-		{
-			"position": {
 				"x": -30,
 				"y": -35,
 				"z": 43.99999812333096
@@ -195,6 +161,40 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/终点旗帜.item"
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "地面",
+			"visible": true,
+			"ground": true,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"file": "scene/vox/Level2-2.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true,
+					"acc": 0,
+					"curIndex": 0
+				}
+			]
 		}
 	],
 	"zfog": {

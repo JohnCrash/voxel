@@ -17,6 +17,7 @@
 	<block type="turn_right"></block>
 	<block type="jump"></block>
 	<block type="remove_obstacle_fence"></block>
+	<block type="open_box"></block>
 </xml>
 
 <xml id="default">

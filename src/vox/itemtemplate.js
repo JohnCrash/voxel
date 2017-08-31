@@ -11,6 +11,14 @@ class ItemTemplate_{
     reset(){
         this.itemTemplates = {};
     }
+    searchLiveByScript(script){
+        for(let k in this.itemTemplates){
+            let t = this.itemTemplates[k];
+            if(t.json.script===script)
+                return t.json.live;
+        }
+        return null;
+    }
     load(file,cb){
         let s = this.itemTemplates[file];
         if(s && s.state==='ready'){
@@ -25,6 +33,11 @@ class ItemTemplate_{
                 if(json.script){
                     ScriptManager.load(json.script,(iserr)=>{
                         if(!iserr){
+                            //fixbug: 脚本每次加载给对应的模板设置live函数
+                            // 但是第二次脚本加载将不执行注册函数(脚本已经缓冲)
+                            if(s.json.script&&!s.json.live){
+                                s.json.live = this.searchLiveByScript(s.json.script);
+                            }
                             for(let cbc of s.cbs){
                                 cbc(false,json);
                             }

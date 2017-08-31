@@ -41,6 +41,54 @@
 			"loop":false
 		},
 		{
+			"name":"jump_dead",
+			"sequece":[
+				11
+			],
+			"delay":150,
+			"loop":false
+		},
+		{
+			"name":"collect_crystal",
+			"sequece":[
+				6,7,6,7,6,7
+			],
+			"delay":150,
+			"loop":false
+		},
+		{
+			"name":"lift_up_item",
+			"sequece":[
+				3,6,7,8
+			],
+			"delay":150,
+			"loop":false
+		},
+		{
+			"name":"lift_up_item_idle",
+			"sequece":[
+				8
+			],
+			"delay":150,
+			"loop":false
+		},		
+		{
+			"name":"lift_up_item_walk",
+			"sequece":[
+				8,9,10
+			],
+			"delay":150,
+			"loop":false
+		},
+		{
+			"name":"lift_up_item_jump",
+			"sequece":[
+				3,4,4,5,5,0
+			],
+			"delay":170,
+			"loop":false
+		},		
+		{
 			"name":"remove_cones",
 			"sequece":[
 				6,7,6,7,6,7

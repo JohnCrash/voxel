@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": -91.27026378472428,
-			"y": -132.82554377182137,
-			"z": 123.86997585453786
+			"x": -91.63084734704921,
+			"y": -124.58860208887727,
+			"z": 120.43561344667037
 		},
 		"rotation": {
-			"x": 1.0058914255660674,
+			"x": 1.042543339857949,
 			"y": 0,
-			"z": -0.6126105674500025
+			"z": -0.6579891280018557
 		}
 	},
 	"material": {
@@ -120,6 +120,72 @@
 	"item": [
 		{
 			"position": {
+				"x": -36,
+				"y": 26,
+				"z": 44.00000162802054
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "男孩",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/男孩.item"
+		},
+		{
+			"position": {
+				"x": -37,
+				"y": -43,
+				"z": 43.99999837496749
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 856.021166250085
+			},
+			"name": "钥匙",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/钥匙.item"
+		},
+		{
+			"position": {
+				"x": 32,
+				"y": 29,
+				"z": 44.00000100530862
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "盒子",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/盒子.item"
+		},
+		{
+			"position": {
 				"x": 0,
 				"y": 0,
 				"z": 0
@@ -147,120 +213,10 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 33,
 					"curIndex": 0
 				}
 			]
-		},
-		{
-			"position": {
-				"x": 36,
-				"y": -38,
-				"z": 40.000000218670436
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 3.141592653589793
-			},
-			"name": "男孩",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/男孩.item"
-		},
-		{
-			"position": {
-				"x": 36,
-				"y": -2,
-				"z": 39.99999895767844
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 1.5707963267948966
-			},
-			"name": "栅栏",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/栅栏.item"
-		},
-		{
-			"position": {
-				"x": 2,
-				"y": -2,
-				"z": 39.9999989659964
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "栅栏1",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/栅栏.item"
-		},
-		{
-			"position": {
-				"x": 0,
-				"y": -38,
-				"z": 40.00000144701464
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 625.2240619541654
-			},
-			"name": "钥匙",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": true,
-			"template": "scene/item/钥匙.item"
-		},
-		{
-			"position": {
-				"x": 2,
-				"y": 32,
-				"z": 40.00000120090307
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 4.71238898038469
-			},
-			"name": "盒子",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": true,
-			"template": "scene/item/盒子.item"
 		}
 	],
 	"zfog": {

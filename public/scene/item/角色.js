@@ -11,7 +11,7 @@ function initItemBlockly(_this){
 	_this.forwardAngle = _this.rotation.z;
 	
 	characters.push(_this);
-	appendCharacterDropdown=function(c){
+	function appendCharacterDropdown(c){
 		if(characters.length>1){
 			var op = [];
 			for(var i=0;i<characters.length;i++){
@@ -21,7 +21,7 @@ function initItemBlockly(_this){
 		}
 		return c;
 	}
-	getItemByName=function(name){
+	function getItemByName(name){
 		if(name==='null'){
 			return characters[0];
 		}
@@ -30,6 +30,17 @@ function initItemBlockly(_this){
 				return characters[i];
 		}
 		return null;
+	}
+	function ItemAction(item,action){
+		if(item.liftItem){
+			//举起的动作
+			switch(action){
+				case 'walk':action = 'lift_up_item_walk';break;
+				case 'idle':action = 'lift_up_item_idle';break;
+				case 'jump':action = 'lift_up_item_jump';break;
+			}
+		}
+		item.doAction(action);
 	}
 	//开始
 	Blockly.Blocks['when_start'] = {
@@ -94,9 +105,9 @@ function initItemBlockly(_this){
 		var item = getItemByName(name);
 		if(item._isobstruct && !eqAngle(item.rotation.z-Math.PI,item.forwardAngle)){
 			item.blocklyStop();
-			item.doAction('walk');
+			ItemAction(item,'walk');
 			setTimeout(function(){
-				item.doAction('idle');
+				ItemAction(item,'idle');
 				item.blocklyContinue('forward');
 			},300);
 			return;
@@ -128,7 +139,7 @@ function initItemBlockly(_this){
 		else
 			item.speed = SPEED/(2*Math.abs(step));
 		
-		item.doAction('walk');
+		ItemAction(item,'walk');
 	});
 
 	//左转
@@ -154,7 +165,7 @@ function initItemBlockly(_this){
 		item.blocklyStop('turn_left');
 		item.currentAction = 'empty';
 		item.rotation.z += Math.PI/2;
-		item.doAction('walk');
+		ItemAction(item,'walk');
 		setTimeout(function(){
 			item.currentAction = '';
 			item.idleAcc = 0;
@@ -184,7 +195,7 @@ function initItemBlockly(_this){
 		item.blocklyStop('turn_right');
 		item.currentAction = 'empty';
 		item.rotation.z -= Math.PI/2;
-		item.doAction('walk');
+		ItemAction(item,'walk');
 		setTimeout(function(){
 			item.currentAction = '';
 			item.idleAcc = 0;
@@ -214,7 +225,7 @@ function initItemBlockly(_this){
 		var item = getItemByName(name);
 		if(item._isobstruct && !eqAngle(item.rotation.z-Math.PI,item.forwardAngle)){
 			item.velocity.z = JUMP_SPEED;
-			item.doAction('jump');
+			ItemAction(item,'jump');
 			item.currentAction = 'jump2';
 			item.blocklyStop('jump2');
 			return;
@@ -241,7 +252,7 @@ function initItemBlockly(_this){
 		item.velocity.z = JUMP_SPEED;
 		//var g = item.sceneManager.gravity;
 		item.speed = SPEED/JUMP_STEP;//Math.abs(d*g)/(2*JUMP_SPEED);
-		item.doAction('jump');
+		ItemAction(item,'jump');
 	});
 
 	// 移除障碍栅栏
@@ -265,6 +276,11 @@ function initItemBlockly(_this){
 	};
 	_this.injectBlocklyFunction('unlock',function(name){
 		var item = getItemByName(name);
+		if(item.liftItem){
+			item.blocklyStop('unlock liftitem obstruct');
+			setTimeout(function(){item.blocklyEvent('WrongAction');},1000);			
+			return;
+		}
 		if(item._obstructItem){
 			if(item._obstructItem.typeName!=='栅栏'){
 				item.blocklyStop('unlock obstruct');	
@@ -275,7 +291,7 @@ function initItemBlockly(_this){
 		if(item._isobstruct && eqAngle(item.rotation.z,item.forwardAngle)){
 			item.blocklyStop('unlock');
 			
-			item.doAction('remove_cones');
+			ItemAction(item,'remove_cones');
 			setTimeout(function(){
 				item._obstructItem.unlock();
 				
@@ -289,10 +305,10 @@ function initItemBlockly(_this){
 				item.forwardT = 0;
 				item.speed = 2*SPEED;
 
-				item.doAction('walk');
+				ItemAction(item,'walk');
 			},800);
 		}else{
-			item.doAction('remove_cones');
+			ItemAction(item,'remove_cones');
 			item.blocklyStop('unlock 2');
 			setTimeout(function(){
 				item.blocklyContinue('unlock 2');
@@ -320,6 +336,11 @@ function initItemBlockly(_this){
 	};	
 	_this.injectBlocklyFunction('openbox',function(name){
 		var item = getItemByName(name);
+		if(item.liftItem){
+			item.blocklyStop('openbox liftitem obstruct');
+			setTimeout(function(){item.blocklyEvent('WrongAction');},1000);			
+			return;
+		}		
 		if(item._obstructItem){
 			if(item._obstructItem.typeName!=='盒子'){
 				item.blocklyStop('openbox obstruct');	
@@ -330,20 +351,83 @@ function initItemBlockly(_this){
 		
 		if(item._isobstruct && item.usekey && eqAngle(item.rotation.z,item.forwardAngle)){
 			item.blocklyStop('openbox');
-			item.doAction('remove_cones');
+			ItemAction(item,'remove_cones');
 			setTimeout(function(){
 				item.usekey(item._obstructItem);
 				item.blocklyContinue('openbox usekey');
-				//item.doAction('hail'); //欢呼
+				//ItemAction(item,'hail'); //欢呼
 			},800);
 		}else{
-			item.doAction('remove_cones');
+			ItemAction(item,'remove_cones');
 			item.blocklyStop('openbox2');
 			setTimeout(function(){
 				item.blocklyContinue('openbox2');
 			},300);
 		}
-	});		
+	});
+	
+	// 举起
+	Blockly.Blocks['lift_up'] = {
+	  init: function() {
+		appendCharacterDropdown(this.appendDummyInput())
+			.appendField(" 举起石头 ");
+		this.setInputsInline(true);
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(true, null);
+		this.setColour(300);
+	 this.setTooltip("");
+	 this.setHelpUrl("");
+	  }
+	};	
+	Blockly.JavaScript['lift_up'] = function(block) {
+	  var charcter_name = block.getFieldValue('CHARCTER');
+	  var code = `liftUp("${charcter_name}");\n`;
+	  return code;
+	};	
+	_this.injectBlocklyFunction('liftUp',function(name){
+		var item = getItemByName(name);
+		if(item._obstructItem){
+			if(item._obstructItem.typeName!=='石块'){
+				item.blocklyStop('lift_up obstruct');	
+				setTimeout(function(){item.blocklyEvent('WrongAction');},1000);
+				return;
+			}
+		}
+		
+		if(item._isobstruct && eqAngle(item.rotation.z,item.forwardAngle)){
+			item.blocklyStop('lift up');
+			ItemAction(item,'lift_up_item');
+			setTimeout(function(){
+				item._obstructItem.gravity = false;
+				item._obstructItem.collision = false;				
+				item._obstructItem.position.z += item.aabb().depth()/2;
+			},200);
+			setTimeout(function(){
+				item.liftItem = item._obstructItem;
+				item.liftItem.gravity = false;
+				item.liftItem.collision = false;
+				item.liftItem.position.set(item.position.x,item.position.y,item.position.z+item.aabb().depth());
+				
+				item.currentAction = 'forward';
+				let d = STEP - calcD(item);
+				item.forwardBegin = {x:item.position.x,y:item.position.y};
+				item.forwardEnd = {
+					x:item.position.x+Math.cos(item.rotation.z-Math.PI/2)*d,
+					y:item.position.y+Math.sin(item.rotation.z-Math.PI/2)*d
+				};
+				item.forwardT = 0;
+				item.speed = 2*SPEED;
+
+				ItemAction(item,'walk');				
+			},800);
+		}else{
+			ItemAction(item,'lift_up');
+			item.blocklyStop('lift up 2');
+			setTimeout(function(){
+				item.blocklyContinue('lift up 2');
+			},300);
+		}
+	});	
 }
 
 regItemEvent('角色',
@@ -362,6 +446,7 @@ function(event,dt,z){
 			break;
 		case 'fall':
 			if(!dt&&z&& Math.abs(z)>=15){
+				doAction(this,'jump_dead');
 				this.blocklyEvent('FallDead');
 			}
 			if((this.currentAction==='jump'||this.currentAction==='jump2') && !dt){
@@ -399,19 +484,26 @@ function(event,dt,z){
 						this.blocklyContinue('forward update');
 					}
 				}
-
 				this.position.x = this.forwardEnd.x*t + this.forwardBegin.x*(1-t);
 				this.position.y = this.forwardEnd.y*t + this.forwardBegin.y*(1-t);
+				if(this.liftItem){
+					this.liftItem.position.x = this.position.x;
+					this.liftItem.position.y = this.position.y;
+					this.liftItem.position.z = this.position.z+this.aabb().depth();
+				}
 				this.forwardT += this.speed*dt/1000;
 			}else if(this.currentAction==='empty'){
-			}else if(this.currentActionName()!=='idle'){
+			}else if(this.currentActionName()!=='idle'||this.currentActionName()!=='lift_up_item_idle'){
 				//idle
 				this.idleAcc += dt;
 				if(this._isobstruct&&this.curAction.name==='remove_cones'){
 				//正在开栅栏
 				}else if(this.idleAcc>300){
 					this.idleAcc = 0;
-					this.doAction('idle');
+					if(this.liftItem){
+						this.doAction('lift_up_item_idle');
+					}else
+						this.doAction('idle');
 				}
 			}
 			break;

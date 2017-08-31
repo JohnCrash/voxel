@@ -11,6 +11,7 @@ function(event,dt){
 			break;
 		case 'init':
 			console.log(`${this.name} 登场`);
+			this.ground = true;
 			this.flatColor = 'green'; //default color
 			this.toJsonEx = function(json){
 				json.flatColor = this.flatColor;
