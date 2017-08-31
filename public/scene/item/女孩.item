@@ -78,7 +78,7 @@
 				8,9,10
 			],
 			"delay":150,
-			"loop":false
+			"loop":true
 		},
 		{
 			"name":"lift_up_item_jump",
