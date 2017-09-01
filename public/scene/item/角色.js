@@ -540,7 +540,8 @@ function(event,dt,z){
 			break;
 		case 'fall':
 			if(!dt&&z&& Math.abs(z)>=15){
-				doAction(this,'jump_dead');
+				this.currentAction='empty'
+				this.doAction('jump_dead');
 				this.blocklyEvent('FallDead');
 			}
 			if((this.currentAction==='jump'||this.currentAction==='jumpwall') && !dt){
@@ -571,8 +572,9 @@ function(event,dt,z){
 			}
 			break;
 		case 'update':
-			if(this.position.z < -50)
+			if(this.position.z < -50){
 				this.blocklyEvent('OutOfBounds');
+			}
 			if(this.forwardEnd&&this.currentAction==='forward'){
 				var t = this.forwardT;
 				if(t>=1){

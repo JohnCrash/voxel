@@ -44,10 +44,10 @@
 			},
 			"uuid": "8CBEA633-C2BA-47F9-AF07-2AC7BB62F5EB",
 			"type": "MeshPhongMaterial",
-			"color": 9868950,
-			"emissive": 0,
+			"color": 16777215,
+			"emissive": 2236962,
 			"specular": 0,
-			"shininess": 45.666034809581255,
+			"shininess": 32,
 			"shading": 1,
 			"vertexColors": 2,
 			"opacity": 0.7000000000000001,
@@ -151,7 +151,7 @@
 					"curIndex": 0
 				}
 			],
-			"water": 0
+			"water": 177
 		},
 		{
 			"position": {
