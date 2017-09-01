@@ -523,6 +523,13 @@ function(event,dt,z){
 		case 'init':
 			this.idleAcc = 0;
 			initItemBlockly(this);
+			this.syncLiftItem = function(){
+				if(this.liftItem){
+					this.liftItem.position.x = this.position.x;
+					this.liftItem.position.y = this.position.y;
+					this.liftItem.position.z = this.position.z+this.aabb().depth();
+				}
+			}
 			console.log(`${this.name} 登场`);
 			break;
 		case 'release':
@@ -547,14 +554,9 @@ function(event,dt,z){
 					this.blocklyContinue('jump fall');
 				}else{
 					this.resultAction = 'break';
-					
 					this.blocklyContinue('jumpwall fall');
 				}
-				if(this.liftItem){
-					this.liftItem.position.x = this.position.x;
-					this.liftItem.position.y = this.position.y;
-					this.liftItem.position.z = this.position.z+this.aabb().depth();
-				}
+				this.syncLiftItem();
 				this.currentAction = '';
 			}
 			break;
@@ -583,11 +585,7 @@ function(event,dt,z){
 				}
 				this.position.x = this.forwardEnd.x*t + this.forwardBegin.x*(1-t);
 				this.position.y = this.forwardEnd.y*t + this.forwardBegin.y*(1-t);
-				if(this.liftItem){
-					this.liftItem.position.x = this.position.x;
-					this.liftItem.position.y = this.position.y;
-					this.liftItem.position.z = this.position.z+this.aabb().depth();
-				}
+				this.syncLiftItem();
 				this.forwardT += this.speed*dt/1000;
 				if(this.forwardT>1)this.forwardT = 1;
 			}else if(this.currentAction==='jump'){
@@ -597,11 +595,7 @@ function(event,dt,z){
 				}
 				this.position.x = this.forwardEnd.x*t + this.forwardBegin.x*(1-t);
 				this.position.y = this.forwardEnd.y*t + this.forwardBegin.y*(1-t);
-				if(this.liftItem){
-					this.liftItem.position.x = this.position.x;
-					this.liftItem.position.y = this.position.y;
-					this.liftItem.position.z = this.position.z+this.aabb().depth();
-				}
+				this.syncLiftItem();
 				this.forwardT += this.speed*dt/1000;
 				if(this.forwardT>1)this.forwardT = 1;
 			}else if(this.currentAction==='forwardwall'){
@@ -614,16 +608,13 @@ function(event,dt,z){
 					this.blocklyContinue('forwardwall');
 				}
 			}else if(this.currentAction==='jumpwall'){
-				if(this.liftItem){
-					this.liftItem.position.x = this.position.x;
-					this.liftItem.position.y = this.position.y;
-					this.liftItem.position.z = this.position.z+this.aabb().depth();
-				}				
+				this.syncLiftItem();			
 			}else if(this.currentAction==='empty'){
 			}else if(this.currentActionName()!=='idle'&&this.currentActionName()!=='lift_up_item_idle'){
 				if(this._noidle)break;
 				//idle
 				this.idleAcc += dt;
+				this.syncLiftItem();
 				if(this._isobstruct&&this.curAction.name==='remove_cones'){
 				//正在开栅栏
 				}else if(this.idleAcc>300){
