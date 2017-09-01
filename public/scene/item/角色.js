@@ -1,6 +1,6 @@
 (function(){
 
-var STEP = 17;
+var STEP = 18;
 var SPEED = 1;
 var JUMP_SPEED = 47;
 var JUMP_STEP = 1;
@@ -104,7 +104,7 @@ function initItemBlockly(_this){
 	}
 	_this.injectBlocklyFunction('forward',function(name,step){
 		var item = getItemByName(name);
-		if(item._isobstruct && !eqAngle(item.rotation.z-Math.PI,item.forwardAngle)){
+		if((item._isobstruct||item.resultAction==='break') && !eqAngle(item.rotation.z-Math.PI,item.forwardAngle)){
 			item.blocklyStop();
 			ItemAction(item,'walk');
 			setTimeout(function(){
@@ -113,7 +113,7 @@ function initItemBlockly(_this){
 			},300);
 			return;
 		}
-		
+
 		item.blocklyStop();
 		item.currentAction = 'forward';
 		
@@ -224,15 +224,16 @@ function initItemBlockly(_this){
 	
 	_this.injectBlocklyFunction('jump',function(name){
 		var item = getItemByName(name);
-		if(item._isobstruct && !eqAngle(item.rotation.z-Math.PI,item.forwardAngle)){
+		if((item._isobstruct||item.resultAction==='break') && !eqAngle(item.rotation.z-Math.PI,item.forwardAngle)){
 			item.velocity.z = JUMP_SPEED;
 			ItemAction(item,'jump');
-			item.currentAction = 'jump2';
-			item.blocklyStop('jump2');
+			item.currentAction = 'jump';
+			item.blocklyStop('jump orgine');
 			return;
 		}
 		item.blocklyStop('jump');
 		item.currentAction = 'jump';
+		this.resultAction = '';
 		if(item.forwardT!==undefined && item.forwardT!=1){
 			let d = calcD(item);
 			item.forwardBegin = {x:item.position.x,y:item.position.y};
@@ -527,40 +528,49 @@ function(event,dt,z){
 				doAction(this,'jump_dead');
 				this.blocklyEvent('FallDead');
 			}
-			if((this.currentAction==='jump'||this.currentAction==='jump2') && !dt){
+			if((this.currentAction==='jump'||this.currentAction==='jumpwall') && !dt){
 				if(this._isobstruct)this._isobstruct = false;
+				this.idleAcc = 0;				
 				if(this.currentAction==='jump'){
 					this.position.x = this.forwardEnd.x;
 					this.position.y = this.forwardEnd.y;
+					if(this.liftItem){
+						this.liftItem.position.x = this.position.x;
+						this.liftItem.position.y = this.position.y;
+						this.liftItem.position.z = this.position.z+this.aabb().depth();
+					}					
+					this.forwardT = 1;
+					this.resultAction = 'done';
+					this.blocklyContinue('jump fall');
+				}else{
+					this.resultAction = 'break';
+					this.blocklyContinue('jumpwall fall');
 				}
 				this.currentAction = '';
-				this.idleAcc = 0;
-				this.blocklyContinue('fall');
 			}
 			break;
 		case 'collision':
 			break;
 		case 'wall':
-			if(this.currentAction==='forward' || this.currentAction==='jump'){
-				if(this._isobstruct)this._isobstruct = false;
-				this.currentAction = '';
-				this.idleAcc = 0;
-				this.blocklyContinue('wall');
+			if(this.currentAction==='forward'){
+				this.currentAction = 'forwardwall';
+				this.forwardTT = this.forwardT;
+			}else if(this.currentAction==='jump'){
+				this.currentAction = 'jumpwall';
 			}
 			break;
 		case 'update':
 			if(this.position.z < -50)
 				this.blocklyEvent('OutOfBounds');
-			if(this.forwardEnd&&(this.currentAction==='forward'||this.currentAction==='jump')){
+			if(this.forwardEnd&&this.currentAction==='forward'){
 				var t = this.forwardT;
 				if(t>=1){
 					t = 1;
-					if(this.currentAction!='jump'){ //不落地不可以再次跳跃
-						if(this._isobstruct)this._isobstruct = false;
-						this.currentAction = '';
-						this.idleAcc = 0;
-						this.blocklyContinue('forward update');
-					}
+					if(this._isobstruct)this._isobstruct = false;
+					this.currentAction = '';
+					this.idleAcc = 0;
+					this.resultAction = 'done';
+					this.blocklyContinue('forward update');
 				}
 				this.position.x = this.forwardEnd.x*t + this.forwardBegin.x*(1-t);
 				this.position.y = this.forwardEnd.y*t + this.forwardBegin.y*(1-t);
@@ -571,8 +581,32 @@ function(event,dt,z){
 				}
 				this.forwardT += this.speed*dt/1000;
 				if(this.forwardT>1)this.forwardT = 1;
+			}else if(this.currentAction==='jump'){
+				var t = this.forwardT;
+				if(t>=1){
+					t = 1;
+				}
+				this.position.x = this.forwardEnd.x*t + this.forwardBegin.x*(1-t);
+				this.position.y = this.forwardEnd.y*t + this.forwardBegin.y*(1-t);
+				if(this.liftItem){
+					this.liftItem.position.x = this.position.x;
+					this.liftItem.position.y = this.position.y;
+					this.liftItem.position.z = this.position.z+this.aabb().depth();
+				}
+				this.forwardT += this.speed*dt/1000;
+				if(this.forwardT>1)this.forwardT = 1;
+			}else if(this.currentAction==='forwardwall'){
+				this.forwardTT += this.speed*dt/1000;
+				if(this.forwardTT>1){
+					if(this._isobstruct)this._isobstruct = false;
+					this.currentAction = '';
+					this.resultAction = 'break';
+					this.idleAcc = 0;
+					this.blocklyContinue('forwardwall');
+				}
+			}else if(this.currentAction==='jumpwall'){
 			}else if(this.currentAction==='empty'){
-			}else if(this.currentActionName()!=='idle'||this.currentActionName()!=='lift_up_item_idle'){
+			}else if(this.currentActionName()!=='idle'&&this.currentActionName()!=='lift_up_item_idle'){
 				if(this._noidle)break;
 				//idle
 				this.idleAcc += dt;

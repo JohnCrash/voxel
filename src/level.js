@@ -148,6 +148,8 @@ class Level extends Component{
                 },600);
             }
         },(err)=>{
+            this.testXML = [];
+            this.setState({curSelectTest:-1});
             console.log(err);
         });
     }
