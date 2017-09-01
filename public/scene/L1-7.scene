@@ -147,15 +147,15 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 32,
+					"acc": 0,
 					"curIndex": 0
 				}
 			]
 		},
 		{
 			"position": {
-				"x": 17,
-				"y": 6,
+				"x": 19.5,
+				"y": 5.5,
 				"z": 40.00000004061582
 			},
 			"rotation": {
@@ -176,14 +176,14 @@
 		},
 		{
 			"position": {
-				"x": 17,
-				"y": -28,
+				"x": 19.5,
+				"y": -30.5,
 				"z": 39.99999968871037
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 424.6710701343283
+				"z": 720.7504697718413
 			},
 			"name": "金币",
 			"visible": true,
@@ -193,13 +193,13 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/金币.item"
 		},
 		{
 			"position": {
-				"x": -36,
-				"y": 6,
+				"x": -37.5,
+				"y": 5.5,
 				"z": 39.999999577500645
 			},
 			"rotation": {

@@ -389,10 +389,10 @@ class SceneManager extends EventEmitter{
             return null;
         this._groundCollisions = {
             length :  grounds.length,
-            collisionFunc : item=>{
+            collisionFunc : (item,b)=>{
                 let ab;
                 for(let ground of grounds){
-                    ab = ground.collisionFunc(item);
+                    ab = ground.collisionFunc(item,b);
                     if(ab)return ab;
                 }
                 return ab;

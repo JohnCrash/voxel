@@ -4,9 +4,9 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": -112.2138610648488,
-			"y": -126.72410224684594,
-			"z": 128.72104351133555
+			"x": -114.07243666240849,
+			"y": -133.20854477068636,
+			"z": 132.25625240235843
 		},
 		"rotation": {
 			"x": 1.0413797870232853,
@@ -147,15 +147,15 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 34,
+					"acc": 0,
 					"curIndex": 0
 				}
 			]
 		},
 		{
 			"position": {
-				"x": -48,
-				"y": 24,
+				"x": -47.5,
+				"y": 23.5,
 				"z": 39.9999992517357
 			},
 			"rotation": {
@@ -171,13 +171,13 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/男孩.item"
 		},
 		{
 			"position": {
-				"x": -30,
-				"y": 24,
+				"x": -29,
+				"y": 23,
 				"z": 40.00000013446839
 			},
 			"rotation": {
@@ -193,13 +193,13 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		},
 		{
 			"position": {
-				"x": -30,
-				"y": 7,
+				"x": -29,
+				"y": 5,
 				"z": 40.00000013458892
 			},
 			"rotation": {
@@ -215,13 +215,13 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		},
 		{
 			"position": {
-				"x": -13,
-				"y": 7,
+				"x": -11,
+				"y": 5,
 				"z": 39.99999876977303
 			},
 			"rotation": {
@@ -237,13 +237,13 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		},
 		{
 			"position": {
-				"x": -13,
-				"y": -10,
+				"x": -11,
+				"y": -13,
 				"z": 39.99999876476021
 			},
 			"rotation": {
@@ -259,13 +259,13 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		},
 		{
 			"position": {
-				"x": 4,
-				"y": -10,
+				"x": 7,
+				"y": -13,
 				"z": 39.99999876959242
 			},
 			"rotation": {
@@ -281,13 +281,13 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		},
 		{
 			"position": {
-				"x": 4,
-				"y": -27,
+				"x": 7,
+				"y": -31,
 				"z": 40.00000013117109
 			},
 			"rotation": {
@@ -303,13 +303,13 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		},
 		{
 			"position": {
-				"x": 21,
-				"y": -27,
+				"x": 25,
+				"y": -31,
 				"z": 39.99999973169173
 			},
 			"rotation": {
@@ -325,13 +325,13 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		},
 		{
 			"position": {
-				"x": 21,
-				"y": -44,
+				"x": 25,
+				"y": -49,
 				"z": 40.000001673090615
 			},
 			"rotation": {
@@ -347,13 +347,13 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		},
 		{
 			"position": {
-				"x": 38,
-				"y": -47,
+				"x": 43.5,
+				"y": -52,
 				"z": 39.999998783611844
 			},
 			"rotation": {
@@ -369,7 +369,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/终点旗帜.item"
 		}
 	],

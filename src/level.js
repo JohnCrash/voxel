@@ -14,11 +14,27 @@ import IconRotateLeft from 'material-ui/svg-icons/image/rotate-left';
 import IconRotateRight from 'material-ui/svg-icons/image/rotate-right';
 import IconMenu from 'material-ui/svg-icons/navigation/menu';
 import IconStep from 'material-ui/svg-icons/maps/directions-walk';
+import AddTest from 'material-ui/svg-icons/content/add';
+import RemoveTest from 'material-ui/svg-icons/content/remove';
 import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 import BlocklyInterface from './vox/blocklyinterface';
 import {ScriptManager} from './vox/scriptmanager';
 import {TextManager} from './ui/textmanager';
 import {ItemTemplate} from './vox/itemtemplate';
+import {fetchJson,postJson} from './vox/fetch';
+
+function parserXML(id,text){
+    let result;
+    let regx = new RegExp(`<xml\\s+id="${id}">([^]*?)<\/xml>`,"g");
+    let regx2 = new RegExp(`^<xml id="${id}">([^]*)<\/xml>$`);
+    text.replace(regx,(a,t)=>{result = a});
+    if(result)
+        return result.replace(regx2,(a,b)=>{
+            return b;
+        });
+}
 
 class Level extends Component{
     constructor(props){
@@ -28,6 +44,7 @@ class Level extends Component{
             playPause:true,
             volumeOnOff:true,
             levelDesc:'',
+            curSelectTest:-1
         }
     }
     Menu(){
@@ -104,8 +121,84 @@ class Level extends Component{
     Step(){
         this.blockview.step();
     }
+
+    componentDidMount(){
+        this.loadTest(this.props.level);
+    }
+    componentWillReceiveProps(nextProps){
+        if(nextProps.level!=this.props.level){
+            this.loadTest(nextProps.level);
+        }
+    }
+    loadTest(name){
+        fetchJson(`scene/test/${name}.json`,(json)=>{
+            this.testXML = [];
+            let text = json.workspace;
+            for(let i=0;i<100;i++){
+                let it = parserXML(`${i}`,text);
+                if(it)
+                    this.testXML.push(it);
+                else break;
+            }
+            this.forceUpdate();
+            if(this.testXML.length>0&&this.testXML[0]){
+                setTimeout(()=>{
+                    this.blockview.loadXML(this.testXML[0]);
+                    this.setState({curSelectTest:0});
+                },600);
+            }
+        },(err)=>{
+            console.log(err);
+        });
+    }
+    SaveTest(){
+        let i = 0;
+        let file = this.testXML.map(xml=>`<xml id="${i++}">\n${xml}\n</xml>`).join('\n');
+        let json = {
+            workspace:file
+        };
+        postJson(`/save?file=scene/test/${this.props.level}.json`,json,(json)=>{
+            if(json.result==='ok'){//成功
+                console.log('add workspace xml success');
+            }else{//失败
+                window.alert(json.result);
+            }
+        });
+    }
+    AddTest(){
+        let xml = this.blockview.toXML();
+        this.testXML = this.testXML || [];
+        this.testXML.push(xml);
+        this.SaveTest();
+        this.setState({curSelectTest:this.testXML.length-1});
+    }
+    RemoveTest(){
+        if(this.testXML&&this.testXML[this.state.curSelectTest]){
+            this.testXML.splice(this.state.curSelectTest,1);
+            let i = this.state.curSelectTest-1;
+            if(this.testXML[i]){
+                this.blockview.loadXML(this.testXML[i]);
+                this.setState({curSelectTest:i});
+            }else{
+                this.blockview.initWorkspace();
+                this.setState({curSelectTest:-1});
+            }
+            this.SaveTest();
+        }
+    }
+    handleTestChange(event,index,value){
+        if(this.testXML[index]){
+            this.blockview.loadXML(this.testXML[index]);
+            this.setState({curSelectTest:index});
+        }
+    }
     render(){
-        let {playPause,volumeOnOff,levelDesc,mute} = this.state;
+        let {playPause,volumeOnOff,levelDesc,mute,curSelectTest} = this.state;
+        let tests = [];
+        if(this.testXML){
+            for(let i=0;i<this.testXML.length;i++)
+                tests.push(<MenuItem value={i} key={i} primaryText={`test ${i}`} />);
+        }
         return <div>
             <div style={{position:"absolute",left:"0px",top:"0px",right:"50%",bottom:"30%"}}>
                 <VoxView file={this.props.level} ref={ref=>this.voxview=ref} mute={!volumeOnOff}/>
@@ -121,6 +214,20 @@ class Level extends Component{
                         </IconButton>                          
                     </ToolbarGroup>
                     <ToolbarGroup>
+                        <IconButton touch={true} onClick={this.AddTest.bind(this)}>
+                            <AddTest />
+                        </IconButton>
+                        <IconButton touch={true} onClick={this.RemoveTest.bind(this)}>
+                            <RemoveTest />
+                        </IconButton>                        
+                        <SelectField
+                            value={curSelectTest}
+                            onChange={this.handleTestChange.bind(this)}
+                            maxHeight={200}
+                            style={{width:'120px'}}
+                        >
+                            {tests}
+                        </SelectField>
                         <IconButton touch={true} onClick={this.RotationLeft.bind(this)}>
                             <IconRotateLeft />
                         </IconButton>  
@@ -138,7 +245,7 @@ class Level extends Component{
                         </IconButton>
                         <IconButton touch={true} onClick={this.Step.bind(this)}>
                             <IconStep />
-                        </IconButton>                        
+                        </IconButton>
                     </ToolbarGroup>
                 </Toolbar>
                 <div style={{width:"100%",height:"100%",overflowY: "auto"}}>

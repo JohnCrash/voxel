@@ -147,15 +147,15 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 33,
 					"curIndex": 0
 				}
 			]
 		},
 		{
 			"position": {
-				"x": -38,
-				"y": -42,
+				"x": -37.5,
+				"y": -43.5,
 				"z": 37.00000081268558
 			},
 			"rotation": {
@@ -171,13 +171,13 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/男孩.item"
 		},
 		{
 			"position": {
-				"x": 33,
-				"y": 28,
+				"x": 38.5,
+				"y": 29.5,
 				"z": 53.000000619034694
 			},
 			"rotation": {
@@ -193,7 +193,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/终点旗帜.item"
 		}
 	],

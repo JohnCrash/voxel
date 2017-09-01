@@ -87,9 +87,9 @@
 			"type": "ambient",
 			"name": "环境灯3",
 			"color": {
-				"r": 0.4588235294117647,
-				"g": 0.3411764705882353,
-				"b": 0.3411764705882353
+				"r": 0.6352941176470588,
+				"g": 0.5882352941176471,
+				"b": 0.5882352941176471
 			}
 		},
 		{
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 33,
+					"acc": 50,
 					"curIndex": 0
 				}
 			],
@@ -157,7 +157,7 @@
 			"position": {
 				"x": -36,
 				"y": -18,
-				"z": 44.0000012847293
+				"z": 44.000001177223375
 			},
 			"rotation": {
 				"x": 0,
@@ -179,7 +179,7 @@
 			"position": {
 				"x": 50,
 				"y": 18,
-				"z": 44.00000034562367
+				"z": 44.00000070175395
 			},
 			"rotation": {
 				"x": 0,
@@ -201,7 +201,7 @@
 			"position": {
 				"x": -2,
 				"y": -18,
-				"z": 43.9999997781732
+				"z": 43.99999938695435
 			},
 			"rotation": {
 				"x": 0,
@@ -338,7 +338,7 @@
 			"position": {
 				"x": 33,
 				"y": -51,
-				"z": 44.000001065133986
+				"z": 44.00000072975084
 			},
 			"rotation": {
 				"x": 0,
@@ -360,12 +360,12 @@
 			"position": {
 				"x": 0,
 				"y": -52,
-				"z": 43.99999841081267
+				"z": 44.00000028885932
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1422.224127021235
+				"z": 2798.524452632346
 			},
 			"name": "钥匙",
 			"visible": true,
@@ -382,7 +382,7 @@
 			"position": {
 				"x": -54,
 				"y": -51,
-				"z": 43.999999807920176
+				"z": 43.999998784296395
 			},
 			"rotation": {
 				"x": 0,
@@ -404,7 +404,7 @@
 			"position": {
 				"x": -52,
 				"y": -17,
-				"z": 44.00000034609307
+				"z": 44.000000702223346
 			},
 			"rotation": {
 				"x": 0,
@@ -419,19 +419,19 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		},
 		{
 			"position": {
 				"x": -20,
 				"y": -17,
-				"z": 43.99999974908029
+				"z": 43.99999946997552
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 162.14388003707597
+				"z": 1538.4442056482492
 			},
 			"name": "金币",
 			"visible": true,
@@ -441,8 +441,30 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/金币.item"
+		},
+		{
+			"position": {
+				"x": -50,
+				"y": 50,
+				"z": 43.999999251693815
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "终点旗帜",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/终点旗帜.item"
 		}
 	],
 	"zfog": {

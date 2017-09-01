@@ -147,15 +147,15 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 34,
+					"acc": 0,
 					"curIndex": 0
 				}
 			]
 		},
 		{
 			"position": {
-				"x": -35,
-				"y": -13,
+				"x": -35.5,
+				"y": -12.5,
 				"z": 39.999999548961696
 			},
 			"rotation": {
@@ -176,8 +176,8 @@
 		},
 		{
 			"position": {
-				"x": 35,
-				"y": -12,
+				"x": 40.5,
+				"y": -12.5,
 				"z": 47.99999971419563
 			},
 			"rotation": {
@@ -193,7 +193,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/终点旗帜.item"
 		}
 	],

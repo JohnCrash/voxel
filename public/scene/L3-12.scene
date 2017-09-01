@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": -76.65996334238949,
-			"y": -116.7698455550745,
-			"z": 111.61525182324645
+			"x": 153.1909150248638,
+			"y": -89.69271353301328,
+			"z": 122.0122075776506
 		},
 		"rotation": {
-			"x": 1.0402162341886219,
+			"x": 1.0739592663938455,
 			"y": 0,
-			"z": -0.6201736608753119
+			"z": 1.011127413322056
 		}
 	},
 	"material": {
@@ -87,9 +87,9 @@
 			"type": "ambient",
 			"name": "环境灯3",
 			"color": {
-				"r": 0.4588235294117647,
-				"g": 0.3411764705882353,
-				"b": 0.3411764705882353
+				"r": 0.5686274509803921,
+				"g": 0.5686274509803921,
+				"b": 0.5686274509803921
 			}
 		},
 		{
@@ -138,7 +138,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"file": "scene/vox/Level2-3.vox",
+			"file": "scene/vox/Level3-12.vox",
 			"actions": [
 				{
 					"name": "idle",
@@ -147,21 +147,22 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 33,
+					"acc": 0,
 					"curIndex": 0
 				}
-			]
+			],
+			"water": 177
 		},
 		{
 			"position": {
-				"x": -4.5,
-				"y": 52.5,
-				"z": 39.999999753478164
+				"x": 0,
+				"y": -4,
+				"z": 46.000001525151895
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 1.5707963267948966
 			},
 			"name": "男孩",
 			"visible": true,
@@ -176,14 +177,14 @@
 		},
 		{
 			"position": {
-				"x": -4,
-				"y": 18,
-				"z": 39.9999993401824
+				"x": 0,
+				"y": 32,
+				"z": 46.00000108667472
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1.5707963267948966
+				"z": 0
 			},
 			"name": "栅栏",
 			"visible": true,
@@ -195,50 +196,6 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
-		},
-		{
-			"position": {
-				"x": -4,
-				"y": -18,
-				"z": 39.999999197628846
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 1.5707963267948966
-			},
-			"name": "栅栏1",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/栅栏.item"
-		},
-		{
-			"position": {
-				"x": 0,
-				"y": -52.5,
-				"z": 40.0000009095539
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "终点旗帜",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/终点旗帜.item"
 		}
 	],
 	"zfog": {

@@ -5,9 +5,19 @@ import {TextManager} from './ui/textmanager';
 
 function parserXML(id,text){
     let result;
-    let regx = new RegExp(`<xml\\s+id="${id}">([^]*)<\/xml>`,"g");
+    let regx = new RegExp(`<xml\\s+id="${id}">([^]*?)<\/xml>`,"g");
     text.replace(regx,(a,t)=>{result = a});
     return result;
+}
+
+function splitXML(s){
+    return s.replace(/^<xml xmlns="http:\/\/www.w3.org\/1999\/xhtml">([^]*)<\/xml>$/,(a,b)=>{
+        return b;
+    });
+}
+
+function xmlHead(s){
+    return `<xml xmlns="http://www.w3.org/1999/xhtml">${s}</xml>`;
 }
 
 class BlockView extends Component{
@@ -77,6 +87,15 @@ class BlockView extends Component{
     highlightBlock(id) {
         this.workspace.highlightBlock(id);
         this.highlightPause = true;
+    }
+    toXML(){
+        let dom = Blockly.Xml.workspaceToDom(this.workspace);
+        return splitXML(Blockly.Xml.domToText(dom));
+    }
+    loadXML(xml){
+        this.initWorkspace();
+        let dom = Blockly.Xml.textToDom(xmlHead(xml));
+        Blockly.Xml.domToWorkspace(dom,this.workspace);
     }
     /**
      * t  执行速度ms
