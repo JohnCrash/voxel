@@ -89,8 +89,12 @@ function initItemBlockly(_this){
 		if(!this._isobstruct){
 			this._isobstruct = true;
 			this._obstructItem = i;
-			this.currentAction='idle';
-			this.blocklyContinue('collision obstruct');
+			if(this.currentAction==='forward'){
+				this.blocklyContinue('collision obstruct');
+				this.currentAction='idle';
+			}else{
+				this.currentAction = 'jumpwall';
+			}
 		}
 	}
 	function eqAngle(a1,a2){
@@ -227,7 +231,10 @@ function initItemBlockly(_this){
 		if((item._isobstruct||item.resultAction==='break') && !eqAngle(item.rotation.z-Math.PI,item.forwardAngle)){
 			item.velocity.z = JUMP_SPEED;
 			ItemAction(item,'jump');
-			item.currentAction = 'jump';
+			if(item.currentAction === 'jumpwall')
+				item.currentAction = 'jumpwall';				
+			else
+				item.currentAction = 'jump';
 			item.blocklyStop('jump orgine');
 			return;
 		}
@@ -459,22 +466,23 @@ function initItemBlockly(_this){
 			return;
 		}
 		var ab = item.liftItem.aabb();
-		
-		var cc = item.sceneManager.createCollisionItem(
-		[item.liftItem.position.x+Math.cos(item.rotation.z-Math.PI/2)*STEP,
-		item.liftItem.position.y+Math.sin(item.rotation.z-Math.PI/2)*STEP,
-		item.liftItem.position.z-ab.depth()],
-		[ab.width(),ab.height(),ab.depth()]);
+
+		var cc = item.liftItem;
+		var oldp = {x:cc.position.x,y:cc.position.y,z:cc.position.z}
+		cc.position.set(item.liftItem.position.x+Math.cos(item.rotation.z-Math.PI/2)*STEP,
+			item.liftItem.position.y+Math.sin(item.rotation.z-Math.PI/2)*STEP,
+			item.liftItem.position.z-ab.depth()/2);
 		var iscollision = false;
 		for(var i=0;i<item.sceneManager.items.length;i++){
 			var it = item.sceneManager.items[i];
-			if(it.collision && it!==item.liftItem){
+			if((it.collision||it.ground) && it!==cc){
 				if(it.collisionFunc(cc)){
 					iscollision = true;
 					break;
 				}
 			}
 		}
+		cc.position.set(oldp.x,oldp.y,oldp.z);
 		if(!iscollision){ //能不能丢
 			item.blocklyStop('put down');
 			ItemAction(item,'put_down_item');
@@ -533,18 +541,19 @@ function(event,dt,z){
 				this.idleAcc = 0;				
 				if(this.currentAction==='jump'){
 					this.position.x = this.forwardEnd.x;
-					this.position.y = this.forwardEnd.y;
-					if(this.liftItem){
-						this.liftItem.position.x = this.position.x;
-						this.liftItem.position.y = this.position.y;
-						this.liftItem.position.z = this.position.z+this.aabb().depth();
-					}					
+					this.position.y = this.forwardEnd.y;				
 					this.forwardT = 1;
 					this.resultAction = 'done';
 					this.blocklyContinue('jump fall');
 				}else{
 					this.resultAction = 'break';
+					
 					this.blocklyContinue('jumpwall fall');
+				}
+				if(this.liftItem){
+					this.liftItem.position.x = this.position.x;
+					this.liftItem.position.y = this.position.y;
+					this.liftItem.position.z = this.position.z+this.aabb().depth();
 				}
 				this.currentAction = '';
 			}
@@ -605,6 +614,11 @@ function(event,dt,z){
 					this.blocklyContinue('forwardwall');
 				}
 			}else if(this.currentAction==='jumpwall'){
+				if(this.liftItem){
+					this.liftItem.position.x = this.position.x;
+					this.liftItem.position.y = this.position.y;
+					this.liftItem.position.z = this.position.z+this.aabb().depth();
+				}				
 			}else if(this.currentAction==='empty'){
 			}else if(this.currentActionName()!=='idle'&&this.currentActionName()!=='lift_up_item_idle'){
 				if(this._noidle)break;

@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 33,
 					"curIndex": 0
 				}
 			]
@@ -223,7 +223,7 @@
 			"position": {
 				"x": 15,
 				"y": -22,
-				"z": 40
+				"z": 40.5
 			},
 			"rotation": {
 				"x": 0,

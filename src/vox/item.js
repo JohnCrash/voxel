@@ -515,7 +515,7 @@ class Item{
         if(!this.curDim || !item.curDim)return null;
         let ab1 = this.collisionAABB();
         let ab2 = item.collisionAABB();
-        let u = ab1.union(ab2)
+        let u = ab1.union(ab2);
         if((u!==null)&&((u.width()>0)||(u.height()>0)||(u.depth()>0))){//AABB相交
             if(!(this.ground || item.ground)){ 
                 return u;//都不是地面的碰撞，简单的返回两个物体aabb盒的交集
