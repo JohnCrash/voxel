@@ -20,6 +20,9 @@
 	<block type="open_box"></block>
 	<block type="lift_up"></block>
 	<block type="put_down"></block>
+	<category name="%{BKY_CATVARIABLES}" colour="%{BKY_VARIABLES_HUE}" custom="VARIABLE"></category>
+    <category name="%{BKY_CATFUNCTIONS}" colour="%{BKY_PROCEDURES_HUE}" custom="PROCEDURE"></category>
+
 </xml>
 
 <xml id="default">

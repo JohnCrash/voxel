@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 49,
+					"acc": 34,
 					"curIndex": 0
 				}
 			],
@@ -172,7 +172,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/男孩.item"
 		},
 		{
@@ -245,7 +245,7 @@
 		{
 			"position": {
 				"x": 38,
-				"y": -17,
+				"y": -17.5,
 				"z": 40.5
 			},
 			"rotation": {
@@ -268,7 +268,7 @@
 		{
 			"position": {
 				"x": -51,
-				"y": 19,
+				"y": 18.5,
 				"z": 40.5
 			},
 			"rotation": {
@@ -313,7 +313,7 @@
 		},
 		{
 			"position": {
-				"x": 53,
+				"x": 53.5,
 				"y": 16,
 				"z": 40.5
 			},
@@ -365,7 +365,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 952.3329722312387
+				"z": 1234.463700486865
 			},
 			"name": "钥匙",
 			"visible": true,
@@ -431,7 +431,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 3266.2384837138384
+				"z": 3548.369211969548
 			},
 			"name": "金币",
 			"visible": true,
