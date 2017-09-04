@@ -79,35 +79,27 @@ class Level extends Component{
     /**
      * 当游戏失败时
      */
-    onGameOver(){
-        MessageBox.show('ok',undefined,<MarkdownElement file={`scene/gameover.md`}/>,(result)=>{
-            this.Reset();
-        });
-    }
-    /**
-     * 当游戏过关
-     */    
-    onCompleted(){
-        MessageBox.show('ok',undefined,<MarkdownElement file={`scene/missioncompleted.md`}/>,(result)=>{
-            this.Reset();
-        });
-    }
-    /**
-     * 当游戏失败,错误的动作用
-     */
-    onWrongAction(){
-        MessageBox.show('ok',undefined,<MarkdownElement file={`scene/wrongaction.md`}/>,(result)=>{
+    onGameOver(event){
+        let md;
+        switch(event){
+            case 'OutOfBounds':
+            case 'Dead':
+                md = 'scene/gameover.md';
+                break;
+            case 'MissionCompleted': 
+                md = 'scene/missioncompleted.md';
+                break;
+            case 'WrongAction':
+                md = 'scene/wrongaction.md';
+                break;
+            case 'FallDead':
+                md = 'scene/falldead.md';
+                break;
+        }
+        MessageBox.show('ok',undefined,<MarkdownElement file={md}/>,(result)=>{
             this.Reset();
         });
     } 
-    /**
-     * 坠亡
-     */
-    onFallDead(){
-        MessageBox.show('ok',undefined,<MarkdownElement file={`scene/falldead.md`}/>,(result)=>{
-            this.Reset();
-        });
-    }     
     PlayPause(){
         if(this.state.playPause){
             this.blockview.run(0,()=>{

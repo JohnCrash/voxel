@@ -69,38 +69,13 @@ export default class BlocklyInterface{
                     currentBlockView.initWorkspace();
                 }
             }
-        }else if(!isNotifyDead && (event==='OutOfBounds'||event==='Dead')){
-            if(currentLevel)
-                currentLevel.onGameOver();
+        }else if(!isNotifyDead){
             if(currentBlockView){
                 currentBlockView.freeze = true;
                 currentBlockView.pause();
             }
             isNotifyDead = true;
-        }else if(!isNotifyDead && event==='MissionCompleted'){
-            if(currentLevel)
-                currentLevel.onCompleted();
-            if(currentBlockView){
-                currentBlockView.freeze = true;
-                currentBlockView.pause();
-            }
-            isNotifyDead = true;
-        }else if(!isNotifyDead && event==='WrongAction'){
-            if(currentLevel)
-                currentLevel.onWrongAction();
-            if(currentBlockView){
-                currentBlockView.freeze = true;
-                currentBlockView.pause();
-            }
-            isNotifyDead = true;            
-        }else if(!isNotifyDead && event==='FallDead'){
-            if(currentLevel)
-                currentLevel.onFallDead();
-            if(currentBlockView){
-                currentBlockView.freeze = true;
-                currentBlockView.pause();
-            }
-            isNotifyDead = true;
+            currentLevel.onGameOver(event);
         }
     }
 };
