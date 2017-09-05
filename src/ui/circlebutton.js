@@ -122,7 +122,7 @@ class CircleButton extends Component{
         let hover = this.state.hovered?c.hover:c.normal;
         return <div style={{display: 'inline-block',position: 'relative'}}>
             <div style={m(bgstyle,pos==='first'&&{left:bhelf},pos==='last'&&{right:bhelf})}></div>
-            <a href={link} style={{position:'relative'}}>
+            <a href={link} style={{position:'relative',textDecoration: 'none'}}>
                 <div style={m(style,hover)}
                     onMouseLeave = {this.handleMouseLeave.bind(this)}
                     onMouseEnter = {this.handleMouseEnter.bind(this)}

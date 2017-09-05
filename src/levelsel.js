@@ -6,6 +6,7 @@ import {fetchJson} from './vox/fetch';
 import AppBar from 'material-ui/AppBar';
 import CircleButton from './ui/circlebutton';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import Paper from 'material-ui/Paper';
 
 const buttonStyle = {
     borderRadius:'18px',
@@ -57,12 +58,8 @@ class LevelSel extends Component{
                     }
                 }
                 return <Card key={item.name}>
-                             <CardHeader title={item.name} titleStyle={titleStyle}/>
-                             <CardText>
-                                 {item.desc}
-                                 <br />
-                                 {bl}
-                            </CardText>
+                            <CardHeader title={item.name} titleStyle={titleStyle} subtitle={item.desc}/>
+                            <CardText>{bl}</CardText>                          
                         </Card>;
             });
             this.setState({title:json.title});
@@ -77,17 +74,19 @@ class LevelSel extends Component{
         }
     }    
     render(){
-        return <div>
-            <AppBar title={this.state.title}/>
+        //<AppBar title={this.state.title}/>
+        return <div>  
             <div style={{
                 overflowY:'auto',
                 position:'absolute',
                 left :'0px',
                 right :'0px',
                 bottom :'0px',
-                top :'64px'
+                top :'0px'
             }}>
+                <Paper style={{width:"90%",margin:'auto',marginTop:'20px',marginBottom:'20px',maxWidth:'520px'}}>
                 {this.level}
+                </Paper>
             </div>
         </div>;
     }
