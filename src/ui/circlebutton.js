@@ -117,9 +117,9 @@ class CircleButton extends Component{
         this.setState({hovered:true});
     }
     render(){
-        let {link,state,pos} = this.props;
+        let {link,state,pos,disable} = this.props;
         let c = cc(state);
-        let hover = this.state.hovered?c.hover:c.normal;
+        let hover = disable?c.normal : (this.state.hovered)?c.hover:c.normal;
         return <div style={{display: 'inline-block',position: 'relative'}}>
             <div style={m(bgstyle,pos==='first'&&{left:bhelf},pos==='last'&&{right:bhelf})}></div>
             <a href={link} style={{position:'relative',textDecoration: 'none'}}>

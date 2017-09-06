@@ -24,6 +24,7 @@ import {ScriptManager} from './vox/scriptmanager';
 import {TextManager} from './ui/textmanager';
 import {ItemTemplate} from './vox/itemtemplate';
 import {fetchJson,postJson} from './vox/fetch';
+import Tops from './tops';
 
 function parserXML(id,text){
     let result;
@@ -44,7 +45,8 @@ class Level extends Component{
             playPause:true,
             volumeOnOff:true,
             levelDesc:'',
-            curSelectTest:-1
+            curSelectTest:-1,
+            openTops:true
         }
     }
     Menu(){
@@ -87,7 +89,7 @@ class Level extends Component{
                 md = 'scene/gameover.md';
                 break;
             case 'MissionCompleted': 
-                md = 'scene/missioncompleted.md';
+                this.Tops.open();
                 break;
             case 'WrongAction':
                 md = 'scene/wrongaction.md';
@@ -96,9 +98,9 @@ class Level extends Component{
                 md = 'scene/falldead.md';
                 break;
         }
-        MessageBox.show('ok',undefined,<MarkdownElement file={md}/>,(result)=>{
-            this.Reset();
-        });
+    //    MessageBox.show('ok',undefined,<MarkdownElement file={md}/>,(result)=>{
+    //        this.Reset();
+    //    });
     } 
     PlayPause(){
         if(this.state.playPause){
@@ -187,7 +189,9 @@ class Level extends Component{
         }
     }
     render(){
-        let {playPause,volumeOnOff,levelDesc,mute,curSelectTest} = this.state;
+        let {playPause,volumeOnOff,levelDesc,mute,curSelectTest,openTops} = this.state;
+        let {level} = this.props;
+
         let tests = [];
         if(this.testXML){
             for(let i=0;i<this.testXML.length;i++)
@@ -195,10 +199,10 @@ class Level extends Component{
         }
         return <div>
             <div style={{position:"absolute",left:"0px",top:"0px",right:"50%",bottom:"30%"}}>
-                <VoxView file={this.props.level} ref={ref=>this.voxview=ref} mute={!volumeOnOff}/>
+                <VoxView file={level} ref={ref=>this.voxview=ref} mute={!volumeOnOff}/>
             </div>
             <div style={{position:"absolute",left:"50%",top:"0px",right:"0px",bottom:"0px"}}>
-                <BlockView ref={ref=>this.blockview=ref} file={`scene/${this.props.level}.toolbox`}/>
+                <BlockView ref={ref=>this.blockview=ref} file={`scene/${level}.toolbox`}/>
             </div>
             <div style={{position:"absolute",display:"flex",flexDirection:"column",left:"0px",top:"70%",right:"50%",bottom:"0px"}}>
                 <Toolbar>
@@ -243,10 +247,11 @@ class Level extends Component{
                     </ToolbarGroup>
                 </Toolbar>
                 <div style={{width:"100%",height:"100%",overflowY: "auto"}}>
-                    <MarkdownElement file={`scene/${this.props.level}.md`}/>
+                    <MarkdownElement file={`scene/${level}.md`}/>
                 </div>
             </div>
             <MessageBox/>
+            <Tops ref={ref=>this.Tops=ref} level={level}/>
         </div>;
     }
 };
