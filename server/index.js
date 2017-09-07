@@ -3,7 +3,6 @@ var fs = require('fs');
 var express = require('express');
 var multiparty = require('multiparty');
 var crypto = require('crypto');
-var fs = require("fs");
 var browserify = require("browserify");
 var router = express.Router();
 

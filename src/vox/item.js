@@ -478,7 +478,7 @@ class Item{
         if(this.ground)return this.aabb();
         let w = this.collisionWidth();
         return aabb([this.position.x-w/2,this.position.y-w/2,this.position.z],
-            [w,w,this.curDim[2]]);      
+            [w,w,this.curDim[2]]);
     }
     /**
      * 确保collisionWidth是一个静态值，因为如果根据动画来变动将导致碰撞检测的不一致，而发生抖动。
@@ -576,6 +576,33 @@ class Item{
         }
 
         return null;//不相交
+    }
+    /**
+     * 判断一个点是不是在物体的内部
+     */
+    ptInItem(pt,water){
+        if(!this.curDim)return false;
+        let ab = this.collisionAABB();
+        if( pt.x>=ab.x0()&&pt.x<=ab.x1()&&
+            pt.y>=ab.y0()&&pt.y<=ab.y1()&&
+            pt.z>=ab.z0()&&pt.z<=ab.z1() ){
+            let dx = this.curDim[0];
+            let dy = this.curDim[1];
+            let dz = this.curDim[2];
+            let plane = dx*dy;                
+            //和体素的相对坐标
+            let p = {x:Math.floor(pt.x-this.position.x+dx/2),
+                y:Math.floor(pt.y-this.position.y+dy/2),
+                z:Math.floor(pt.z-this.position.z)};
+            let vox = water?this.curWaterVox:this.curVox;
+            if(!vox)return false;
+            if(p.x<0||p.x>=dx)return false;
+            if(p.y<0||p.y>=dy)return false;
+            if(p.z<0||p.z>=dz)return false;
+            let i = plane*p.z + p.y*dx + p.x;
+            return vox[i]!=0;
+        }
+        return false;
     }
     /**
      * 向Blockly注入函数

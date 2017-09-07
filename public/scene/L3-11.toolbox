@@ -6,6 +6,26 @@
 			</shadow>
 		</value>
 	</block>
+		<block type="controls_whileUntil"></block>
+      <block type="controls_for">
+        <value name="FROM">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="TO">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="BY">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="controls_forEach"></block>
+      <block type="controls_flow_statements"></block>
 	<block type="forward">
 		<value name="STEP">
 			<shadow type="math_number">
@@ -20,6 +40,10 @@
 	<block type="open_box"></block>
 	<block type="lift_up"></block>
 	<block type="put_down"></block>
+	<block type="controls_if"></block>
+	<block type="logic_negate"></block>
+	<block type="logic_operation"></block>
+	<block type="what_is_it"></block>
 </xml>
 
 <xml id="default">

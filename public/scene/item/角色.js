@@ -515,6 +515,92 @@ function initItemBlockly(_this){
 			},300);
 		}
 	});		
+	
+	// 判断什么障碍物
+	Blockly.Blocks['what_is_it'] = {
+	  init: function() {
+		appendCharacterDropdown(this.appendDummyInput())
+			.appendField("前面是")
+			.appendField(new Blockly.FieldDropdown([
+			["障碍","barrier"], 
+			["旗子","flag"],
+			["宝箱","chest"], 
+			["石头","ston"], 
+			["楼梯","ladder"],
+			["悬崖","cliff"],
+			["墙壁","wall"],]), "IT");
+		this.setOutput(true, "Boolean");
+		this.setColour(0);
+	 this.setTooltip("");
+	 this.setHelpUrl("");
+	  }
+	};
+	Blockly.JavaScript['what_is_it'] = function(block) {
+	  var charcter_name = block.getFieldValue('CHARCTER');
+	  var it_name = block.getFieldValue('IT');
+
+	  var code = `whatIt("${charcter_name}","${it_name}")`;
+
+	  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+	};
+	_this.injectBlocklyFunction('whatIt',function(name,it){
+		var item = getItemByName(name);
+
+		let d = item.forwardT!==undefined ? (1*STEP + calcD(item)) : (1*STEP);
+			
+		let pt = {
+			x:item.position.x+Math.cos(item.rotation.z-Math.PI/2)*d,
+			y:item.position.y+Math.sin(item.rotation.z-Math.PI/2)*d,
+			z:item.position.z+8
+		};
+		let ar = item.sceneManager.ptItem(pt);
+		switch(it){
+			case 'barrier':
+				for(let i=0;i<ar.length;i++){
+					if(ar[i].typeName==='栅栏')return true;
+				}
+				break;
+			case 'chest':
+				for(let i=0;i<ar.length;i++){
+					if(ar[i].typeName==='盒子')return true;
+				}
+				break;
+			case 'flag':
+				for(let i=0;i<ar.length;i++){
+					if(ar[i].typeName==='终点旗帜')return true;
+				}			
+				break;
+			case 'ston':
+				for(let i=0;i<ar.length;i++){
+					if(ar[i].typeName==='石块')return true;
+				}			
+				break;				
+			case 'ladder':
+				if(ar.length===0){
+					pt.z = item.position.z+1;
+					ar = item.sceneManager.ptItem(pt);
+					for(let i=0;i<ar.length;i++){
+						if(ar[i].ground)return true;
+					}						
+				}
+				break;
+			case 'cliff':
+				for(let z = 0;z < 15;z++){
+					pt.z = item.position.z-z;
+					ar = item.sceneManager.ptItem(pt);
+					for(let i=0;i<ar.length;i++){
+						if(ar[i].ground)return false;
+					}
+				}
+				return true;
+			case 'wall':
+				for(let i=0;i<ar.length;i++){
+					if(ar[i].ground)return true;
+				}			
+				break;
+		}
+		return false;
+	});
 }
 
 regItemEvent('角色',

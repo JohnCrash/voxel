@@ -57,7 +57,17 @@ class BlockView extends Component{
             this.workspace.dispose();
         try{
             this.workspace = Blockly.inject(this.blockDiv,
-                {toolbox: this.toolboxXML});
+                {toolbox: this.toolboxXML,
+                    trashcan: true,
+                    scrollbars: true, 
+                    zoom: {
+                        controls: true,
+                        wheel: true,
+                        startScale: 1.1,
+                        maxScale: 1.2,
+                        minScale: 1,
+                        //scaleSpeed: 1.2
+                    }});
         }catch(e){
             this.workspace = Blockly.inject(this.blockDiv);
             console.log(`Can not inject blocly workspace \n${e}`);

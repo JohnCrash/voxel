@@ -555,6 +555,18 @@ class SceneManager extends EventEmitter{
             if(isnotify)item.onCollisionWall();
         }
     }
+    /**
+     * 点位置有什么东西
+     */
+    ptItem(pt){
+        let ia = [];
+        for(let item of this.items){
+            if(item.ptInItem(pt)){
+                ia.push(item);
+            }
+        }
+        return ia;
+    }
     //物体和物体之间发生了碰撞
     collision(item1,item2,ab,dt){
         //通知他们彼此
