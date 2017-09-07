@@ -90,7 +90,7 @@ class Level extends Component{
                 break;
             case 'MissionCompleted': 
                 this.Tops.open();
-                break;
+                return;
             case 'WrongAction':
                 md = 'scene/wrongaction.md';
                 break;
@@ -98,9 +98,9 @@ class Level extends Component{
                 md = 'scene/falldead.md';
                 break;
         }
-    //    MessageBox.show('ok',undefined,<MarkdownElement file={md}/>,(result)=>{
-    //        this.Reset();
-    //    });
+        MessageBox.show('ok',undefined,<MarkdownElement file={md}/>,(result)=>{
+            this.Reset();
+        });
     } 
     PlayPause(){
         if(this.state.playPause){

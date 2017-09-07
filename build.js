@@ -23,3 +23,4 @@ function build(src,des){
 
 build('src/levelindex.js','public/levelindex_compress.js');
 build('src/editor.js','public/editor_compress.js');
+build('src/main.js','public/main_compress.js');

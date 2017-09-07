@@ -9,9 +9,9 @@
 			"z": 122.0122075776506
 		},
 		"rotation": {
-			"x": 1.092576111748451,
+			"x": 1.0739592663938455,
 			"y": 0,
-			"z": 1.0227629416686848
+			"z": 1.011127413322056
 		}
 	},
 	"material": {
@@ -137,7 +137,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"file": "scene/vox/Level5-1.vox",
+			"file": "scene/vox/Level5-2.vox",
 			"actions": [
 				{
 					"name": "idle",
@@ -146,16 +146,16 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 17,
+					"acc": 0,
 					"curIndex": 0
 				}
 			]
 		},
 		{
 			"position": {
-				"x": 12.5,
+				"x": 36.5,
 				"y": 34.5,
-				"z": 44.00000035181328
+				"z": 44.000001550784354
 			},
 			"rotation": {
 				"x": 0,
@@ -170,19 +170,19 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/男孩.item"
 		},
 		{
 			"position": {
-				"x": 12.5,
-				"y": -35.5,
-				"z": 43.999999035889545
+				"x": -33.5,
+				"y": 34.5,
+				"z": 44.00000070996235
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1.5707963267948966
+				"z": 0
 			},
 			"name": "终点旗帜",
 			"visible": true,
@@ -192,7 +192,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/终点旗帜.item"
 		}
 	],

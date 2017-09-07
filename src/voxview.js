@@ -34,6 +34,10 @@ class VoxView extends Component{
             this.sceneManager.muteSound(nextProps.mute);
         }
     }
+    componentWillUnmount(){
+        this.sceneManager.destroy();
+        this.game.destroy();
+    }
     load(file){
         BlocklyInterface.blocklyEvent('SceneReset');
         fetchJson(`/load?file=scene/${file}.scene`,(json)=>{

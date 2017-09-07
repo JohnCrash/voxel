@@ -98,6 +98,12 @@ Game.prototype.setSize = function(w,h){
     this.emit('resize',w,h);
 };
 
+Game.prototype.destroy=function(){
+    if(this.renderer){
+        this.stop();
+        this.renderer.dispose();
+    }
+}
 /**
  * 渲染循环
  */
@@ -109,6 +115,10 @@ Game.prototype.run=function(){
     }
     var t = Date.now()-1;
     var animate = function(){
+        if(this.stoped){
+            console.log('Game stoped!');
+            return;
+        }
         requestAnimationFrame( animate );
         if(this.stats)this.stats.update();
         var nt = Date.now();
@@ -124,6 +134,10 @@ Game.prototype.run=function(){
     }.bind(this);
     animate();    
 };
+
+Game.prototype.stop=function(){
+    this.stoped = true;
+}
 
 /**
  * 暂停主循环

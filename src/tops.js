@@ -25,7 +25,7 @@ class Tops extends Component{
         this.setState({open: false});
         switch(result){
             case 'exit':
-                location.href='main.html#main';
+                location.href='#main';
                 break;
             case 'agin':
                 break;
@@ -33,12 +33,12 @@ class Tops extends Component{
                 if(typeof appGetLevelInfo !== 'undefined'){
                     let info = appGetLevelInfo(this.props.level);
                     if(info && info.nextName){
-                        location.href=`main.html#level#${info.nextName}`;
+                        location.href=`#level#${info.nextName}`;
                     }else{//打通了全部
-                        location.href='main.html#main';
+                        location.href='#main';
                     }
                 }else{
-                    location.href='main.html#main';
+                    location.href='#main';
                 }
                 break;
         }
@@ -65,19 +65,28 @@ class Tops extends Component{
             onClick={this.handleAction.bind(this,'next')}/>            
         ];
         let tops = [];
+        /*
         for(let i=0;i<10;i++){
             tops.push(<TableRow selectable={false} selected={i==3}>
                 <TableRowColumn>{i+1}</TableRowColumn>
                 <TableRowColumn>John Smith</TableRowColumn>
                 <TableRowColumn>Employed</TableRowColumn>
             </TableRow>);
-        }
+        }*/
+        /*
+        let title;
+        if(typeof appGetLevelInfo !== 'undefined'){
+            let info = appGetLevelInfo(level);
+            title = info.name
+        }*/
+        
         return <Dialog
-            title={level}
             actions={actions}
             open={open}
         >
+            <h3>成功完成任务</h3>
             <LevelOf level={level}/>
+            {/*
             <Table>
                 <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                     <TableRow>
@@ -89,7 +98,7 @@ class Tops extends Component{
                 <TableBody displayRowCheckbox={false}>
                     {tops}
                 </TableBody>
-            </Table>
+            </Table>*/}
         </Dialog>
     }
 };

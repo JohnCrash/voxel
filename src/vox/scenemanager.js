@@ -74,8 +74,8 @@ class SceneManager extends EventEmitter{
      * 删除场景全部的对象
      */
     destroy(){
-        clearLight();
-        clearItem();
+        this.clearLight();
+        this.clearItem();
     }
 
     /**

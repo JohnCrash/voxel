@@ -1,17 +1,26 @@
 import React, {Component} from 'react';
 import CircleButton from './circlebutton';
 
+const style = {
+    width: "100%",
+    display:'inline-flex',
+    flexDirection:'row',
+    justifyContent:'center'
+};
+
 class LevelOf extends Component{
     constructor(props){
         super(props);
     }
     render(){
         let bl = [];
+        let title = '';
         if(typeof appGetLevelInfo !== 'undefined'){
             let info = appGetLevelInfo(this.props.level);
             if(info){
                 let current = info.begin+info.current;
                 let closed = info.closed;
+                title = info.name;
                 for(let i=info.begin;i<=info.end;i++){
                     let s;
                     if(i===current){
@@ -31,7 +40,7 @@ class LevelOf extends Component{
                 }
             }
         }
-        return <div>{bl}</div>
+        return <div style={style}>{bl}</div>
     }
 };
 
