@@ -1,37 +1,27 @@
 (function(){
 	
-var SPEED = 1/20;
-
+var SPEED = Math.PI/1000;
 regItemEvent('宝石',
 function(event,dt){
 	switch(event){
 		case 'collision':
-			//this.playSound('scene/audio/effect/正确的宝石声音.ogg');
-			{
-				let item = dt;
-				if(item.obstruct && this.currentAction !== 'unlock'){
-					item.obstruct(this);
-				}
+			this.playSound('scene/audio/effect/比赛成绩金光闪闪.ogg');
+			this.removeSelf();
+			let b = false;
+			for(let i = 0;i<this.sceneManager.items.length;i++){
+				if(this.sceneManager.items[i].typeName==='宝石')
+					b = true;
 			}
+			if(!b)this.blocklyEvent('MissionCompleted');
 			break;
 		case 'init':
 			console.log(`${this.name} 登场`);
-			this.unlock = function(){
-				this.currentAction = 'unlock';
-				this.collision = false; 
-				this.gravity = false;				
-			}
 			break;
 		case 'release':
 			console.log(`${this.name} 退出`);
 			break;
 		case 'update':
-			if(this.currentAction === 'unlock'){
-				this.position.z -= SPEED * dt;
-				if(this.position.z < -50){
-					this.removeSelf();
-				}
-			}
+			this.rotation.z += SPEED*dt;
 			break;
 	}
 });

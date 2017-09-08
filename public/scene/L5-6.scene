@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": 182.0392844003288,
-			"y": -115.83746226296729,
-			"z": 149.01984044122437
+			"x": 159.82042515999274,
+			"y": -106.930813407343,
+			"z": 135.6745719081312
 		},
 		"rotation": {
-			"x": 1.088503676827131,
+			"x": 1.046033998361936,
 			"y": 0,
-			"z": 0.9820385924554829
+			"z": 0.9750572754475054
 		}
 	},
 	"material": {
@@ -146,7 +146,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 17,
 					"curIndex": 0
 				}
 			]
@@ -182,9 +182,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 572.4987124489867
+				"z": 604.8979574854487
 			},
-			"name": "金币",
+			"name": "宝石",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -192,8 +192,8 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
-			"template": "scene/item/金币.item"
+			"receiveShadow": false,
+			"template": "scene/item/宝石.item"
 		},
 		{
 			"position": {
@@ -204,9 +204,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 443.6777056885471
+				"z": 476.07695072502213
 			},
-			"name": "金币1",
+			"name": "宝石1",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -214,8 +214,8 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
-			"template": "scene/item/金币.item"
+			"receiveShadow": false,
+			"template": "scene/item/宝石.item"
 		},
 		{
 			"position": {
@@ -226,9 +226,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 364.38076551927935
+				"z": 396.78001055575436
 			},
-			"name": "金币2",
+			"name": "宝石2",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -236,8 +236,8 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
-			"template": "scene/item/金币.item"
+			"receiveShadow": false,
+			"template": "scene/item/宝石.item"
 		},
 		{
 			"position": {
@@ -248,9 +248,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 267.88674716425896
+				"z": 300.285992200734
 			},
-			"name": "金币3",
+			"name": "宝石3",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -258,8 +258,8 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
-			"template": "scene/item/金币.item"
+			"receiveShadow": false,
+			"template": "scene/item/宝石.item"
 		},
 		{
 			"position": {
@@ -270,9 +270,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 176.8528168411839
+				"z": 209.25206187765644
 			},
-			"name": "金币4",
+			"name": "宝石4",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -280,8 +280,8 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
-			"template": "scene/item/金币.item"
+			"receiveShadow": false,
+			"template": "scene/item/宝石.item"
 		},
 		{
 			"position": {
@@ -292,9 +292,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 56.545526171962706
+				"z": 88.94477120843356
 			},
-			"name": "金币5",
+			"name": "宝石5",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -302,8 +302,8 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
-			"template": "scene/item/金币.item"
+			"receiveShadow": false,
+			"template": "scene/item/宝石.item"
 		}
 	],
 	"zfog": {

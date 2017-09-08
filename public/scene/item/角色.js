@@ -98,7 +98,7 @@ function initItemBlockly(_this){
 		}
 	}
 	function eqAngle(a1,a2){
-		let a = (a2-a1)/(2*Math.PI);
+		let a = Math.abs((a2-a1)/(2*Math.PI));
 		let b = Math.floor(a);
 		return Math.abs(a-b)<0.01;
 	}
@@ -108,7 +108,7 @@ function initItemBlockly(_this){
 	}
 	_this.injectBlocklyFunction('forward',function(name,step){
 		var item = getItemByName(name);
-		if((item._isobstruct||item.resultAction==='break') && !eqAngle(item.rotation.z-Math.PI,item.forwardAngle)){
+		if((item._isobstruct||item.resultAction==='break') && !eqAngle(item.rotation.z-(step>0?Math.PI:0),item.forwardAngle)){
 			item.blocklyStop();
 			ItemAction(item,'walk');
 			setTimeout(function(){
@@ -122,7 +122,13 @@ function initItemBlockly(_this){
 		item.currentAction = 'forward';
 		
 		if(item.forwardT!==undefined && item.forwardT!=1){
-			let d = (step-1)*STEP + calcD(item);
+			let d;
+			if(step>0)
+				d = (step-1)*STEP + calcD(item);
+			else if(step<0){
+				d = (step+1)*STEP - calcD(item);
+			}else
+				d = 0;
 			item.forwardBegin = {x:item.position.x,y:item.position.y};
 			item.forwardEnd = {
 				x:item.position.x+Math.cos(item.rotation.z-Math.PI/2)*d,
