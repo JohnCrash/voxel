@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": 154.53965771596143,
-			"y": -63.92466086681876,
-			"z": 117.21268590596151
+			"x": 184.7106764151988,
+			"y": -115.49406338845914,
+			"z": 143.93798818311717
 		},
 		"rotation": {
-			"x": 1.0739592663938466,
+			"x": 1.0658143965512052,
 			"y": 0,
-			"z": 1.292125422893145
+			"z": 0.9890199094634612
 		}
 	},
 	"material": {
@@ -128,7 +128,7 @@
 				"y": 0,
 				"z": 0
 			},
-			"name": "地面",
+			"name": "地图",
 			"visible": true,
 			"ground": true,
 			"collision": false,
@@ -136,8 +136,8 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
-			"file": "scene/vox/Level5-4.vox",
+			"receiveShadow": false,
+			"file": "scene/vox/Level4-3.vox",
 			"actions": [
 				{
 					"name": "idle",
@@ -146,16 +146,16 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 34,
+					"acc": 46,
 					"curIndex": 0
 				}
 			]
 		},
 		{
 			"position": {
-				"x": -45.5,
-				"y": 23.5,
-				"z": 40.000000754645235
+				"x": 0,
+				"y": 0,
+				"z": 43.999998850598864
 			},
 			"rotation": {
 				"x": 0,
@@ -170,157 +170,21 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/男孩.item"
 		},
 		{
 			"position": {
-				"x": -27,
-				"y": 5.5,
-				"z": 36.5
+				"x": 55,
+				"y": 0,
+				"z": 44.00000066480469
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1.5707963267948966
+				"z": 623.6626904053321
 			},
-			"name": "地板",
-			"visible": true,
-			"ground": true,
-			"collision": false,
-			"fixed": false,
-			"gravity": false,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/地板.item",
-			"flatColor": "green"
-		},
-		{
-			"position": {
-				"x": 9,
-				"y": -30.5,
-				"z": 36.5
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 1.5707963267948966
-			},
-			"name": "地板1",
-			"visible": true,
-			"ground": true,
-			"collision": false,
-			"fixed": false,
-			"gravity": false,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/地板.item",
-			"flatColor": "yellow"
-		},
-		{
-			"position": {
-				"x": -28.5,
-				"y": 23.5,
-				"z": 40
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "地板开关",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": false,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/地板开关.item",
-			"flatColor": "green"
-		},
-		{
-			"position": {
-				"x": 7.5,
-				"y": -12.5,
-				"z": 40
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "地板开关2",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": false,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/地板开关.item",
-			"flatColor": "yellow"
-		},
-		{
-			"position": {
-				"x": -28.5,
-				"y": 23.5,
-				"z": 45
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "石块",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/石块.item"
-		},
-		{
-			"position": {
-				"x": 44,
-				"y": -46,
-				"z": 40
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 1.5707963267948966
-			},
-			"name": "终点旗帜",
-			"visible": true,
-			"ground": false,
-			"collision": false,
-			"fixed": false,
-			"gravity": false,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/终点旗帜.item"
-		},
-		{
-			"position": {
-				"x": 7.5,
-				"y": -12.5,
-				"z": 45
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "石块1",
+			"name": "宝石",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -329,7 +193,161 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": true,
-			"template": "scene/item/石块.item"
+			"template": "scene/item/宝石.item"
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": 55,
+				"z": 43.99999854883662
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 540.5801310885231
+			},
+			"name": "宝石1",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/宝石.item"
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": -55,
+				"z": 43.999999895271195
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 485.1844278277781
+			},
+			"name": "宝石2",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/宝石.item"
+		},
+		{
+			"position": {
+				"x": -55,
+				"y": 0,
+				"z": 43.99999922193016
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 427.7749636760733
+			},
+			"name": "宝石3",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/宝石.item"
+		},
+		{
+			"position": {
+				"x": -55,
+				"y": 55,
+				"z": 44.0000018317923
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 345.40240429894084
+			},
+			"name": "宝石4",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/宝石.item"
+		},
+		{
+			"position": {
+				"x": -55,
+				"y": -55,
+				"z": 43.99999823120436
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 276.56068448082107
+			},
+			"name": "宝石5",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/宝石.item"
+		},
+		{
+			"position": {
+				"x": 55,
+				"y": -55,
+				"z": 43.99999845800976
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 165.3797204702733
+			},
+			"name": "宝石6",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/宝石.item"
+		},
+		{
+			"position": {
+				"x": 55,
+				"y": 55,
+				"z": 44.000000059082375
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 102.84003551526119
+			},
+			"name": "宝石7",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/宝石.item"
 		}
 	],
 	"zfog": {

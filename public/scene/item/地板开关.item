@@ -46,6 +46,22 @@
 			],
 			"delay":0,
 			"loop":false
+		},
+		{
+			"name":"purple",
+			"sequece":[
+				3
+			],
+			"delay":0,
+			"loop":false
+		},
+		{
+			"name":"blue",
+			"sequece":[
+				4
+			],
+			"delay":0,
+			"loop":false
 		}
 	],
 	"script":"scene/item/地板开关.js"

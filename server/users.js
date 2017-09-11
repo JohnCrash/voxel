@@ -99,6 +99,29 @@ router.post('/login',function(req,res){
  * 提交成绩，返回排名情况
  */
 router.post('/commit',function(req,res){
+  let cc = req.cookies.cc;
+  console.log('commit '+cc);
+  if(cc){
+    sqlQuery(`select * from UserInfo where cookie='${cc}'`,(result)=>{
+      let d = result.recordset[0];
+      if(d){
+        let lv = req.body.lv;
+        if((d.lv+1)>=lv){
+          sqlQuery(`update UserInfo set lv='${lv}' where cookie='${cc}'`,(result)=>{
+            res.json({result:'ok'});
+          },(err)=>{res.json({result:err});});
+        }else{
+          res.json({result:''});
+        }
+      }else{
+        res.json({result:'没有找到用户'});
+      }
+    },(err)=>{
+      res.json({result:err});
+    });
+  }else{
+    res.json({result:'请登录再进行游戏'});
+  }
 });
 
 /**

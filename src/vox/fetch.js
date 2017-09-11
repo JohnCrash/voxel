@@ -30,9 +30,10 @@ function fetchText(s,cb,errcb){
 
 function postJson(s,b,cb,errcb){
     fetch(s,{method:'POST',
+    credentials: 'same-origin',
     headers: {'Content-Type': 'application/json'},
     body : JSON.stringify(b)})
-    .then(response=>response.json())
+    .then(response=>response.text())
     .then(json=>cb(json))
     .catch(err=>{
         errcb?errcb(err):log(err);

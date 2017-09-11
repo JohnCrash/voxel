@@ -44,6 +44,30 @@
 	<block type="logic_negate"></block>
 	<block type="logic_operation"></block>
 	<block type="what_is_it"></block>
+	
+	<block type="math_arithmetic"></block>
+	<block type="variables_set">
+		<field name="VAR" variabletype=""> x </field>
+		<value name="VALUE">
+			<shadow type="math_number">
+				<field name="NUM">1</field>
+			</shadow>
+		</value>
+	</block>
+	<block type="variables_get">
+		<field name="VAR" variabletype=""> x </field>
+	</block>
+	<block type="variables_set">
+		<field name="VAR" variabletype=""> y </field>
+		<value name="VALUE">
+			<shadow type="math_number">
+				<field name="NUM">1</field>
+			</shadow>
+		</value>
+	</block>
+	<block type="variables_get">
+		<field name="VAR" variabletype=""> y </field>
+	</block>
 </xml>
 
 <xml id="default">

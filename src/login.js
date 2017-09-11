@@ -36,6 +36,7 @@ class Login extends Component{
                 //成功登录
                 //this.props.onLogin(json.user);
                 this.setState({open:false});
+                location.href='#main#'+(json.lv+1);
             }else{
                 if(user)this.messageBar(json.result);
                 this.setState({open:true});

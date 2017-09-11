@@ -23,6 +23,12 @@ const titleStyle = {
 let LevelJson;
 /**
  * 全局函数通过观看名称取得关卡信息
+ * current 当前段的当前关
+ * next     全局的下一关
+ * begin    全局本段开始
+ * end      全局本段结束
+ * nextName 下一关名称
+ * closed   全局未开放关卡
  */
 global.appGetLevelInfo = function(level){
     if(!level || !LevelJson)return null;
@@ -36,6 +42,7 @@ global.appGetLevelInfo = function(level){
             let begin = Number(m[1]);
             let end = Number(m[2]);
             let nextName;
+            let next = begin + e + 1;
             if(e<end-begin){
                 nextName = `L${b+1}-${e+2}`;
             }else if(LevelJson.level[b+2]){
@@ -45,6 +52,7 @@ global.appGetLevelInfo = function(level){
                 begin,
                 end,
                 nextName,
+                next,
                 closed:LevelJson.closed},LevelJson.level[b]);
         }
     }
@@ -55,17 +63,18 @@ class LevelSel extends Component{
     constructor(props){
         super(props);
         this.state={
-            title:''
+            title:'',
+            current:0
         };
     }
-    loadJson(json){
+    loadJson(json,cur){
         let stage = 0;
         appTitle( json.title );
         this.level = json.level.map((item)=>{
             let bl = [];
             let m = item.rang.match(/(\d+)-(\d+)/);
             if(m){
-                let current = this.props.current || 1;
+                let current = Number(cur || 1);
                 stage++;
                 for(let i=Number(m[1]);i<=Number(m[2]);i++){
                     let s,link;
@@ -94,22 +103,26 @@ class LevelSel extends Component{
         });
         this.setState({title:json.title});
     }
-    load(name){
+    load(name,current){
         if(LevelJson){
-            this.loadJson(LevelJson);
+            this.loadJson(LevelJson,current);
+            this.setState({current});
             return;
         }
         fetchJson(`scene/${name}.index`,(json)=>{
-            this.loadJson(json);
+            this.loadJson(json,current);
+            this.setState({current});
             LevelJson = json;
         });
     }
     componentDidMount(){
-        this.load(this.props.index);
+        let {index,current} = this.props;
+        this.load(index,current);
     }
     componentWillReceiveProps(nextProps){
-        if(nextProps.index!=this.props.index){
-            this.load(nextProps.index);
+        let {index,current} = this.props;
+        if(nextProps.index!=index || nextProps.current!=current){
+            this.load(index,nextProps.current);
         }
     }    
     render(){

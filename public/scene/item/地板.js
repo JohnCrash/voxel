@@ -29,7 +29,7 @@ function(event,dt){
 						item.flatColor = v;
 						item.doAction(v);
 						}});
-				ui.add(itemUI,'颜色',['green','yellow','red']);
+				ui.add(itemUI,'颜色',['green','yellow','red','purple','blue']);
 			}
 			
 			this._onoff = false;

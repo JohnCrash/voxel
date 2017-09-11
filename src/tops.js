@@ -13,6 +13,7 @@ import {
     TableRowColumn,
   } from 'material-ui/Table';
 import LevelOf from './ui/levelof';
+import {postJson} from './vox/fetch';
 
 class Tops extends Component{
     constructor(props){
@@ -23,28 +24,38 @@ class Tops extends Component{
     }
     handleAction(result){
         this.setState({open: false});
+        let info;
+        if(typeof appGetLevelInfo !== 'undefined'){
+            info = appGetLevelInfo(this.props.level);
+        }
+        if(!info)return;
+
         switch(result){
             case 'exit':
-                location.href='#main';
+                location.href='#main#'+info.next;
                 break;
             case 'agin':
                 break;
             case 'next':
-                if(typeof appGetLevelInfo !== 'undefined'){
-                    let info = appGetLevelInfo(this.props.level);
-                    if(info && info.nextName){
-                        location.href=`#level#${info.nextName}`;
-                    }else{//打通了全部
-                        location.href='#main';
-                    }
-                }else{
-                    location.href='#main';
+                if(info.nextName){
+                    location.href=`#level#${info.nextName}`;
+                }else{//打通了全部
+                    location.href='#main'+info.next;
                 }
                 break;
         }
     }
     open(){
         this.setState({open: true});
+        let info;
+        if(typeof appGetLevelInfo !== 'undefined'){
+            info = appGetLevelInfo(this.props.level);
+        }       
+        if(!info)return; 
+        //commit
+        postJson('/users/commit',{lv:info.next-1},(json)=>{
+            console.log(json);
+        });
     }
     render(){
         let {level} = this.props;
@@ -79,7 +90,6 @@ class Tops extends Component{
             let info = appGetLevelInfo(level);
             title = info.name
         }*/
-        
         return <Dialog
             actions={actions}
             open={open}

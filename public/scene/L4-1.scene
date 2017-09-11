@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": 146.153212247895,
-			"y": -52.22338914296436,
-			"z": 127.85472011215886
+			"x": 124.35522596738795,
+			"y": -71.95852949770327,
+			"z": 104.75159655641836
 		},
 		"rotation": {
-			"x": 1.006473201983401,
+			"x": 1.099557428756428,
 			"y": 0,
-			"z": 1.2514010736799417
+			"z": 1.025090047338011
 		}
 	},
 	"material": {
@@ -137,7 +137,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"file": "scene/vox/Level5-5.vox",
+			"file": "scene/vox/Level4-1.vox",
 			"actions": [
 				{
 					"name": "idle",
@@ -146,21 +146,21 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 33,
+					"acc": 0,
 					"curIndex": 0
 				}
 			]
 		},
 		{
 			"position": {
-				"x": 55.5,
-				"y": -1.5,
-				"z": 43.99999925003508
+				"x": 12.5,
+				"y": 34.5,
+				"z": 44.00000035181328
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 4.71238898038469
+				"z": 0
 			},
 			"name": "男孩",
 			"visible": true,
@@ -175,16 +175,16 @@
 		},
 		{
 			"position": {
-				"x": 19.5,
-				"y": 16.5,
-				"z": 47.99999820071263
+				"x": 12.5,
+				"y": -35.5,
+				"z": 43.999999035889545
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1852.7228515279369
+				"z": 1.5707963267948966
 			},
-			"name": "宝石",
+			"name": "终点旗帜",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -193,161 +193,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/宝石.item"
-		},
-		{
-			"position": {
-				"x": 0,
-				"y": 35.5,
-				"z": 47.99999919826706
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 1563.913097290765
-			},
-			"name": "宝石1",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/宝石.item"
-		},
-		{
-			"position": {
-				"x": 37.5,
-				"y": -1.5,
-				"z": 48.00000060329274
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 1364.701565533963
-			},
-			"name": "宝石2",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/宝石.item"
-		},
-		{
-			"position": {
-				"x": -38.5,
-				"y": 0,
-				"z": 47.9999999338546
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 950.6176626422794
-			},
-			"name": "宝石3",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": true,
-			"template": "scene/item/宝石.item"
-		},
-		{
-			"position": {
-				"x": -18,
-				"y": 17.5,
-				"z": 47.999999073981606
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 745.9429012609663
-			},
-			"name": "宝石4",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": true,
-			"template": "scene/item/宝石.item"
-		},
-		{
-			"position": {
-				"x": 20,
-				"y": -18.5,
-				"z": 48.000000322270004
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 321.7273620614865
-			},
-			"name": "宝石5",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": true,
-			"template": "scene/item/宝石.item"
-		},
-		{
-			"position": {
-				"x": 0,
-				"y": -36.5,
-				"z": 48.00000151001248
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 196.71082400452565
-			},
-			"name": "宝石6",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": true,
-			"template": "scene/item/宝石.item"
-		},
-		{
-			"position": {
-				"x": -18.5,
-				"y": -18.5,
-				"z": 48.00000071557708
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 110.8950790790648
-			},
-			"name": "宝石7",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": true,
-			"template": "scene/item/宝石.item"
+			"template": "scene/item/终点旗帜.item"
 		}
 	],
 	"zfog": {

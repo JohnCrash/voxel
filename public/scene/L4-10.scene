@@ -9,9 +9,9 @@
 			"z": 130.97401787803202
 		},
 		"rotation": {
-			"x": 1.0908307824964565,
+			"x": 1.104793416512411,
 			"y": 0,
-			"z": 0.6382087298126012
+			"z": 0.640535835481927
 		}
 	},
 	"material": {
@@ -138,7 +138,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"file": "scene/vox/Level5-10.vox",
+			"file": "scene/vox/Level4-10.vox",
 			"actions": [
 				{
 					"name": "idle",
@@ -147,14 +147,14 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 34,
+					"acc": 33,
 					"curIndex": 0
 				}
 			]
 		},
 		{
 			"position": {
-				"x": -52,
+				"x": -53.5,
 				"y": -36,
 				"z": 38.00000033740609
 			},
@@ -399,7 +399,7 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/地板开关.item",
-			"flatColor": "green"
+			"flatColor": "purple"
 		},
 		{
 			"position": {
@@ -422,7 +422,7 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/地板开关.item",
-			"flatColor": "red"
+			"flatColor": "blue"
 		},
 		{
 			"position": {
@@ -445,7 +445,7 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/地板.item",
-			"flatColor": "green"
+			"flatColor": "purple"
 		},
 		{
 			"position": {
@@ -491,7 +491,7 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/地板.item",
-			"flatColor": "red"
+			"flatColor": "blue"
 		},
 		{
 			"position": {
@@ -514,7 +514,7 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/地板.item",
-			"flatColor": "green"
+			"flatColor": "blue"
 		},
 		{
 			"position": {
@@ -537,7 +537,7 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/地板.item",
-			"flatColor": "red"
+			"flatColor": "purple"
 		},
 		{
 			"position": {
@@ -548,7 +548,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 135.81419200733876
+				"z": 845.559662713622
 			},
 			"name": "钥匙",
 			"visible": true,

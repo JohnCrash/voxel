@@ -73,6 +73,7 @@ class BlockView extends Component{
             console.log(`Can not inject blocly workspace \n${e}`);
         }
         this.workspace.addChangeListener((event)=>{
+            console.log(this.getBlockCount());
             this.reset();
             if(this.runComplateCB)this.runComplateCB();
             this.runComplateCB = undefined;                        
@@ -97,6 +98,11 @@ class BlockView extends Component{
     highlightBlock(id) {
         this.workspace.highlightBlock(id);
         this.highlightPause = true;
+    }
+    getBlockCount(){
+        if(this.workspace){
+            return this.workspace.getAllBlocks().length;
+        }else return 0;
     }
     toXML(){
         let dom = Blockly.Xml.workspaceToDom(this.workspace);

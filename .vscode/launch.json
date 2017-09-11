@@ -11,7 +11,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Debug client",
-            "url": "http://localhost:3000/main.html",
+            "url": "http://localhost:3000/maindbg.html",
             "webRoot": "${workspaceRoot}"
         },
         {

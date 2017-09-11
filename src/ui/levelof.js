@@ -18,7 +18,7 @@ class LevelOf extends Component{
         if(typeof appGetLevelInfo !== 'undefined'){
             let info = appGetLevelInfo(this.props.level);
             if(info){
-                let current = info.begin+info.current;
+                let current = info.begin+info.current+1;
                 let closed = info.closed;
                 title = info.name;
                 for(let i=info.begin;i<=info.end;i++){

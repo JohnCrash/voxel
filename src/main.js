@@ -31,21 +31,22 @@ class Main extends Component{
     render(){
         let {router} = this.props;
         let content = "未定义的页面";
-        switch(router){
+        let s = router.split('#');
+        switch(s[0]){
             case '':
+            case 'login':
+                content = "正在登录...";
+                break;            
             case 'main':
-            content = [<AppBar key='mainbar' title={this.state.title}/>,<LevelSel key='levelselect' index='main'/>];
-            break;
+                content = [<AppBar key='mainbar' title={this.state.title}/>,<LevelSel key='levelselect' index='main' current={s[1]} />];
+                break;
             case 'setting':
-            break;
+                break;
+            case 'level':
+                content = <Level level={s[1]}/>;
+                break;
             default:
-            {
-                let m = router.match(/^level#([^]*)/);
-                if(m){
-                    content = <Level level={m[1]}/>;
-                }
-            }
-            break;
+                break;
         }
         return <div>{content}</div>;
     }
