@@ -13,7 +13,7 @@ function(event,dt){
 				this.currentAction = 'drop';
 				this._t = 0;
 				this.idleAcc = 0;
-				console.log('collision drop');
+				console.log(`collision drop ${dt.name}`);
 			}
 			break;
 		case 'init':
@@ -62,6 +62,7 @@ function(event,dt){
 					this._t=1;
 					this.currentAction = '';
 					//打开平板
+					console.log('open flat');
 					this.turnFlat(true);
 				}
 				this.position.z = this._oldz - DOWN*this._t;
@@ -71,6 +72,7 @@ function(event,dt){
 					this._t=1;
 					this.currentAction = '';
 					//关闭平板
+					console.log('close flat');
 					this.turnFlat(false);
 				}
 				this.position.z = this._oldz + (DOWN-1)*this._t;
@@ -80,6 +82,7 @@ function(event,dt){
 				if(this.idleAcc>100){
 					this.idleAcc = 0;
 					this._t = 0;
+					console.log('floating....');
 					this.currentAction = 'floating';
 				}	
 			}

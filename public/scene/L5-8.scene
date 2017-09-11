@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": 124.35522596738795,
-			"y": -71.95852949770327,
-			"z": 104.75159655641836
+			"x": 127.0931279599327,
+			"y": -168.85736474035795,
+			"z": 164.05440735697042
 		},
 		"rotation": {
-			"x": 1.099557428756428,
+			"x": 1.0448704455272753,
 			"y": 0,
-			"z": 1.025090047338011
+			"z": 0.6643886685925166
 		}
 	},
 	"material": {
@@ -136,8 +136,8 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
-			"file": "scene/vox/Level5-1.vox",
+			"receiveShadow": true,
+			"file": "scene/vox/Level5-8.vox",
 			"actions": [
 				{
 					"name": "idle",
@@ -149,18 +149,19 @@
 					"acc": 0,
 					"curIndex": 0
 				}
-			]
+			],
+			"water": 177
 		},
 		{
 			"position": {
-				"x": 12.5,
-				"y": 34.5,
-				"z": 44.00000035181328
+				"x": 27.5,
+				"y": -10,
+				"z": 56
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 3.141592653589793
 			},
 			"name": "男孩",
 			"visible": true,
@@ -175,14 +176,174 @@
 		},
 		{
 			"position": {
-				"x": 12.5,
-				"y": -35.5,
-				"z": 43.999999035889545
+				"x": -54,
+				"y": -55,
+				"z": 62.999998608433586
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
 				"z": 1.5707963267948966
+			},
+			"name": "女孩",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/女孩.item"
+		},
+		{
+			"position": {
+				"x": -26.5,
+				"y": 45.5,
+				"z": 67
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "地板开关",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/地板开关.item",
+			"flatColor": "green"
+		},
+		{
+			"position": {
+				"x": 27.5,
+				"y": 46.5,
+				"z": 67
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "地板开关1",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/地板开关.item",
+			"flatColor": "yellow"
+		},
+		{
+			"position": {
+				"x": -26.5,
+				"y": -8.5,
+				"z": 55
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "地板开关2",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/地板开关.item",
+			"flatColor": "red"
+		},
+		{
+			"position": {
+				"x": -16,
+				"y": -54.5,
+				"z": 59.5
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "地板",
+			"visible": true,
+			"ground": true,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/地板.item",
+			"flatColor": "green"
+		},
+		{
+			"position": {
+				"x": -52,
+				"y": -54.5,
+				"z": 59.5
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "地板1",
+			"visible": true,
+			"ground": true,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/地板.item",
+			"flatColor": "yellow"
+		},
+		{
+			"position": {
+				"x": 20,
+				"y": -54.5,
+				"z": 59.5
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "地板2",
+			"visible": true,
+			"ground": true,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/地板.item",
+			"flatColor": "red"
+		},
+		{
+			"position": {
+				"x": 58,
+				"y": -55,
+				"z": 63.00000161987391
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
 			},
 			"name": "终点旗帜",
 			"visible": true,

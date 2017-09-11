@@ -4,6 +4,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import LevelSel from './levelsel';
 import Level from './level';
+import Login from './login';
 
 let app;
 
@@ -24,6 +25,8 @@ class Main extends Component{
     }
     appTitle(t){
         this.setState({title:t});
+    }
+    componentDidMount(){
     }
     render(){
         let {router} = this.props;
@@ -52,7 +55,10 @@ function App(){
     let route = window.location.hash.substr(1);
     console.log(`ruter "${route}"`);
     return <MuiThemeProvider>
+        <div>
         <Main router={route}/>
+        <Login />
+        </div>
     </MuiThemeProvider>;
 }
 

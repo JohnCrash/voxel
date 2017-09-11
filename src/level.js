@@ -106,6 +106,7 @@ class Level extends Component{
         if(this.state.playPause){
             this.blockview.run(0,()=>{
                 this.setState({playPause:true});
+                //this.Reset();
             });
         }else{
             this.Reset();

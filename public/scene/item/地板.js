@@ -33,13 +33,14 @@ function(event,dt){
 			}
 			
 			this._onoff = false;
+			this.forwardT = 1;
 			this._forwardPt = {x:this.position.x,y:this.position.y};
 			this._endPt = this.forwardEnd = {
 					x:this.position.x+Math.cos(this.rotation.z-Math.PI/2)*STEP,
 					y:this.position.y+Math.sin(this.rotation.z-Math.PI/2)*STEP
 				};
 			this.turnon = function(b){
-				if(this._onoff == !!b)return;
+				if(this._onoff == !!b || this.forwardT!==1)return;
 				let d;
 				this.forwardBegin = {x:this.position.x,y:this.position.y};
 				if(b){
@@ -70,6 +71,7 @@ function(event,dt){
 				this.position.x = this.forwardEnd.x*t + this.forwardBegin.x*(1-t);
 				this.position.y = this.forwardEnd.y*t + this.forwardBegin.y*(1-t);
 				this.forwardT += this.speed*dt/1000;
+				if(this.forwardT>1)this.forwardT=1;
 			}
 			break;
 	}

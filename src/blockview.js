@@ -61,11 +61,11 @@ class BlockView extends Component{
                     trashcan: true,
                     scrollbars: true, 
                     zoom: {
-                        controls: true,
-                        wheel: true,
-                        startScale: 1.1,
-                        maxScale: 1.2,
-                        minScale: 1,
+                        //controls: true,
+                        //wheel: false,
+                        //startScale: 1.1,
+                        //maxScale: 1.2,
+                        //minScale: 1,
                         //scaleSpeed: 1.2
                     }});
         }catch(e){

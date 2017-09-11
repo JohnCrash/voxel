@@ -1,5 +1,5 @@
 (function(){
-	
+
 var SPEED = Math.PI/1000;
 regItemEvent('宝石',
 function(event,dt){
