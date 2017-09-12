@@ -89,7 +89,7 @@ class Level extends Component{
                 md = 'scene/gameover.md';
                 break;
             case 'MissionCompleted': 
-                this.Tops.open();
+                this.Tops.open(this.blockview.getBlockCount(),this.blockview.toXML());
                 return;
             case 'WrongAction':
                 md = 'scene/wrongaction.md';
@@ -189,6 +189,9 @@ class Level extends Component{
             this.setState({curSelectTest:index});
         }
     }
+    onBlockCount(count){
+        this.blockcount.innerText = `${count}×`;
+    }
     render(){
         let {playPause,volumeOnOff,levelDesc,mute,curSelectTest,openTops} = this.state;
         let {level} = this.props;
@@ -203,7 +206,11 @@ class Level extends Component{
                 <VoxView file={level} ref={ref=>this.voxview=ref} mute={!volumeOnOff}/>
             </div>
             <div style={{position:"absolute",left:"50%",top:"0px",right:"0px",bottom:"0px"}}>
-                <BlockView ref={ref=>this.blockview=ref} file={`scene/${level}.toolbox`}/>
+                <BlockView ref={ref=>this.blockview=ref} file={`scene/${level}.toolbox`} onBlockCount={this.onBlockCount.bind(this)}/>
+                <div style={{position:"absolute",right:"12px",top:"12px"}}>
+                    <span ref={ref=>this.blockcount=ref} style={{fontSize:"24px",fontWeight:"bold",verticalAlign:"top"}}>0×</span>
+                    <img src="media/title-beta.png" height="24px" />
+                </div>                    
             </div>
             <div style={{position:"absolute",display:"flex",flexDirection:"column",left:"0px",top:"70%",right:"50%",bottom:"0px"}}>
                 <Toolbar>

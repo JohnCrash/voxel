@@ -4,6 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import {MessageBox} from './ui/messagebox';
 import 'whatwg-fetch';
+import {Global} from './global';
 
 class Login extends Component{
     constructor(props){
@@ -36,6 +37,7 @@ class Login extends Component{
                 //成功登录
                 //this.props.onLogin(json.user);
                 this.setState({open:false});
+                Global.setMaxPassLevel(json.lv+1);
                 location.href='#main#'+(json.lv+1);
             }else{
                 if(user)this.messageBar(json.result);

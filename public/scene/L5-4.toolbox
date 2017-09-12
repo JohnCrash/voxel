@@ -11,8 +11,6 @@
 	<block type="turn_left"></block>
 	<block type="turn_right"></block>
 	<block type="jump"></block>
-	<block type="lift_up"></block>
-	<block type="put_down"></block>
 </xml>
 
 <xml id="default">

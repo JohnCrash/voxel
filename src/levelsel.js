@@ -2,10 +2,10 @@
  * 关卡选择
  */
 import React, {Component} from 'react';
-import {fetchJson} from './vox/fetch';
 import CircleButton from './ui/circlebutton';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
+import {Global} from './global';
 
 const buttonStyle = {
     borderRadius:'18px',
@@ -19,45 +19,6 @@ const titleStyle = {
     fontSize : '18px',
     fontWeight : 'bold',
 };
-
-let LevelJson;
-/**
- * 全局函数通过观看名称取得关卡信息
- * current 当前段的当前关
- * next     全局的下一关
- * begin    全局本段开始
- * end      全局本段结束
- * nextName 下一关名称
- * closed   全局未开放关卡
- */
-global.appGetLevelInfo = function(level){
-    if(!level || !LevelJson)return null;
-
-    let m = level.match(/L(\d+)-(\d+)/);
-    if(m){
-        let b = Number(m[1])-1;
-        let e = Number(m[2])-1;
-        m = LevelJson.level[b].rang.match(/(\d+)-(\d+)/);
-        if(m){
-            let begin = Number(m[1]);
-            let end = Number(m[2]);
-            let nextName;
-            let next = begin + e + 1;
-            if(e<end-begin){
-                nextName = `L${b+1}-${e+2}`;
-            }else if(LevelJson.level[b+2]){
-                nextName = `L${b+2}-${1}`;
-            }
-            return Object.assign({current:e,
-                begin,
-                end,
-                nextName,
-                next,
-                closed:LevelJson.closed},LevelJson.level[b]);
-        }
-    }
-    return null;
-}
 
 class LevelSel extends Component{
     constructor(props){
@@ -104,15 +65,9 @@ class LevelSel extends Component{
         this.setState({title:json.title});
     }
     load(name,current){
-        if(LevelJson){
-            this.loadJson(LevelJson,current);
-            this.setState({current});
-            return;
-        }
-        fetchJson(`scene/${name}.index`,(json)=>{
+        Global.loadLevelJson(name,(json)=>{
             this.loadJson(json,current);
             this.setState({current});
-            LevelJson = json;
         });
     }
     componentDidMount(){

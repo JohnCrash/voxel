@@ -5,7 +5,7 @@
             "type": "node",
             "request": "launch",
             "name": "Debug server",
-            "program": "${workspaceRoot}/server/www"
+            "program": "${workspaceRoot}/server/wwwtest.js"
         },
         {
             "type": "chrome",

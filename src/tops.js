@@ -12,8 +12,9 @@ import {
     TableRow,
     TableRowColumn,
   } from 'material-ui/Table';
-import LevelOf from './ui/levelof';
+import LevelOf from './levelof';
 import {postJson} from './vox/fetch';
+import {Global} from './global';
 
 class Tops extends Component{
     constructor(props){
@@ -24,10 +25,7 @@ class Tops extends Component{
     }
     handleAction(result){
         this.setState({open: false});
-        let info;
-        if(typeof appGetLevelInfo !== 'undefined'){
-            info = appGetLevelInfo(this.props.level);
-        }
+        let info = Global.appGetLevelInfo(this.props.level);
         if(!info)return;
 
         switch(result){
@@ -40,20 +38,22 @@ class Tops extends Component{
                 if(info.nextName){
                     location.href=`#level#${info.nextName}`;
                 }else{//打通了全部
-                    location.href='#main'+info.next;
+                    location.href='#main#'+info.next;
                 }
                 break;
         }
     }
-    open(){
+    open(blocks,method){
         this.setState({open: true});
-        let info;
-        if(typeof appGetLevelInfo !== 'undefined'){
-            info = appGetLevelInfo(this.props.level);
-        }       
+        let info = Global.appGetLevelInfo(this.props.level);   
         if(!info)return; 
+        Global.passLevel(info.next);
         //commit
-        postJson('/users/commit',{lv:info.next-1},(json)=>{
+        postJson('/users/commit',
+            {lv:info.next-1,
+             lname:this.props.level,
+             blocks,
+             method},(json)=>{
             console.log(json);
         });
     }

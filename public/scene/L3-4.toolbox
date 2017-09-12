@@ -6,6 +6,7 @@
 			</shadow>
 		</value>
 	</block>
+	<block type="what_is_it"></block>
 	<block type="forward">
 		<value name="STEP">
 			<shadow type="math_number">
@@ -13,6 +14,9 @@
 			</shadow>
 		</value>
 	</block>
+	<block type="turn_left"></block>
+	<block type="turn_right"></block>
+	<block type="jump"></block>
 </xml>
 
 <xml id="default">

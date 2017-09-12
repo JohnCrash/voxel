@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": 111.12249016265457,
-			"y": -83.97651700231592,
-			"z": 99.77745525817893
+			"x": 127.79654720375201,
+			"y": -72.26944591574599,
+			"z": 105.38488177857452
 		},
 		"rotation": {
-			"x": 1.129809802457669,
+			"x": 1.0861765711578064,
 			"y": 0,
-			"z": 0.966912405604869
+			"z": 0.9407324668249514
 		}
 	},
 	"material": {
@@ -137,7 +137,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": true,
-			"file": "scene/vox/Level5-3.vox",
+			"file": "scene/vox/Level6-1.vox",
 			"actions": [
 				{
 					"name": "idle",
@@ -146,23 +146,23 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 33,
 					"curIndex": 0
 				}
 			]
 		},
 		{
 			"position": {
-				"x": 25.5,
-				"y": -34.5,
-				"z": 44.000000030039345
+				"x": -44,
+				"y": 24,
+				"z": 43.99999977246474
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 3.141592653589793
+				"z": 1.5707963267948966
 			},
-			"name": "男孩",
+			"name": "女孩",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -170,14 +170,14 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/男孩.item"
+			"receiveShadow": true,
+			"template": "scene/item/女孩.item"
 		},
 		{
 			"position": {
-				"x": -25,
-				"y": -35,
-				"z": 43.9999984628975
+				"x": 48,
+				"y": -28,
+				"z": 44.00000091577264
 			},
 			"rotation": {
 				"x": 0,
@@ -192,52 +192,8 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/终点旗帜.item"
-		},
-		{
-			"position": {
-				"x": 25.5,
-				"y": 19.5,
-				"z": 43.999998260259225
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "栅栏",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": true,
-			"template": "scene/item/栅栏.item"
-		},
-		{
-			"position": {
-				"x": -28,
-				"y": 20,
-				"z": 43.99999996728669
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "栅栏1",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": true,
-			"template": "scene/item/栅栏.item"
 		}
 	],
 	"zfog": {

@@ -96,23 +96,16 @@ router.post('/login',function(req,res){
 });
 
 /**
- * 提交成绩，返回排名情况
+ * cookies => UserInfo
  */
-router.post('/commit',function(req,res){
+router.use(function(req,res,next){
   let cc = req.cookies.cc;
-  console.log('commit '+cc);
+  console.log('cookies cechker ' + cc);
   if(cc){
     sqlQuery(`select * from UserInfo where cookie='${cc}'`,(result)=>{
-      let d = result.recordset[0];
-      if(d){
-        let lv = req.body.lv;
-        if((d.lv+1)>=lv){
-          sqlQuery(`update UserInfo set lv='${lv}' where cookie='${cc}'`,(result)=>{
-            res.json({result:'ok'});
-          },(err)=>{res.json({result:err});});
-        }else{
-          res.json({result:''});
-        }
+      req.UserInfo = result.recordset[0];
+      if(req.UserInfo){
+        next();
       }else{
         res.json({result:'没有找到用户'});
       }
@@ -121,6 +114,22 @@ router.post('/commit',function(req,res){
     });
   }else{
     res.json({result:'请登录再进行游戏'});
+  }
+});
+
+/**
+ * 提交成绩，返回排名情况
+ */
+router.post('/commit',function(req,res){
+  let lv = req.body.lv;
+  if((req.UserInfo.lv+1)>=lv){
+    //更新用户做到第几关了
+    if(req.UserInfo.lv+1==lv)
+      sqlQuery(`update UserInfo set lv='${lv}' where uid='${req.UserInfo.uid}'`,(result)=>{},(err)=>{res.json({result:err});});
+    //提交成绩
+    res.json({result:'ok'});
+  }else{
+    res.json({result:'没有按顺序完成关卡'});
   }
 });
 

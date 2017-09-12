@@ -4,6 +4,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import LevelSel from './levelsel';
 import Level from './level';
+import {Global} from './global';
 import Login from './login';
 
 let app;
@@ -38,7 +39,7 @@ class Main extends Component{
                 content = "正在登录...";
                 break;            
             case 'main':
-                content = [<AppBar key='mainbar' title={this.state.title}/>,<LevelSel key='levelselect' index='main' current={s[1]} />];
+                content = [<AppBar key='mainbar' title={this.state.title}/>,<LevelSel key='levelselect' index='main' current={Global.getMaxPassLevel()} />];
                 break;
             case 'setting':
                 break;
