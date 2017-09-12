@@ -146,7 +146,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 33,
 					"curIndex": 0
 				}
 			],
@@ -263,7 +263,7 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/地板开关.item",
-			"flatColor": "green"
+			"flatColor": "yellow"
 		},
 		{
 			"position": {
@@ -286,7 +286,7 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/地板.item",
-			"flatColor": "green"
+			"flatColor": "yellow"
 		},
 		{
 			"position": {
@@ -309,7 +309,7 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/地板开关.item",
-			"flatColor": "green"
+			"flatColor": "blue"
 		},
 		{
 			"position": {
@@ -332,7 +332,7 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/地板.item",
-			"flatColor": "green"
+			"flatColor": "blue"
 		},
 		{
 			"position": {
@@ -355,7 +355,7 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/地板.item",
-			"flatColor": "green"
+			"flatColor": "red"
 		},
 		{
 			"position": {
@@ -424,7 +424,7 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/地板.item",
-			"flatColor": "green"
+			"flatColor": "purple"
 		},
 		{
 			"position": {

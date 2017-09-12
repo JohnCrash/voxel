@@ -4,6 +4,7 @@
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import CircularProgress from 'material-ui/CircularProgress';
 import {
     Table,
     TableBody,
@@ -20,7 +21,8 @@ class Tops extends Component{
     constructor(props){
         super(props);
         this.state={
-            open:false
+            open:false,
+            loading:true,
         };
     }
     handleAction(result){
@@ -44,7 +46,7 @@ class Tops extends Component{
         }
     }
     open(blocks,method){
-        this.setState({open: true});
+        this.setState({open: true,loading:true});
         let info = Global.appGetLevelInfo(this.props.level);   
         if(!info)return; 
         Global.passLevel(info.next);
@@ -54,12 +56,16 @@ class Tops extends Component{
              lname:this.props.level,
              blocks,
              method},(json)=>{
+            this.tops = json.tops.sort((a,b)=>{
+                return a.blocks > b.blocks;
+            });
             console.log(json);
+            this.setState({loading:false});
         });
     }
     render(){
         let {level} = this.props;
-        let {open} = this.state;
+        let {open,loading} = this.state;
 
         let actions = [
             <FlatButton
@@ -76,14 +82,15 @@ class Tops extends Component{
             onClick={this.handleAction.bind(this,'next')}/>            
         ];
         let tops = [];
-        /*
-        for(let i=0;i<10;i++){
-            tops.push(<TableRow selectable={false} selected={i==3}>
-                <TableRowColumn>{i+1}</TableRowColumn>
-                <TableRowColumn>John Smith</TableRowColumn>
-                <TableRowColumn>Employed</TableRowColumn>
-            </TableRow>);
-        }*/
+        if(!loading&&this.tops){
+            for(let i=0;i<this.tops.length;i++){
+                tops.push(<TableRow selectable={false} selected={i==3}>
+                    <TableRowColumn>{i+1}</TableRowColumn>
+                    <TableRowColumn>{this.tops[i].blocks}</TableRowColumn>
+                    <TableRowColumn>{this.tops[i].count}</TableRowColumn>
+                </TableRow>);
+            }
+        }
         /*
         let title;
         if(typeof appGetLevelInfo !== 'undefined'){
@@ -95,20 +102,20 @@ class Tops extends Component{
             open={open}
         >
             <h3>成功完成任务</h3>
-            <LevelOf level={level}/>
-            {/*
+            {loading?<CircularProgress />:
             <Table>
                 <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                     <TableRow>
                         <TableHeaderColumn>排名</TableHeaderColumn>
                         <TableHeaderColumn>使用的块数</TableHeaderColumn>
-                        <TableHeaderColumn>使用该方法的人</TableHeaderColumn>
+                        <TableHeaderColumn>使用该方法的人数</TableHeaderColumn>
                     </TableRow>                    
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
                     {tops}
                 </TableBody>
-            </Table>*/}
+            </Table>}
+            <LevelOf level={level}/>
         </Dialog>
     }
 };

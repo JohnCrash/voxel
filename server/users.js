@@ -120,6 +120,15 @@ router.use(function(req,res,next){
   }
 });
 
+function tops(req,res){
+  let lname = req.body.lname;
+  sqlQuery(`select blocks,count from Tops where lname='${lname}'`,(result)=>{
+    let data = result.recordset;
+    res.json({result:'ok',tops:data});
+  },(err)=>{
+    res.json({result:err});
+  });
+}
 /**
  * 提交成绩，返回排名情况
  */
@@ -141,26 +150,43 @@ router.post('/commit',function(req,res){
     sqlQuery(`select count from Method where md5='${md5}'`,(result)=>{
       if(result.recordset[0]){
         let count = result.recordset[0].count+1;
-        sqlQuery(`update Method set lv=${lv},lname='${lname}',blocks=${blocks},count=${count},method='${method}' where md5='${md5}'`);
+        sqlQuery(`update Method set lv=${lv},lname='${lname}',blocks=${blocks},count=${count},method=N'${method}' where md5='${md5}'`);
       }else{
-        sqlQuery(`insert into Method (lv,lname,blocks,count,method,md5) values (${lv},'${lname}',${blocks},${count},'${method}','${md5}')`);
+        sqlQuery(`insert into Method (lv,lname,blocks,count,method,md5) values (${lv},'${lname}',${blocks},1,N'${method}','${md5}')`);
       }
     });
     //更新个人成绩
-    sqlQuery(`select try,blocks from Level where uid='${UserInfo.uid}' and lname='${lname}'`,(result)=>{
+    sqlQuery(`select try,blocks from Level where uid='${req.UserInfo.uid}' and lname='${lname}'`,(result)=>{
       let data = result.recordset[0];
-      if(data && data.blocks>blocks){
-        sqlQuery(`update Level set lv=${lv},lname='${lname}',blocks=${blocks},try=${data.try+1},md5='${md5}',uid=${UserInfo.uid},cls=${UserInfo.cls} where uid='${UserInfo.uid}' and lname='${lname}'`);
+      if(data){
+        if(data.blocks>blocks)
+          sqlQuery(`update Level set lv=${lv},lname='${lname}',blocks=${blocks},try=${data.try+1},md5='${md5}',uid=${req.UserInfo.uid},cls=${req.UserInfo.cls} where uid='${req.UserInfo.uid}' and lname='${lname}'`);
       }else{
-        sqlQuery(`insert into Level set (lv,lname,blocks,try,md5,uid,cls) values (${lv},'${lname}',${blocks},${data.try+1},'${md5}',${UserInfo.uid},${UserInfo.cls})`);
+        sqlQuery(`insert into Level (lv,lname,blocks,try,md5,uid,cls) values (${lv},'${lname}',${blocks},1,'${md5}',${req.UserInfo.uid},${req.UserInfo.cls})`);
       }
     });
     //更新排行榜
-    sqlQuery(`select count from Tops where lname='${lname}'`,(result)=>{
-      if(result.recordset.length==0){//插入新的
-        sqlQuery(`insert into Tops set (lname,lv,blocks,count) values ('${lname}',${lv},${blocks},1)`);
+    sqlQuery(`select count,blocks from Tops where lname='${lname}'`,(result)=>{
+      let data = result.recordset;
+      let maxblocks = -1;
+      let hasblock = false;
+      let datacount = 0;
+      for(let i = 0;i<data.length;i++){
+        if(data[i].blocks > maxblocks)
+          maxblocks = data[i].blocks;
+        if(data[i].blocks == blocks){
+          hasblock = true;
+          datacount = data[i].count;
+        }
+      }
+      if(data.length<5 && !hasblock){//插入新的
+        sqlQuery(`insert into Tops (lname,lv,blocks,count) values ('${lname}',${lv},${blocks},1)`,(result)=>{tops(req,res);},(err)=>{res.json({result:err});});
       }else{
-        sqlQuery(`update Tops set count=${data.count+1} where lname='${lname}' and blocks=${blocks}`);
+        if(hasblock){ //增加计数
+          sqlQuery(`update Tops set count=${datacount+1} where lname='${lname}' and blocks=${blocks}`,(result)=>{tops(req,res);},(err)=>{res.json({result:err});});
+        }else{ //更新块
+          sqlQuery(`update Tops set count=1,blocks=${blocks} where lname='${lname}' and blocks=${maxblocks}`,(result)=>{tops(req,res);},(err)=>{res.json({result:err});});
+        }
       }
     },(err)=>{
       res.json({result:err});
@@ -174,6 +200,7 @@ router.post('/commit',function(req,res){
  * 单独返回排名情况
  */
 router.post('/tops',function(req,res){
+  tops(req,res);
 });
 
 /* GET users listing. */

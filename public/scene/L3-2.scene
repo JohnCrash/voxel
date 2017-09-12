@@ -273,7 +273,7 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/地板开关.item",
-			"flatColor": "green"
+			"flatColor": "yellow"
 		},
 		{
 			"position": {
@@ -327,7 +327,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 16,
+					"acc": 33,
 					"curIndex": 0
 				}
 			]
