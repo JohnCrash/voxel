@@ -263,7 +263,7 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/地板开关.item",
-			"flatColor": "yellow"
+			"flatColor": "green"
 		},
 		{
 			"position": {
@@ -286,7 +286,7 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/地板.item",
-			"flatColor": "yellow"
+			"flatColor": "green"
 		},
 		{
 			"position": {
@@ -309,7 +309,7 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/地板开关.item",
-			"flatColor": "red"
+			"flatColor": "green"
 		},
 		{
 			"position": {
@@ -332,7 +332,7 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/地板.item",
-			"flatColor": "red"
+			"flatColor": "green"
 		},
 		{
 			"position": {
@@ -355,7 +355,7 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/地板.item",
-			"flatColor": "blue"
+			"flatColor": "green"
 		},
 		{
 			"position": {
@@ -376,9 +376,9 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/地板开关.item",
-			"flatColor": "blue"
+			"flatColor": "red"
 		},
 		{
 			"position": {
@@ -399,7 +399,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/地板开关.item",
 			"flatColor": "purple"
 		},
@@ -422,9 +422,9 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/地板.item",
-			"flatColor": "purple"
+			"flatColor": "green"
 		},
 		{
 			"position": {
@@ -445,7 +445,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/终点旗帜.item"
 		},
 		{
@@ -467,7 +467,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		},
 		{
@@ -489,7 +489,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		}
 	],

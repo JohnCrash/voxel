@@ -599,6 +599,7 @@ class Edit{
         if(name){
             resolve(name,this.sceneList,()=>
                 postJson(`/save?file=scene/${name}.scene`,json,(json)=>{
+                    console.log(json);
                     if(json.result==='ok'){
                         this['刷新列表']('scene');
                         window.alert(`成功将该场景保存到文件'${name}.scene'中.`);

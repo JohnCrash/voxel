@@ -15,7 +15,7 @@ function(event,dt){
 				this.idleAcc = 0;
 			}
 			break;
-		case 'init':
+		case 'construct':
 			this.flatColor = 'green'; //default color
 			this.toJsonEx = function(json){
 				json.flatColor = this.flatColor;
@@ -23,7 +23,7 @@ function(event,dt){
 			this.loadEx = function(json){
 				this.flatColor = json.flatColor || 'green';
 				this.doAction(this.flatColor);
-			}
+			}		
 			this.editorUI = function(ui,itemUI,item){
 				Object.defineProperty(itemUI,"颜色",{
 					get:function(){
@@ -34,8 +34,9 @@ function(event,dt){
 						item.doAction(v);
 						}});
 				ui.add(itemUI,'颜色',['green','yellow','red','purple','blue']);
-			}
-			
+			}			
+			break;
+		case 'init':			
 			this._t = 0;
 			this._oldz = this.position.z;
 			this.currentAction = '';

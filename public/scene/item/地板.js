@@ -9,8 +9,7 @@ function(event,dt){
 		case 'collision':
 			//this.playSound('scene/audio/effect/正确的宝石声音.ogg');
 			break;
-		case 'init':
-			console.log(`${this.name} 登场`);
+		case 'construct':
 			this.ground = true;
 			this.flatColor = 'green'; //default color
 			this.toJsonEx = function(json){
@@ -30,8 +29,10 @@ function(event,dt){
 						item.doAction(v);
 						}});
 				ui.add(itemUI,'颜色',['green','yellow','red','purple','blue']);
-			}
-			
+			}		
+			break;
+		case 'init':
+			console.log(`${this.name} 登场`);
 			this._onoff = false;
 			this.forwardT = 1;
 			this._forwardPt = {x:this.position.x,y:this.position.y};

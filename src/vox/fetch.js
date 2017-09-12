@@ -33,7 +33,7 @@ function postJson(s,b,cb,errcb){
     credentials: 'same-origin',
     headers: {'Content-Type': 'application/json'},
     body : JSON.stringify(b)})
-    .then(response=>response.text())
+    .then(response=>response.json())
     .then(json=>cb(json))
     .catch(err=>{
         errcb?errcb(err):log(err);
