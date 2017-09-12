@@ -39,6 +39,7 @@ class VoxView extends Component{
         this.game.destroy();
     }
     load(file){
+        console.log('load '+file);
         BlocklyInterface.blocklyEvent('SceneReset');
         fetchJson(`/load?file=scene/${file}.scene`,(json)=>{
             if(json.result==='ok'){

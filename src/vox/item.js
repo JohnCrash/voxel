@@ -220,9 +220,6 @@ class Item{
                     this.script = template.script;
                     if(template.live && typeof template.live==='function'){
                         this.live = template.live.bind(this);
-                        if(this.live){
-                            this.live('init');
-                        }
                     }
                     load();
                 }else{

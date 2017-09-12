@@ -116,6 +116,7 @@ Game.prototype.run=function(){
     var t = Date.now()-1;
     var animate = function(){
         if(this.stoped){
+            this.emit('exit');
             console.log('Game stoped!');
             return;
         }

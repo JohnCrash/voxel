@@ -156,7 +156,7 @@
 			"position": {
 				"x": -53.5,
 				"y": -37.5,
-				"z": 43.999999597734885
+				"z": 43.999998602378376
 			},
 			"rotation": {
 				"x": 0,
@@ -171,14 +171,14 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/男孩.item"
 		},
 		{
 			"position": {
 				"x": 1.5,
 				"y": -55.5,
-				"z": 44.00000118928274
+				"z": 44.00000019392623
 			},
 			"rotation": {
 				"x": 0,
@@ -193,7 +193,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/女孩.item"
 		},
 		{
@@ -215,7 +215,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/地板开关.item",
 			"flatColor": "green"
 		},
@@ -261,7 +261,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/地板开关.item",
 			"flatColor": "yellow"
 		},
@@ -330,9 +330,167 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/地板.item",
 			"flatColor": "red"
+		},
+		{
+			"position": {
+				"x": -0.5,
+				"y": 34,
+				"z": 40.5
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "地板1",
+			"visible": true,
+			"ground": true,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/地板.item",
+			"flatColor": "blue"
+		},
+		{
+			"position": {
+				"x": 36.5,
+				"y": -18.5,
+				"z": 44
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "地板开关2",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/地板开关.item",
+			"flatColor": "blue"
+		},
+		{
+			"position": {
+				"x": 17.5,
+				"y": 55,
+				"z": 44
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "地板开关4",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/地板开关.item",
+			"flatColor": "purple"
+		},
+		{
+			"position": {
+				"x": 53,
+				"y": -0.5,
+				"z": 40.5
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 4.71238898038469
+			},
+			"name": "地板5",
+			"visible": true,
+			"ground": true,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/地板.item",
+			"flatColor": "purple"
+		},
+		{
+			"position": {
+				"x": 57,
+				"y": 0,
+				"z": 44.00000086279778
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "终点旗帜",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/终点旗帜.item"
+		},
+		{
+			"position": {
+				"x": -18,
+				"y": 0,
+				"z": 44.00000108203385
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "栅栏",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/栅栏.item"
+		},
+		{
+			"position": {
+				"x": 17.5,
+				"y": 36,
+				"z": 43.999998478516126
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "栅栏6",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/栅栏.item"
 		}
 	],
 	"zfog": {

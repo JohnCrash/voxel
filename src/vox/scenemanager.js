@@ -34,6 +34,8 @@ class SceneManager extends EventEmitter{
         this.gravity = -98;//重力加速度
         this._pause = true; //默认暂停
         this._editor = false; //编辑状态
+        this._exit = false; //退出状态
+        this._doloadstate = false; //加载状态
         //初始化声音监听
         this.audioListener = new THREE.AudioListener();
         game.camera.add(this.audioListener);
@@ -58,6 +60,11 @@ class SceneManager extends EventEmitter{
              transparent : true} );
         this.enableZFog(true);
         game.on('update',dt=>this.update(dt));
+        game.on('exit',()=>{
+            this._exit = true;
+            if(!this._doloadstate)
+                this.destroy();
+        });
     }
     pause(b){
         this._pause = b;
@@ -95,6 +102,8 @@ class SceneManager extends EventEmitter{
      * 当加载完全结束时调用cb(true),如果失败调用cb(false)
      */
     loadFromJson(json,cb){
+        if(this._exit)return;
+        this._doloadstate = true;
         this.muteMusic(true); //关闭声音
         this.muteSound(true);
         this.pause(true); //加载的时候暂停更新
@@ -163,11 +172,23 @@ class SceneManager extends EventEmitter{
                         return;
                     else if(item.state==='error'){
                         clearInterval(id);
+                        this._doloadstate = false;
+                        if(this._exit){
+                            this.destroy();
+                        }
                         cb(true);
                         return;
                     }
                 }
                 clearInterval(id);
+                if(this._exit){
+                    this.destroy();
+                }else{
+                    for(let item of this.items){
+                        if(item.live)item.live('init');
+                    }
+                }
+                this._doloadstate = false;
                 cb(false);
             },20);
         }
@@ -406,6 +427,8 @@ class SceneManager extends EventEmitter{
     update(dt){
         let dts = dt/1000.0;
         let groundItem = this.getGroundItem();
+        
+        if(this._doloadstate)return; //如果真正读取就不要更新
 
         if(this._pause || !groundItem){//没有地面，直接简单更新
             for(let item of this.items){

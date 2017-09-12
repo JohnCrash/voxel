@@ -27,9 +27,12 @@ function sqlQuery(query,cb,ep){
   new sql.ConnectionPool(config).connect().then(pool=>{
     return pool.request().query(query);
   }).then(result=>{
-    cb(result);
+    if(cb)cb(result);
   }).catch(err=>{
-    ep(err);
+    if(ep)
+      ep(err);
+    else
+      console.log(err);
   });
 }
 
@@ -122,12 +125,46 @@ router.use(function(req,res,next){
  */
 router.post('/commit',function(req,res){
   let lv = req.body.lv;
-  if((req.UserInfo.lv+1)>=lv){
+  let method = req.body.method;
+  let blocks = req.body.blocks;
+  let lname = req.body.lname;
+    
+  if(method && (req.UserInfo.lv+1)>=lv){
     //更新用户做到第几关了
     if(req.UserInfo.lv+1==lv)
       sqlQuery(`update UserInfo set lv='${lv}' where uid='${req.UserInfo.uid}'`,(result)=>{},(err)=>{res.json({result:err});});
     //提交成绩
-    res.json({result:'ok'});
+    var md5sum = crypto.createHash('md5');
+    md5sum.update(method);
+    var md5 = md5sum.digest('hex');
+    //更新方法
+    sqlQuery(`select count from Method where md5='${md5}'`,(result)=>{
+      if(result.recordset[0]){
+        let count = result.recordset[0].count+1;
+        sqlQuery(`update Method set lv=${lv},lname='${lname}',blocks=${blocks},count=${count},method='${method}' where md5='${md5}'`);
+      }else{
+        sqlQuery(`insert into Method (lv,lname,blocks,count,method,md5) values (${lv},'${lname}',${blocks},${count},'${method}','${md5}')`);
+      }
+    });
+    //更新个人成绩
+    sqlQuery(`select try,blocks from Level where uid='${UserInfo.uid}' and lname='${lname}'`,(result)=>{
+      let data = result.recordset[0];
+      if(data && data.blocks>blocks){
+        sqlQuery(`update Level set lv=${lv},lname='${lname}',blocks=${blocks},try=${data.try+1},md5='${md5}',uid=${UserInfo.uid},cls=${UserInfo.cls} where uid='${UserInfo.uid}' and lname='${lname}'`);
+      }else{
+        sqlQuery(`insert into Level set (lv,lname,blocks,try,md5,uid,cls) values (${lv},'${lname}',${blocks},${data.try+1},'${md5}',${UserInfo.uid},${UserInfo.cls})`);
+      }
+    });
+    //更新排行榜
+    sqlQuery(`select count from Tops where lname='${lname}'`,(result)=>{
+      if(result.recordset.length==0){//插入新的
+        sqlQuery(`insert into Tops set (lname,lv,blocks,count) values ('${lname}',${lv},${blocks},1)`);
+      }else{
+        sqlQuery(`update Tops set count=${data.count+1} where lname='${lname}' and blocks=${blocks}`);
+      }
+    },(err)=>{
+      res.json({result:err});
+    });
   }else{
     res.json({result:'没有按顺序完成关卡'});
   }

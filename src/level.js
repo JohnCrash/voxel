@@ -138,9 +138,11 @@ class Level extends Component{
             this.forceUpdate();
             if(this.testXML.length>0&&this.testXML[0]){
                 setTimeout(()=>{
-                    this.blockview.loadXML(this.testXML[0]);
+                    if(this.blockview){
+                        this.blockview.loadXML(this.testXML[0]);
+                    }
                     this.setState({curSelectTest:0});
-                },600);
+                },1000);
             }
         },(err)=>{
             this.testXML = [];
