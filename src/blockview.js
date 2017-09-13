@@ -58,6 +58,7 @@ class BlockView extends Component{
         try{
             this.workspace = Blockly.inject(this.blockDiv,
                 {toolbox: this.toolboxXML,
+                    media: 'blockly/media/',
                     trashcan: true,
                     scrollbars: true, 
                     zoom: {

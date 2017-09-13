@@ -36,33 +36,7 @@ function sqlQuery(query,cb,ep){
   });
 }
 
-/**
- * 登录，返回关卡进行状况
- */
-router.post('/login',function(req,res){
-  let cc = req.cookies.cc;
-  if(cc){ //通过cookie登录
-    sqlQuery(`select * from UserInfo where cookie='${cc}'`,(result)=>{
-      if(result.recordset[0] && result.recordset[0].UserName && result.recordset[0].UserAcount){
-        sqlQuery(`update UserInfo set lastlogin=getdate() where UserAcount='${result.recordset[0].UserAcount}'`,()=>{},()=>{});
-          let cookie = result.recordset[0].cookie;
-          let userName = result.recordset[0].UserName;
-          let lv = result.recordset[0].lv;        
-          res.json({
-            lv,
-            result:'ok',
-            user:stripTailSpace(userName)
-          });
-      }else{
-        res.json({result:'请重新输入密码'});
-      }
-    },(err)=>{
-      res.send(err);
-    });
-    return;
-  }
-  let user = req.body.user;
-  let passwd = req.body.passwd;
+function login(req,res,user,passwd){
   if(!(user && passwd)){
     res.json({result:'请输入用户名密码'});
     return;
@@ -95,7 +69,34 @@ router.post('/login',function(req,res){
     }
   },(err)=>{
     res.send(err);
-  });  
+  });
+}
+/**
+ * 登录，返回关卡进行状况
+ */
+router.post('/login',function(req,res){
+  let cc = req.cookies.cc;
+  if(cc){ //通过cookie登录
+    sqlQuery(`select * from UserInfo where cookie='${cc}'`,(result)=>{
+      if(result.recordset[0] && result.recordset[0].UserName && result.recordset[0].UserAcount){
+        sqlQuery(`update UserInfo set lastlogin=getdate() where UserAcount='${result.recordset[0].UserAcount}'`,()=>{},()=>{});
+          let cookie = result.recordset[0].cookie;
+          let userName = result.recordset[0].UserName;
+          let lv = result.recordset[0].lv;        
+          res.json({
+            lv,
+            result:'ok',
+            user:stripTailSpace(userName)
+          });
+      }else{
+        login(req,res,req.body.user,req.body.passwd);
+      }
+    },(err)=>{
+      res.send(err);
+    });
+    return;
+  }
+  login(req,res,req.body.user,req.body.passwd);
 });
 
 /**
@@ -124,7 +125,14 @@ function tops(req,res){
   let lname = req.body.lname;
   sqlQuery(`select blocks,count from Tops where lname='${lname}'`,(result)=>{
     let data = result.recordset;
-    res.json({result:'ok',tops:data});
+    sqlQuery(`select uname,blocks,try from Level where lname='${lname}' and cls='${req.UserInfo.cls}'`,(result2)=>{
+      let cls = result2.recordset;
+      res.json({result:'ok',
+      tops:data,
+      cls});
+    },(err)=>{
+      res.json({result:err});
+    });
   },(err)=>{
     res.json({result:err});
   });
@@ -150,19 +158,25 @@ router.post('/commit',function(req,res){
     sqlQuery(`select count from Method where md5='${md5}'`,(result)=>{
       if(result.recordset[0]){
         let count = result.recordset[0].count+1;
-        sqlQuery(`update Method set lv=${lv},lname='${lname}',blocks=${blocks},count=${count},method=N'${method}' where md5='${md5}'`);
+        sqlQuery(`update Method set count=${count} where md5='${md5}'`);
       }else{
         sqlQuery(`insert into Method (lv,lname,blocks,count,method,md5) values (${lv},'${lname}',${blocks},1,N'${method}','${md5}')`);
       }
     });
     //更新个人成绩
-    sqlQuery(`select try,blocks from Level where uid='${req.UserInfo.uid}' and lname='${lname}'`,(result)=>{
+    sqlQuery(`select try,blocks,tms,avgms from Level where uid='${req.UserInfo.uid}' and lname='${lname}'`,(result)=>{
       let data = result.recordset[0];
+      let avgms = req.body.each;
+      let tms = req.body.total;
       if(data){
-        if(data.blocks>blocks)
-          sqlQuery(`update Level set lv=${lv},lname='${lname}',blocks=${blocks},try=${data.try+1},md5='${md5}',uid=${req.UserInfo.uid},cls=${req.UserInfo.cls} where uid='${req.UserInfo.uid}' and lname='${lname}'`);
+        if(data.blocks>blocks){
+          avgms += data.avgms;
+          avgms /= 2;
+          tms += data.tms;
+          sqlQuery(`update Level set blocks=${blocks},md5='${md5}',try=${data.try+1},tms=${tms},avgms=${avgms} where uid='${req.UserInfo.uid}' and lname='${lname}'`);
+        }
       }else{
-        sqlQuery(`insert into Level (lv,lname,blocks,try,md5,uid,cls) values (${lv},'${lname}',${blocks},1,'${md5}',${req.UserInfo.uid},${req.UserInfo.cls})`);
+        sqlQuery(`insert into Level (lv,lname,blocks,try,md5,uid,cls,uname,tms,avgms) values (${lv},'${lname}',${blocks},1,'${md5}',${req.UserInfo.uid},${req.UserInfo.cls},'${req.UserInfo.UserName}',${tms},${avgms})`);
       }
     });
     //更新排行榜
@@ -184,8 +198,10 @@ router.post('/commit',function(req,res){
       }else{
         if(hasblock){ //增加计数
           sqlQuery(`update Tops set count=${datacount+1} where lname='${lname}' and blocks=${blocks}`,(result)=>{tops(req,res);},(err)=>{res.json({result:err});});
-        }else{ //更新块
+        }else if(blocks<maxblocks){ //更新块
           sqlQuery(`update Tops set count=1,blocks=${blocks} where lname='${lname}' and blocks=${maxblocks}`,(result)=>{tops(req,res);},(err)=>{res.json({result:err});});
+        }else{ //未上榜
+          tops(req,res);
         }
       }
     },(err)=>{

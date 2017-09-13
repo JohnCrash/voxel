@@ -83,13 +83,15 @@ class Level extends Component{
      */
     onGameOver(event){
         let md;
+        let now = Date.now();
         switch(event){
             case 'OutOfBounds':
             case 'Dead':
                 md = 'scene/gameover.md';
                 break;
-            case 'MissionCompleted': 
-                this.Tops.open(this.blockview.getBlockCount(),this.blockview.toXML());
+            case 'MissionCompleted':
+                this.Tops.open(this.blockview.getBlockCount(),this.blockview.toXML(),now-this.btms,now-this.btpms);
+                this.btpms = now;
                 return;
             case 'WrongAction':
                 md = 'scene/wrongaction.md';
@@ -98,6 +100,7 @@ class Level extends Component{
                 md = 'scene/falldead.md';
                 break;
         }
+        this.btpms = now;
         MessageBox.show('ok',undefined,<MarkdownElement file={md}/>,(result)=>{
             this.Reset();
         });
@@ -119,10 +122,14 @@ class Level extends Component{
 
     componentDidMount(){
         this.loadTest(this.props.level);
+        this.btms = Date.now();
+        this.btpms = this.btms;
     }
     componentWillReceiveProps(nextProps){
         if(nextProps.level!=this.props.level){
             this.loadTest(nextProps.level);
+            this.btms = Date.now();
+            this.btpms = this.btms;
         }
     }
     loadTest(name){

@@ -4,7 +4,7 @@
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import CircularProgress from 'material-ui/CircularProgress';
+import LinearProgress from 'material-ui/LinearProgress';
 import {
     Table,
     TableBody,
@@ -45,20 +45,24 @@ class Tops extends Component{
                 break;
         }
     }
-    open(blocks,method){
+    open(blocks,method,total,each){
         this.setState({open: true,loading:true});
         let info = Global.appGetLevelInfo(this.props.level);   
         if(!info)return; 
         Global.passLevel(info.next);
         //commit
+        this.blocks = blocks;
         postJson('/users/commit',
             {lv:info.next-1,
              lname:this.props.level,
              blocks,
+             total,
+             each,
              method},(json)=>{
             this.tops = json.tops.sort((a,b)=>{
                 return a.blocks > b.blocks;
             });
+            this.cls = json.cls;
             console.log(json);
             this.setState({loading:false});
         });
@@ -83,32 +87,43 @@ class Tops extends Component{
         ];
         let tops = [];
         if(!loading&&this.tops){
+            let bcls = {};
+            for(let i=0;i<this.cls.length;i++){
+                if(this.cls[i].uname){
+                    if(bcls[this.cls[i].blocks]){
+                        bcls[this.cls[i].blocks] += ",";
+                    }else{
+                        bcls[this.cls[i].blocks] = "";
+                    }
+                    bcls[this.cls[i].blocks] += this.cls[i].uname;
+                }
+            }
+            function clsblock(b){
+                if(bcls[b])return bcls[b];
+            }
             for(let i=0;i<this.tops.length;i++){
-                tops.push(<TableRow selectable={false} selected={i==3}>
+                tops.push(<TableRow selectable={false} selected={this.tops[i].blocks===this.blocks} key={"top"+i}>
                     <TableRowColumn>{i+1}</TableRowColumn>
-                    <TableRowColumn>{this.tops[i].blocks}</TableRowColumn>
+                    <TableRowColumn><span style={{verticalAlign:"top"}}>{this.tops[i].blocks}×</span><img src="media/title-beta.png" height="22px" /></TableRowColumn>
                     <TableRowColumn>{this.tops[i].count}</TableRowColumn>
+                    <TableRowColumn>{clsblock(this.tops[i].blocks)}</TableRowColumn>
                 </TableRow>);
             }
         }
-        /*
-        let title;
-        if(typeof appGetLevelInfo !== 'undefined'){
-            let info = appGetLevelInfo(level);
-            title = info.name
-        }*/
+
         return <Dialog
             actions={actions}
             open={open}
         >
             <h3>成功完成任务</h3>
-            {loading?<CircularProgress />:
+            {loading?<LinearProgress />:
             <Table>
                 <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                     <TableRow>
                         <TableHeaderColumn>排名</TableHeaderColumn>
-                        <TableHeaderColumn>使用的块数</TableHeaderColumn>
-                        <TableHeaderColumn>使用该方法的人数</TableHeaderColumn>
+                        <TableHeaderColumn>块数</TableHeaderColumn>
+                        <TableHeaderColumn>人数</TableHeaderColumn>
+                        <TableHeaderColumn>使用者</TableHeaderColumn>
                     </TableRow>                    
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
