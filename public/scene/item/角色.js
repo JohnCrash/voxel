@@ -562,12 +562,12 @@ function initItemBlockly(_this){
 		var item = getItemByName(name);
 		if(!item)return;
 
-		let d = item.forwardT!==undefined ? (1*STEP + calcD(item)) : (1*STEP);
+		let d = (item.forwardT!==undefined && item.forwardT!=1) ? (calcD(item)) : (1*STEP);
 			
 		let pt = {
 			x:item.position.x+Math.cos(item.rotation.z-Math.PI/2)*d,
 			y:item.position.y+Math.sin(item.rotation.z-Math.PI/2)*d,
-			z:item.position.z+8
+			z:item.position.z+7.9
 		};
 		let ar = item.sceneManager.ptItem(pt);
 		switch(it){

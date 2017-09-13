@@ -28,7 +28,7 @@ function(event,dt){
 						item.flatColor = v;
 						item.doAction(v);
 						}});
-				ui.add(itemUI,'颜色',['green','yellow','red','purple','blue']);
+				ui.add(itemUI,'颜色',['green','yellow','red','purple','blue','brown']);
 			}		
 			break;
 		case 'init':

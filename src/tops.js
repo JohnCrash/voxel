@@ -61,10 +61,14 @@ class Tops extends Component{
              total,
              each,
              method},(json)=>{
-            this.tops = json.tops.sort((a,b)=>{
-                return a.blocks > b.blocks;
-            });
-            this.cls = json.cls;
+            if(json.tops){
+                this.tops = json.tops.sort((a,b)=>{
+                    return a.blocks > b.blocks;
+                });
+            }else{
+                this.tops = [];
+            }
+            this.cls = json.cls||[];
             console.log(json);
             this.setState({loading:false});
         });

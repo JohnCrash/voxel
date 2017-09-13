@@ -62,6 +62,14 @@
 			],
 			"delay":0,
 			"loop":false
+		},
+		{
+			"name":"brown",
+			"sequece":[
+				5
+			],
+			"delay":0,
+			"loop":false
 		}	
 	],
 	"script":"scene/item/地板.js"
