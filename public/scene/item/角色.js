@@ -107,7 +107,9 @@ function initItemBlockly(_this){
 		return d - Math.floor(d/STEP)*STEP;
 	}
 	_this.injectBlocklyFunction('forward',function(name,step){
+		console.log('forward');
 		var item = getItemByName(name);
+		if(!item)return;
 		if((item._isobstruct||item.resultAction==='break') && !eqAngle(item.rotation.z-(step>0?Math.PI:0),item.forwardAngle)){
 			item.blocklyStop();
 			ItemAction(item,'walk');
@@ -173,6 +175,7 @@ function initItemBlockly(_this){
 	
 	_this.injectBlocklyFunction('turn_left',function(name){
 		var item = getItemByName(name);
+		if(!item)return;
 		item.blocklyStop('turn_left');
 		item.currentAction = 'empty';
 		item.rotation.z += Math.PI/2;
@@ -203,6 +206,7 @@ function initItemBlockly(_this){
 	
 	_this.injectBlocklyFunction('turn_right',function(name){
 		var item = getItemByName(name);
+		if(!item)return;
 		item.blocklyStop('turn_right');
 		item.currentAction = 'empty';
 		item.rotation.z -= Math.PI/2;
@@ -234,6 +238,7 @@ function initItemBlockly(_this){
 	
 	_this.injectBlocklyFunction('jump',function(name){
 		var item = getItemByName(name);
+		if(!item)return;
 		if((item._isobstruct||item.resultAction==='break') && !eqAngle(item.rotation.z-Math.PI,item.forwardAngle)){
 			item.velocity.z = JUMP_SPEED;
 			ItemAction(item,'jump');
@@ -291,6 +296,7 @@ function initItemBlockly(_this){
 	};
 	_this.injectBlocklyFunction('unlock',function(name){
 		var item = getItemByName(name);
+		if(!item)return;
 		if(item.liftItem){
 			item.blocklyStop('unlock liftitem obstruct');
 			setTimeout(function(){item.blocklyEvent('WrongAction');},1000);			
@@ -351,6 +357,7 @@ function initItemBlockly(_this){
 	};	
 	_this.injectBlocklyFunction('openbox',function(name){
 		var item = getItemByName(name);
+		if(!item)return;
 		if(item.liftItem){
 			item.blocklyStop('openbox liftitem obstruct');
 			setTimeout(function(){item.blocklyEvent('WrongAction');},1000);			
@@ -401,6 +408,7 @@ function initItemBlockly(_this){
 	};	
 	_this.injectBlocklyFunction('liftUp',function(name){
 		var item = getItemByName(name);
+		if(!item)return;
 		if(item._obstructItem){
 			if(item._obstructItem.typeName!=='石块'){
 				item.blocklyStop('lift_up obstruct');	
@@ -466,6 +474,7 @@ function initItemBlockly(_this){
 	};
 	_this.injectBlocklyFunction('putDown',function(name){
 		var item = getItemByName(name);
+		if(!item)return;
 		if(!item.liftItem){
 			item.blocklyStop('putDown obstruct');
 			setTimeout(function(){item.blocklyEvent('WrongAction');},1000);	
@@ -551,6 +560,7 @@ function initItemBlockly(_this){
 	};
 	_this.injectBlocklyFunction('whatIt',function(name,it){
 		var item = getItemByName(name);
+		if(!item)return;
 
 		let d = item.forwardT!==undefined ? (1*STEP + calcD(item)) : (1*STEP);
 			

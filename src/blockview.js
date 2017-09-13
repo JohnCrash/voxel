@@ -143,6 +143,9 @@ class BlockView extends Component{
     continue(){
         this.pauseRun = false;
     }
+    setEndCB(cb){
+        this.runComplateCB = cb;
+    }
     /**
      * 单步执行,代码开始时调用cb('begin'),结束时调用cb('end')
      */

@@ -44,8 +44,8 @@ class Login extends Component{
                         Global.muteSound(config.sound);
                     }
                 }else{
-                    Global.muteMusic(false);
-                    Global.muteSound(false);  
+                    Global.muteMusic(true);
+                    Global.muteSound(true);  
                 }
                 Global.setMaxPassLevel(json.lv+1);
                 location.href='#main#'+(json.lv+1);

@@ -110,10 +110,14 @@ class Level extends Component{
         });
     } 
     PlayPause(){
+        if(this.needReset){
+            this.Reset();
+            this.needReset = false;
+        }
         if(this.state.playPause){
-            this.blockview.run(0,()=>{
+            this.blockview.run(0,()=>{//执行完成
                 this.setState({playPause:true});
-                //this.Reset();
+                this.needReset = true;
             });
         }else{
             this.Reset();
@@ -121,6 +125,13 @@ class Level extends Component{
         this.setState({playPause:!this.state.playPause});
     }
     Step(){
+    //    if(this.needReset){
+    //        this.Reset();
+    //        this.needReset = false;
+    //    }
+        this.blockview.setEndCB(()=>{
+            this.needReset = true;
+        });
         this.blockview.step();
     }
 
