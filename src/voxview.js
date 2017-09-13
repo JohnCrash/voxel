@@ -5,6 +5,7 @@ import SceneManager from './vox/scenemanager';
 import log from './vox/log';
 import {MessageBox} from './ui/messagebox';
 import BlocklyInterface from './vox/blocklyinterface';
+import {Global} from './global';
 
 /**
  * VoxView的属性
@@ -24,22 +25,22 @@ class VoxView extends Component{
         this.game.observer = true;
         this.game.camera.rotation.order = 'ZXY';
         this.game.run();
+        Global.setCurrentSceneManager(this.sceneManager);
         this.load(this.props.file);
     }
     componentWillReceiveProps(nextProps){
         if(this.props.file!=nextProps.file){
             this.load(nextProps.file);
-        }else if(this.props.mute!=nextProps.mute){
-            this.sceneManager.muteMusic(nextProps.mute);
-            this.sceneManager.muteSound(nextProps.mute);
         }
     }
     componentWillUnmount(){
         this.sceneManager.destroy();
         this.game.destroy();
+        Global.setCurrentSceneManager(null);
     }
     load(file){
         console.log('load '+file);
+        Global.initAudio();
         BlocklyInterface.blocklyEvent('SceneReset');
         fetchJson(`/load?file=scene/${file}.scene`,(json)=>{
             if(json.result==='ok'){
@@ -47,8 +48,6 @@ class VoxView extends Component{
                     if(!iserr){
                         BlocklyInterface.blocklyEvent('SceneReady');
                         this.sceneManager.enablePhysical(true);
-                        this.sceneManager.muteMusic(this.props.mute);
-                        this.sceneManager.muteSound(this.props.mute);
                         this.sceneManager.pause(false);
                     }else{
                         log(`'${file}' load error.`);

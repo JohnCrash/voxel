@@ -1,6 +1,11 @@
 <xml id="toolbox">
-	<block type="controls_whileUntil"></block>
-	<block type="what_is_it"></block>
+	<block type="controls_repeat_ext">
+		<value name="TIMES">
+			<shadow type="math_number">
+				<field name="NUM">3</field>
+			</shadow>
+		</value>
+	</block>
 	<block type="forward">
 		<value name="STEP">
 			<shadow type="math_number">
@@ -11,6 +16,7 @@
 	<block type="turn_left"></block>
 	<block type="turn_right"></block>
 	<block type="jump"></block>
+	<block type="remove_obstacle_fence"></block>
 </xml>
 
 <xml id="default">

@@ -37,6 +37,16 @@ class Login extends Component{
                 //成功登录
                 //this.props.onLogin(json.user);
                 this.setState({open:false});
+                if(json.config){
+                    let config = JSON.parse(json.config);
+                    if(config){
+                        Global.muteMusic(config.music);
+                        Global.muteSound(config.sound);
+                    }
+                }else{
+                    Global.muteMusic(false);
+                    Global.muteSound(false);  
+                }
                 Global.setMaxPassLevel(json.lv+1);
                 location.href='#main#'+(json.lv+1);
             }else{

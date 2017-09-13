@@ -83,6 +83,33 @@ class _Global_{
             this.maxpasslv = lv;
         }
     }
+    setCurrentSceneManager(sceneManager){
+        this._sceneManager = sceneManager;
+    }
+    initAudio(){
+        if(this._sceneManager){
+            this._sceneManager.muteMusic(!this._muteMusic);
+            this._sceneManager.muteSound(!this._muteSound);
+        }        
+    }
+    isMusic(){
+        return this._muteMusic;
+    }
+    isSound(){
+        return this._muteSound;
+    }
+    muteMusic(b){
+        this._muteMusic = b;
+        if(this._sceneManager){
+            this._sceneManager.muteMusic(!this._muteMusic);
+        }
+    }
+    muteSound(b){
+        this._muteSound = b;
+        if(this._sceneManager){
+            this._sceneManager.muteSound(!this._muteSound);
+        }        
+    }
 };
 
 export let Global = new _Global_();

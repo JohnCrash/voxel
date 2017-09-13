@@ -35,6 +35,7 @@ class Tops extends Component{
                 location.href='#main#'+info.next;
                 break;
             case 'agin':
+                if(this._isagin)this._isagin();
                 break;
             case 'next':
                 if(info.nextName){
@@ -45,7 +46,8 @@ class Tops extends Component{
                 break;
         }
     }
-    open(blocks,method,total,each){
+    open(blocks,method,total,each,cb){
+        this._isagin = cb;
         this.setState({open: true,loading:true});
         let info = Global.appGetLevelInfo(this.props.level);   
         if(!info)return; 

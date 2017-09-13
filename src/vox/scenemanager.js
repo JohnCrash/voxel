@@ -104,8 +104,8 @@ class SceneManager extends EventEmitter{
     loadFromJson(json,cb){
         if(this._exit)return;
         this._doloadstate = true;
-        this.muteMusic(true); //关闭声音
-        this.muteSound(true);
+        //this.muteMusic(true); //关闭声音
+        //this.muteSound(true);
         this.pause(true); //加载的时候暂停更新
         this.description = json.description;
         this.markdownDescription = json.markdownDescription;
@@ -628,6 +628,7 @@ class SceneManager extends EventEmitter{
     }
     //打开关闭声音
     muteSound(b){
+        console.log('muteSound:'+b);
         if(this._muteSound!==!!b){
             this._muteSound = b;
             if(b){//关闭全部正在播放的声音
@@ -635,6 +636,7 @@ class SceneManager extends EventEmitter{
         }
     }
     muteMusic(b){
+        console.log('muteMusic:'+b);
         if(this._muteMusic!==!!b){
             this._muteMusic = b;
             if(b){
