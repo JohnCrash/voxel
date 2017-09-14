@@ -52,7 +52,8 @@ class Level extends Component{
             openTops:true,
             openMenu:false,
             music:false,
-            sound:false
+            sound:false,
+            lang:false
         }
     }
     Menu(){
@@ -62,7 +63,8 @@ class Level extends Component{
         console.log(`music:${Global.isMusic()} sound:${Global.isSound()}`);
         this.setState({openMenu:true,
             music:Global.isMusic(),
-            sound:Global.isSound()});
+            sound:Global.isSound(),
+            lang:Global.getCurrentLang()!=="zh"});
     }
     Reset(){
         //重新加载全部资源
@@ -115,9 +117,11 @@ class Level extends Component{
             this.needReset = false;
         }
         if(this.state.playPause){
-            this.blockview.run(0,()=>{//执行完成
-                this.setState({playPause:true});
-                this.needReset = true;
+            this.voxview.readyPromise.then(()=>{
+                this.blockview.run(0,()=>{//执行完成
+                    this.setState({playPause:true});
+                    this.needReset = true;
+                });
             });
         }else{
             this.Reset();
@@ -125,14 +129,16 @@ class Level extends Component{
         this.setState({playPause:!this.state.playPause});
     }
     Step(){
-    //    if(this.needReset){
-    //        this.Reset();
-    //        this.needReset = false;
-    //    }
+        if(this.needReset){
+            this.Reset();
+            this.needReset = false;
+        }
         this.blockview.setEndCB(()=>{
             this.needReset = true;
         });
-        this.blockview.step();
+        this.voxview.readyPromise.then(()=>{
+            this.blockview.step();
+        });
     }
 
     componentDidMount(){
@@ -221,7 +227,7 @@ class Level extends Component{
         this.blockcount.innerText = `${count}×`;
     }
     render(){
-        let {playPause,levelDesc,music,sound,
+        let {playPause,levelDesc,music,sound,lang,
             mute,curSelectTest,openTops,openMenu} = this.state;
         let {level} = this.props;
 
@@ -296,6 +302,10 @@ class Level extends Component{
                     this.setState({sound:b});
                     Global.muteSound(b);
                 }} />
+                <Toggle label="使用英语" style={ToggleStyle} defaultToggled={lang} onToggle={(e,b)=>{
+                    this.setState({lang:b});
+                    Global.setCurrentLang(b?"en":"zh");
+                }} />                
             </Drawer>
         </div>;
     }

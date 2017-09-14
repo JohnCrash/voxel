@@ -15,7 +15,12 @@ function initItemBlockly(_this){
 		if(characters.length>1){
 			var op = [];
 			for(var i=0;i<characters.length;i++){
-				op.push([characters[i].name,characters[i].name]);
+				let name = "";
+				if(characters[i].name==='男孩')
+					name = Blockly.Msg.BOY;
+				else if(characters[i].name==='女孩')
+					name = Blockly.Msg.GIRL;
+				op.push([name,characters[i].name]);
 			}
 			c.appendField(new Blockly.FieldDropdown(op),"CHARCTER");
 		}
@@ -50,7 +55,7 @@ function initItemBlockly(_this){
         this.setColour(60);
         this.appendDummyInput()
             .setAlign(Blockly.ALIGN_CENTRE)
-            .appendField("开始运行程序");
+            .appendField(Blockly.Msg.WHEN_START);
         this.setNextStatement(true, "null");
         this.setTooltip('');
 		}
@@ -66,10 +71,10 @@ function initItemBlockly(_this){
         this.setColour(200);
         appendCharacterDropdown(this.appendValueInput("STEP")
             .setCheck("Number"))
-            .appendField("向前移动");
+            .appendField(Blockly.Msg.FORWARD);
 		
         this.appendDummyInput()
-            .appendField("步");
+            .appendField(Blockly.Msg.STEP);
         this.setInputsInline(true);
         this.setPreviousStatement(true, "null");
         this.setNextStatement(true, "null");
@@ -160,7 +165,7 @@ function initItemBlockly(_this){
 	  init: function() {
 		this.setColour(160);
 		appendCharacterDropdown(this.appendDummyInput())
-			.appendField("左转 90°")
+			.appendField(Blockly.Msg.TURN_LEFT)
 		this.setPreviousStatement(true, "null");
 		this.setNextStatement(true, "null");
 		this.setTooltip('');
@@ -191,7 +196,7 @@ function initItemBlockly(_this){
 	  init: function() {
 		this.setColour(160);
 		appendCharacterDropdown(this.appendDummyInput())
-			.appendField("右转 90°")
+			.appendField(Blockly.Msg.TURN_RIGHT)
 		this.setPreviousStatement(true, "null");
 		this.setNextStatement(true, "null");
 		this.setTooltip('');
@@ -221,7 +226,7 @@ function initItemBlockly(_this){
 	Blockly.Blocks['jump'] = {
 	  init: function() {
 		appendCharacterDropdown(this.appendDummyInput())
-			.appendField("向前跳跃");
+			.appendField(Blockly.Msg.JUMP);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
 		this.setColour(0);
@@ -279,7 +284,7 @@ function initItemBlockly(_this){
 	Blockly.Blocks['remove_obstacle_fence'] = {
 	  init: function() {
 		appendCharacterDropdown(this.appendDummyInput())
-			.appendField(" 移除障碍 ");
+			.appendField(Blockly.Msg.CLEAR_OBSTACLE);
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
@@ -341,7 +346,7 @@ function initItemBlockly(_this){
 	Blockly.Blocks['open_box'] = {
 	  init: function() {
 		appendCharacterDropdown(this.appendDummyInput())
-			.appendField(" 打开宝箱 ");
+			.appendField(Blockly.Msg.OPEN_BOX);
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
@@ -392,7 +397,7 @@ function initItemBlockly(_this){
 	Blockly.Blocks['lift_up'] = {
 	  init: function() {
 		appendCharacterDropdown(this.appendDummyInput())
-			.appendField(" 举起石头 ");
+			.appendField(Blockly.Msg.LIFT_UP);
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
@@ -458,7 +463,7 @@ function initItemBlockly(_this){
 	Blockly.Blocks['put_down'] = {
 	  init: function() {
 		appendCharacterDropdown(this.appendDummyInput())
-			.appendField(" 放下石头 ");
+			.appendField(Blockly.Msg.PUT_DOWN);
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
@@ -535,15 +540,15 @@ function initItemBlockly(_this){
 	Blockly.Blocks['what_is_it'] = {
 	  init: function() {
 		appendCharacterDropdown(this.appendDummyInput())
-			.appendField("前面是")
+			.appendField(Blockly.Msg.FORWARD_IS)
 			.appendField(new Blockly.FieldDropdown([
-			["障碍","barrier"], 
-			["旗子","flag"],
-			["宝箱","chest"], 
-			["石头","ston"], 
-			["楼梯","ladder"],
-			["悬崖","cliff"],
-			["墙壁","wall"],]), "IT");
+			[Blockly.Msg.BARRIER,"barrier"], 
+			[Blockly.Msg.FLAG,"flag"],
+			[Blockly.Msg.BOX,"chest"], 
+			[Blockly.Msg.STON,"ston"], 
+			[Blockly.Msg.LADDER,"ladder"],
+			[Blockly.Msg.CLIFF,"cliff"],
+			[Blockly.Msg.WALL,"wall"],]), "IT");
 		this.setOutput(true, "Boolean");
 		this.setColour(0);
 	 this.setTooltip("");

@@ -39,23 +39,31 @@ class VoxView extends Component{
         Global.setCurrentSceneManager(null);
     }
     load(file){
-        console.log('load '+file);
-        Global.initAudio();
-        BlocklyInterface.blocklyEvent('SceneReset');
-        fetchJson(`/load?file=scene/${file}.scene`,(json)=>{
-            if(json.result==='ok'){
-                this.sceneManager.loadFromJson(json.content,(iserr)=>{
-                    if(!iserr){
-                        BlocklyInterface.blocklyEvent('SceneReady');
-                        this.sceneManager.enablePhysical(true);
-                        this.sceneManager.pause(false);
-                    }else{
-                        log(`'${file}' load error.`);
-                    }
-                });
-            }else if(json.result){
-                log(json.result);
-            }
+        this.readyPromise = new Promise((resolve,reject)=>{
+            console.log('load '+file);
+            Global.initAudio();
+            BlocklyInterface.blocklyEvent('SceneReset');
+            fetchJson(`/load?file=scene/${file}.scene`,(json)=>{
+                if(json.result==='ok'){
+                    this.sceneManager.loadFromJson(json.content,(iserr)=>{
+                        if(!iserr){
+                            BlocklyInterface.blocklyEvent('SceneReady');
+                            this.sceneManager.enablePhysical(true);
+                            this.sceneManager.pause(false);
+                            resolve("ready");
+                        }else{
+                            let err = `'${file}' load error.`;
+                            log(err);
+                            reject(err);
+                        }
+                    });
+                }else if(json.result){
+                    log(json.result);
+                    reject(json.result);
+                }else{
+                    reject(`fetchJson /load?file=scene/${file}.scene error`);
+                }
+            });
         });
     }
     reset(){

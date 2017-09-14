@@ -86,6 +86,9 @@ class _Global_{
     setCurrentSceneManager(sceneManager){
         this._sceneManager = sceneManager;
     }
+    setCurrentBlocklyView(view){
+        this._blocklyView = view;
+    }
     initAudio(){
         if(this._sceneManager){
             this._sceneManager.muteMusic(!this._muteMusic);
@@ -109,6 +112,15 @@ class _Global_{
         if(this._sceneManager){
             this._sceneManager.muteSound(!this._muteSound);
         }        
+    }
+    setCurrentLang(lang){
+        this._lang = lang;
+        if(this._blocklyView){
+            this._blocklyView.ResetWorkspace();
+        }
+    }
+    getCurrentLang(){
+        return this._lang;
     }
 };
 

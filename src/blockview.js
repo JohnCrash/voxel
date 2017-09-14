@@ -2,6 +2,9 @@ import React, {Component} from 'react';
 import VoxView from './voxview';
 import BlocklyInterface from './vox/blocklyinterface';
 import {TextManager} from './ui/textmanager';
+import {Global} from './global';
+import en from './lang/en';
+import zh from './lang/zh';
 
 function parserXML(id,text){
     let result;
@@ -27,6 +30,7 @@ class BlockView extends Component{
         this.highlightPause = false;
         this.pauseRun = false;
         BlocklyInterface.setCurrentBlockView(this);
+        Global.setCurrentBlocklyView(this);
     }
     componentDidMount(){
         if(this.props.file){
@@ -49,10 +53,22 @@ class BlockView extends Component{
             }
           });
     }
+    //重新加载界面
+    ResetWorkspace(){
+        let d = this.toXML();
+        this.initWorkspace();
+        this.loadXML(d);
+    }
     /**
      * 当toolboxXML被载入并且voxview加载结束后在初始化workspace
      */
     initWorkspace(){
+        let lang = Global.getCurrentLang();
+        switch(lang){
+            case 'en':en();break;
+            case 'zh':zh();break;
+            default: en();
+        }
         if(this.workspace)
             this.workspace.dispose();
         try{
