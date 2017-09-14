@@ -16,6 +16,9 @@ import {
 import LevelOf from './levelof';
 import {postJson} from './vox/fetch';
 import {Global} from './global';
+import {TextManager} from './ui/textmanager';
+import MarkdownElement from './ui/markdownelement';
+import md from './mdtemplate';
 
 class Tops extends Component{
     constructor(props){
@@ -24,6 +27,18 @@ class Tops extends Component{
             open:false,
             loading:true,
         };
+        this.initText();  
+    }
+    initText(){
+        TextManager.load('scene/ui/Top_title.md',(iserr,text)=>{
+            this.title = !iserr ? text : "";
+        });
+        TextManager.load('scene/ui/Top_content.md',(iserr,text)=>{
+            this.content = !iserr ? text : "";
+        });
+        TextManager.load('scene/ui/Top_bottom.md',(iserr,text)=>{
+            this.bottom = !iserr ? text : "";
+        });
     }
     handleAction(result){
         this.setState({open: false});
@@ -48,6 +63,7 @@ class Tops extends Component{
     }
     open(blocks,method,total,each,cb){
         this._isagin = cb;
+        this.initText();
         this.setState({open: true,loading:true});
         let info = Global.appGetLevelInfo(this.props.level);   
         if(!info)return; 
@@ -76,7 +92,6 @@ class Tops extends Component{
     render(){
         let {level} = this.props;
         let {open,loading} = this.state;
-
         let actions = [
             <FlatButton
             label="退出"
@@ -92,6 +107,8 @@ class Tops extends Component{
             onClick={this.handleAction.bind(this,'next')}/>            
         ];
         let tops = [];
+        let best_block_num = this.blocks;
+        let rank = 6;
         if(!loading&&this.tops){
             let bcls = {};
             for(let i=0;i<this.cls.length;i++){
@@ -108,6 +125,12 @@ class Tops extends Component{
                 if(bcls[b])return bcls[b];
             }
             for(let i=0;i<this.tops.length;i++){
+                if(this.tops[i].blocks < best_block_num){
+                    best_block_num = this.tops[i].blocks;
+                }
+                if(this.tops[i].blocks===this.blocks){
+                    rank = i+1;
+                }
                 tops.push(<TableRow selectable={false} selected={this.tops[i].blocks===this.blocks} key={"top"+i}>
                     <TableRowColumn>{i+1}</TableRowColumn>
                     <TableRowColumn><span style={{verticalAlign:"top"}}>{this.tops[i].blocks}×</span><img src="media/title-beta.png" height="22px" /></TableRowColumn>
@@ -116,12 +139,18 @@ class Tops extends Component{
                 </TableRow>);
             }
         }
-
+        let dict = {
+            level_name:level,
+            best_block_num,
+            block_num : this.blocks,
+            rank,
+            method_num : this.tops?this.tops.length:0,
+        };
         return <Dialog
             actions={actions}
             open={open}
         >
-            <h3>成功完成任务</h3>
+            <MarkdownElement text={md(this.title,dict)}/>
             {loading?<LinearProgress />:
             <Table>
                 <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
@@ -136,7 +165,9 @@ class Tops extends Component{
                     {tops}
                 </TableBody>
             </Table>}
+            <MarkdownElement text={md(this.content,dict)}/>
             <LevelOf level={level}/>
+            <MarkdownElement text={md(this.bottom,dict)}/>
         </Dialog>
     }
 };

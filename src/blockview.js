@@ -173,13 +173,23 @@ class BlockView extends Component{
             //Blockly.JavaScript.INFINITE_LOOP_TRAP to a code snippet which will be inserted into every loop and every function.
             Blockly.JavaScript.INFINITE_LOOP_TRAP = 'if(--window.LoopTrap == 0) throw "Infinite loop.";\n';
             var code = Blockly.JavaScript.workspaceToCode(this.workspace);
-            this.myInterpreter = new Interpreter(code,this.initFunc.bind(this));
+            try{
+                this.myInterpreter = new Interpreter(code,this.initFunc.bind(this));
+            }catch(e){
+                console.log('Program error');
+                this.reset();
+                if(cb)cb('error');
+                if(this.runComplateCB)this.runComplateCB('error');
+                this.runComplateCB = undefined;
+                return;
+            }
             setTimeout(()=>{
                 console.log('ready to execute the following code\n');
                 console.log(code);
                 this.step(cb);
             },1);
             if(cb)cb('begin');
+            if(this.runComplateCB)this.runComplateCB('begin');
             return;
         }
         if(this.freeze || this.pauseRun)return;
@@ -187,12 +197,14 @@ class BlockView extends Component{
         do{
             try{
                 var hasMoreCode = this.myInterpreter.step();
+                if(cb)cb('step');
+                if(this.runComplateCB)this.runComplateCB('step');                
             }finally{
                 if (!hasMoreCode) {
                     console.log('Program complete');
                     this.reset();
                     if(cb)cb('end');
-                    if(this.runComplateCB)this.runComplateCB();
+                    if(this.runComplateCB)this.runComplateCB('end');
                     this.runComplateCB = undefined;
                     return;
                 }

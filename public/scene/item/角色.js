@@ -114,7 +114,7 @@ function initItemBlockly(_this){
 	_this.injectBlocklyFunction('forward',function(name,step){
 		console.log('forward');
 		var item = getItemByName(name);
-		if(!item)return;
+		if(!item||!step)return;
 		if((item._isobstruct||item.resultAction==='break') && !eqAngle(item.rotation.z-(step>0?Math.PI:0),item.forwardAngle)){
 			item.blocklyStop();
 			ItemAction(item,'walk');
@@ -602,7 +602,12 @@ function initItemBlockly(_this){
 					ar = item.sceneManager.ptItem(pt);
 					for(let i=0;i<ar.length;i++){
 						if(ar[i].ground)return true;
-					}						
+					}
+					pt.z = item.position.z-7.9;
+					ar = item.sceneManager.ptItem(pt);
+					for(let i=0;i<ar.length;i++){
+						if(ar[i].ground)return true;
+					}					
 				}
 				break;
 			case 'cliff':

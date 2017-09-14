@@ -91,7 +91,7 @@ class Level extends Component{
         switch(event){
             case 'OutOfBounds':
             case 'Dead':
-                md = 'scene/gameover.md';
+                md = 'scene/ui/gameover.md';
                 break;
             case 'MissionCompleted':
                 this.Tops.open(this.blockview.getBlockCount(),
@@ -100,10 +100,10 @@ class Level extends Component{
                 this.btpms = now;
                 return;
             case 'WrongAction':
-                md = 'scene/wrongaction.md';
+                md = 'scene/ui/wrongaction.md';
                 break;
             case 'FallDead':
-                md = 'scene/falldead.md';
+                md = 'scene/ui/falldead.md';
                 break;
         }
         this.btpms = now;
@@ -118,9 +118,14 @@ class Level extends Component{
         }
         if(this.state.playPause){
             this.voxview.readyPromise.then(()=>{
-                this.blockview.run(0,()=>{//执行完成
-                    this.setState({playPause:true});
-                    this.needReset = true;
+                this.blockview.run(0,(state)=>{//执行完成
+                    if(state === 'end'||state === 'error'){
+                        if(state === 'error'){
+                            MessageBox.show('ok',undefined,<MarkdownElement file={'scene/ui/program_error.md'}/>,(result)=>{});
+                        }
+                        this.setState({playPause:true});
+                        this.needReset = true;
+                    }
                 });
             });
         }else{
@@ -151,6 +156,7 @@ class Level extends Component{
             this.loadTest(nextProps.level);
             this.btms = Date.now();
             this.btpms = this.btms;
+            this.setState({playPause:true});
         }
     }
     onReturnMain(){
