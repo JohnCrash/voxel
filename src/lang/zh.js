@@ -19,6 +19,8 @@ export default function zh(){
     Blockly.Msg["LADDER"] = "楼梯";
     Blockly.Msg["CLIFF"] = "悬崖";
     Blockly.Msg["WALL"] = "墙壁";
+    Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_UNTIL"] = "Until";
+    Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_WHILE"] = "While";
     //============================    
     Blockly.Msg["ADD_COMMENT"] = "添加注释";
     Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "不能删除变量“%1”，因为它是功能“%2”定义的一部分";

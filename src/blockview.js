@@ -5,6 +5,8 @@ import {TextManager} from './ui/textmanager';
 import {Global} from './global';
 import en from './lang/en';
 import zh from './lang/zh';
+import IconButton from 'material-ui/IconButton';
+import CreateIcon from 'material-ui/svg-icons/action/build';
 
 function parserXML(id,text){
     let result;
@@ -89,7 +91,10 @@ class BlockView extends Component{
             this.workspace = Blockly.inject(this.blockDiv);
             console.log(`Can not inject blocly workspace \n${e}`);
         }
+        this.workspace.scrollX = 12;        
+        this.workspace.scrollY = 12;        
         this.workspace.addChangeListener((event)=>{
+            this.workspace.flyout_.setVisible(false);
             if(this.props.onBlockCount)
                 this.props.onBlockCount(this.getBlockCount());
             this.reset();
@@ -99,6 +104,11 @@ class BlockView extends Component{
         if(this.defaultXML){
             let dom = Blockly.Xml.textToDom(this.defaultXML);
             Blockly.Xml.domToWorkspace(dom,this.workspace);
+        }
+        if(this.props.toolbox!=="expand"){
+            this.workspace.flyout_.setVisible(false);
+            this.workspace.deleteAreaToolbox_ = null;
+            this.workspace.updateScreenCalculationsIfScrolled();
         }
     }
     /**
@@ -211,6 +221,13 @@ class BlockView extends Component{
             }
         }while(hasMoreCode && !this.highlightPause && !this._freeze);
     }
+    //打开创建对话栏
+    openFlyOut(){
+        if(this.workspace && this.workspace.flyout_){
+            this.workspace.flyout_.setVisible(true);
+            this.workspace.deleteAreaToolbox_ = null;
+        }
+    }
     /**
      * 重置执行环境
      */
@@ -225,7 +242,13 @@ class BlockView extends Component{
         }
     }
     render(){
-        return <div style={{width:"100%",height:"100%"}} ref={ref=>this.blockDiv=ref}></div>;
+        return <div style={{width:"100%",height:"100%"}} ref={ref=>this.blockDiv=ref}>
+                {this.props.toolbox!=="expand"?<IconButton onClick={this.openFlyOut.bind(this)}
+                    iconStyle={{width:48,height:48,color:"#BDBDBD"}}
+                    style={{position:"absolute",left:"12px",bottom:"12px",width:96,height:96,padding:24}}>
+                    <CreateIcon />
+                </IconButton>:undefined}
+        </div>;
     }
 };
 

@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": 151.21153012116977,
-			"y": -127.81771815027294,
-			"z": 133.75780888410003
+			"x": 144.1257964001134,
+			"y": -84.20208796852016,
+			"z": 122.48060059605264
 		},
 		"rotation": {
-			"x": 1.0838494654884805,
+			"x": 1.0885036768271295,
 			"y": 0,
-			"z": 0.9151343044623677
+			"z": 1.0535970917872501
 		}
 	},
 	"material": {
@@ -137,7 +137,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": true,
-			"file": "scene/vox/Level6-4.vox",
+			"file": "scene/vox/Level6-8.vox",
 			"actions": [
 				{
 					"name": "idle",
@@ -154,14 +154,14 @@
 		},
 		{
 			"position": {
-				"x": -22.5,
-				"y": -37.5,
-				"z": 44.00000001441003
+				"x": -52.5,
+				"y": -38.5,
+				"z": 44.00000058740645
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 3.141592653589793
 			},
 			"name": "男孩",
 			"visible": true,
@@ -176,14 +176,14 @@
 		},
 		{
 			"position": {
-				"x": 16,
-				"y": 53,
-				"z": 44.00000162817799
+				"x": -18,
+				"y": -57,
+				"z": 44.00000017309695
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 4.71238898038469
 			},
 			"name": "终点旗帜",
 			"visible": true,
@@ -195,50 +195,6 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/终点旗帜.item"
-		},
-		{
-			"position": {
-				"x": 13,
-				"y": -1,
-				"z": 47.99999862866546
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "栅栏",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": true,
-			"template": "scene/item/栅栏.item"
-		},
-		{
-			"position": {
-				"x": 13,
-				"y": -55,
-				"z": 48.00000168432651
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "栅栏1",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": true,
-			"template": "scene/item/栅栏.item"
 		}
 	],
 	"zfog": {

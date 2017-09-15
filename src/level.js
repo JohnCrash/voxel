@@ -236,7 +236,8 @@ class Level extends Component{
         }
     }
     onBlockCount(count){
-        this.blockcount.innerText = `${count}×`;
+        if(this.blockcount)
+            this.blockcount.innerText = `${count}×`;
     }
     optionEle(){
         let {music,sound,lang,openMenu,landscape} = this.state;

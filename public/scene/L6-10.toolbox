@@ -12,6 +12,11 @@
 	<block type="turn_right"></block>
 	<block type="jump"></block>
 	<block type="controls_if"></block>
+	<block type="controls_if">
+		<mutation else="1"></mutation>
+	</block>
+	<block type="lift_up"></block>
+	<block type="put_down"></block>
 	<block type="remove_obstacle_fence"></block>
 </xml>
 

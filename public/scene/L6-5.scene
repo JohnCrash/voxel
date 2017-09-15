@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": 151.21153012116977,
-			"y": -127.81771815027294,
-			"z": 133.75780888410003
+			"x": 150.94515038572132,
+			"y": -115.23762951125558,
+			"z": 129.89472164419246
 		},
 		"rotation": {
-			"x": 1.0838494654884805,
+			"x": 1.0611601852125538,
 			"y": 0,
-			"z": 0.9151343044623677
+			"z": 0.9104800931237162
 		}
 	},
 	"material": {
@@ -137,7 +137,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": true,
-			"file": "scene/vox/Level6-4.vox",
+			"file": "scene/vox/Level6-5.vox",
 			"actions": [
 				{
 					"name": "idle",
@@ -154,14 +154,14 @@
 		},
 		{
 			"position": {
-				"x": -22.5,
-				"y": -37.5,
-				"z": 44.00000001441003
+				"x": 55,
+				"y": -55,
+				"z": 43.999999944109916
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 3.141592653589793
 			},
 			"name": "男孩",
 			"visible": true,
@@ -176,14 +176,14 @@
 		},
 		{
 			"position": {
-				"x": 16,
-				"y": 53,
-				"z": 44.00000162817799
+				"x": -35,
+				"y": -57.5,
+				"z": 44.00000186305257
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 4.71238898038469
 			},
 			"name": "终点旗帜",
 			"visible": true,
@@ -198,9 +198,9 @@
 		},
 		{
 			"position": {
-				"x": 13,
+				"x": 19,
 				"y": -1,
-				"z": 47.99999862866546
+				"z": 48.00000130323572
 			},
 			"rotation": {
 				"x": 0,
@@ -220,16 +220,16 @@
 		},
 		{
 			"position": {
-				"x": 13,
-				"y": -55,
-				"z": 48.00000168432651
+				"x": -53,
+				"y": -19,
+				"z": 52.00000053564502
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
 				"z": 0
 			},
-			"name": "栅栏1",
+			"name": "栅栏2",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -239,6 +239,50 @@
 			"castShadow": true,
 			"receiveShadow": true,
 			"template": "scene/item/栅栏.item"
+		},
+		{
+			"position": {
+				"x": 19,
+				"y": 35,
+				"z": 43.999998378672046
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "栅栏3",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/栅栏.item"
+		},
+		{
+			"position": {
+				"x": -54,
+				"y": 0,
+				"z": 47.99999941114102
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 632.2078224230869
+			},
+			"name": "金币",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/金币.item"
 		}
 	],
 	"zfog": {

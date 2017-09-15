@@ -146,7 +146,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 34,
+					"acc": 0,
 					"curIndex": 0
 				}
 			],
@@ -156,7 +156,7 @@
 			"position": {
 				"x": -16.5,
 				"y": -18.5,
-				"z": 43.99999884546068
+				"z": 43.99999937768973
 			},
 			"rotation": {
 				"x": 0,
@@ -171,14 +171,14 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/男孩.item"
 		},
 		{
 			"position": {
 				"x": -52,
 				"y": -55,
-				"z": 44.00000159570354
+				"z": 43.999998313235324
 			},
 			"rotation": {
 				"x": 0,
@@ -193,8 +193,52 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/终点旗帜.item"
+		},
+		{
+			"position": {
+				"x": 36,
+				"y": -1,
+				"z": 43.999998739992705
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "栅栏",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/栅栏.item"
+		},
+		{
+			"position": {
+				"x": -54,
+				"y": -0.5,
+				"z": 43.99999922241278
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "栅栏1",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/栅栏.item"
 		}
 	],
 	"zfog": {

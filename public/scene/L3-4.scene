@@ -291,7 +291,7 @@
 		{
 			"position": {
 				"x": -18,
-				"y": -17,
+				"y": -17.5,
 				"z": 78
 			},
 			"rotation": {
@@ -314,7 +314,7 @@
 		{
 			"position": {
 				"x": 0,
-				"y": -17,
+				"y": -17.5,
 				"z": 58
 			},
 			"rotation": {
@@ -353,7 +353,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/终点旗帜.item"
 		}
 	],

@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": 151.21153012116977,
-			"y": -127.81771815027294,
-			"z": 133.75780888410003
+			"x": 159.31314899934884,
+			"y": -102.93025512707851,
+			"z": 131.03151460366556
 		},
 		"rotation": {
-			"x": 1.0838494654884805,
+			"x": 1.0890854532444616,
 			"y": 0,
-			"z": 0.9151343044623677
+			"z": 0.9541133244235804
 		}
 	},
 	"material": {
@@ -137,7 +137,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": true,
-			"file": "scene/vox/Level6-4.vox",
+			"file": "scene/vox/Level6-10.vox",
 			"actions": [
 				{
 					"name": "idle",
@@ -146,7 +146,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 33,
 					"curIndex": 0
 				}
 			],
@@ -154,14 +154,14 @@
 		},
 		{
 			"position": {
-				"x": -22.5,
-				"y": -37.5,
-				"z": 44.00000001441003
+				"x": -42.5,
+				"y": -36.5,
+				"z": 43.999998564484585
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 1.5707963267948966
 			},
 			"name": "男孩",
 			"visible": true,
@@ -176,9 +176,167 @@
 		},
 		{
 			"position": {
-				"x": 16,
+				"x": 55.5,
+				"y": 34.5,
+				"z": 44.00000139697751
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "女孩",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/女孩.item"
+		},
+		{
+			"position": {
+				"x": 55,
+				"y": 17.5,
+				"z": 44
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "地板开关",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/地板开关.item",
+			"flatColor": "green"
+		},
+		{
+			"position": {
+				"x": -24,
+				"y": -36.5,
+				"z": 40.5
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "地板",
+			"visible": true,
+			"ground": true,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/地板.item",
+			"flatColor": "green"
+		},
+		{
+			"position": {
+				"x": 10.5,
+				"y": -37.5,
+				"z": 43.99999887086605
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "石块",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/石块.item"
+		},
+		{
+			"position": {
+				"x": 54.5,
+				"y": 16,
+				"z": 40.5
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "地板2",
+			"visible": true,
+			"ground": true,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/地板.item",
+			"flatColor": "blue"
+		},
+		{
+			"position": {
+				"x": -8,
+				"y": 35,
+				"z": 31
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "地板开关2",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/地板开关.item",
+			"flatColor": "blue"
+		},
+		{
+			"position": {
+				"x": -25,
 				"y": 53,
-				"z": 44.00000162817799
+				"z": 59.999999321778276
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "栅栏",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/栅栏.item"
+		},
+		{
+			"position": {
+				"x": 58,
+				"y": -19,
+				"z": 43.9999982441452
 			},
 			"rotation": {
 				"x": 0,
@@ -195,50 +353,6 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/终点旗帜.item"
-		},
-		{
-			"position": {
-				"x": 13,
-				"y": -1,
-				"z": 47.99999862866546
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "栅栏",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": true,
-			"template": "scene/item/栅栏.item"
-		},
-		{
-			"position": {
-				"x": 13,
-				"y": -55,
-				"z": 48.00000168432651
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "栅栏1",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": true,
-			"template": "scene/item/栅栏.item"
 		}
 	],
 	"zfog": {

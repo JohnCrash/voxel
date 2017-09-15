@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": 151.21153012116977,
-			"y": -127.81771815027294,
-			"z": 133.75780888410003
+			"x": 172.43939494606641,
+			"y": -118.97418276983626,
+			"z": 139.61867139341345
 		},
 		"rotation": {
-			"x": 1.0838494654884805,
+			"x": 1.0797770305671597,
 			"y": 0,
-			"z": 0.9151343044623677
+			"z": 0.9424777960769459
 		}
 	},
 	"material": {
@@ -137,7 +137,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": true,
-			"file": "scene/vox/Level6-4.vox",
+			"file": "scene/vox/Level6-7.vox",
 			"actions": [
 				{
 					"name": "idle",
@@ -154,9 +154,9 @@
 		},
 		{
 			"position": {
-				"x": -22.5,
-				"y": -37.5,
-				"z": 44.00000001441003
+				"x": -53.5,
+				"y": 53.5,
+				"z": 43.99999834059629
 			},
 			"rotation": {
 				"x": 0,
@@ -176,16 +176,16 @@
 		},
 		{
 			"position": {
-				"x": 16,
-				"y": 53,
-				"z": 44.00000162817799
+				"x": -36,
+				"y": -18.5,
+				"z": 43.99999983935558
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 1318.3033836331936
 			},
-			"name": "终点旗帜",
+			"name": "金币",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -194,13 +194,35 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/终点旗帜.item"
+			"template": "scene/item/金币.item"
 		},
 		{
 			"position": {
-				"x": 13,
+				"x": 18,
+				"y": 18,
+				"z": 44.00000103883277
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1095.938314019419
+			},
+			"name": "金币4",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/金币.item"
+		},
+		{
+			"position": {
+				"x": 1,
 				"y": -1,
-				"z": 47.99999862866546
+				"z": 44.00000012696288
 			},
 			"rotation": {
 				"x": 0,
@@ -215,21 +237,21 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		},
 		{
 			"position": {
-				"x": 13,
-				"y": -55,
-				"z": 48.00000168432651
+				"x": 55,
+				"y": -1,
+				"z": 44.000000210701145
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
 				"z": 0
 			},
-			"name": "栅栏1",
+			"name": "栅栏5",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -237,8 +259,52 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
+		},
+		{
+			"position": {
+				"x": -17,
+				"y": -18.5,
+				"z": 43.99999886499617
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 506.58495698401623
+			},
+			"name": "钥匙",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/钥匙.item"
+		},
+		{
+			"position": {
+				"x": 55,
+				"y": -58.5,
+				"z": 43.99999871753276
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 3.141592653589793
+			},
+			"name": "盒子",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/盒子.item"
 		}
 	],
 	"zfog": {
