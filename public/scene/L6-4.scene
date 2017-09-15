@@ -137,7 +137,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": true,
-			"file": "scene/vox/Level6-2.vox",
+			"file": "scene/vox/Level6-4.vox",
 			"actions": [
 				{
 					"name": "idle",

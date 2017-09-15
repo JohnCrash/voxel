@@ -40,7 +40,7 @@ class BlockView extends Component{
         }
     }
     componentWillReceiveProps(nextProps){
-        if(this.props.file!=nextProps.file){
+        if(this.props.file!=nextProps.file||this.props.layout!=nextProps.layout){
             this.load(nextProps.file);
         }
     }

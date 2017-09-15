@@ -29,7 +29,11 @@ class VoxView extends Component{
         this.load(this.props.file);
     }
     componentWillReceiveProps(nextProps){
-        if(this.props.file!=nextProps.file){
+        if(this.props.file!=nextProps.file||this.props.layout!=nextProps.layout){
+            if(this.props.layout!=nextProps.layout){
+                let parent = this.canvas.parentNode;           
+                this.game.setSize(parent.clientWidth,parent.clientHeight);
+            }
             this.load(nextProps.file);
         }
     }

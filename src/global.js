@@ -4,6 +4,7 @@ class _Global_{
     constructor(){
         this.LevelJson = null;
         this.maxpasslv = 0;
+        this._layout = 'landscape';
     }
     /**
      * 加载当前关卡层次
@@ -121,6 +122,18 @@ class _Global_{
     }
     getCurrentLang(){
         return this._lang;
+    }
+    setLayout(layout){
+        this._layout = layout;
+    }
+    getLayout(){
+        return this._layout;
+    }
+    save(){
+
+    }
+    load(){
+
     }
 };
 

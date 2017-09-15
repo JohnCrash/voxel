@@ -1,0 +1,19 @@
+<xml id="toolbox">
+	<block type="controls_whileUntil"></block>
+	<block type="what_is_it"></block>
+	<block type="forward">
+		<value name="STEP">
+			<shadow type="math_number">
+				<field name="NUM">1</field>
+			</shadow>
+		</value>
+	</block>
+	<block type="turn_left"></block>
+	<block type="turn_right"></block>
+	<block type="jump"></block>
+	<block type="controls_if"></block>
+</xml>
+
+<xml id="default">
+	<block movable="false" deletable="flase" type="when_start" x="20" y="20"></block>
+</xml>

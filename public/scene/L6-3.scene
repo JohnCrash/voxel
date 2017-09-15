@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": 139.5121707101627,
-			"y": -106.15739569545424,
-			"z": 121.18943449645685
+			"x": 124.96643969960155,
+			"y": -153.68311927764265,
+			"z": 137.0699957753015
 		},
 		"rotation": {
-			"x": 1.0396344577712902,
+			"x": 1.0879219004098,
 			"y": 0,
-			"z": 0.8214683012720052
+			"z": 0.7452555906015863
 		}
 	},
 	"material": {
@@ -137,7 +137,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": true,
-			"file": "scene/vox/Level6-2.vox",
+			"file": "scene/vox/Level6-3.vox",
 			"actions": [
 				{
 					"name": "idle",
@@ -146,7 +146,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 33,
+					"acc": 34,
 					"curIndex": 0
 				}
 			],
@@ -154,14 +154,14 @@
 		},
 		{
 			"position": {
-				"x": 55,
-				"y": -55,
-				"z": 44.00000114551046
+				"x": -16.5,
+				"y": -18.5,
+				"z": 43.99999884546068
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 3.141592653589793
+				"z": 0
 			},
 			"name": "男孩",
 			"visible": true,
@@ -171,14 +171,14 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/男孩.item"
 		},
 		{
 			"position": {
-				"x": 21,
-				"y": 0,
-				"z": 44.000000877686034
+				"x": -52,
+				"y": -55,
+				"z": 44.00000159570354
 			},
 			"rotation": {
 				"x": 0,
@@ -193,7 +193,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/终点旗帜.item"
 		}
 	],

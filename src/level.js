@@ -53,7 +53,8 @@ class Level extends Component{
             openMenu:false,
             music:false,
             sound:false,
-            lang:false
+            lang:false,
+            landscape:Global.getLayout()==="landscape",
         }
     }
     Menu(){
@@ -64,7 +65,8 @@ class Level extends Component{
         this.setState({openMenu:true,
             music:Global.isMusic(),
             sound:Global.isSound(),
-            lang:Global.getCurrentLang()!=="zh"});
+            lang:Global.getCurrentLang()!=="zh",
+            landscape:Global.getLayout()==="landscape"});
     }
     Reset(){
         //重新加载全部资源
@@ -236,29 +238,36 @@ class Level extends Component{
     onBlockCount(count){
         this.blockcount.innerText = `${count}×`;
     }
-    render(){
-        let {playPause,levelDesc,music,sound,lang,
-            mute,curSelectTest,openTops,openMenu} = this.state;
-        let {level} = this.props;
-
+    optionEle(){
+        let {music,sound,lang,openMenu,landscape} = this.state;
+        return <Drawer docked={false} open={openMenu} onRequestChange={(open) => this.setState({openMenu:open})}>
+            <MenuItem primaryText="返回选择关卡" style={{marginBottom:32}} leftIcon={<IconHome /> } onClick={this.onReturnMain.bind(this)} />
+            <Toggle label="背影音乐" style={ToggleStyle} defaultToggled={music} onToggle={(e,b)=>{
+                this.setState({music:b});
+                Global.muteMusic(b);
+            }} />
+            <Toggle label="音效" style={ToggleStyle} defaultToggled={sound} onToggle={(e,b)=>{
+                this.setState({sound:b});
+                Global.muteSound(b);
+            }} />
+            <Toggle label="使用英语" style={ToggleStyle} defaultToggled={lang} onToggle={(e,b)=>{
+                this.setState({lang:b});
+                Global.setCurrentLang(b?"en":"zh");
+            }} />   
+            <Toggle label="使用竖屏" style={ToggleStyle} defaultToggled={!landscape} onToggle={(e,b)=>{
+                this.setState({landscape:!b});
+                Global.setLayout(!b?"landscape":"portrait");
+            }} />                           
+        </Drawer>;
+    }
+    toolbarEle(){
+        let {playPause,curSelectTest} = this.state;   
         let tests = [];
         if(this.testXML){
             for(let i=0;i<this.testXML.length;i++)
                 tests.push(<MenuItem value={i} key={i} primaryText={`test ${i}`} />);
-        }
-        return <div>
-            <div style={{position:"absolute",left:"0px",top:"0px",right:"50%",bottom:"30%"}}>
-                <VoxView file={level} ref={ref=>this.voxview=ref}/>
-            </div>
-            <div style={{position:"absolute",left:"50%",top:"0px",right:"0px",bottom:"0px"}}>
-                <BlockView ref={ref=>this.blockview=ref} file={`scene/${level}.toolbox`} onBlockCount={this.onBlockCount.bind(this)}/>
-                <div style={{position:"absolute",right:"12px",top:"12px"}}>
-                    <span ref={ref=>this.blockcount=ref} style={{fontSize:"24px",fontWeight:"bold",verticalAlign:"top"}}>0×</span>
-                    <img src="media/title-beta.png" height="24px" />
-                </div>
-            </div>
-            <div style={{position:"absolute",display:"flex",flexDirection:"column",left:"0px",top:"70%",right:"50%",bottom:"0px"}}>
-                <Toolbar>
+        }             
+        return <Toolbar>
                     <ToolbarGroup>
                         <IconButton touch={true} onClick={this.Menu.bind(this)}>
                             <IconMenu />
@@ -295,29 +304,67 @@ class Level extends Component{
                             {playPause?<IconPlayArrow />:<IconPause />}
                         </IconButton>
                     </ToolbarGroup>
-                </Toolbar>
+                </Toolbar>;
+    }
+    //横屏
+    landscape(){
+        let {levelDesc,music,sound,lang,curSelectTest,openTops,openMenu} = this.state;
+        let {level} = this.props;
+        return <div>
+            <div style={{position:"absolute",left:"0px",top:"0px",right:"50%",bottom:"30%"}}>
+                <VoxView file={level} ref={ref=>this.voxview=ref}  layout="landscape"/>
+            </div>
+            <div style={{position:"absolute",left:"50%",top:"0px",right:"0px",bottom:"0px"}}>
+                <div style={{position:"absolute",left:"0px",right:"0px",top:"0px",bottom:"0px"}}>
+                <BlockView ref={ref=>this.blockview=ref} 
+                    file={`scene/${level}.toolbox`} 
+                    onBlockCount={this.onBlockCount.bind(this)}
+                    layout="landscape"/>
+                </div>
+                <div style={{position:"absolute",right:"12px",top:"12px"}}>
+                    <span ref={ref=>this.blockcount=ref} style={{fontSize:"24px",fontWeight:"bold",verticalAlign:"top"}}>0×</span>
+                    <img src="media/title-beta.png" height="24px" />
+                </div>
+            </div>
+            <div style={{position:"absolute",display:"flex",flexDirection:"column",left:"0px",top:"70%",right:"50%",bottom:"0px"}}>
+                {this.toolbarEle()}
                 <div style={{width:"100%",height:"100%",overflowY: "auto"}}>
                     <MarkdownElement file={`scene/${level}.md`}/>
                 </div>
             </div>
             <MessageBox/>
+            {this.optionEle()}
             <Tops ref={ref=>this.Tops=ref} level={level}/>
-            <Drawer docked={false} open={openMenu} onRequestChange={(open) => this.setState({openMenu:open})}>
-                <MenuItem primaryText="返回选择关卡" style={{marginBottom:32}} leftIcon={<IconHome /> } onClick={this.onReturnMain.bind(this)} />
-                <Toggle label="背影音乐" style={ToggleStyle} defaultToggled={music} onToggle={(e,b)=>{
-                    this.setState({music:b});
-                    Global.muteMusic(b);
-                }} />
-                <Toggle label="音效" style={ToggleStyle} defaultToggled={sound} onToggle={(e,b)=>{
-                    this.setState({sound:b});
-                    Global.muteSound(b);
-                }} />
-                <Toggle label="使用英语" style={ToggleStyle} defaultToggled={lang} onToggle={(e,b)=>{
-                    this.setState({lang:b});
-                    Global.setCurrentLang(b?"en":"zh");
-                }} />                
-            </Drawer>
         </div>;
+    }
+    //竖屏
+    portrait(){
+        let {levelDesc,music,sound,lang,curSelectTest,openTops,openMenu} = this.state;
+        let {level} = this.props;
+        return <div>
+            <div style={{position:"absolute",left:"0px",top:"0px",right:"0px",bottom:"60%"}}>
+                <VoxView file={level} ref={ref=>this.voxview=ref} layout="portrait"/>
+            </div>
+            <div style={{position:"absolute",left:"0px",top:"40%",right:"0px",bottom:"0px"}}>
+                {this.toolbarEle()}
+                <div style={{position:"absolute",left:"0px",right:"0px",top:"56px",bottom:"0px"}}>
+                <BlockView ref={ref=>this.blockview=ref} 
+                    file={`scene/${level}.toolbox`} 
+                    onBlockCount={this.onBlockCount.bind(this)}
+                    layout="portrait" />
+                </div>
+                <div style={{position:"absolute",right:"12px",top:"78px"}}>
+                    <span ref={ref=>this.blockcount=ref} style={{fontSize:"24px",fontWeight:"bold",verticalAlign:"top"}}>0×</span>
+                    <img src="media/title-beta.png" height="24px" />
+                </div>
+            </div>
+            <MessageBox/>
+            {this.optionEle()}
+            <Tops ref={ref=>this.Tops=ref} level={level}/>
+        </div>;
+    }
+    render(){
+        return this.state.landscape?this.landscape():this.portrait();
     }
 };
 
