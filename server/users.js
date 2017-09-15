@@ -1,4 +1,4 @@
-var sql = require('mssql');
+var Sql = require('mssql');
 var express = require('express');
 var multiparty = require('multiparty');
 var crypto = require('crypto');
@@ -23,25 +23,43 @@ function stripTailSpace(s){
   }
   return s;
 }
-function sqlQuery(query,cb,ep){
-  new sql.ConnectionPool(config).connect().then(pool=>{
+
+function sql(query){
+  return new Sql.ConnectionPool(config).connect().then(pool=>{
     return pool.request().query(query);
-  }).then(result=>{
-    if(cb)cb(result);
-  }).catch(err=>{
-    if(ep)
-      ep(err);
-    else
-      console.log(err);
   });
 }
+
+/**
+ * cookies => UserInfo
+ */
+router.use(function(req,res,next){
+  let cc = req.cookies.cc;
+  console.log('cookies cechker ' + cc);
+  if(cc){
+    sql(`select * from UserInfo where cookie='${cc}'`).then((result)=>{
+      req.UserInfo = result.recordset[0];
+      if(req.UserInfo){
+        next();
+      }else{
+        throw '没有找到用户';
+      }
+    }).catch((err)=>{
+      res.json({result:err});
+    });
+  }else{
+    if(req.url!=='/login')
+      res.json({result:'请登录再进行游戏'});
+    else next();
+  }
+});
 
 function login(req,res,user,passwd){
   if(!(user && passwd)){
     res.json({result:'请输入用户名密码'});
     return;
   } 
-  sqlQuery(`select * from UserInfo where UserAcount='${user}'`,(result)=>{
+  sql(`select * from UserInfo where UserAcount='${user}'`).then((result)=>{
     if( result.recordset[0] && 'UserPwd' in result.recordset[0]){
       let pwd = stripTailSpace(result.recordset[0].UserPwd);
       if(pwd===passwd){
@@ -52,88 +70,47 @@ function login(req,res,user,passwd){
           var md5sum = crypto.createHash('md5');
           md5sum.update(user+passwd);
           cookie = md5sum.digest('hex');
-          sqlQuery(`update UserInfo set cookie='${cookie}' where UserAcount='${user}'`,(result)=>{},(err)=>{});
+          sql(`update UserInfo set cookie='${cookie}' where UserAcount='${user}'`);
         }
-        sqlQuery(`update UserInfo set lastlogin=getdate() where UserAcount='${result.recordset[0].UserAcount}'`,()=>{},()=>{});
+        sql(`update UserInfo set lastlogin=getdate() where UserAcount='${result.recordset[0].UserAcount}'`);
         res.cookie('cc',cookie);
         res.json({
-          lv,
           result:'ok',
+          lv,
           user:stripTailSpace(userName)
         });
-      }else{
-        res.json({result:'密码不正确'});
-      }
-    }else{
-      res.json({result:'用户名不存在'});
-    }
-  },(err)=>{
-    res.send(err);
+      }else throw'密码不正确';
+    }else throw '用户名不存在';
+  }).catch((err)=>{
+    res.send({result:err});
   });
 }
 /**
  * 登录，返回关卡进行状况
  */
 router.post('/login',function(req,res){
-  let cc = req.cookies.cc;
-  if(cc){ //通过cookie登录
-    sqlQuery(`select * from UserInfo where cookie='${cc}'`,(result)=>{
-      if(result.recordset[0] && result.recordset[0].UserName && result.recordset[0].UserAcount){
-        sqlQuery(`update UserInfo set lastlogin=getdate() where UserAcount='${result.recordset[0].UserAcount}'`,()=>{},()=>{});
-          let cookie = result.recordset[0].cookie;
-          let userName = result.recordset[0].UserName;
-          let lv = result.recordset[0].lv;        
-          res.json({
-            lv,
-            result:'ok',
-            user:stripTailSpace(userName)
-          });
-      }else{
-        login(req,res,req.body.user,req.body.passwd);
-      }
-    },(err)=>{
-      res.send(err);
+  if(req.UserInfo){ //通过cookie登录
+    sql(`update UserInfo set lastlogin=getdate() where UserAcount='${req.UserInfo.UserAcount}'`);
+    let cookie = req.UserInfo.cookie;
+    let userName = req.UserInfo.UserName;
+    let lv = req.UserInfo.lv;
+    res.json({
+      lv,
+      result:'ok',
+      user:stripTailSpace(userName)
     });
-    return;
-  }
-  login(req,res,req.body.user,req.body.passwd);
-});
-
-/**
- * cookies => UserInfo
- */
-router.use(function(req,res,next){
-  let cc = req.cookies.cc;
-  console.log('cookies cechker ' + cc);
-  if(cc){
-    sqlQuery(`select * from UserInfo where cookie='${cc}'`,(result)=>{
-      req.UserInfo = result.recordset[0];
-      if(req.UserInfo){
-        next();
-      }else{
-        res.json({result:'没有找到用户'});
-      }
-    },(err)=>{
-      res.json({result:err});
-    });
-  }else{
-    res.json({result:'请登录再进行游戏'});
-  }
+  }else
+    login(req,res,req.body.user,req.body.passwd);
 });
 
 function tops(req,res){
   let lname = req.body.lname;
-  sqlQuery(`select blocks,count from Tops where lname='${lname}'`,(result)=>{
-    let data = result.recordset;
-    sqlQuery(`select uname,blocks,try from Level where lname='${lname}' and cls='${req.UserInfo.cls}'`,(result2)=>{
-      let cls = result2.recordset;
-      res.json({result:'ok',
-      tops:data,
-      cls});
-    },(err)=>{
-      res.json({result:err});
-    });
-  },(err)=>{
+  Promise.all([sql(`select blocks,count from Tops where lname='${lname}'`),
+  sql(`select uname,blocks,try from Level where lname='${lname}' and cls='${req.UserInfo.cls}'`)]).then(([data,cls])=>{
+    res.json({result:'ok',
+    tops:data.recordset,
+    cls:cls.recordset});
+  }).catch((err)=>{
     res.json({result:err});
   });
 }
@@ -149,22 +126,22 @@ router.post('/commit',function(req,res){
   if(method && (req.UserInfo.lv+1)>=lv){
     //更新用户做到第几关了
     if(req.UserInfo.lv+1==lv)
-      sqlQuery(`update UserInfo set lv='${lv}' where uid='${req.UserInfo.uid}'`,(result)=>{},(err)=>{res.json({result:err});});
+      sql(`update UserInfo set lv='${lv}' where uid='${req.UserInfo.uid}'`);
     //提交成绩
     var md5sum = crypto.createHash('md5');
     md5sum.update(method);
     var md5 = md5sum.digest('hex');
     //更新方法
-    sqlQuery(`select count from Method where md5='${md5}'`,(result)=>{
+    sql(`select count from Method where md5='${md5}'`).then((result)=>{
       if(result.recordset[0]){
         let count = result.recordset[0].count+1;
-        sqlQuery(`update Method set count=${count} where md5='${md5}'`);
+        sql(`update Method set count=${count} where md5='${md5}'`);
       }else{
-        sqlQuery(`insert into Method (lv,lname,blocks,count,method,md5) values (${lv},'${lname}',${blocks},1,N'${method}','${md5}')`);
+        sql(`insert into Method (lv,lname,blocks,count,method,md5) values (${lv},'${lname}',${blocks},1,N'${method}','${md5}')`);
       }
     });
     //更新个人成绩
-    sqlQuery(`select try,blocks,tms,avgms from Level where uid='${req.UserInfo.uid}' and lname='${lname}'`,(result)=>{
+    sql(`select try,blocks,tms,avgms from Level where uid='${req.UserInfo.uid}' and lname='${lname}'`).then((result)=>{
       let data = result.recordset[0];
       let avgms = req.body.each;
       let tms = req.body.total;
@@ -173,14 +150,14 @@ router.post('/commit',function(req,res){
           avgms += data.avgms;
           avgms /= 2;
           tms += data.tms;
-          sqlQuery(`update Level set blocks=${blocks},md5='${md5}',try=${data.try+1},tms=${tms},avgms=${avgms} where uid='${req.UserInfo.uid}' and lname='${lname}'`);
+          sql(`update Level set blocks=${blocks},md5='${md5}',try=${data.try+1},tms=${tms},avgms=${avgms} where uid='${req.UserInfo.uid}' and lname='${lname}'`);
         }
       }else{
-        sqlQuery(`insert into Level (lv,lname,blocks,try,md5,uid,cls,uname,tms,avgms) values (${lv},'${lname}',${blocks},1,'${md5}',${req.UserInfo.uid},${req.UserInfo.cls},'${req.UserInfo.UserName}',${tms},${avgms})`);
+        sql(`insert into Level (lv,lname,blocks,try,md5,uid,cls,uname,tms,avgms) values (${lv},'${lname}',${blocks},1,'${md5}',${req.UserInfo.uid},${req.UserInfo.cls},'${req.UserInfo.UserName}',${tms},${avgms})`);
       }
     });
     //更新排行榜
-    sqlQuery(`select count,blocks from Tops where lname='${lname}'`,(result)=>{
+    sql(`select count,blocks from Tops where lname='${lname}'`).then((result)=>{
       let data = result.recordset;
       let maxblocks = -1;
       let hasblock = false;
@@ -194,17 +171,17 @@ router.post('/commit',function(req,res){
         }
       }
       if(data.length<5 && !hasblock){//插入新的
-        sqlQuery(`insert into Tops (lname,lv,blocks,count) values ('${lname}',${lv},${blocks},1)`,(result)=>{tops(req,res);},(err)=>{res.json({result:err});});
+        return sql(`insert into Tops (lname,lv,blocks,count) values ('${lname}',${lv},${blocks},1)`);
       }else{
         if(hasblock){ //增加计数
-          sqlQuery(`update Tops set count=${datacount+1} where lname='${lname}' and blocks=${blocks}`,(result)=>{tops(req,res);},(err)=>{res.json({result:err});});
+          return sql(`update Tops set count=${datacount+1} where lname='${lname}' and blocks=${blocks}`);
         }else if(blocks<maxblocks){ //更新块
-          sqlQuery(`update Tops set count=1,blocks=${blocks} where lname='${lname}' and blocks=${maxblocks}`,(result)=>{tops(req,res);},(err)=>{res.json({result:err});});
-        }else{ //未上榜
-          tops(req,res);
-        }
+          return sql(`update Tops set count=1,blocks=${blocks} where lname='${lname}' and blocks=${maxblocks}`);
+        }//未上榜
       }
-    },(err)=>{
+    }).then((result)=>{
+      tops(req,res);
+    }).catch((err)=>{
       res.json({result:err});
     });
   }else{

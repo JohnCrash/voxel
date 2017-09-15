@@ -138,8 +138,12 @@ class Level extends Component{
             this.Reset();
             this.needReset = false;
         }
-        this.blockview.setEndCB(()=>{
-            this.needReset = true;
+        this.blockview.setEndCB((state)=>{
+            if(state === 'end'||state === 'error')
+                this.needReset = true;
+            if(state === 'error'){
+                MessageBox.show('ok',undefined,<MarkdownElement file={'scene/ui/program_error.md'}/>,(result)=>{});
+            }            
         });
         this.voxview.readyPromise.then(()=>{
             this.blockview.step();

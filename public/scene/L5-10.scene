@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": 181.51837420098425,
-			"y": 30.24545161275094,
-			"z": 131.86266713373544
+			"x": 75.92800101127862,
+			"y": -171.291071919187,
+			"z": 130.77071058155238
 		},
 		"rotation": {
-			"x": 1.0378891285192977,
+			"x": 1.0885036768271352,
 			"y": 0,
-			"z": 1.6691165413239166
+			"z": 0.436332312998589
 		}
 	},
 	"material": {
@@ -137,7 +137,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": true,
-			"file": "scene/vox/Level5-6.vox",
+			"file": "scene/vox/Level5-10.vox",
 			"actions": [
 				{
 					"name": "idle",
@@ -146,7 +146,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 33,
+					"acc": 0,
 					"curIndex": 0
 				}
 			],
@@ -154,14 +154,36 @@
 		},
 		{
 			"position": {
-				"x": -36.5,
-				"y": -52.5,
-				"z": 40.00000057301008
+				"x": 56.5,
+				"y": 54.5,
+				"z": 40.00000034815935
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1.5707963267948966
+				"z": 0
+			},
+			"name": "终点旗帜",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/终点旗帜.item"
+		},
+		{
+			"position": {
+				"x": -35.5,
+				"y": -54.5,
+				"z": 40.000000438241
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 3.141592653589793
 			},
 			"name": "男孩",
 			"visible": true,
@@ -171,14 +193,14 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/男孩.item"
 		},
 		{
 			"position": {
-				"x": 17.5,
-				"y": 0.5,
-				"z": 39.99999892089858
+				"x": 18,
+				"y": 0,
+				"z": 40.00000175806237
 			},
 			"rotation": {
 				"x": 0,
@@ -191,72 +213,6 @@
 			"collision": true,
 			"fixed": false,
 			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/栅栏.item"
-		},
-		{
-			"position": {
-				"x": -18.5,
-				"y": -35.5,
-				"z": 40.000001029059334
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "栅栏1",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/栅栏.item"
-		},
-		{
-			"position": {
-				"x": 54,
-				"y": 57,
-				"z": 39.999999692874724
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 1.5707963267948966
-			},
-			"name": "终点旗帜",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/终点旗帜.item"
-		},
-		{
-			"position": {
-				"x": 36,
-				"y": 18.5,
-				"z": 40
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "栅栏2",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": true,
