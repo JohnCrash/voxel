@@ -25,6 +25,9 @@ function xmlHead(s){
     return `<xml xmlns="http://www.w3.org/1999/xhtml">${s}</xml>`;
 }
 
+const startBlockDrag = Blockly.BlockDragger.prototype.startBlockDrag;
+const endBlockDrag = Blockly.BlockDragger.prototype.endBlockDrag;
+
 class BlockView extends Component{
     constructor(props){
         super(props);
@@ -33,8 +36,12 @@ class BlockView extends Component{
         this.pauseRun = false;
         BlocklyInterface.setCurrentBlockView(this);
         Global.setCurrentBlocklyView(this);
+        this.state = {
+            tbopen:true
+        };
     }
     componentDidMount(){
+        this.toolboxMode = this.props.toolbox;
         if(this.props.file){
             this.load(this.props.file);
         }else{
@@ -42,8 +49,11 @@ class BlockView extends Component{
         }
     }
     componentWillReceiveProps(nextProps){
-        if(this.props.file!=nextProps.file||this.props.layout!=nextProps.layout){
+        if(this.props.file!=nextProps.file){
             this.load(nextProps.file);
+        }else if(this.props.toolbox!=nextProps.toolbox){
+            this.toolboxMode = nextProps.toolbox;
+            this.initWorkspace();
         }
     }
     load(file){
@@ -90,11 +100,10 @@ class BlockView extends Component{
         }catch(e){
             this.workspace = Blockly.inject(this.blockDiv);
             console.log(`Can not inject blocly workspace \n${e}`);
-        }
-        this.workspace.scrollX = 12;        
-        this.workspace.scrollY = 12;        
+        }       
         this.workspace.addChangeListener((event)=>{
-            this.workspace.flyout_.setVisible(false);
+            if(this.toolboxMode!=="expand")
+                this.workspace.flyout_.setVisible(false);
             if(this.props.onBlockCount)
                 this.props.onBlockCount(this.getBlockCount());
             this.reset();
@@ -105,10 +114,38 @@ class BlockView extends Component{
             let dom = Blockly.Xml.textToDom(this.defaultXML);
             Blockly.Xml.domToWorkspace(dom,this.workspace);
         }
-        if(this.props.toolbox!=="expand"){
+        if(this.toolboxMode!=="expand"){
+            console.log('closed');
+            this.workspace.scrollX = 12;        
+            this.workspace.scrollY = 12;             
+            let trashcan = this.workspace.trashcan;
+            let _this = this;
+            _this.setState({tbopen:true});
+            trashcan.svgGroup_.style.opacity=0;
+            this.workspace.svgBackground_.onmousedown = function(e){
+                _this.workspace.flyout_.setVisible(false);
+            }
+            //设置拖动挂钩监视块的拖动
+            Blockly.BlockDragger.prototype.startBlockDrag = function(xy){
+                startBlockDrag.call(this,xy);
+                trashcan.svgGroup_.style.opacity=0.4;
+                _this.setState({tbopen:false});
+            }            
+            
+            Blockly.BlockDragger.prototype.endBlockDrag = function(e,xy){
+                endBlockDrag.call(this,e,xy);
+                setTimeout(()=>{ //有个合上垃圾桶的过程
+                    trashcan.svgGroup_.style.opacity=0;
+                    _this.setState({tbopen:true});
+                },600);
+            }
+
             this.workspace.flyout_.setVisible(false);
             this.workspace.deleteAreaToolbox_ = null;
             this.workspace.updateScreenCalculationsIfScrolled();
+        }else{//恢复挂钩
+            Blockly.BlockDragger.prototype.startBlockDrag = startBlockDrag;
+            Blockly.BlockDragger.prototype.endBlockDrag = endBlockDrag;
         }
     }
     /**
@@ -243,9 +280,12 @@ class BlockView extends Component{
     }
     render(){
         return <div style={{width:"100%",height:"100%"}} ref={ref=>this.blockDiv=ref}>
-                {this.props.toolbox!=="expand"?<IconButton onClick={this.openFlyOut.bind(this)}
+                {this.toolboxMode!=="expand"?<IconButton
+                    onClick={this.openFlyOut.bind(this)}
                     iconStyle={{width:48,height:48,color:"#BDBDBD"}}
-                    style={{position:"absolute",left:"12px",bottom:"12px",width:96,height:96,padding:24}}>
+                    style={{display:this.state.tbopen?"inline-block":"none",
+                    position:"absolute",
+                    right:"12px",bottom:"12px",width:96,height:96,padding:24}}>
                     <CreateIcon />
                 </IconButton>:undefined}
         </div>;

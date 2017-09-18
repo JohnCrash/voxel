@@ -6,7 +6,7 @@ export default function en(){
     Blockly.Msg["FORWARD"] = "move forward";
     Blockly.Msg["TURN_LEFT"] = "turn left 90°";
     Blockly.Msg["TURN_RIGHT"] = "turn right 90°";
-    Blockly.Msg["JUMP"] = "jump";
+    Blockly.Msg["JUMP"] = "jump forward";
     Blockly.Msg["CLEAR_OBSTACLE"] = " remove obstacle ";
     Blockly.Msg["OPEN_BOX"] = " open box ";
     Blockly.Msg["LIFT_UP"] = " lift up ";

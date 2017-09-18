@@ -5,6 +5,7 @@ class _Global_{
         this.LevelJson = null;
         this.maxpasslv = 0;
         this._layout = 'landscape';
+        this._btb = 'expand';
     }
     /**
      * 加载当前关卡层次
@@ -128,6 +129,12 @@ class _Global_{
     }
     getLayout(){
         return this._layout;
+    }
+    setBlocklyToolbar(m){
+        this._btb = m;
+    }
+    getBlocklyToolbar(){
+        return this._btb;
     }
     save(){
 

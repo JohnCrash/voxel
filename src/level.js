@@ -55,6 +55,7 @@ class Level extends Component{
             sound:false,
             lang:false,
             landscape:Global.getLayout()==="landscape",
+            blocklytoolbox:"expand", //展开blockly工具条
         }
     }
     Menu(){
@@ -240,7 +241,7 @@ class Level extends Component{
             this.blockcount.innerText = `${count}×`;
     }
     optionEle(){
-        let {music,sound,lang,openMenu,landscape} = this.state;
+        let {music,sound,lang,openMenu,landscape,blocklytoolbox} = this.state;
         return <Drawer docked={false} open={openMenu} onRequestChange={(open) => this.setState({openMenu:open})}>
             <MenuItem primaryText="返回选择关卡" style={{marginBottom:32}} leftIcon={<IconHome /> } onClick={this.onReturnMain.bind(this)} />
             <Toggle label="背影音乐" style={ToggleStyle} defaultToggled={music} onToggle={(e,b)=>{
@@ -258,7 +259,11 @@ class Level extends Component{
             <Toggle label="使用竖屏" style={ToggleStyle} defaultToggled={!landscape} onToggle={(e,b)=>{
                 this.setState({landscape:!b});
                 Global.setLayout(!b?"landscape":"portrait");
-            }} />                           
+            }} />   
+            <Toggle label="Blockly紧凑工具条" style={ToggleStyle} defaultToggled={blocklytoolbox!=="expand"} onToggle={(e,b)=>{
+                this.setState({blocklytoolbox:b?"close":"expand"});
+                Global.setBlocklyToolbar(b?"close":"expand");
+            }} />                                      
         </Drawer>;
     }
     toolbarEle(){
@@ -309,7 +314,7 @@ class Level extends Component{
     }
     //横屏
     landscape(){
-        let {levelDesc,music,sound,lang,curSelectTest,openTops,openMenu} = this.state;
+        let {levelDesc,music,sound,lang,curSelectTest,openTops,openMenu,blocklytoolbox} = this.state;
         let {level} = this.props;
         return <div>
             <div style={{position:"absolute",left:"0px",top:"0px",right:"50%",bottom:"30%"}}>
@@ -320,7 +325,8 @@ class Level extends Component{
                 <BlockView ref={ref=>this.blockview=ref} 
                     file={`scene/${level}.toolbox`} 
                     onBlockCount={this.onBlockCount.bind(this)}
-                    layout="landscape"/>
+                    layout="landscape"
+                    toolbox={blocklytoolbox} />
                 </div>
                 <div style={{position:"absolute",right:"12px",top:"12px"}}>
                     <span ref={ref=>this.blockcount=ref} style={{fontSize:"24px",fontWeight:"bold",verticalAlign:"top"}}>0×</span>
@@ -340,7 +346,7 @@ class Level extends Component{
     }
     //竖屏
     portrait(){
-        let {levelDesc,music,sound,lang,curSelectTest,openTops,openMenu} = this.state;
+        let {levelDesc,music,sound,lang,curSelectTest,openTops,openMenu,blocklytoolbox} = this.state;
         let {level} = this.props;
         return <div>
             <div style={{position:"absolute",left:"0px",top:"0px",right:"0px",bottom:"60%"}}>
@@ -352,7 +358,8 @@ class Level extends Component{
                 <BlockView ref={ref=>this.blockview=ref} 
                     file={`scene/${level}.toolbox`} 
                     onBlockCount={this.onBlockCount.bind(this)}
-                    layout="portrait" />
+                    layout="portrait"
+                    toolbox={blocklytoolbox} />
                 </div>
                 <div style={{position:"absolute",right:"12px",top:"78px"}}>
                     <span ref={ref=>this.blockcount=ref} style={{fontSize:"24px",fontWeight:"bold",verticalAlign:"top"}}>0×</span>
