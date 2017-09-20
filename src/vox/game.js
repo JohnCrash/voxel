@@ -240,7 +240,7 @@ Game.prototype.addDirectionaLight=function(t){
 
     light.name = t.name || '';
 
-    light.castShadow = true;
+    light.castShadow = false;
     light.shadow.mapSize.width = t.shadowMapWidth || 1024;
     light.shadow.mapSize.height = t.shadowMapHeight || 1024;              
     var d = t.shadowRound||100;
@@ -248,12 +248,16 @@ Game.prototype.addDirectionaLight=function(t){
     light.shadow.camera.right = d;
     light.shadow.camera.top = d;
     light.shadow.camera.bottom = -d;
+    light.shadow.camera.near = 0.5;
     light.shadow.camera.far = 3500;
     light.shadow.bias = t.bias||0;
 
     if(t.position)light.position.set(t.position.x,t.position.y,t.position.z);
     if(t.rotation)light.rotation.set(t.rotation.x,t.rotation.y,t.rotation.z);
     this.scene.add(light);
+    setTimeout(()=>{
+        light.castShadow = true;
+    },100);
     return light;
 }
 
@@ -266,6 +270,7 @@ Game.prototype.removeLight=function(light){
 
 Game.prototype.removeSkybox=function(){
     if(this.skybox){
+        this.scene.fog = null;
         this.scene.remove(this.skybox.sky);
         this.scene.remove(this.skybox.ground);
         this.skybox.sky = null;

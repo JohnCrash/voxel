@@ -1,17 +1,17 @@
 {
 	"music": "",
 	"loop": true,
-	"bgcolor": 5504221,
+	"bgcolor": 56575,
 	"camera": {
 		"position": {
-			"x": -67.25028453581317,
-			"y": -89.43295430689146,
-			"z": 96.5318015667345
+			"x": 72.61117108996325,
+			"y": -149.325339534868,
+			"z": 123.57607064818758
 		},
 		"rotation": {
-			"x": 1.0553424210392395,
+			"x": 1.058251303125892,
 			"y": 0,
-			"z": -0.6475171524898894
+			"z": 0.4689117923691509
 		}
 	},
 	"material": {
@@ -44,10 +44,10 @@
 			},
 			"uuid": "8CBEA633-C2BA-47F9-AF07-2AC7BB62F5EB",
 			"type": "MeshPhongMaterial",
-			"color": 9868950,
-			"emissive": 0,
+			"color": 16777215,
+			"emissive": 2236962,
 			"specular": 0,
-			"shininess": 45.666034809581255,
+			"shininess": 32,
 			"shading": 1,
 			"vertexColors": 2,
 			"opacity": 0.7000000000000001,
@@ -87,18 +87,18 @@
 			"type": "ambient",
 			"name": "环境灯3",
 			"color": {
-				"r": 0.4588235294117647,
-				"g": 0.3411764705882353,
-				"b": 0.3411764705882353
+				"r": 0.4117647058823529,
+				"g": 0.4117647058823529,
+				"b": 0.4117647058823529
 			}
 		},
 		{
 			"type": "direct",
 			"name": "方向灯4",
 			"color": {
-				"r": 1,
-				"g": 1,
-				"b": 1
+				"r": 0.47843137254901963,
+				"g": 0.47843137254901963,
+				"b": 0.47843137254901963
 			},
 			"position": {
 				"x": 133.89626055488543,
@@ -137,7 +137,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"file": "scene/vox/Level1-8.vox",
 			"actions": [
 				{
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 33,
 					"curIndex": 0
 				}
 			]
@@ -156,7 +156,7 @@
 			"position": {
 				"x": -35.5,
 				"y": -12.5,
-				"z": 39.999999548961696
+				"z": 48
 			},
 			"rotation": {
 				"x": 0,
@@ -178,7 +178,7 @@
 			"position": {
 				"x": 40.5,
 				"y": -12.5,
-				"z": 47.99999971419563
+				"z": 55
 			},
 			"rotation": {
 				"x": 0,
@@ -193,15 +193,15 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/终点旗帜.item"
 		}
 	],
 	"zfog": {
 		"color": {
-			"r": 0.3254901960784314,
-			"g": 0.9882352941176471,
-			"b": 0.8666666666666667
+			"r": 0,
+			"g": 0.8627450980392157,
+			"b": 1
 		},
 		"high": 40,
 		"low": 0
