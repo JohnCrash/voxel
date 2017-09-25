@@ -50,6 +50,7 @@
 			"shininess": 32,
 			"shading": 1,
 			"vertexColors": 2,
+			"opacity": 0.7000000000000001,
 			"depthFunc": 3,
 			"depthTest": true,
 			"depthWrite": true,
@@ -136,7 +137,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"file": "scene/vox/Level4-6.vox",
 			"actions": [
 				{
@@ -182,7 +183,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 604.8979574854487
+				"z": 622.0133542622008
 			},
 			"name": "宝石",
 			"visible": true,
@@ -204,7 +205,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 476.07695072502213
+				"z": 493.1923475017813
 			},
 			"name": "宝石1",
 			"visible": true,
@@ -226,7 +227,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 396.78001055575436
+				"z": 413.8954073325135
 			},
 			"name": "宝石2",
 			"visible": true,
@@ -248,7 +249,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 300.285992200734
+				"z": 317.4013889774931
 			},
 			"name": "宝石3",
 			"visible": true,
@@ -270,7 +271,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 209.25206187765644
+				"z": 226.36745865441418
 			},
 			"name": "宝石4",
 			"visible": true,
@@ -292,7 +293,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 88.94477120843356
+				"z": 106.06016798519028
 			},
 			"name": "宝石5",
 			"visible": true,

@@ -137,7 +137,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"file": "scene/vox/Level4-10.vox",
 			"actions": [
 				{
@@ -548,7 +548,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 930.1658944674201
+				"z": 944.230804777538
 			},
 			"name": "钥匙",
 			"visible": true,

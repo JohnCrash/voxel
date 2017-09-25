@@ -50,6 +50,7 @@
 			"shininess": 32,
 			"shading": 1,
 			"vertexColors": 2,
+			"opacity": 0.7000000000000001,
 			"depthFunc": 3,
 			"depthTest": true,
 			"depthWrite": true,
@@ -136,7 +137,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"file": "scene/vox/Level4-5.vox",
 			"actions": [
 				{
@@ -182,7 +183,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1852.7228515279369
+				"z": 1872.1410357197758
 			},
 			"name": "宝石",
 			"visible": true,
@@ -204,7 +205,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1563.913097290765
+				"z": 1583.331281482604
 			},
 			"name": "宝石1",
 			"visible": true,
@@ -226,7 +227,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1364.701565533963
+				"z": 1384.119749725802
 			},
 			"name": "宝石2",
 			"visible": true,
@@ -248,7 +249,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 950.6176626422794
+				"z": 970.0358468341119
 			},
 			"name": "宝石3",
 			"visible": true,
@@ -258,7 +259,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/宝石.item"
 		},
 		{
@@ -270,7 +271,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 745.9429012609663
+				"z": 765.3610854527989
 			},
 			"name": "宝石4",
 			"visible": true,
@@ -280,7 +281,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/宝石.item"
 		},
 		{
@@ -292,7 +293,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 321.7273620614865
+				"z": 341.1455462533269
 			},
 			"name": "宝石5",
 			"visible": true,
@@ -302,7 +303,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/宝石.item"
 		},
 		{
@@ -314,7 +315,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 196.71082400452565
+				"z": 216.12900819636485
 			},
 			"name": "宝石6",
 			"visible": true,
@@ -324,7 +325,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/宝石.item"
 		},
 		{
@@ -336,7 +337,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 110.8950790790648
+				"z": 130.3132632709029
 			},
 			"name": "宝石7",
 			"visible": true,
@@ -346,7 +347,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/宝石.item"
 		}
 	],

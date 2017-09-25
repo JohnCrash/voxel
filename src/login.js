@@ -5,12 +5,14 @@ import TextField from 'material-ui/TextField';
 import {MessageBox} from './ui/messagebox';
 import 'whatwg-fetch';
 import {Global} from './global';
+import MarkdownElement from './ui/markdownelement';
 
 class Login extends Component{
     constructor(props){
         super(props);
         this.state={
-            open:false         
+            open:false,
+            errorMsg:'',        
         };
     }
     messageBar(str,f){
@@ -37,25 +39,18 @@ class Login extends Component{
                 //成功登录
                 //this.props.onLogin(json.user);
                 this.setState({open:false});
-                if(json.config){
-                    let config = JSON.parse(json.config);
-                    if(config){
-                        Global.muteMusic(config.music);
-                        Global.muteSound(config.sound);
-                    }
-                }else{
-                    Global.muteMusic(true);
-                    Global.muteSound(true);  
-                }
+                Global.loadConfig(json.config);
+                console.log("setMaxPassLevel "+(json.lv+1));
                 Global.setMaxPassLevel(json.lv+1);
+                Global.setUserName(json.user);
                 location.href='#main#'+(json.lv+1);
             }else{
                 if(user)this.messageBar(json.result);
-                this.setState({open:true});
+                this.setState({open:true,errorMsg:json.result});
             }
         }.bind(this)).catch(function(e){
             this.messageBar(e);
-            this.setState({open:true});
+            this.setState({open:true,errorMsg:json.result});
         }.bind(this));
     }
     logout(){
@@ -79,8 +74,8 @@ class Login extends Component{
     }
     render(){
         return <Dialog open={this.state.open}
-            title={'登录'}actions={[<FlatButton label='登录' primary={true} onClick={this.openLogin.bind(this)}/>]}>
-            <p>请输入用户名和密码:</p>
+            actions={[<FlatButton label='登录' primary={true} onClick={this.openLogin.bind(this)}/>]}>
+            <MarkdownElement file={`scene/ui/login.md`}/>
             <TextField
                 hintText="用户名"
                 floatingLabelText="请输入用户名"
@@ -90,6 +85,7 @@ class Login extends Component{
                 type="password"
                 floatingLabelText="请输入密码"
                 ref={(ref)=>{this.pwd=ref}}/>
+            {this.state.errorMsg}
             </Dialog>;
     }
 };

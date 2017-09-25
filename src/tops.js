@@ -156,8 +156,8 @@ class Tops extends Component{
                 <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                     <TableRow>
                         <TableHeaderColumn>排名</TableHeaderColumn>
-                        <TableHeaderColumn>块数</TableHeaderColumn>
-                        <TableHeaderColumn>人数</TableHeaderColumn>
+                        <TableHeaderColumn>使用的块数</TableHeaderColumn>
+                        <TableHeaderColumn>使用该方法的人数</TableHeaderColumn>
                         <TableHeaderColumn>使用者</TableHeaderColumn>
                     </TableRow>                    
                 </TableHeader>

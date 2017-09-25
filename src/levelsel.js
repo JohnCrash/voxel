@@ -6,6 +6,7 @@ import CircleButton from './ui/circlebutton';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
 import {Global} from './global';
+import SelectChar from './selectchar';
 
 const buttonStyle = {
     borderRadius:'18px',
@@ -25,8 +26,20 @@ class LevelSel extends Component{
         super(props);
         this.state={
             title:'',
-            current:0
+            current:0,
+            openCharacterSelectDialog:false,
         };
+    }
+    onSelectLevel(link){
+        if(link){
+            if(Global.getCharacter()==='none'){
+                //打开角色选择
+                this.selectAfterLink = link;
+                this.setState({openCharacterSelectDialog:true});
+            }else{
+                location.href=link;
+            }
+        }
     }
     loadJson(json,cur){
         let stage = 0;
@@ -50,11 +63,11 @@ class LevelSel extends Component{
                     }else if(i>current)
                         s = 'unfinished';
                     if(i===Number(m[1]))
-                        bl.push(<CircleButton key={i} label={i} link={link} pos='first' state={s} />);
+                        bl.push(<CircleButton key={i} label={i} onClick={this.onSelectLevel.bind(this,link)} pos='first' state={s} />);
                     else if(i===Number(m[2]))
-                        bl.push(<CircleButton key={i} label={i} link={link} pos='last' state={s} />);
+                        bl.push(<CircleButton key={i} label={i} onClick={this.onSelectLevel.bind(this,link)} pos='last' state={s} />);
                     else
-                        bl.push(<CircleButton key={i} label={i} link={link} state={s} />);
+                        bl.push(<CircleButton key={i} label={i} onClick={this.onSelectLevel.bind(this,link)} state={s} />);
                 }
             }
             return <Card key={item.name}>
@@ -94,6 +107,7 @@ class LevelSel extends Component{
                 {this.level}
                 </Paper>
             </div>
+            <SelectChar open={this.state.openCharacterSelectDialog} link={this.selectAfterLink}/>
         </div>;
     }
 };

@@ -42,6 +42,20 @@ class VoxView extends Component{
         this.game.destroy();
         Global.setCurrentSceneManager(null);
     }
+    initCharacter(json){
+        //替换角色
+        if(Global.getCharacter()!=='boy'&&json&&json.content){
+            for(let item of json.content.item){
+                if(item.name==='男孩'){
+                    item.name = '女孩';
+                    item.template = "scene/item/女孩.item";
+                }else if(item.name==='女孩'){
+                    item.name = '男孩';
+                    item.template = "scene/item/男孩.item";
+                }
+            }
+        }
+    }
     load(file){
         this.readyPromise = new Promise((resolve,reject)=>{
             console.log('load '+file);
@@ -49,6 +63,7 @@ class VoxView extends Component{
             BlocklyInterface.blocklyEvent('SceneReset');
             fetchJson(`/load?file=scene/${file}.scene`,(json)=>{
                 if(json.result==='ok'){
+                    this.initCharacter(json);
                     this.sceneManager.loadFromJson(json.content,(iserr)=>{
                         if(!iserr){
                             BlocklyInterface.blocklyEvent('SceneReady');

@@ -1,11 +1,64 @@
-import {fetchJson} from './vox/fetch';
+import {postJson,fetchJson} from './vox/fetch';
+import Log from './vox/log';
 
 class _Global_{
     constructor(){
         this.LevelJson = null;
         this.maxpasslv = 0;
+        this._debug = false;
         this._layout = 'landscape';
         this._btb = 'expand';
+        this._character = 'none';
+        this._muteMusic = true;
+        this._muteSound = true;
+        this._userName = 'None';
+    }
+    isDebug(){
+        return this._debug;
+    }
+    setDebugMode(b){
+        this._debug = b;
+    }
+    getUserName(){
+        return this._userName;
+    }
+    setUserName(name){
+        this._userName = name;
+    }
+    loadConfig(jsonStr){
+        if(jsonStr){
+            let config = JSON.parse(jsonStr);
+            if(config){
+                this.muteMusic(config.music);
+                this.muteSound(config.sound);
+                this.setLayout(config.layout);
+                this.setCharacter(config.character);
+                this.setDebugMode(config.debug);
+                return;
+            }
+        }
+        //无配置默认状态
+        this.muteMusic(true);
+        this.muteSound(true);
+        this.setLayout('landscape');
+        this.setCharacter('none');
+    }
+    //上传
+    pushConfig(){
+        postJson('/users/config',
+        {
+            config : JSON.stringify({
+            music : this._muteMusic,
+            sound : this._muteSound,
+            layout : this._layout,
+            character : this._character,
+            debug : this._debug})
+        },
+        (json)=>{
+            if(json.result!=='ok'){
+                log(json.result);
+            }
+        });
     }
     /**
      * 加载当前关卡层次
@@ -136,11 +189,12 @@ class _Global_{
     getBlocklyToolbar(){
         return this._btb;
     }
-    save(){
-
+    //设置角色
+    setCharacter(c){
+        this._character = c;
     }
-    load(){
-
+    getCharacter(){
+        return this._character;
     }
 };
 

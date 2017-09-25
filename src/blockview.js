@@ -37,21 +37,23 @@ class BlockView extends Component{
         BlocklyInterface.setCurrentBlockView(this);
         Global.setCurrentBlocklyView(this);
         this.state = {
-            tbopen:true
+            tbopen:true,
+            toolboxMode:this.props.toolbox
         };
     }
     componentDidMount(){
+        this.setState({toolboxMode:this.props.toolbox});
         this.toolboxMode = this.props.toolbox;
         if(this.props.file){
             this.load(this.props.file);
-        }else{
-            this.toolboxXML = this.props.toolbox;
         }
     }
     componentWillReceiveProps(nextProps){
         if(this.props.file!=nextProps.file){
             this.load(nextProps.file);
-        }else if(this.props.toolbox!=nextProps.toolbox){
+        }
+        if(this.props.toolbox!=nextProps.toolbox){
+            this.setState({toolboxMode:nextProps.toolbox});
             this.toolboxMode = nextProps.toolbox;
             this.initWorkspace();
         }
@@ -115,7 +117,6 @@ class BlockView extends Component{
             Blockly.Xml.domToWorkspace(dom,this.workspace);
         }
         if(this.toolboxMode!=="expand"){
-            console.log('closed');
             this.workspace.scrollX = 12;        
             this.workspace.scrollY = 12;             
             let trashcan = this.workspace.trashcan;
@@ -280,7 +281,7 @@ class BlockView extends Component{
     }
     render(){
         return <div style={{width:"100%",height:"100%"}} ref={ref=>this.blockDiv=ref}>
-                {this.toolboxMode!=="expand"?<IconButton
+                {this.state.toolboxMode!=="expand"?<IconButton
                     onClick={this.openFlyOut.bind(this)}
                     iconStyle={{width:48,height:48,color:"#BDBDBD"}}
                     style={{display:this.state.tbopen?"inline-block":"none",

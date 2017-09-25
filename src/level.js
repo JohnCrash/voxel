@@ -55,14 +55,11 @@ class Level extends Component{
             sound:false,
             lang:false,
             landscape:Global.getLayout()==="landscape",
-            blocklytoolbox:"expand", //展开blockly工具条
+            blocklytoolbox:Global.getBlocklyToolbar(), //展开blockly工具条
         }
+        this.motifyConfig = false;
     }
     Menu(){
-/*        MessageBox.show('ok',undefined,<MarkdownElement file={`scene/${this.props.level}.md`}/>,(result)=>{
-            console.log(result);
-        },{width:"100%",maxWidth: 'none'}); */
-        console.log(`music:${Global.isMusic()} sound:${Global.isSound()}`);
         this.setState({openMenu:true,
             music:Global.isMusic(),
             sound:Global.isSound(),
@@ -70,11 +67,12 @@ class Level extends Component{
             landscape:Global.getLayout()==="landscape"});
     }
     Reset(){
-        //重新加载全部资源
-        ItemTemplate.reset();
-        TextManager.reset();
-        ScriptManager.reset();
-
+        if(Global.isDebug()){
+            //重新加载全部资源
+            ItemTemplate.reset();
+            TextManager.reset();
+            ScriptManager.reset();
+        }
         this.voxview.reset();
         this.blockview.reset();
         this.setState({playPause:true});
@@ -152,25 +150,36 @@ class Level extends Component{
             this.blockview.step();
         });
     }
-
-    componentDidMount(){
-        this.loadTest(this.props.level);
+    onGameStart(props){
+        this.loadTest(props.level);
         this.btms = Date.now();
         this.btpms = this.btms;
+        setTimeout(()=>{
+            MessageBox.show('ok',undefined,<MarkdownElement file={`scene/${props.level}.md`}/>,(result)=>{
+                console.log(result);
+            });   
+        },800);
+    }
+    componentDidMount(){
+        this.onGameStart(this.props);
     }
     componentWillReceiveProps(nextProps){
         if(nextProps.level!=this.props.level){
-            this.loadTest(nextProps.level);
-            this.btms = Date.now();
-            this.btpms = this.btms;
-            this.setState({playPause:true});
+            this.onGameStart(nextProps);
+            this.setState({playPause:true});         
         }
     }
     onReturnMain(){
         console.log('exit..');
+        if(this.motifyConfig){
+            this.motifyConfig = false;
+            Global.pushConfig();
+        }        
         location.href='#main';
     }
     loadTest(name){
+        if(!Global.isDebug())return;
+        console.log('LOADTEST '+name);
         fetchJson(`scene/test/${name}.json`,(json)=>{
             this.testXML = [];
             let text = json.workspace;
@@ -242,28 +251,39 @@ class Level extends Component{
     }
     optionEle(){
         let {music,sound,lang,openMenu,landscape,blocklytoolbox} = this.state;
-        return <Drawer docked={false} open={openMenu} onRequestChange={(open) => this.setState({openMenu:open})}>
+        return <Drawer docked={false} open={openMenu} onRequestChange={(open) => {
+                this.setState({openMenu:open});
+                if(this.motifyConfig){
+                    this.motifyConfig = false;
+                    Global.pushConfig();
+                }
+            }}>
             <MenuItem primaryText="返回选择关卡" style={{marginBottom:32}} leftIcon={<IconHome /> } onClick={this.onReturnMain.bind(this)} />
             <Toggle label="背影音乐" style={ToggleStyle} defaultToggled={music} onToggle={(e,b)=>{
                 this.setState({music:b});
+                this.motifyConfig = true;
                 Global.muteMusic(b);
             }} />
             <Toggle label="音效" style={ToggleStyle} defaultToggled={sound} onToggle={(e,b)=>{
                 this.setState({sound:b});
+                this.motifyConfig = true;
                 Global.muteSound(b);
             }} />
             <Toggle label="使用英语" style={ToggleStyle} defaultToggled={lang} onToggle={(e,b)=>{
                 this.setState({lang:b});
+                this.motifyConfig = true;
                 Global.setCurrentLang(b?"en":"zh");
             }} />   
             <Toggle label="使用竖屏" style={ToggleStyle} defaultToggled={!landscape} onToggle={(e,b)=>{
                 this.setState({landscape:!b});
+                this.motifyConfig = true;
                 Global.setLayout(!b?"landscape":"portrait");
             }} />   
             <Toggle label="Blockly紧凑工具条" style={ToggleStyle} defaultToggled={blocklytoolbox!=="expand"} onToggle={(e,b)=>{
                 this.setState({blocklytoolbox:b?"close":"expand"});
+                this.motifyConfig = true;
                 Global.setBlocklyToolbar(b?"close":"expand");
-            }} />                                      
+            }} />
         </Drawer>;
     }
     toolbarEle(){
@@ -272,7 +292,21 @@ class Level extends Component{
         if(this.testXML){
             for(let i=0;i<this.testXML.length;i++)
                 tests.push(<MenuItem value={i} key={i} primaryText={`test ${i}`} />);
-        }             
+        }
+        let debugTool = Global.isDebug()?
+        [<IconButton touch={true} onClick={this.AddTest.bind(this)}>
+            <AddTest />
+        </IconButton>,
+        <IconButton touch={true} onClick={this.RemoveTest.bind(this)}>
+            <RemoveTest />
+        </IconButton> ,                       
+        <SelectField
+            value={curSelectTest}
+            onChange={this.handleTestChange.bind(this)}
+            maxHeight={200}
+            style={{width:'120px'}}>
+            {tests}
+        </SelectField>]:[];
         return <Toolbar>
                     <ToolbarGroup>
                         <IconButton touch={true} onClick={this.Menu.bind(this)}>
@@ -280,20 +314,7 @@ class Level extends Component{
                         </IconButton>                          
                     </ToolbarGroup>
                     <ToolbarGroup>
-                        <IconButton touch={true} onClick={this.AddTest.bind(this)}>
-                            <AddTest />
-                        </IconButton>
-                        <IconButton touch={true} onClick={this.RemoveTest.bind(this)}>
-                            <RemoveTest />
-                        </IconButton>                        
-                        <SelectField
-                            value={curSelectTest}
-                            onChange={this.handleTestChange.bind(this)}
-                            maxHeight={200}
-                            style={{width:'120px'}}
-                        >
-                            {tests}
-                        </SelectField>
+                        {debugTool}
                         <IconButton touch={true} onClick={this.RotationLeft.bind(this)}>
                             <IconRotateLeft />
                         </IconButton>  

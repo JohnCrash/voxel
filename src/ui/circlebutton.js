@@ -116,13 +116,17 @@ class CircleButton extends Component{
     handleMouseEnter(){
         this.setState({hovered:true});
     }
+    onClick(){
+        if(this.props.onClick)
+            this.props.onClick();
+    }
     render(){
         let {link,state,pos,disable} = this.props;
         let c = cc(state);
         let hover = disable?c.normal : (this.state.hovered)?c.hover:c.normal;
         return <div style={{display: 'inline-block',position: 'relative'}}>
             <div style={m(bgstyle,pos==='first'&&{left:bhelf},pos==='last'&&{right:bhelf})}></div>
-            <a href={link} style={{position:'relative',textDecoration: 'none'}}>
+            <a onClick={this.onClick.bind(this)} style={{position:'relative',textDecoration: 'none',cursor:"pointer"}}>
                 <div style={m(style,hover)}
                     onMouseLeave = {this.handleMouseLeave.bind(this)}
                     onMouseEnter = {this.handleMouseEnter.bind(this)}

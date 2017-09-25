@@ -1,17 +1,17 @@
 {
 	"music": "",
 	"loop": true,
-	"bgcolor": 56575,
+	"bgcolor": 5478652,
 	"camera": {
 		"position": {
-			"x": 143.5303246936038,
-			"y": -98.77911569403743,
-			"z": 123.46576789263311
+			"x": 0.14563740787561644,
+			"y": -39.86133188595576,
+			"z": 8.264145454447648
 		},
 		"rotation": {
-			"x": 1.1228284854496817,
+			"x": 1.5056373680537718,
 			"y": 0,
-			"z": 0.9715666169435174
+			"z": 0.010471975511974055
 		}
 	},
 	"material": {
@@ -87,9 +87,9 @@
 			"type": "ambient",
 			"name": "环境灯3",
 			"color": {
-				"r": 0.5372549019607843,
-				"g": 0.5294117647058824,
-				"b": 0.5294117647058824
+				"r": 0.47843137254901963,
+				"g": 0.47843137254901963,
+				"b": 0.47843137254901963
 			}
 		},
 		{
@@ -129,40 +129,6 @@
 				"y": 0,
 				"z": 0
 			},
-			"name": "地面",
-			"visible": true,
-			"ground": true,
-			"collision": false,
-			"fixed": false,
-			"gravity": false,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": true,
-			"file": "scene/vox/Level4-1.vox",
-			"actions": [
-				{
-					"name": "idle",
-					"sequece": [
-						0
-					],
-					"delay": 0,
-					"loop": true,
-					"acc": 33,
-					"curIndex": 0
-				}
-			]
-		},
-		{
-			"position": {
-				"x": 12.5,
-				"y": 34.5,
-				"z": 44.00000035181328
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
 			"name": "男孩",
 			"visible": true,
 			"ground": false,
@@ -173,37 +139,15 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/男孩.item"
-		},
-		{
-			"position": {
-				"x": 12.5,
-				"y": -35.5,
-				"z": 43.999999035889545
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 1.5707963267948966
-			},
-			"name": "终点旗帜",
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": true,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/终点旗帜.item"
 		}
 	],
 	"zfog": {
 		"color": {
-			"r": 0,
-			"g": 0.8627450980392157,
-			"b": 1
+			"r": 0.6235294117647059,
+			"g": 0.6235294117647059,
+			"b": 0.6235294117647059
 		},
-		"high": 40,
-		"low": 0
+		"high": -9000,
+		"low": -9000
 	}
 }

@@ -15,15 +15,15 @@ const config = {
 function stripTailSpace(s){
   if(s){
     let result = s;
-    s.replace(/([^\S]*)\S*/,function($1){
-      result = $1;
-      return $1;
+    s.replace(/\s*(\S*)\s*/,function($1,$2){
+      result = $2;
+      return $2;
     });
     return result;
   }
   return s;
 }
-
+ 
 function sql(query){
   return new Sql.ConnectionPool(config).connect().then(pool=>{
     return pool.request().query(query);
@@ -35,14 +35,15 @@ function sql(query){
  */
 router.use(function(req,res,next){
   let cc = req.cookies.cc;
-  console.log('cookies cechker ' + cc);
   if(cc){
     sql(`select * from UserInfo where cookie='${cc}'`).then((result)=>{
       req.UserInfo = result.recordset[0];
       if(req.UserInfo){
         next();
       }else{
-        throw '没有找到用户';
+        if(req.url!=='/login')
+          throw '没有找到用户';
+        next();
       }
     }).catch((err)=>{
       res.json({result:err});
@@ -55,32 +56,47 @@ router.use(function(req,res,next){
 });
 
 function login(req,res,user,passwd){
-  if(!(user && passwd)){
+  if(!user){
     res.json({result:'请输入用户名密码'});
     return;
   } 
-  sql(`select * from UserInfo where UserAcount='${user}'`).then((result)=>{
+  sql(`select * from UserInfo where UserName='${user}'`).then((result)=>{
     if( result.recordset[0] && 'UserPwd' in result.recordset[0]){
       let pwd = stripTailSpace(result.recordset[0].UserPwd);
       if(pwd===passwd){
-        let cookie = result.recordset[0].cookie;
-        let userName = result.recordset[0].UserName;
-        let lv = result.recordset[0].lv;
+        let {cookie,userName,lv,config} = result.recordset[0];
         if(!cookie){//产生一个新的cookie
           var md5sum = crypto.createHash('md5');
           md5sum.update(user+passwd);
           cookie = md5sum.digest('hex');
-          sql(`update UserInfo set cookie='${cookie}' where UserAcount='${user}'`);
+          sql(`update UserInfo set cookie='${cookie}' where UserName='${user}'`);
         }
-        sql(`update UserInfo set lastlogin=getdate() where UserAcount='${result.recordset[0].UserAcount}'`);
+        sql(`update UserInfo set lastlogin=getdate() where UserName='${user}'`);
         res.cookie('cc',cookie);
         res.json({
           result:'ok',
           lv,
-          user:stripTailSpace(userName)
+          config,
+          user
         });
       }else throw'密码不正确';
-    }else throw '用户名不存在';
+    }else{
+      //这里插入一个新的用户
+      let cookie;
+      var md5sum = crypto.createHash('md5');
+      md5sum.update(user+passwd);
+      cookie = md5sum.digest('hex');
+      res.cookie('cc',cookie);
+      sql(`insert into UserInfo (cookie,lv,cls,UserName,UserPwd) values ('${cookie}',0,0,N'${user}','${passwd}')`).then((result)=>{
+        res.json({
+          result:'ok',
+          lv:0,
+          user      
+        });
+      }).catch((err)=>{
+        res.send({result:err});
+      });
+    }
   }).catch((err)=>{
     res.send({result:err});
   });
@@ -90,14 +106,13 @@ function login(req,res,user,passwd){
  */
 router.post('/login',function(req,res){
   if(req.UserInfo){ //通过cookie登录
-    sql(`update UserInfo set lastlogin=getdate() where UserAcount='${req.UserInfo.UserAcount}'`);
-    let cookie = req.UserInfo.cookie;
-    let userName = req.UserInfo.UserName;
-    let lv = req.UserInfo.lv;
+    sql(`update UserInfo set lastlogin=getdate() where UserName='${req.UserInfo.UserName}'`);
+    let {cookie,UserName,lv,config} = req.UserInfo;
     res.json({
       lv,
       result:'ok',
-      user:stripTailSpace(userName)
+      config,
+      user:stripTailSpace(UserName)
     });
   }else
     login(req,res,req.body.user,req.body.passwd);
@@ -194,6 +209,26 @@ router.post('/commit',function(req,res){
  */
 router.post('/tops',function(req,res){
   tops(req,res);
+});
+
+/**
+ * 保存配置
+ */
+router.post('/config',function(req,res){
+  sql(`update UserInfo set config=N'${req.body.config}' where uid='${req.UserInfo.uid}'`).
+  then((result)=>{
+    res.json({result:'ok'});
+  }).catch((err)=>{
+    res.json({result:err});
+  });
+});
+
+/**
+ * 登出
+ */
+router.post('/logout',function(req,res){
+    res.clearCookie('cc');
+    res.json({result:'ok'});
 });
 
 /* GET users listing. */
