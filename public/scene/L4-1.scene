@@ -1,17 +1,17 @@
 {
 	"music": "",
 	"loop": true,
-	"bgcolor": 56575,
+	"bgcolor": 16575933,
 	"camera": {
 		"position": {
-			"x": 143.5303246936038,
-			"y": -98.77911569403743,
-			"z": 123.46576789263311
+			"x": 130.42654722593653,
+			"y": -146.5971030909581,
+			"z": 133.6307967852268
 		},
 		"rotation": {
-			"x": 1.1228284854496817,
+			"x": 1.1222467090323507,
 			"y": 0,
-			"z": 0.9715666169435174
+			"z": 0.7528186840268948
 		}
 	},
 	"material": {
@@ -147,16 +147,17 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 33,
+					"acc": 0,
 					"curIndex": 0
 				}
-			]
+			],
+			"water": 0
 		},
 		{
 			"position": {
 				"x": 12.5,
 				"y": 34.5,
-				"z": 44.00000035181328
+				"z": 43.99999866578982
 			},
 			"rotation": {
 				"x": 0,
@@ -176,14 +177,14 @@
 		},
 		{
 			"position": {
-				"x": 12.5,
-				"y": -35.5,
-				"z": 43.999999035889545
+				"x": 15,
+				"y": -38,
+				"z": 44.00000116456336
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1.5707963267948966
+				"z": 0
 			},
 			"name": "终点旗帜",
 			"visible": true,
@@ -195,12 +196,210 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/终点旗帜.item"
+		},
+		{
+			"position": {
+				"x": -40,
+				"y": 50,
+				"z": 44.00000023707224
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 3.141592653589793
+			},
+			"name": "栅栏",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/栅栏.item"
+		},
+		{
+			"position": {
+				"x": -57,
+				"y": -21,
+				"z": 44.00000075782077
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 3.141592653589793
+			},
+			"name": "栅栏1",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/栅栏.item"
+		},
+		{
+			"position": {
+				"x": 13,
+				"y": 52,
+				"z": 57.99999830127409
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "栅栏2",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/栅栏.item"
+		},
+		{
+			"position": {
+				"x": -54,
+				"y": 32,
+				"z": 57.99999999194484
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 4.71238898038469
+			},
+			"name": "栅栏3",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/栅栏.item"
+		},
+		{
+			"position": {
+				"x": 36.5,
+				"y": -3.5,
+				"z": 11
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "水花",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/水花.item"
+		},
+		{
+			"position": {
+				"x": -24,
+				"y": -56,
+				"z": 12
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "水花1",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/水花.item"
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "L4-1瀑布",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/L4-1瀑布.item"
+		},
+		{
+			"position": {
+				"x": -40,
+				"y": 15,
+				"z": 48
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 961.2016882922668
+			},
+			"name": "金币",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/金币.item"
+		},
+		{
+			"position": {
+				"x": -52,
+				"y": -4,
+				"z": 44
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "图腾",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/图腾.item"
 		}
 	],
 	"zfog": {
 		"color": {
-			"r": 0,
-			"g": 0.8627450980392157,
+			"r": 0.4235294117647059,
+			"g": 0.7294117647058823,
 			"b": 1
 		},
 		"high": 40,

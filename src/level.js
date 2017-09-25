@@ -18,6 +18,7 @@ import IconRotateRight from 'material-ui/svg-icons/image/rotate-right';
 import IconHome from 'material-ui/svg-icons/action/home';
 import IconMenu from 'material-ui/svg-icons/navigation/menu';
 import IconStep from 'material-ui/svg-icons/maps/directions-walk';
+import IconHelp from 'material-ui/svg-icons/action/help';
 import AddTest from 'material-ui/svg-icons/content/add';
 import RemoveTest from 'material-ui/svg-icons/content/remove';
 import BlocklyInterface from './vox/blocklyinterface';
@@ -286,6 +287,11 @@ class Level extends Component{
             }} />
         </Drawer>;
     }
+    Help(){
+        MessageBox.show('ok',undefined,<MarkdownElement file={`scene/${props.level}.md`}/>,(result)=>{
+            console.log(result);
+        });         
+    }
     toolbarEle(){
         let {playPause,curSelectTest} = this.state;   
         let tests = [];
@@ -315,6 +321,9 @@ class Level extends Component{
                     </ToolbarGroup>
                     <ToolbarGroup>
                         {debugTool}
+                        <IconButton touch={true} onClick={this.Help.bind(this)}>
+                            <IconHelp />
+                        </IconButton>                        
                         <IconButton touch={true} onClick={this.RotationLeft.bind(this)}>
                             <IconRotateLeft />
                         </IconButton>  
@@ -338,7 +347,7 @@ class Level extends Component{
         let {levelDesc,music,sound,lang,curSelectTest,openTops,openMenu,blocklytoolbox} = this.state;
         let {level} = this.props;
         return <div>
-            <div style={{position:"absolute",left:"0px",top:"0px",right:"50%",bottom:"30%"}}>
+            <div style={{position:"absolute",left:"0px",top:"0px",right:"50%",bottom:"56px"}}>
                 <VoxView file={level} ref={ref=>this.voxview=ref}  layout="landscape"/>
             </div>
             <div style={{position:"absolute",left:"50%",top:"0px",right:"0px",bottom:"0px"}}>
@@ -354,11 +363,8 @@ class Level extends Component{
                     <img src="media/title-beta.png" height="24px" />
                 </div>
             </div>
-            <div style={{position:"absolute",display:"flex",flexDirection:"column",left:"0px",top:"70%",right:"50%",bottom:"0px"}}>
+            <div style={{position:"absolute",display:"flex",flexDirection:"column",left:"0px",right:"50%",bottom:"0px"}}>
                 {this.toolbarEle()}
-                <div style={{width:"100%",height:"100%",overflowY: "auto"}}>
-                    <MarkdownElement file={`scene/${level}.md`}/>
-                </div>
             </div>
             <MessageBox/>
             {this.optionEle()}

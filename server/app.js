@@ -4,6 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var config = require('./config');
 
 var index = require('./index');
 var users = require('./users');
@@ -28,7 +29,7 @@ app.use(function(req,res,next){
   next();
 });
 */
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, config.public)));
 
 app.use('/', index);
 app.use('/users', users);

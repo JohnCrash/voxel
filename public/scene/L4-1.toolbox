@@ -1,5 +1,7 @@
 <xml id="toolbox">
 	<block type="forward"></block>
+	<block type="turn_left"></block>
+	<block type="turn_right"></block>
 	<block type="variables_set">
 		<field name="VAR" variabletype=""> x </field>
 		<value name="VALUE">

@@ -1,0 +1,28 @@
+{
+	"position":{
+		"x":0,
+		"y":0,
+		"z":0
+	},
+	"rotation":{
+		"x":0,
+		"y":0,
+		"z":0
+	},
+	"name":"瀑布",
+	"visible":true,
+	"castShadow":true,
+	"receiveShadow":false,
+	"file":"scene/vox/Level4-1_water.vox",
+	"actions":[
+		{
+			"name":"idle",
+			"sequece":[
+				0
+			],
+			"delay":0,
+			"loop":false
+		}
+	],
+	"script":"scene/item/瀑布.js"
+}

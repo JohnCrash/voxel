@@ -1,0 +1,28 @@
+{
+	"position":{
+		"x":0,
+		"y":0,
+		"z":0
+	},
+	"rotation":{
+		"x":0,
+		"y":0,
+		"z":0
+	},
+	"name":"水花",
+	"visible":true,
+	"castShadow":true,
+	"receiveShadow":false,
+	"file":"scene/vox/obj_splash.vox",
+	"actions":[
+		{
+			"name":"idle",
+			"sequece":[
+				0, 1, 2
+			],
+			"delay":200,
+			"loop":true
+		}
+	],
+	"script":"scene/item/水花.js"
+}

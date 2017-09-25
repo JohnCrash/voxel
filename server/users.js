@@ -2,15 +2,8 @@ var Sql = require('mssql');
 var express = require('express');
 var multiparty = require('multiparty');
 var crypto = require('crypto');
-
+var config = require('./config');
 var router = express.Router();
-
-const config = {
-  user:'abc',
-  password:'123456',
-  server:'192.168.2.83',
-  database:'voxel',
-};
 
 function stripTailSpace(s){
   if(s){
@@ -25,7 +18,7 @@ function stripTailSpace(s){
 }
  
 function sql(query){
-  return new Sql.ConnectionPool(config).connect().then(pool=>{
+  return new Sql.ConnectionPool(config.sqlserver).connect().then(pool=>{
     return pool.request().query(query);
   });
 }

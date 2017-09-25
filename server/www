@@ -89,22 +89,3 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
-
-/**
- * 单独的启动一个websocket服务
- * 参数1,websocket端口
- * 参数2,服务器路径
- */
-/*
-var ws = spawn('node',['../ws.js','3002','g:/tk']);
-ws.stdout.on('data', (data) => {
-  console.log(`ws: ${data}`);
-});
-
-ws.stderr.on('data', (data) => {
-  console.log(`ws err: ${data}`);
-});
-
-ws.on('close', (code) => {
-  console.log(`ws.js exited with code ${code}`);
-});  */

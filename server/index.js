@@ -5,25 +5,7 @@ var multiparty = require('multiparty');
 var crypto = require('crypto');
 var browserify = require("browserify");
 var router = express.Router();
-
-const config = {
-  user:'sa',
-  password:'123456',
-  server:'192.168.2.15',
-  database:'ep_tiku',
-};
-const upload = 'public/';       //上传路径
-const images_host = 'images/';  //外部访问路径相对或者绝对
-
-function sqlQuery(query,cb,ep){
-  new sql.ConnectionPool(config).connect().then(pool=>{
-    return pool.request().query(query);
-  }).then(result=>{
-    cb(result);
-  }).catch(err=>{
-    ep(err);
-  });
-}
+var config = require('./config');
 
 /**
  * 使用动态编译javascript
@@ -50,7 +32,7 @@ router.get(/.*\.js$/,function(req,res){
  * 枚举资源文件
  */
 router.get('/list',function(req,res){
-  fs.readdir(`${upload}/${req.query['dir']}`,function(err,files){
+  fs.readdir(`${config.upload}/${req.query['dir']}`,function(err,files){
     if(err){
       res.json({err:err});
     }else{
@@ -63,7 +45,7 @@ router.get('/list',function(req,res){
  * 将json保存到指定的文件中，不能覆盖
  */
 router.post('/save',function(req,res){
-  let filename = upload+req.query['file'];
+  let filename = config.upload+req.query['file'];
 
   let json = req.body;
   let jsonStr = JSON.stringify(json,null,'\t');
@@ -80,7 +62,7 @@ router.post('/save',function(req,res){
  * 读取json文件
  */
 router.get('/load',function(req,res){
-  let filename = upload+req.query['file'];
+  let filename = config.upload+req.query['file'];
 
   fs.readFile(filename,(err,data)=>{
     if(err){
