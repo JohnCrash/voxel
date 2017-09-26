@@ -4,9 +4,9 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": -110.23104012665449,
-			"y": -151.20267574033448,
-			"z": 139.5707358542401
+			"x": -142.7410788110862,
+			"y": -194.44955836109767,
+			"z": 169.84951601993944
 		},
 		"rotation": {
 			"x": 1.0605784087952181,
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 33,
 					"curIndex": 0
 				}
 			],
@@ -238,7 +238,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		},
 		{
@@ -260,7 +260,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		}
 	],

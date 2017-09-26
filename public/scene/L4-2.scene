@@ -4,9 +4,9 @@
 	"bgcolor": 16575933,
 	"camera": {
 		"position": {
-			"x": -130.76786243896038,
-			"y": -142.76103543643467,
-			"z": 135.22178329465203
+			"x": -161.58126676940924,
+			"y": -176.86290571556242,
+			"z": 161.61489900753688
 		},
 		"rotation": {
 			"x": 1.0495246568659242,
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 35,
+					"acc": 0,
 					"curIndex": 0
 				}
 			]
@@ -369,7 +369,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/石块.item"
 		}
 	],

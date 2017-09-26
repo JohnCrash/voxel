@@ -9,6 +9,7 @@ import Login from './login';
 import Popover from 'material-ui/Popover';
 import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
+import {MessageBox} from './ui/messagebox';
 import {postJson,fetchJson} from './vox/fetch';
 let app;
 
@@ -105,6 +106,7 @@ function App(){
     return <MuiThemeProvider>
         <div>
             <Main router={route}/>
+            <MessageBox/>
         </div>
     </MuiThemeProvider>;
 }

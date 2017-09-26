@@ -6,6 +6,7 @@ import log from './vox/log';
 import {MessageBox} from './ui/messagebox';
 import BlocklyInterface from './vox/blocklyinterface';
 import {Global} from './global';
+import CircularProgress from 'material-ui/CircularProgress';
 
 /**
  * VoxView的属性
@@ -14,6 +15,9 @@ import {Global} from './global';
 class VoxView extends Component{
     constructor(props){
         super(props);
+        this.state = {
+            loading:false,
+        };
     }
     componentDidMount(){
         this.game = new Game({enableStats:false,
@@ -57,6 +61,7 @@ class VoxView extends Component{
         }
     }
     load(file){
+        this.setState({loading:true});
         this.readyPromise = new Promise((resolve,reject)=>{
             console.log('load '+file);
             Global.initAudio();
@@ -69,17 +74,21 @@ class VoxView extends Component{
                             BlocklyInterface.blocklyEvent('SceneReady');
                             this.sceneManager.enablePhysical(true);
                             this.sceneManager.pause(false);
+                            this.setState({loading:false});
                             resolve("ready");
                         }else{
                             let err = `'${file}' load error.`;
                             log(err);
+                            this.setState({loading:false});
                             reject(err);
                         }
                     });
                 }else if(json.result){
                     log(json.result);
+                    this.setState({loading:false});
                     reject(json.result);
                 }else{
+                    this.setState({loading:false});
                     reject(`fetchJson /load?file=scene/${file}.scene error`);
                 }
             });
@@ -95,8 +104,14 @@ class VoxView extends Component{
         this.sceneManager.rotateRight();
     }    
     render(){
-        return <canvas ref={canvas=>this.canvas=canvas}>
-            </canvas>;
+        return <div style={{width:"100%",height:"100%"}}>
+                <canvas ref={canvas=>this.canvas=canvas}></canvas>
+                <div style={{position:"absolute",left:"0",right:"0",top:"50%",display:this.state.loading?"flex":"none",
+                    flexDirection:"column",alignItems:"center"}}>
+                    <CircularProgress/>
+                    <div>LOADING...</div>
+                </div>
+            </div>;
     }
 };
 

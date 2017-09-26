@@ -155,11 +155,15 @@ class Level extends Component{
         this.loadTest(props.level);
         this.btms = Date.now();
         this.btpms = this.btms;
-        setTimeout(()=>{
-            MessageBox.show('ok',undefined,<MarkdownElement file={`scene/${props.level}.md`}/>,(result)=>{
-                console.log(result);
-            });   
-        },800);
+        this.voxview.readyPromise.then(()=>{
+            TextManager.load(`scene/${props.level}.md`,(iserr,text)=>{
+                MessageBox.show('ok',undefined,<MarkdownElement text={text}/>,(result)=>{
+                    console.log(result);
+                });
+            });
+        }).catch((err)=>{
+
+        });
     }
     componentDidMount(){
         this.onGameStart(this.props);
@@ -288,7 +292,7 @@ class Level extends Component{
         </Drawer>;
     }
     Help(){
-        MessageBox.show('ok',undefined,<MarkdownElement file={`scene/${props.level}.md`}/>,(result)=>{
+        MessageBox.show('ok',undefined,<MarkdownElement file={`scene/${this.props.level}.md`}/>,(result)=>{
             console.log(result);
         });         
     }
@@ -393,7 +397,6 @@ class Level extends Component{
                     <img src="media/title-beta.png" height="24px" />
                 </div>
             </div>
-            <MessageBox/>
             {this.optionEle()}
             <Tops ref={ref=>this.Tops=ref} level={level}/>
         </div>;

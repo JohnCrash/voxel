@@ -1,17 +1,17 @@
 {
 	"music": "",
 	"loop": true,
-	"bgcolor": 5504221,
+	"bgcolor": 16575933,
 	"camera": {
 		"position": {
-			"x": 159.82042515999274,
-			"y": -106.930813407343,
-			"z": 135.6745719081312
+			"x": 220.51479111427759,
+			"y": 145.94366776444025,
+			"z": 175.99524276844164
 		},
 		"rotation": {
-			"x": 1.046033998361936,
+			"x": 1.046033998361933,
 			"y": 0,
-			"z": 0.9750572754475054
+			"z": 2.1740984715676053
 		}
 	},
 	"material": {
@@ -87,18 +87,18 @@
 			"type": "ambient",
 			"name": "环境灯3",
 			"color": {
-				"r": 0.4666666666666667,
-				"g": 0.3411764705882353,
-				"b": 0.3411764705882353
+				"r": 0.5372549019607843,
+				"g": 0.5294117647058824,
+				"b": 0.5294117647058824
 			}
 		},
 		{
 			"type": "direct",
 			"name": "方向灯4",
 			"color": {
-				"r": 1,
-				"g": 1,
-				"b": 1
+				"r": 0.47843137254901963,
+				"g": 0.47843137254901963,
+				"b": 0.47843137254901963
 			},
 			"position": {
 				"x": 133.89626055488543,
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 17,
+					"acc": 38,
 					"curIndex": 0
 				}
 			]
@@ -183,7 +183,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 622.0133542622008
+				"z": 2015.9882801425174
 			},
 			"name": "宝石",
 			"visible": true,
@@ -205,7 +205,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 493.1923475017813
+				"z": 1887.1672733820608
 			},
 			"name": "宝石1",
 			"visible": true,
@@ -227,7 +227,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 413.8954073325135
+				"z": 1807.8703332127843
 			},
 			"name": "宝石2",
 			"visible": true,
@@ -249,7 +249,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 317.4013889774931
+				"z": 1711.37631485775
 			},
 			"name": "宝石3",
 			"visible": true,
@@ -271,7 +271,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 226.36745865441418
+				"z": 1620.342384534655
 			},
 			"name": "宝石4",
 			"visible": true,
@@ -293,7 +293,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 106.06016798519028
+				"z": 1500.0350938654105
 			},
 			"name": "宝石5",
 			"visible": true,
@@ -305,15 +305,103 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/宝石.item"
+		},
+		{
+			"position": {
+				"x": -55,
+				"y": -55,
+				"z": 44
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "栅栏",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/栅栏.item"
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "瀑布",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/L4-6瀑布.item"
+		},
+		{
+			"position": {
+				"x": 28,
+				"y": 37,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "水花",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/水花.item"
+		},
+		{
+			"position": {
+				"x": 37,
+				"y": 26,
+				"z": 1
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "水花1",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/水花.item"
 		}
 	],
 	"zfog": {
 		"color": {
-			"r": 0.3254901960784314,
-			"g": 0.9882352941176471,
-			"b": 0.8666666666666667
+			"r": 0.4235294117647059,
+			"g": 0.7294117647058823,
+			"b": 1
 		},
-		"high": 40,
+		"high": 12,
 		"low": 0
 	}
 }

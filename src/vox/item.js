@@ -173,7 +173,7 @@ class Item{
                                     water.material.opacity = json.waterOpacity;
                             }                            
                         }else{
-                            this.mesh[i] = this.vox.createModelMesh(i,this.sceneManager.itemMaterial);
+                            this.mesh[i] = this.vox.createModelMesh(i,this.ground?this.sceneManager.groundMaterial:this.sceneManager.itemMaterial);
                             this.mesh[i].castShadow = this._castShadow;
                             this.mesh[i].receiveShadow = this._receiveShadow;
                         }

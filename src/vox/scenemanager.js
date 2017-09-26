@@ -104,6 +104,7 @@ class SceneManager extends EventEmitter{
     loadFromJson(json,cb){
         if(this._exit)return;
         this._doloadstate = true;
+        this.game.scene.visible = false;
         //this.muteMusic(true); //关闭声音
         //this.muteSound(true);
         this.pause(true); //加载的时候暂停更新
@@ -173,6 +174,7 @@ class SceneManager extends EventEmitter{
                     else if(item.state==='error'){
                         clearInterval(id);
                         this._doloadstate = false;
+                        this.game.scene.visible = true;
                         if(this._exit){
                             this.destroy();
                         }
@@ -189,6 +191,7 @@ class SceneManager extends EventEmitter{
                     }
                 }
                 this._doloadstate = false;
+                this.game.scene.visible = true;
                 cb(false);
             },20);
         }

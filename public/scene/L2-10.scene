@@ -4,9 +4,9 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": 151.19168005026555,
-			"y": -151.18333485192636,
-			"z": 145.93697515296196
+			"x": 185.81457025363764,
+			"y": -185.40569510485014,
+			"z": 171.53161390181606
 		},
 		"rotation": {
 			"x": 1.0867583475751341,
@@ -183,7 +183,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 2310.1544498540375
+				"z": 2345.1140929031917
 			},
 			"name": "金币",
 			"visible": true,
@@ -227,7 +227,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 4831.650120701505
+				"z": 4866.6097637506655
 			},
 			"name": "钥匙",
 			"visible": true,
@@ -391,7 +391,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		},
 		{
