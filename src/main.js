@@ -64,10 +64,21 @@ class Main extends Component{
         this.handleRequestClose();
         Global.pushConfig();
     }
+    onDownload(s){
+        switch(s){
+            case 'windows':
+            location.href = 'http://60.205.177.108:3000/html5_windows.zip';
+            break;
+            case 'android':
+            location.href = 'http://60.205.177.108:3000/html5_android.zip';
+            break;
+        }
+    }
     render(){
         let {router} = this.props;
         let content = "未定义的页面";
         let s = router.split('#');
+        console.log('Platfrom : '+Global.getPlatfrom());
         switch(s[0]){
             case '':
             case 'login':
@@ -82,6 +93,8 @@ class Main extends Component{
                             targetOrigin={{horizontal: 'left', vertical: 'top'}}
                             onRequestClose={this.handleRequestClose.bind(this)}>
                             <Menu>
+                                <MenuItem primaryText="下载Windows版本"  onClick={this.onDownload.bind(this,'windows')} checked={this.state.isdebug}/>
+                                <MenuItem primaryText="下载Android版本"  onClick={this.onDownload.bind(this,'android')} checked={this.state.isdebug}/>
                                 <MenuItem primaryText="关卡调试"  onClick={this.onDebug.bind(this)} checked={this.state.isdebug}/>
                                 <MenuItem primaryText={`登出(${Global.getUserName()})`} onClick={this.onLogout.bind(this)}/>
                             </Menu>

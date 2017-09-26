@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 38,
+					"acc": 0,
 					"curIndex": 0
 				}
 			]
@@ -183,7 +183,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 2015.9882801425174
+				"z": 2046.4554456970327
 			},
 			"name": "宝石",
 			"visible": true,
@@ -205,7 +205,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1887.1672733820608
+				"z": 1917.634438936576
 			},
 			"name": "宝石1",
 			"visible": true,
@@ -227,7 +227,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1807.8703332127843
+				"z": 1838.3374987672996
 			},
 			"name": "宝石2",
 			"visible": true,
@@ -249,7 +249,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1711.37631485775
+				"z": 1741.8434804122653
 			},
 			"name": "宝石3",
 			"visible": true,
@@ -271,7 +271,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1620.342384534655
+				"z": 1650.8095500891702
 			},
 			"name": "宝石4",
 			"visible": true,
@@ -293,7 +293,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1500.0350938654105
+				"z": 1530.5022594199258
 			},
 			"name": "宝石5",
 			"visible": true,
@@ -347,7 +347,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/L4-6瀑布.item"
 		},
 		{
@@ -369,7 +369,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/水花.item"
 		},
 		{
@@ -391,7 +391,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/水花.item"
 		}
 	],

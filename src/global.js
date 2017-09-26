@@ -196,6 +196,9 @@ class _Global_{
     getCharacter(){
         return this._character;
     }
+    getPlatfrom(){
+        return window.platfrom;
+    }
 };
 
 export let Global = new _Global_();
