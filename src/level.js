@@ -370,7 +370,6 @@ class Level extends Component{
             <div style={{position:"absolute",display:"flex",flexDirection:"column",left:"0px",right:"50%",bottom:"0px"}}>
                 {this.toolbarEle()}
             </div>
-            <MessageBox/>
             {this.optionEle()}
             <Tops ref={ref=>this.Tops=ref} level={level}/>
         </div>;

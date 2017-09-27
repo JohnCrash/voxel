@@ -11,6 +11,8 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import {MessageBox} from './ui/messagebox';
 import {postJson,fetchJson} from './vox/fetch';
+import {TextManager} from './ui/textmanager';
+import MarkdownElement from './ui/markdownelement';
 let app;
 
 /**
@@ -65,12 +67,23 @@ class Main extends Component{
         Global.pushConfig();
     }
     onDownload(s){
+        this.handleRequestClose();
         switch(s){
             case 'windows':
-            location.href = 'http://60.205.177.108:3000/html5_windows.zip';
+            TextManager.load('scene/ui/download_windows.md',(iserr,text)=>{
+                MessageBox.show('okcancel',undefined,<MarkdownElement text={text}/>,(result)=>{
+                    if(result==='ok')
+                        location.href = 'http://60.205.177.108:3000/html5_windows.zip';
+                });                
+            });
             break;
             case 'android':
-            location.href = 'http://60.205.177.108:3000/html5_android.zip';
+            TextManager.load('scene/ui/download_android.md',(iserr,text)=>{
+                MessageBox.show('okcancel',undefined,<MarkdownElement text={text}/>,(result)=>{
+                    if(result==='ok')
+                        location.href = 'http://60.205.177.108:3000/html5_android.apk';
+                });                
+            });
             break;
         }
     }
@@ -93,8 +106,8 @@ class Main extends Component{
                             targetOrigin={{horizontal: 'left', vertical: 'top'}}
                             onRequestClose={this.handleRequestClose.bind(this)}>
                             <Menu>
-                                <MenuItem primaryText="下载Windows版本"  onClick={this.onDownload.bind(this,'windows')} checked={this.state.isdebug}/>
-                                <MenuItem primaryText="下载Android版本"  onClick={this.onDownload.bind(this,'android')} checked={this.state.isdebug}/>
+                                <MenuItem primaryText="下载Windows版本"  onClick={this.onDownload.bind(this,'windows')}/>
+                                <MenuItem primaryText="下载Android版本"  onClick={this.onDownload.bind(this,'android')}/>
                                 <MenuItem primaryText="关卡调试"  onClick={this.onDebug.bind(this)} checked={this.state.isdebug}/>
                                 <MenuItem primaryText={`登出(${Global.getUserName()})`} onClick={this.onLogout.bind(this)}/>
                             </Menu>

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import {Global} from '../global';
 
 /**
  * type
@@ -20,6 +21,10 @@ class MessageBox extends Component{
     static globalNode = null;
     static globalCB = null;
     static show(type,title,content,result,style){
+        if(!style){
+            if(Global.getPlatfrom()==='android')
+                style = {width:"95%"};
+        }
         if(MessageBox.globalNode.state.open){
             MessageBox.globalNode.handleClose();
             setTimeout(function() {
