@@ -157,7 +157,7 @@
 			"position": {
 				"x": -36,
 				"y": -8.5,
-				"z": 45
+				"z": 44.99999939282351
 			},
 			"rotation": {
 				"x": 0,
@@ -177,16 +177,16 @@
 		},
 		{
 			"position": {
-				"x": 21.5,
+				"x": 18,
 				"y": -8.5,
-				"z": 45
+				"z": 50
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 86.33724930595392
 			},
-			"name": "终点旗帜",
+			"name": "宝石1",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -195,7 +195,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/终点旗帜.item"
+			"template": "scene/item/红宝石.item"
 		}
 	],
 	"zfog": {

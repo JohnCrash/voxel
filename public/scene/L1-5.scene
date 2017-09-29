@@ -4,14 +4,14 @@
 	"bgcolor": 56575,
 	"camera": {
 		"position": {
-			"x": 183.87594836643342,
-			"y": -85.49221544102099,
-			"z": 138.81179664740063
+			"x": 134.801848169989,
+			"y": -131.55321106850582,
+			"z": 134.89199896780474
 		},
 		"rotation": {
-			"x": 1.1001392051737544,
+			"x": 1.0716321607245145,
 			"y": 0,
-			"z": 1.1158471684417168
+			"z": 0.8860454835957955
 		}
 	},
 	"material": {
@@ -138,7 +138,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": true,
-			"file": "scene/vox/Level1-5.vox",
+			"file": "scene/vox/Level1-6.vox",
 			"actions": [
 				{
 					"name": "idle",
@@ -147,21 +147,21 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 34,
+					"acc": 33,
 					"curIndex": 0
 				}
 			]
 		},
 		{
 			"position": {
-				"x": -15.5,
-				"y": -34.5,
-				"z": 44.99999887304858
+				"x": -3.5,
+				"y": -12.5,
+				"z": 45.00000142676824
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1.5707963267948966
+				"z": 4.71238898038469
 			},
 			"name": "男孩",
 			"visible": true,
@@ -173,19 +173,19 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/男孩.item"
-		},
+		},											
 		{
 			"position": {
-				"x": -37,
-				"y": 21,
-				"z": 44.99999887304858
+				"x": 34,
+				"y": -14,
+				"z": 45.000001044195066
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 3.141592653589793
+				"z": 482.33500329096825
 			},
-			"name": "终点旗帜",
+			"name": "宝石",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -193,8 +193,30 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/终点旗帜.item"
+			"receiveShadow": true,
+			"template": "scene/item/红宝石.item"
+		},
+		{
+			"position": {
+				"x": -37,
+				"y": -14,
+				"z": 45.000001258545986
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 184.5685683984005
+			},
+			"name": "宝石1",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/紫宝石.item"
 		}
 	],
 	"zfog": {

@@ -86,7 +86,7 @@ function initItemBlockly(_this){
 	Blockly.JavaScript['forward'] = function (block) {
 		var charcter_name = block.getFieldValue('CHARCTER');
 		var number_step = Blockly.JavaScript.valueToCode(block, 'STEP', Blockly.JavaScript.ORDER_ATOMIC);
-		var code = 'forward("${charcter_name}",${number_step});\n';
+		var code = 'forward("'+charcter_name+'",'+number_step+');\n';
 		return code;
 	};
 	
@@ -174,7 +174,7 @@ function initItemBlockly(_this){
 
 	Blockly.JavaScript['turn_left'] = function(block) {
 	  var charcter_name = block.getFieldValue('CHARCTER');
-	  var code = 'turn_left("${charcter_name}");\n';
+	  var code = 'turn_left("'+charcter_name+'");\n';
 	  return code;
 	};
 	
@@ -205,7 +205,7 @@ function initItemBlockly(_this){
 
 	Blockly.JavaScript['turn_right'] = function(block) {
 	  var charcter_name = block.getFieldValue('CHARCTER');
-	  var code = 'turn_right("${charcter_name}");\n';
+	  var code = 'turn_right("'+charcter_name+'");\n';
 	  return code;
 	};
 	
@@ -237,7 +237,7 @@ function initItemBlockly(_this){
 
 	Blockly.JavaScript['jump'] = function(block) {
 	  var charcter_name = block.getFieldValue('CHARCTER');
-	  var code = 'jump("${charcter_name}");\n';
+	  var code = 'jump("'+charcter_name+'");\n';
 	  return code;
 	};
 	
@@ -296,7 +296,7 @@ function initItemBlockly(_this){
 
 	Blockly.JavaScript['remove_obstacle_fence'] = function(block) {
 	  var charcter_name = block.getFieldValue('CHARCTER');
-	  var code = 'unlock("${charcter_name}");\n';
+	  var code = 'unlock("'+charcter_name+'");\n';
 	  return code;
 	};
 	_this.injectBlocklyFunction('unlock',function(name){
@@ -357,7 +357,7 @@ function initItemBlockly(_this){
 	};	
 	Blockly.JavaScript['open_box'] = function(block) {
 	  var charcter_name = block.getFieldValue('CHARCTER');
-	  var code = 'openbox("${charcter_name}");\n';
+	  var code = 'openbox("'+charcter_name+'");\n';
 	  return code;
 	};	
 	_this.injectBlocklyFunction('openbox',function(name){
@@ -408,7 +408,7 @@ function initItemBlockly(_this){
 	};	
 	Blockly.JavaScript['lift_up'] = function(block) {
 	  var charcter_name = block.getFieldValue('CHARCTER');
-	  var code = 'liftUp("${charcter_name}");\n';
+	  var code = 'liftUp("'+charcter_name+'");\n';
 	  return code;
 	};	
 	_this.injectBlocklyFunction('liftUp',function(name){
@@ -474,7 +474,7 @@ function initItemBlockly(_this){
 	};	
 	Blockly.JavaScript['put_down'] = function(block) {
 	  var charcter_name = block.getFieldValue('CHARCTER');
-	  var code = 'putDown("${charcter_name}");\n';
+	  var code = 'putDown("'+charcter_name+'");\n';
 	  return code;
 	};
 	_this.injectBlocklyFunction('putDown',function(name){
@@ -559,7 +559,7 @@ function initItemBlockly(_this){
 	  var charcter_name = block.getFieldValue('CHARCTER');
 	  var it_name = block.getFieldValue('IT');
 
-	  var code = 'whatIt("${charcter_name}","${it_name}")';
+	  var code = 'whatIt("'+charcter_name+'","'+it_name+'")';
 
 	  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 	};

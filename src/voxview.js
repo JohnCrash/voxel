@@ -69,6 +69,7 @@ class VoxView extends Component{
             BlocklyInterface.blocklyEvent('SceneReset');
             fetchJson(`/load?file=scene/${file}.scene`,(json)=>{
                 if(json.result==='ok'){
+                    BlocklyInterface.pause();
                     this.initCharacter(json);
                     this.sceneManager.loadFromJson(json.content,(iserr)=>{
                         if(!iserr){
@@ -76,6 +77,7 @@ class VoxView extends Component{
                             this.sceneManager.zoom(Global.getPlatfrom()!=='windows'?0.85:1);
                             this.sceneManager.enablePhysical(true);
                             this.sceneManager.pause(false);
+                            BlocklyInterface.resume();
                             this.setState({loading:false});
                             resolve("ready");
                         }else{
@@ -97,7 +99,8 @@ class VoxView extends Component{
         });
     }
     reset(){
-        this.load(this.props.file);
+        BlocklyInterface.reset();
+        this.sceneManager.resetItem();
     }
     RotationLeft(){
         this.sceneManager.rotateLeft();

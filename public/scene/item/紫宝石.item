@@ -13,7 +13,7 @@
 	"visible":true,
 	"castShadow":true,
 	"receiveShadow":false,
-	"file":"scene/vox/obj_diamond.vox",
+	"file":"scene/vox/obj_purple_diamond.vox",
 	"actions":[
 		{
 			"name":"idle",

@@ -325,30 +325,31 @@ class Level extends Component{
             style={{width:'120px'}}>
             {tests}
         </SelectField>]:[];
+        let b = Global.getPlatfrom()==='windows';
         return <Toolbar>
                     <ToolbarGroup>
-                        <IconButton touch={true} onClick={this.Menu.bind(this)} tooltip="菜单..." tooltipPosition="top-center">
+                        <IconButton touch={true} onClick={this.Menu.bind(this)} tooltip={b?"菜单...":undefined} tooltipPosition="top-center">
                             <IconMenu />
                         </IconButton>                          
                     </ToolbarGroup>
                     <ToolbarGroup>
                         {debugTool}
-                        <IconButton touch={true} onClick={this.Help.bind(this)} tooltip="打开帮助" tooltipPosition="top-center">
+                        <IconButton touch={true} onClick={this.Help.bind(this)} tooltip={b?"打开帮助":undefined} tooltipPosition="top-center">
                             <IconHelp />
                         </IconButton>                        
-                        <IconButton touch={true} onClick={this.RotationLeft.bind(this)} tooltip="向左转动视角" tooltipPosition="top-center">
+                        <IconButton touch={true} onClick={this.RotationLeft.bind(this)} tooltip={b?"向左转动视角":undefined} tooltipPosition="top-center">
                             <IconRotateLeft />
                         </IconButton>  
-                        <IconButton touch={true} onClick={this.RotationRight.bind(this)} tooltip="向右转动视角" tooltipPosition="top-center">
+                        <IconButton touch={true} onClick={this.RotationRight.bind(this)} tooltip={b?"向右转动视角":undefined} tooltipPosition="top-center">
                             <IconRotateRight />
                         </IconButton>                                                  
-                        <IconButton touch={true} onClick={this.Reset.bind(this)} tooltip="重新开始" tooltipPosition="top-center">
+                        <IconButton touch={true} onClick={this.Reset.bind(this)} tooltip={b?"重新开始":undefined} tooltipPosition="top-center">
                             <IconReplay />
                         </IconButton>                                                
-                        <IconButton touch={true} onClick={this.Step.bind(this)} tooltip="单步执行你的程序" tooltipPosition="top-center">
+                        <IconButton touch={true} onClick={this.Step.bind(this)} tooltip={b?"单步执行你的程序":undefined} tooltipPosition="top-center">
                             <IconStep />
                         </IconButton>                        
-                        <IconButton touch={true} onClick={this.PlayPause.bind(this)} iconStyle={redIcon} tooltip="执行你的程序" tooltipPosition="top-center">
+                        <IconButton touch={true} onClick={this.PlayPause.bind(this)} iconStyle={redIcon} tooltip={b?"执行你的程序":undefined} tooltipPosition="top-center">
                             {playPause?<IconPlayArrow/>:<IconPause/>}
                         </IconButton>
                     </ToolbarGroup>

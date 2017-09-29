@@ -103,6 +103,7 @@ class SceneManager extends EventEmitter{
      */
     loadFromJson(json,cb){
         if(this._exit)return;
+        this.json = json;
         this._doloadstate = true;
         this.game.scene.visible = false;
         //this.muteMusic(true); //关闭声音
@@ -120,6 +121,12 @@ class SceneManager extends EventEmitter{
         this.loadCamera(json.camera);
         this.loadLight(json.light);
         this.loadItem(json.item,cb);
+    }
+
+    resetItem(cb){
+        if(this.json){
+            this.loadItem(this.json.item,cb);
+        }
     }
 
     loadSkybox(t){
@@ -166,35 +173,34 @@ class SceneManager extends EventEmitter{
         for(let i=0;i<items.length;i++){
             this.items.push(new Item(this,items[i]));
         }
-        if(cb){
-            let id = setInterval(()=>{
+
+        let id = setInterval(()=>{
+            for(let item of this.items){
+                if(item.state==='loading')
+                    return;
+                else if(item.state==='error'){
+                    clearInterval(id);
+                    this._doloadstate = false;
+                    this.game.scene.visible = true;
+                    if(this._exit){
+                        this.destroy();
+                    }
+                    if(cb)cb(true);
+                    return;
+                }
+            }
+            clearInterval(id);
+            if(this._exit){
+                this.destroy();
+            }else{
                 for(let item of this.items){
-                    if(item.state==='loading')
-                        return;
-                    else if(item.state==='error'){
-                        clearInterval(id);
-                        this._doloadstate = false;
-                        this.game.scene.visible = true;
-                        if(this._exit){
-                            this.destroy();
-                        }
-                        cb(true);
-                        return;
-                    }
+                    if(item.live)item.live('init');
                 }
-                clearInterval(id);
-                if(this._exit){
-                    this.destroy();
-                }else{
-                    for(let item of this.items){
-                        if(item.live)item.live('init');
-                    }
-                }
-                this._doloadstate = false;
-                this.game.scene.visible = true;
-                cb(false);
-            },20);
-        }
+            }
+            this._doloadstate = false;
+            this.game.scene.visible = true;
+            if(cb)cb(false);
+        },20);
         return true;
     }
     loadMaterial(material){

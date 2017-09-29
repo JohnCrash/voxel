@@ -22,7 +22,7 @@ function initItemBlockly(item){
 
 	Blockly.JavaScript['forward'] = function(block) {
 		var number_step = block.getFieldValue('STEP');
-		var code = 'forward(${number_step});\n';
+		var code = 'forward('+number_step+');\n';
 		return code;
 	};
 	

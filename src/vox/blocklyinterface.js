@@ -64,6 +64,9 @@ export default class BlocklyInterface{
         }
     }
 
+    static reset(){
+        isNotifyDead = false;
+    }
     /**
      * SceneReset 场景重置
      * BlocklyToolboxReady BlocklyToolbox XML加载完成
