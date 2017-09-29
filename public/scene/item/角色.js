@@ -15,7 +15,7 @@ function initItemBlockly(_this){
 		if(characters.length>1){
 			var op = [];
 			for(var i=0;i<characters.length;i++){
-				let name = "";
+				var name = "";
 				if(characters[i].name==='男孩')
 					name = Blockly.Msg.BOY;
 				else if(characters[i].name==='女孩')
@@ -37,7 +37,7 @@ function initItemBlockly(_this){
 		return null;
 	}
 	function ItemAction(item,action){
-		//console.log(`ACTION : ${item.name} ${action}`);
+		//console.log('ACTION : ${item.name} ${action}');
 		if(item.liftItem){
 			//举起的动作
 			switch(action){
@@ -86,7 +86,7 @@ function initItemBlockly(_this){
 	Blockly.JavaScript['forward'] = function (block) {
 		var charcter_name = block.getFieldValue('CHARCTER');
 		var number_step = Blockly.JavaScript.valueToCode(block, 'STEP', Blockly.JavaScript.ORDER_ATOMIC);
-		var code = `forward("${charcter_name}",${number_step});\n`;
+		var code = 'forward("${charcter_name}",${number_step});\n';
 		return code;
 	};
 	
@@ -103,12 +103,12 @@ function initItemBlockly(_this){
 		}
 	}
 	function eqAngle(a1,a2){
-		let a = Math.abs((a2-a1)/(2*Math.PI));
-		let b = Math.floor(a);
+		var a = Math.abs((a2-a1)/(2*Math.PI));
+		var b = Math.floor(a);
 		return Math.abs(a-b)<0.01;
 	}
 	function calcD(item){
-		let d = Math.sqrt((item.forwardBegin.x-item.position.x)*(item.forwardBegin.x-item.position.x)+(item.forwardBegin.y-item.position.y)*(item.forwardBegin.y-item.position.y));
+		var d = Math.sqrt((item.forwardBegin.x-item.position.x)*(item.forwardBegin.x-item.position.x)+(item.forwardBegin.y-item.position.y)*(item.forwardBegin.y-item.position.y));
 		return d - Math.floor(d/STEP)*STEP;
 	}
 	_this.injectBlocklyFunction('forward',function(name,step){
@@ -129,7 +129,7 @@ function initItemBlockly(_this){
 		item.currentAction = 'forward';
 		
 		if(item.forwardT!==undefined && item.forwardT!=1){
-			let d;
+			var d;
 			if(step>0)
 				d = (step-1)*STEP + calcD(item);
 			else if(step<0){
@@ -144,7 +144,7 @@ function initItemBlockly(_this){
 		}else{
 			item.forwardBegin = {x:item.position.x,y:item.position.y};
 			item.forwardAngle = item.rotation.z;
-			let d = step*STEP;
+			var d = step*STEP;
 			item.forwardEnd = {
 				x:item.position.x+Math.cos(item.rotation.z-Math.PI/2)*d,
 				y:item.position.y+Math.sin(item.rotation.z-Math.PI/2)*d
@@ -174,7 +174,7 @@ function initItemBlockly(_this){
 
 	Blockly.JavaScript['turn_left'] = function(block) {
 	  var charcter_name = block.getFieldValue('CHARCTER');
-	  var code = `turn_left("${charcter_name}");\n`;
+	  var code = 'turn_left("${charcter_name}");\n';
 	  return code;
 	};
 	
@@ -205,7 +205,7 @@ function initItemBlockly(_this){
 
 	Blockly.JavaScript['turn_right'] = function(block) {
 	  var charcter_name = block.getFieldValue('CHARCTER');
-	  var code = `turn_right("${charcter_name}");\n`;
+	  var code = 'turn_right("${charcter_name}");\n';
 	  return code;
 	};
 	
@@ -237,7 +237,7 @@ function initItemBlockly(_this){
 
 	Blockly.JavaScript['jump'] = function(block) {
 	  var charcter_name = block.getFieldValue('CHARCTER');
-	  var code = `jump("${charcter_name}");\n`;
+	  var code = 'jump("${charcter_name}");\n';
 	  return code;
 	};
 	
@@ -258,7 +258,7 @@ function initItemBlockly(_this){
 		item.currentAction = 'jump';
 		this.resultAction = '';
 		if(item.forwardT!==undefined && item.forwardT!=1){
-			let d = calcD(item);
+			var d = calcD(item);
 			item.forwardBegin = {x:item.position.x,y:item.position.y};
 			item.forwardEnd = {
 				x:item.position.x+Math.cos(item.rotation.z-Math.PI/2)*d,
@@ -266,7 +266,7 @@ function initItemBlockly(_this){
 			};
 		}else{
 			item.forwardBegin = {x:item.position.x,y:item.position.y};
-			let d = JUMP_STEP*STEP;
+			var d = JUMP_STEP*STEP;
 			item.forwardAngle = item.rotation.z;
 			item.forwardEnd = {
 				x:item.position.x+Math.cos(item.rotation.z-Math.PI/2)*d,
@@ -296,7 +296,7 @@ function initItemBlockly(_this){
 
 	Blockly.JavaScript['remove_obstacle_fence'] = function(block) {
 	  var charcter_name = block.getFieldValue('CHARCTER');
-	  var code = `unlock("${charcter_name}");\n`;
+	  var code = 'unlock("${charcter_name}");\n';
 	  return code;
 	};
 	_this.injectBlocklyFunction('unlock',function(name){
@@ -322,7 +322,7 @@ function initItemBlockly(_this){
 				item._obstructItem.unlock();
 				
 				item.currentAction = 'forward';
-				let d = STEP - calcD(item);
+				var d = STEP - calcD(item);
 				item.forwardBegin = {x:item.position.x,y:item.position.y};
 				item.forwardEnd = {
 					x:item.position.x+Math.cos(item.rotation.z-Math.PI/2)*d,
@@ -357,7 +357,7 @@ function initItemBlockly(_this){
 	};	
 	Blockly.JavaScript['open_box'] = function(block) {
 	  var charcter_name = block.getFieldValue('CHARCTER');
-	  var code = `openbox("${charcter_name}");\n`;
+	  var code = 'openbox("${charcter_name}");\n';
 	  return code;
 	};	
 	_this.injectBlocklyFunction('openbox',function(name){
@@ -408,7 +408,7 @@ function initItemBlockly(_this){
 	};	
 	Blockly.JavaScript['lift_up'] = function(block) {
 	  var charcter_name = block.getFieldValue('CHARCTER');
-	  var code = `liftUp("${charcter_name}");\n`;
+	  var code = 'liftUp("${charcter_name}");\n';
 	  return code;
 	};	
 	_this.injectBlocklyFunction('liftUp',function(name){
@@ -438,7 +438,7 @@ function initItemBlockly(_this){
 				item.liftItem.position.set(item.position.x,item.position.y,item.position.z+item.aabb().depth());
 				
 				item.currentAction = 'forward';
-				let d = STEP - calcD(item);
+				var d = STEP - calcD(item);
 				item.forwardBegin = {x:item.position.x,y:item.position.y};
 				item.forwardEnd = {
 					x:item.position.x+Math.cos(item.rotation.z-Math.PI/2)*d,
@@ -474,7 +474,7 @@ function initItemBlockly(_this){
 	};	
 	Blockly.JavaScript['put_down'] = function(block) {
 	  var charcter_name = block.getFieldValue('CHARCTER');
-	  var code = `putDown("${charcter_name}");\n`;
+	  var code = 'putDown("${charcter_name}");\n';
 	  return code;
 	};
 	_this.injectBlocklyFunction('putDown',function(name){
@@ -559,7 +559,7 @@ function initItemBlockly(_this){
 	  var charcter_name = block.getFieldValue('CHARCTER');
 	  var it_name = block.getFieldValue('IT');
 
-	  var code = `whatIt("${charcter_name}","${it_name}")`;
+	  var code = 'whatIt("${charcter_name}","${it_name}")';
 
 	  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 	};
@@ -567,32 +567,33 @@ function initItemBlockly(_this){
 		var item = getItemByName(name);
 		if(!item)return;
 
-		let d = (item.forwardT!==undefined && item.forwardT!=1) ? (calcD(item)) : (1*STEP);
+		var d = (item.forwardT!==undefined && item.forwardT!=1) ? (calcD(item)) : (1*STEP);
 			
-		let pt = {
+		var pt = {
 			x:item.position.x+Math.cos(item.rotation.z-Math.PI/2)*d,
 			y:item.position.y+Math.sin(item.rotation.z-Math.PI/2)*d,
 			z:item.position.z+7.9
 		};
-		let ar = item.sceneManager.ptItem(pt);
+		var ar = item.sceneManager.ptItem(pt);
+		var i,z;
 		switch(it){
 			case 'barrier':
-				for(let i=0;i<ar.length;i++){
+				for(i=0;i<ar.length;i++){
 					if(ar[i].typeName==='栅栏')return true;
 				}
 				break;
 			case 'chest':
-				for(let i=0;i<ar.length;i++){
+				for(i=0;i<ar.length;i++){
 					if(ar[i].typeName==='盒子')return true;
 				}
 				break;
 			case 'flag':
-				for(let i=0;i<ar.length;i++){
+				for(i=0;i<ar.length;i++){
 					if(ar[i].typeName==='终点旗帜')return true;
 				}			
 				break;
 			case 'ston':
-				for(let i=0;i<ar.length;i++){
+				for(i=0;i<ar.length;i++){
 					if(ar[i].typeName==='石块')return true;
 				}			
 				break;				
@@ -600,27 +601,27 @@ function initItemBlockly(_this){
 				if(ar.length===0){
 					pt.z = item.position.z+1;
 					ar = item.sceneManager.ptItem(pt);
-					for(let i=0;i<ar.length;i++){
+					for(i=0;i<ar.length;i++){
 						if(ar[i].ground)return true;
 					}
 					pt.z = item.position.z-7.9;
 					ar = item.sceneManager.ptItem(pt);
-					for(let i=0;i<ar.length;i++){
+					for(i=0;i<ar.length;i++){
 						if(ar[i].ground)return true;
 					}					
 				}
 				break;
 			case 'cliff':
-				for(let z = 0;z < 15;z++){
+				for(z = 0;z < 15;z++){
 					pt.z = item.position.z-z;
 					ar = item.sceneManager.ptItem(pt);
-					for(let i=0;i<ar.length;i++){
+					for(i=0;i<ar.length;i++){
 						if(ar[i].ground)return false;
 					}
 				}
 				return true;
 			case 'wall':
-				for(let i=0;i<ar.length;i++){
+				for(i=0;i<ar.length;i++){
 					if(ar[i].ground)return true;
 				}			
 				break;
@@ -642,11 +643,11 @@ function(event,dt,z){
 					this.liftItem.position.z = this.position.z+this.aabb().depth();
 				}
 			}
-			console.log(`${this.name} 登场`);
+			console.log(this.name+' 登场');
 			break;
 		case 'release':
 			characters = [];
-			console.log(`${this.name} 退出`);
+			console.log(this.name+' 退出');
 			break;
 		case 'swiming':
 			break;

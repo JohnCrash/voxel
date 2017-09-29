@@ -22,7 +22,7 @@ function initItemBlockly(item){
 
 	Blockly.JavaScript['forward'] = function(block) {
 		var number_step = block.getFieldValue('STEP');
-		var code = `forward(${number_step});\n`;
+		var code = 'forward(${number_step});\n';
 		return code;
 	};
 	
@@ -144,10 +144,10 @@ function(event,dt){
 		case 'init':
 			this.idleAcc = 0;
 			initItemBlockly(this);
-			console.log(`${this.name} 登场`);
+			console.log(this.name+'  登场');
 			break;
 		case 'release':
-			console.log(`${this.name} 退出`);
+			console.log(this.name+' 退出');
 			break;
 		case 'swiming':
 			break;
@@ -176,7 +176,7 @@ function(event,dt){
 			}else if(this.currentActionName()!=='idle'){
 				//idle
 				this.idleAcc += dt;
-				//console.log(`${this.idleAcc} / ${dt}`);
+				//console.log('${this.idleAcc} / ${dt}');
 				if(this.idleAcc>300){
 					this.idleAcc = 0;
 					this.doAction('idle');

@@ -6,17 +6,17 @@ function(event,dt){
 		case 'collision':
 			//this.playSound('scene/audio/effect/正确的宝石声音.ogg');
 			if(this.currentAction!=='forward'){
-				let item = dt;
+				var item = dt;
 				if(item.obstruct){
 					item.obstruct(this);
 				}
 			}
 			break;
 		case 'init':
-			console.log(`${this.name} 登场`);
+			console.log(this.name+'  登场');
 			break;
 		case 'release':
-			console.log(`${this.name} 退出`);
+			console.log(this.name+' 退出');
 			break;
 		case 'update':
 			if(this.currentAction === 'forward'){

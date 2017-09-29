@@ -10,7 +10,7 @@ function(event,dt){
 				this.playSound('scene/audio/effect/正确的宝石声音.ogg');
 				this.removeSelf();
 				//赋予被碰撞物一个函数
-				let item  = dt;
+				var item  = dt;
 				item.usekey = function(box){
 					box.doAction('open');
 					setTimeout(function(){
@@ -20,10 +20,10 @@ function(event,dt){
 			}
 			break;
 		case 'init':
-			console.log(`${this.name} 登场`);
+			console.log(this.name+'  登场');
 			break;
 		case 'release':
-			console.log(`${this.name} 退出`);
+			console.log(this.name+' 退出');
 			break;
 		case 'update':
 			this.rotation.z += SPEED*dt;

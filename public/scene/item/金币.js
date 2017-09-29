@@ -9,10 +9,10 @@ function(event,dt){
 			this.removeSelf();
 			break;
 		case 'init':
-			console.log(`${this.name} 登场`);
+			console.log(this.name+'  登场');
 			break;
 		case 'release':
-			console.log(`${this.name} 退出`);
+			console.log(this.name+' 退出');
 			break;
 		case 'update':
 			this.rotation.z += SPEED*dt;

@@ -32,7 +32,7 @@ function(event,dt){
 			}		
 			break;
 		case 'init':
-			console.log(`${this.name} 登场`);
+			console.log(this.name+'  登场');
 			this._onoff = false;
 			this.forwardT = 1;
 			this._forwardPt = {x:this.position.x,y:this.position.y};
@@ -42,7 +42,7 @@ function(event,dt){
 				};
 			this.turnon = function(b){
 				if(this._onoff == !!b || this.forwardT!==1)return;
-				let d;
+				var d;
 				this.forwardBegin = {x:this.position.x,y:this.position.y};
 				if(b){
 					this.currentAction = 'turn_on';
@@ -59,7 +59,7 @@ function(event,dt){
 			}
 			break;
 		case 'release':
-			console.log(`${this.name} 退出`);
+			console.log(this.name+' 退出');
 			break;
 		case 'update':
 			if(this.currentAction === 'turn_on'||this.currentAction === 'turn_off'){

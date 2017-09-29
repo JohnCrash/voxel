@@ -8,14 +8,14 @@ function(event,dt){
 		case 'collision':
 			//this.playSound('scene/audio/effect/正确的宝石声音.ogg');
 			{
-				let item = dt;
+				var item = dt;
 				if(item.obstruct && this.currentAction !== 'unlock'){
 					item.obstruct(this);
 				}
 			}
 			break;
 		case 'init':
-			console.log(`${this.name} 登场`);
+			console.log(this.name+'  登场');
 			this.drop = function(){
 				this.currentAction = 'drop';
 				this.collision = false; 
@@ -23,7 +23,7 @@ function(event,dt){
 			}
 			break;
 		case 'release':
-			console.log(`${this.name} 退出`);
+			console.log(this.name+' 退出');
 			break;
 		case 'update':
 			if(this.currentAction === 'drop'){
