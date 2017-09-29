@@ -6,11 +6,10 @@
 			</shadow>
 		</value>
 	</block>
-	<block type="turn_left"></block>
 	<block type="turn_right"></block>
 	<block type="jump"></block>
 </xml>
 
 <xml id="default">
-	<block movable="false" deletable="flase" type="when_start" x="20" y="20"></block>
+	<block movable="false" deletable="flase" type="when_start" x="20" y="20"><next><block movable="true" type="jump"><next><block movable="true" type="jump"></next></block>
 </xml>

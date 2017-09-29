@@ -7,6 +7,11 @@ import en from './lang/en';
 import zh from './lang/zh';
 import IconButton from 'material-ui/IconButton';
 import CreateIcon from 'material-ui/svg-icons/action/build';
+import Dialog from 'material-ui/Dialog';
+import IconAdd from 'material-ui/svg-icons/content/add';
+import IconDec from 'material-ui/svg-icons/content/remove';
+import FlatButton from 'material-ui/FlatButton';
+//import {CreateIcon} from './ui/myicon';
 
 function parserXML(id,text){
     let result;
@@ -27,6 +32,8 @@ function xmlHead(s){
 
 const startBlockDrag = Blockly.BlockDragger.prototype.startBlockDrag;
 const endBlockDrag = Blockly.BlockDragger.prototype.endBlockDrag;
+const startDrag = Blockly.WorkspaceDragger.prototype.startDrag;
+const endDrag = Blockly.WorkspaceDragger.prototype.endDrag;
 
 class BlockView extends Component{
     constructor(props){
@@ -38,7 +45,9 @@ class BlockView extends Component{
         Global.setCurrentBlocklyView(this);
         this.state = {
             tbopen:true,
-            toolboxMode:this.props.toolbox
+            toolboxMode:this.props.toolbox,
+            openNumInput:false,
+            num:1,
         };
     }
     componentDidMount(){
@@ -90,7 +99,7 @@ class BlockView extends Component{
                 {toolbox: this.toolboxXML,
                     media: 'blockly/media/',
                     trashcan: true,
-                    scrollbars: true, 
+                    scrollbars: true,
                     zoom: {
                         //controls: true,
                         //wheel: false,
@@ -116,11 +125,17 @@ class BlockView extends Component{
             let dom = Blockly.Xml.textToDom(this.defaultXML);
             Blockly.Xml.domToWorkspace(dom,this.workspace);
         }
-        if(this.toolboxMode!=="expand"){
-            this.workspace.scrollX = 12;        
-            this.workspace.scrollY = 12;             
+        let _this = this;
+        Blockly.WorkspaceDragger.prototype.startDrag = function(){
+            BlocklyInterface.pause();
+            startDrag.call(this);
+        }
+        Blockly.WorkspaceDragger.prototype.endDrag = function(currentDragDeltaXY){
+            BlocklyInterface.resume();
+            endDrag.call(this,currentDragDeltaXY);
+        }
+        if(this.toolboxMode!=="expand"){            
             let trashcan = this.workspace.trashcan;
-            let _this = this;
             _this.setState({tbopen:true});
             trashcan.svgGroup_.style.opacity=0;
             this.workspace.svgBackground_.onmousedown = function(e){
@@ -128,25 +143,47 @@ class BlockView extends Component{
             }
             //设置拖动挂钩监视块的拖动
             Blockly.BlockDragger.prototype.startBlockDrag = function(xy){
+                BlocklyInterface.pause();
                 startBlockDrag.call(this,xy);
                 trashcan.svgGroup_.style.opacity=0.4;
                 _this.setState({tbopen:false});
-            }            
+            }
             
             Blockly.BlockDragger.prototype.endBlockDrag = function(e,xy){
+                BlocklyInterface.resume();
                 endBlockDrag.call(this,e,xy);
+                trashcan.svgGroup_.style.opacity=0;
                 setTimeout(()=>{ //有个合上垃圾桶的过程
                     trashcan.svgGroup_.style.opacity=0;
                     _this.setState({tbopen:true});
-                },600);
+                },400);
             }
 
             this.workspace.flyout_.setVisible(false);
-            this.workspace.deleteAreaToolbox_ = null;
+            let metrics = this.workspace.getMetrics();
+            let w = metrics.contentWidth - metrics.viewWidth;
+            let h = metrics.contentHeight - metrics.viewHeight;
+            this.workspace.scrollbar.set(w-4,h-12);
+            this.workspace.scrollbar.setContainerVisible(false);
             this.workspace.updateScreenCalculationsIfScrolled();
+            this.workspace.deleteAreaToolbox_ = null;
         }else{//恢复挂钩
-            Blockly.BlockDragger.prototype.startBlockDrag = startBlockDrag;
-            Blockly.BlockDragger.prototype.endBlockDrag = endBlockDrag;
+            //拖放优化，当开始拖放的时候暂停刷新
+            Blockly.BlockDragger.prototype.startBlockDrag = function(xy){
+                BlocklyInterface.pause();
+                startBlockDrag.call(this,xy);
+            }
+            Blockly.BlockDragger.prototype.endBlockDrag = function(e,xy){
+                BlocklyInterface.resume();
+                endBlockDrag.call(this,e,xy);
+            }
+        }
+        //定制一个数字块输入对话栏
+        if(Global.getPlatfrom()!=='windows'){
+            Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput){
+                _this.fieldTextInput = this;
+                _this.setState({openNumInput: true,num:Number(this.getValue())});
+            }
         }
     }
     /**
@@ -262,13 +299,17 @@ class BlockView extends Component{
     //打开创建对话栏
     openFlyOut(){
         if(this.workspace && this.workspace.flyout_){
-            this.workspace.flyout_.setVisible(true);
-            this.workspace.deleteAreaToolbox_ = null;
+            if(this.workspace.flyout_.isVisible_){
+                this.workspace.flyout_.setVisible(false);
+            }else{
+                this.workspace.flyout_.setVisible(true);
+                this.workspace.deleteAreaToolbox_ = null;
+            }
         }
     }
     /**
      * 重置执行环境
-     */
+     */ 
     reset(){
         this.workspace.highlightBlock(null);
         this.myInterpreter = null;
@@ -279,7 +320,20 @@ class BlockView extends Component{
             this.runID = undefined;
         }
     }
+    add(){
+        this.setState({num:this.state.num+1});
+    }
+    dec(){
+        this.setState({num:this.state.num-1});
+    }
+    handleClose(result){
+        if(result==='ok'){
+            this.fieldTextInput.setValue(this.state.num);
+        }
+        this.setState({openNumInput: false});
+    }    
     render(){
+        let {openNumInput,num} = this.state;
         return <div style={{width:"100%",height:"100%"}} ref={ref=>this.blockDiv=ref}>
                 {this.state.toolboxMode!=="expand"?<IconButton
                     onClick={this.openFlyOut.bind(this)}
@@ -289,6 +343,28 @@ class BlockView extends Component{
                     right:"12px",bottom:"12px",width:96,height:96,padding:24}}>
                     <CreateIcon />
                 </IconButton>:undefined}
+                <Dialog open={openNumInput} modal={true} contentStyle={{width:"200px"}}>
+                    <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+                        <IconButton touch={true} onClick={this.dec.bind(this)}>
+                            <IconDec />
+                        </IconButton>
+                        <div style={{fontSize:"xx-large",margin:"12px"}}>{num}</div>
+                        <IconButton touch={true} onClick={this.add.bind(this)}>
+                            <IconAdd />
+                        </IconButton>                        
+                    </div>
+                    <br/>
+                    <div style={{display:"flex",justifyContent:"center"}}>
+                        <FlatButton
+                            label="取消"
+                            primary={true}
+                            onClick={this.handleClose.bind(this,'cancel')}/>
+                        <FlatButton
+                            label="确定"
+                            primary={true}
+                            onClick={this.handleClose.bind(this,'ok')}/>                        
+                    </div>
+                </Dialog>
         </div>;
     }
 };

@@ -30,6 +30,7 @@ import {Global} from './global';
 import Tops from './tops';
 
 const ToggleStyle = {marginBottom: 16,marginLeft:16,width:"85%"};
+const redIcon = {color:"#F44336"};
 
 function parserXML(id,text){
     let result;
@@ -56,11 +57,12 @@ class Level extends Component{
             sound:false,
             lang:false,
             landscape:Global.getLayout()==="landscape",
-            blocklytoolbox:Global.getBlocklyToolbar(), //展开blockly工具条
+            blocklytoolbox:Global.getPlatfrom()==='windows'?Global.getBlocklyToolbar():"close", //展开blockly工具条
         }
         this.motifyConfig = false;
     }
     Menu(){
+        BlocklyInterface.pause();
         this.setState({openMenu:true,
             music:Global.isMusic(),
             sound:Global.isSound(),
@@ -157,8 +159,13 @@ class Level extends Component{
         this.btpms = this.btms;
         this.voxview.readyPromise.then(()=>{
             TextManager.load(`scene/${props.level}.md`,(iserr,text)=>{
-                MessageBox.show('ok',undefined,<MarkdownElement text={text}/>,(result)=>{
-                    console.log(result);
+                //如果voxview ready
+                this.voxview.readyPromise.then(()=>{
+                    setTimeout(()=>{
+                        MessageBox.show('ok',undefined,<MarkdownElement text={text}/>,(result)=>{
+                            console.log(result);
+                        });    
+                    },200);
                 });
             });
         }).catch((err)=>{
@@ -257,6 +264,7 @@ class Level extends Component{
     optionEle(){
         let {music,sound,lang,openMenu,landscape,blocklytoolbox} = this.state;
         return <Drawer docked={false} open={openMenu} onRequestChange={(open) => {
+                BlocklyInterface.resume();
                 this.setState({openMenu:open});
                 if(this.motifyConfig){
                     this.motifyConfig = false;
@@ -319,29 +327,29 @@ class Level extends Component{
         </SelectField>]:[];
         return <Toolbar>
                     <ToolbarGroup>
-                        <IconButton touch={true} onClick={this.Menu.bind(this)}>
+                        <IconButton touch={true} onClick={this.Menu.bind(this)} tooltip="菜单..." tooltipPosition="top-center">
                             <IconMenu />
                         </IconButton>                          
                     </ToolbarGroup>
                     <ToolbarGroup>
                         {debugTool}
-                        <IconButton touch={true} onClick={this.Help.bind(this)}>
+                        <IconButton touch={true} onClick={this.Help.bind(this)} tooltip="打开帮助" tooltipPosition="top-center">
                             <IconHelp />
                         </IconButton>                        
-                        <IconButton touch={true} onClick={this.RotationLeft.bind(this)}>
+                        <IconButton touch={true} onClick={this.RotationLeft.bind(this)} tooltip="向左转动视角" tooltipPosition="top-center">
                             <IconRotateLeft />
                         </IconButton>  
-                        <IconButton touch={true} onClick={this.RotationRight.bind(this)}>
+                        <IconButton touch={true} onClick={this.RotationRight.bind(this)} tooltip="向右转动视角" tooltipPosition="top-center">
                             <IconRotateRight />
                         </IconButton>                                                  
-                        <IconButton touch={true} onClick={this.Reset.bind(this)}>
+                        <IconButton touch={true} onClick={this.Reset.bind(this)} tooltip="重新开始" tooltipPosition="top-center">
                             <IconReplay />
                         </IconButton>                                                
-                        <IconButton touch={true} onClick={this.Step.bind(this)}>
+                        <IconButton touch={true} onClick={this.Step.bind(this)} tooltip="单步执行你的程序" tooltipPosition="top-center">
                             <IconStep />
                         </IconButton>                        
-                        <IconButton touch={true} onClick={this.PlayPause.bind(this)}>
-                            {playPause?<IconPlayArrow />:<IconPause />}
+                        <IconButton touch={true} onClick={this.PlayPause.bind(this)} iconStyle={redIcon} tooltip="执行你的程序" tooltipPosition="top-center">
+                            {playPause?<IconPlayArrow/>:<IconPause/>}
                         </IconButton>
                     </ToolbarGroup>
                 </Toolbar>;

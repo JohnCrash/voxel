@@ -4,9 +4,9 @@
 	"bgcolor": 56575,
 	"camera": {
 		"position": {
-			"x": 139.6712551283415,
-			"y": -137.4371402385469,
-			"z": 139.82859111960823
+			"x": 141.57505349340323,
+			"y": -139.22284274369983,
+			"z": 141.3073806070874
 		},
 		"rotation": {
 			"x": 1.055342421039234,
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 34,
+					"acc": 0,
 					"curIndex": 0
 				}
 			]
@@ -156,7 +156,7 @@
 			"position": {
 				"x": 4.5,
 				"y": 13.5,
-				"z": 32.99999875561676
+				"z": 33.00000124048651
 			},
 			"rotation": {
 				"x": 0,
@@ -176,16 +176,16 @@
 		},
 		{
 			"position": {
-				"x": -31.5,
-				"y": -40.5,
-				"z": 44.999999808839426
+				"x": -31,
+				"y": -40,
+				"z": 44.99999811402014
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1539.2610197380338
+				"z": 396.3307628062948
 			},
-			"name": "金币",
+			"name": "宝石",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -193,21 +193,21 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/金币.item"
+			"receiveShadow": true,
+			"template": "scene/item/宝石.item"
 		},
 		{
 			"position": {
 				"x": 4.5,
-				"y": -40.5,
-				"z": 44.999999808839426
+				"y": -40,
+				"z": 44.99999872021733
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1417.9641273829302
+				"z": 290.1512143002534
 			},
-			"name": "金币1",
+			"name": "宝石1",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -215,21 +215,21 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/金币.item"
+			"receiveShadow": true,
+			"template": "scene/item/宝石.item"
 		},
 		{
 			"position": {
-				"x": 43.5,
-				"y": -40.5,
-				"z": 44.999999808839426
+				"x": 40,
+				"y": -40,
+				"z": 45.000000675293506
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 93.82994778476547
 			},
-			"name": "终点旗帜",
+			"name": "宝石2",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -237,8 +237,8 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/终点旗帜.item"
+			"receiveShadow": true,
+			"template": "scene/item/宝石.item"
 		}
 	],
 	"zfog": {

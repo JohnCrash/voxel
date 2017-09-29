@@ -74,6 +74,8 @@ class Login extends Component{
     }
     render(){
         return <Dialog open={this.state.open}
+            autoScrollBodyContent={true}
+            contentStyle={Global.getPlatfrom()!=="windows"?{width:"95%"}:undefined}
             actions={[<FlatButton label='登录' primary={true} onClick={this.openLogin.bind(this)}/>]}>
             <MarkdownElement file={`scene/ui/login.md`}/>
             <TextField
@@ -85,6 +87,7 @@ class Login extends Component{
                 type="password"
                 floatingLabelText="请输入密码"
                 ref={(ref)=>{this.pwd=ref}}/>
+            <br/>
             {this.state.errorMsg}
             </Dialog>;
     }

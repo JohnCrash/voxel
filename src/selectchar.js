@@ -7,12 +7,6 @@ import {Global} from './global';
 
 const selectedColor = 0x64B5F6;
 const unselectColor = 0xFFFFFF;
-const WIDTH = 220;
-const HEIGHT = 300;
-
-const styles = {
-    width:WIDTH,height:HEIGHT,marginRight:12,marginLeft:12
-};
 
 class SelectChar extends Component{
     constructor(props){
@@ -44,9 +38,15 @@ class SelectChar extends Component{
             primary={true}
             onClick={this.handleOk.bind(this)}/>];
         let {open,select} = this.state;
+        let WIDTH = Global.getPlatfrom()==="windows"?220:140;
+        let HEIGHT = Global.getPlatfrom()==="windows"?300:220;        
+        let styles = {
+            width:WIDTH,height:HEIGHT,marginRight:12,marginLeft:12
+        };        
         return <Dialog
             actions={actions}
             modal={true}
+            contentStyle={Global.getPlatfrom()!=="windows"?{width:"95%"}:undefined}
             open={open}>
                 <MarkdownElement file="scene/ui/select_top.md"/>
                 <div style={{display:"inline-flex", display:"-webkit-flex",justifyContent:"center",width:"100%"}}>

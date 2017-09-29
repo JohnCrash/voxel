@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import {Global} from '../global';
+import BlocklyInterface from '../vox/blocklyinterface';
 
 /**
  * type
@@ -21,6 +22,7 @@ class MessageBox extends Component{
     static globalNode = null;
     static globalCB = null;
     static show(type,title,content,result,style){
+        BlocklyInterface.pause();
         if(!style){
             if(Global.getPlatfrom()==='android')
                 style = {width:"95%"};
@@ -49,6 +51,7 @@ class MessageBox extends Component{
         }
     }
     handleClose(result){
+        BlocklyInterface.resume();
         this.setState({open: false,type:'',title:'',content:''});
         if(MessageBox.globalCB){
             MessageBox.globalCB(result);

@@ -39,6 +39,7 @@ function Game(opts){
         this.renderer = new THREE.WebGLRenderer({antialias:this.opts.enableAA});
         document.body.appendChild( this.renderer.domElement );
     }
+    this.renderer.setPixelRatio(window.devicePixelRatio);
     //如果指定了尺寸就是用，否则和屏幕尺寸保持一致
     var width;
     var height;    

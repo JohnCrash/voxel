@@ -4,9 +4,9 @@
 	"bgcolor": 56575,
 	"camera": {
 		"position": {
-			"x": 132.0815876950125,
-			"y": -129.33198423845388,
-			"z": 132.97723153604227
+			"x": 134.801848169989,
+			"y": -131.55321106850582,
+			"z": 134.89199896780474
 		},
 		"rotation": {
 			"x": 1.0716321607245145,
@@ -156,12 +156,12 @@
 			"position": {
 				"x": -3.5,
 				"y": -12.5,
-				"z": 48
+				"z": 45.00000141626421
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1.5707963267948966
+				"z": 4.71238898038469
 			},
 			"name": "男孩",
 			"visible": true,
@@ -176,16 +176,16 @@
 		},
 		{
 			"position": {
-				"x": -40.5,
-				"y": -12.5,
-				"z": 48
+				"x": -40,
+				"y": -12,
+				"z": 45.00000128003178
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 177.65706456050296
+				"z": 205.0988763896109
 			},
-			"name": "金币",
+			"name": "宝石",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -193,21 +193,21 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/金币.item"
+			"receiveShadow": true,
+			"template": "scene/item/宝石.item"
 		},
 		{
 			"position": {
-				"x": 35.5,
-				"y": -12.5,
-				"z": 48
+				"x": 32,
+				"y": -12,
+				"z": 45.000001394776135
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 96.65423958034286
 			},
-			"name": "终点旗帜",
+			"name": "宝石1",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -215,8 +215,8 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/终点旗帜.item"
+			"receiveShadow": true,
+			"template": "scene/item/宝石.item"
 		}
 	],
 	"zfog": {

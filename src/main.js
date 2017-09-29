@@ -13,6 +13,12 @@ import {MessageBox} from './ui/messagebox';
 import {postJson,fetchJson} from './vox/fetch';
 import {TextManager} from './ui/textmanager';
 import MarkdownElement from './ui/markdownelement';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
+
 let app;
 
 /**

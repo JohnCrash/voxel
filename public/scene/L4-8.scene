@@ -157,7 +157,7 @@
 			"position": {
 				"x": 27.5,
 				"y": -10,
-				"z": 56
+				"z": 55.99999959399615
 			},
 			"rotation": {
 				"x": 0,
@@ -179,7 +179,7 @@
 			"position": {
 				"x": -54,
 				"y": -55,
-				"z": 62.999998608433586
+				"z": 62.99999820242974
 			},
 			"rotation": {
 				"x": 0,
@@ -339,7 +339,7 @@
 			"position": {
 				"x": 58,
 				"y": -55,
-				"z": 63.00000161987391
+				"z": 63.000001213870064
 			},
 			"rotation": {
 				"x": 0,
@@ -356,6 +356,116 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/终点旗帜.item"
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "瀑布",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/L4-8瀑布.item"
+		},
+		{
+			"position": {
+				"x": 37,
+				"y": -59,
+				"z": 1
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 4.71238898038469
+			},
+			"name": "水花",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/水花.item"
+		},
+		{
+			"position": {
+				"x": 2,
+				"y": -56,
+				"z": 1
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "水花1",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/水花.item"
+		},
+		{
+			"position": {
+				"x": -37,
+				"y": -59,
+				"z": 1
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 4.71238898038469
+			},
+			"name": "水花2",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/水花.item"
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": 24,
+				"z": 51
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "图腾",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/图腾.item"
 		}
 	],
 	"zfog": {
@@ -364,7 +474,7 @@
 			"g": 0.7294117647058823,
 			"b": 1
 		},
-		"high": 50,
+		"high": 10,
 		"low": 0
 	}
 }

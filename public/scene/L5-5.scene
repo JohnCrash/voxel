@@ -4,9 +4,9 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": 154.53965771596143,
-			"y": -63.92466086681876,
-			"z": 117.21268590596151
+			"x": 182.43062276679896,
+			"y": -71.90470884660645,
+			"z": 132.94205025336163
 		},
 		"rotation": {
 			"x": 1.0739592663938466,
@@ -50,6 +50,7 @@
 			"shininess": 32,
 			"shading": 1,
 			"vertexColors": 2,
+			"opacity": 0.7000000000000001,
 			"depthFunc": 3,
 			"depthTest": true,
 			"depthWrite": true,
@@ -306,7 +307,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/终点旗帜.item"
 		},
 		{
@@ -328,7 +329,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/石块.item"
 		}
 	],

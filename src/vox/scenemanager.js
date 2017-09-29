@@ -670,6 +670,11 @@ class SceneManager extends EventEmitter{
     rotateRight(){
         this.rotateCamera(15*Math.PI/180);
     }
+    zoom(a){
+        this.game.camera.position.x = a*this.game.camera.position.x;
+        this.game.camera.position.y = a*this.game.camera.position.y;        
+        this.game.camera.position.z = a*this.game.camera.position.z;        
+    }
 };
 
 export default SceneManager;

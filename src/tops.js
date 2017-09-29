@@ -19,6 +19,7 @@ import {Global} from './global';
 import {TextManager} from './ui/textmanager';
 import MarkdownElement from './ui/markdownelement';
 import md from './mdtemplate';
+import BlocklyInterface from './vox/blocklyinterface';
 
 class Tops extends Component{
     constructor(props){
@@ -41,6 +42,7 @@ class Tops extends Component{
         });
     }
     handleAction(result){
+        BlocklyInterface.resume();
         this.setState({open: false});
         let info = Global.appGetLevelInfo(this.props.level);
         if(!info)return;
@@ -70,6 +72,7 @@ class Tops extends Component{
         Global.passLevel(info.next);
         //commit
         this.blocks = blocks;
+        BlocklyInterface.pause();
         postJson('/users/commit',
             {lv:info.next-1,
              lname:this.props.level,
@@ -146,10 +149,11 @@ class Tops extends Component{
             rank,
             method_num : this.tops?this.tops.length:0,
         };
+
         return <Dialog
             actions={actions}
             open={open}
-        >
+            contentStyle={Global.getPlatfrom()!=="windows"?{width:"95%"}:undefined}>
             <MarkdownElement text={md(this.title,dict)}/>
             {loading?<LinearProgress />:
             <Table>

@@ -21,7 +21,7 @@ class VoxView extends Component{
     }
     componentDidMount(){
         this.game = new Game({enableStats:false,
-            enableAA:true,
+            enableAA:Global.getPlatfrom()==='windows'?true:false,
             enableLight:true,
             enableShaodw:true,
             canvas:this.canvas});
@@ -29,6 +29,7 @@ class VoxView extends Component{
         this.game.observer = true;
         this.game.camera.rotation.order = 'ZXY';
         this.game.run();
+        BlocklyInterface.setCurrentVoxView(this);
         Global.setCurrentSceneManager(this.sceneManager);
         this.load(this.props.file);
     }
@@ -72,6 +73,7 @@ class VoxView extends Component{
                     this.sceneManager.loadFromJson(json.content,(iserr)=>{
                         if(!iserr){
                             BlocklyInterface.blocklyEvent('SceneReady');
+                            this.sceneManager.zoom(Global.getPlatfrom()!=='windows'?0.85:1);
                             this.sceneManager.enablePhysical(true);
                             this.sceneManager.pause(false);
                             this.setState({loading:false});
@@ -102,11 +104,12 @@ class VoxView extends Component{
     }
     RotationRight(){
         this.sceneManager.rotateRight();
-    }    
+    }
     render(){
         return <div style={{width:"100%",height:"100%"}}>
                 <canvas ref={canvas=>this.canvas=canvas}></canvas>
-                <div style={{position:"absolute",left:"0",right:"0",top:"50%",display:this.state.loading?"flex":"none",
+                <div style={{position:"absolute",left:"0",right:"0",top:"0",bottom:'0',justifyContent:'center',
+                    display:this.state.loading?"flex":"none",
                     flexDirection:"column",alignItems:"center"}}>
                     <CircularProgress/>
                     <div>LOADING...</div>

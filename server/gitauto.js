@@ -58,8 +58,8 @@ function timeoutDoResetServer(){
 }
 
 //监控server目录，如果发生变化就重新启动node server/wwww
-fs.watch('/home/release/server',function(eventType, filename){
-    timeoutDoResetServer();
-});
+//fs.watch('/home/release/server',function(eventType, filename){
+//    timeoutDoResetServer();
+//});
 
-restartWWW();
+//restartWWW();

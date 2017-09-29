@@ -4,14 +4,14 @@
 	"bgcolor": 56575,
 	"camera": {
 		"position": {
-			"x": -115.54789547261079,
-			"y": -157.38557759588466,
-			"z": 137.05142626804303
+			"x": -129.38556626993892,
+			"y": -176.62872176981514,
+			"z": 149.98274564620485
 		},
 		"rotation": {
-			"x": 1.0710503843071837,
+			"x": 1.0687232786378578,
 			"y": 0,
-			"z": -0.6219189901273052
+			"z": -0.6242460957966309
 		}
 	},
 	"material": {
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 34,
 					"curIndex": 0
 				}
 			]
@@ -156,7 +156,7 @@
 			"position": {
 				"x": 19.5,
 				"y": 4.5,
-				"z": 45.000000742676605
+				"z": 45.00000100073563
 			},
 			"rotation": {
 				"x": 0,
@@ -176,16 +176,16 @@
 		},
 		{
 			"position": {
-				"x": 19.5,
-				"y": -30.5,
-				"z": 44.99999931567416
+				"x": 20,
+				"y": -30,
+				"z": 45.00000102929925
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 310.52444265878296
+				"z": 216.6913532813568
 			},
-			"name": "金币",
+			"name": "宝石",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -194,20 +194,20 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/金币.item"
+			"template": "scene/item/宝石.item"
 		},
 		{
 			"position": {
-				"x": -38,
+				"x": -35,
 				"y": 5.5,
-				"z": 44.99999866821408
+				"z": 45.00000021972709
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 3.141592653589793
+				"z": 134.43817442506668
 			},
-			"name": "终点旗帜",
+			"name": "宝石1",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -216,7 +216,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/终点旗帜.item"
+			"template": "scene/item/宝石.item"
 		}
 	],
 	"zfog": {

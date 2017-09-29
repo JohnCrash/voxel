@@ -1,3 +1,4 @@
+let currentVoxView;
 let currentBlockView;
 let currentLevel;
 let injectFunctions = [];
@@ -5,6 +6,17 @@ let loadState = 0;
 let isNotifyDead = false;
 
 export default class BlocklyInterface{
+    static pause(){
+        if(currentVoxView && currentVoxView.game)
+            currentVoxView.game.pause();
+    }
+    static resume(){
+        if(currentVoxView && currentVoxView.game)
+            currentVoxView.game.resume();
+    }
+    static setCurrentVoxView(v){
+        currentVoxView = v;
+    }
     /**
      * 设置当前的Blockly对象
      */

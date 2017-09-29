@@ -4,9 +4,9 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": -117.74653193018827,
-			"y": -180.8403855413015,
-			"z": 156.4990076347305
+			"x": -152.74732233268855,
+			"y": -232.86165525488133,
+			"z": 187.62347017767547
 		},
 		"rotation": {
 			"x": 1.1100294042683971,
@@ -50,6 +50,7 @@
 			"shininess": 32,
 			"shading": 1,
 			"vertexColors": 2,
+			"opacity": 0.7000000000000001,
 			"depthFunc": 3,
 			"depthTest": true,
 			"depthWrite": true,
@@ -146,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 50,
+					"acc": 0,
 					"curIndex": 0
 				}
 			],
@@ -171,7 +172,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/男孩.item"
 		},
 		{
@@ -193,7 +194,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/终点旗帜.item"
 		}
 	],

@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": 111.12249016265457,
-			"y": -83.97651700231592,
-			"z": 99.77745525817893
+			"x": 143.23497265353964,
+			"y": -106.06086014568288,
+			"z": 117.94465778316967
 		},
 		"rotation": {
-			"x": 1.129809802457669,
+			"x": 1.1327186845443264,
 			"y": 0,
-			"z": 0.966912405604869
+			"z": 0.9686577348568634
 		}
 	},
 	"material": {
@@ -50,6 +50,7 @@
 			"shininess": 32,
 			"shading": 1,
 			"vertexColors": 2,
+			"opacity": 0.7000000000000001,
 			"depthFunc": 3,
 			"depthTest": true,
 			"depthWrite": true,
@@ -146,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 17,
 					"curIndex": 0
 				}
 			]
@@ -204,7 +205,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 1.5707963267948966
 			},
 			"name": "栅栏",
 			"visible": true,
@@ -214,7 +215,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		},
 		{
@@ -236,7 +237,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		}
 	],

@@ -4,9 +4,9 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": 144.1257964001134,
-			"y": -84.20208796852016,
-			"z": 122.48060059605264
+			"x": 213.4312246228138,
+			"y": -123.62640064148088,
+			"z": 164.2236382087229
 		},
 		"rotation": {
 			"x": 1.0885036768271295,
@@ -50,6 +50,7 @@
 			"shininess": 32,
 			"shading": 1,
 			"vertexColors": 2,
+			"opacity": 0.7000000000000001,
 			"depthFunc": 3,
 			"depthTest": true,
 			"depthWrite": true,
@@ -146,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 34,
 					"curIndex": 0
 				}
 			],
