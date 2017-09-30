@@ -123,9 +123,11 @@ class Level extends Component{
         if(this.state.playPause){
             this.voxview.readyPromise.then(()=>{
                 this.blockview.run(0,(state)=>{//执行完成
-                    if(state === 'end'||state === 'error'){
+                    if(state === 'end'||state === 'error'||state==='nolink'){
                         if(state === 'error'){
                             MessageBox.show('ok',undefined,<MarkdownElement file={'scene/ui/program_error.md'}/>,(result)=>{});
+                        }else if(state === 'nolink'){
+                            MessageBox.show('ok',undefined,<MarkdownElement file={'scene/ui/link_error.md'}/>,(result)=>{});
                         }
                         this.setState({playPause:true});
                         this.needReset = true;
@@ -178,7 +180,7 @@ class Level extends Component{
     componentWillReceiveProps(nextProps){
         if(nextProps.level!=this.props.level){
             this.onGameStart(nextProps);
-            this.setState({playPause:true});         
+            this.setState({playPause:true,landscape:Global.getLayout()==="landscape"});         
         }
     }
     onReturnMain(){

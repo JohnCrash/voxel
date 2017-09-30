@@ -194,7 +194,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/宝石.item"
+			"template": "scene/item/红宝石.item"
 		},
 		{
 			"position": {
@@ -207,7 +207,7 @@
 				"y": 0,
 				"z": 1321.4229851381783
 			},
-			"name": "宝石1",
+			"name": "宝石",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -216,7 +216,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/宝石.item"
+			"template": "scene/item/紫宝石.item"
 		},
 		{
 			"position": {
@@ -229,7 +229,7 @@
 				"y": 0,
 				"z": 1266.0272818774217
 			},
-			"name": "宝石2",
+			"name": "宝石",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -238,7 +238,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/宝石.item"
+			"template": "scene/item/黄宝石.item"
 		},
 		{
 			"position": {
@@ -251,7 +251,7 @@
 				"y": 0,
 				"z": 1208.617817725708
 			},
-			"name": "宝石3",
+			"name": "宝石",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -260,7 +260,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/宝石.item"
+			"template": "scene/item/红宝石.item"
 		},
 		{
 			"position": {
@@ -273,7 +273,7 @@
 				"y": 0,
 				"z": 1126.245258348574
 			},
-			"name": "宝石4",
+			"name": "宝石",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -282,7 +282,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/宝石.item"
+			"template": "scene/item/黄宝石.item"
 		},
 		{
 			"position": {
@@ -295,7 +295,7 @@
 				"y": 0,
 				"z": 1057.403538530454
 			},
-			"name": "宝石5",
+			"name": "宝石",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -304,7 +304,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/宝石.item"
+			"template": "scene/item/紫宝石.item"
 		},
 		{
 			"position": {
@@ -317,7 +317,7 @@
 				"y": 0,
 				"z": 946.2225745199202
 			},
-			"name": "宝石6",
+			"name": "宝石",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -326,7 +326,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/宝石.item"
+			"template": "scene/item/红宝石.item"
 		},
 		{
 			"position": {
@@ -339,7 +339,7 @@
 				"y": 0,
 				"z": 883.682889564922
 			},
-			"name": "宝石7",
+			"name": "宝石",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -348,7 +348,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/宝石.item"
+			"template": "scene/item/黄宝石.item"
 		},
 		{
 			"position": {

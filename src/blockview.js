@@ -82,6 +82,39 @@ class BlockView extends Component{
         this.initWorkspace();
         this.loadXML(d);
     }
+    //取得特定类型的块数
+    getBlockCountByType(name){
+        let blocks = this.workspace.getAllBlocks();
+        let count = 0;
+        for(let block of blocks){
+            if(block.type===name){
+                count++;
+            }
+        }
+        return count;
+    }
+    //打开或者关闭工具条上的块
+    enableToolboxBlock(name,b){
+        let flyout = this.workspace.getFlyout_();
+        if(flyout){
+            let blocks = flyout.getWorkspace().getAllBlocks();
+            for(let block of blocks){
+                if(block.type===name)block.setDisabled(!b);
+            }
+        }
+    }
+    //做块数限制
+    blockLimiteEvent(){
+        for(let blockName in this.blockLimits){
+            let c = Number(this.blockLimits[blockName]);
+            let n = this.getBlockCountByType(blockName);
+            if( n >= c ){
+                this.enableToolboxBlock(blockName,false);
+            }else{
+                this.enableToolboxBlock(blockName,true);
+            }
+        }
+    }
     /**
      * 当toolboxXML被载入并且voxview加载结束后在初始化workspace
      */
@@ -95,6 +128,16 @@ class BlockView extends Component{
         if(this.workspace)
             this.workspace.dispose();
         try{
+            //块数限制
+            let tree = Blockly.Options.parseToolboxTree(this.toolboxXML);
+            this.blockLimits = {};
+            for(let node of tree.children){
+                let block_type = node.getAttributeNode('type');
+                let limit = node.getAttributeNode('limit');
+                if(block_type&&limit&&limit.value){
+                    this.blockLimits[block_type.value] = limit.value;
+                }
+            }
             this.workspace = Blockly.inject(this.blockDiv,
                 {toolbox: this.toolboxXML,
                     media: 'blockly/media/',
@@ -111,8 +154,11 @@ class BlockView extends Component{
         }catch(e){
             this.workspace = Blockly.inject(this.blockDiv);
             console.log(`Can not inject blocly workspace \n${e}`);
-        }       
+        }
+
         this.workspace.addChangeListener((event)=>{
+            this.blockLimiteEvent();
+
             if(this.toolboxMode!=="expand")
                 this.workspace.flyout_.setVisible(false);
             if(this.props.onBlockCount)
@@ -137,7 +183,8 @@ class BlockView extends Component{
         if(this.toolboxMode!=="expand"){            
             let trashcan = this.workspace.trashcan;
             _this.setState({tbopen:true});
-            trashcan.svgGroup_.style.opacity=0;
+            if(trashcan)
+                trashcan.svgGroup_.style.opacity=0;
             this.workspace.svgBackground_.onmousedown = function(e){
                 _this.workspace.flyout_.setVisible(false);
             }
@@ -216,11 +263,24 @@ class BlockView extends Component{
         let dom = Blockly.Xml.textToDom(xmlHead(xml));
         Blockly.Xml.domToWorkspace(dom,this.workspace);
     }
+    checkLink(){
+        let blocks = this.workspace.getAllBlocks();
+        for(let i =0;i<blocks.length;i++){
+            if( !blocks[i].getParent() && blocks[i].type!=="when_start" ){
+                return false;
+            }
+        }
+        return true;
+    }
     /**
      * t  执行速度ms
      * cb 执行结束回调
      */
     run(t,cb){
+        if(!this.checkLink()){
+            cb('nolink');
+            return;
+        }
         this.runComplateCB = cb;
         this.runID = setInterval(()=>{
             this.step();
@@ -251,6 +311,10 @@ class BlockView extends Component{
      * 单步执行,代码开始时调用cb('begin'),结束时调用cb('end')
      */
     step(cb){
+        if(!this.checkLink()){
+            cb('nolink');
+            return;
+        }        
         if(!this.myInterpreter){
             Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
             Blockly.JavaScript.addReservedWords('highlightBlock');

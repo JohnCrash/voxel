@@ -123,6 +123,7 @@ class Main extends Component{
             case 'setting':
                 break;
             case 'level':
+                Global.setLayout(window.innerWidth>window.innerHeight?"landscape":"portrait");
                 content = <Level level={s[1]}/>;
                 break;
             default:
