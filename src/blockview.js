@@ -6,12 +6,12 @@ import {Global} from './global';
 import en from './lang/en';
 import zh from './lang/zh';
 import IconButton from 'material-ui/IconButton';
-import CreateIcon from 'material-ui/svg-icons/action/build';
+//import CreateIcon from 'material-ui/svg-icons/action/build';
 import Dialog from 'material-ui/Dialog';
 import IconAdd from 'material-ui/svg-icons/content/add';
 import IconDec from 'material-ui/svg-icons/content/remove';
 import FlatButton from 'material-ui/FlatButton';
-//import {CreateIcon} from './ui/myicon';
+import {CreateIcon} from './ui/myicon';
 
 function parserXML(id,text){
     let result;
@@ -75,6 +75,12 @@ class BlockView extends Component{
                 BlocklyInterface.blocklyEvent('BlocklyToolboxReady');
             }
           });
+        let level_top = file.replace(/(.*)\.toolbox$/,($0,level)=>{
+            return `${level}-top.md`;
+        });
+        //提前加载{level}-top.md
+        TextManager.load(level_top,(iserr,text)=>{
+        });
     }
     //重新加载界面
     ResetWorkspace(){
