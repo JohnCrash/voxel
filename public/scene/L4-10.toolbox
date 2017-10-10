@@ -3,12 +3,12 @@
 	<block type="forward"></block>
 	<block type="turn_left"></block>
 	<block type="turn_right"></block>
-	<block type="jump"></block>
-	<block type="open_box"></block>
-	<block type="lift_up"></block>
-	<block type="put_down"></block>
+	<block type="jump" limit="1"></block>
+	<block type="open_box" limit="1"></block>
+	<block type="lift_up" limit="1"></block>
+	<block type="put_down" limit="1"></block>
 	<block type="math_arithmetic"></block>
-	<block type="variables_set">
+	<block type="variables_set" limit="3">
 		<field name="VAR" variabletype=""> x </field>
 		<value name="VALUE">
 			<shadow type="math_number">
@@ -19,7 +19,7 @@
 	<block type="variables_get">
 		<field name="VAR" variabletype=""> x </field>
 	</block>
-	<block type="variables_set">
+	<block type="variables_set" limit="3">
 		<field name="VAR" variabletype=""> y </field>
 		<value name="VALUE">
 			<shadow type="math_number">

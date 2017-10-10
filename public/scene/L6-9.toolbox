@@ -1,6 +1,6 @@
 <xml id="toolbox">
 	<block type="controls_whileUntil"></block>
-	<block type="what_is_it"></block>
+	<block type="what_is_it" limit="2"></block>
 	<block type="forward">
 		<value name="STEP">
 			<shadow type="math_number">

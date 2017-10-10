@@ -6,15 +6,15 @@
 			</shadow>
 		</value>
 	</block>
-	<block type="forward">
+	<block type="forward" limit="2">
 		<value name="STEP">
 			<shadow type="math_number">
 				<field name="NUM">1</field>
 			</shadow>
 		</value>
 	</block>
-	<block type="lift_up"></block>
-	<block type="put_down"></block>
+	<block type="lift_up" limit="1"></block>
+	<block type="put_down" limit="1"></block>
 </xml>
 
 <xml id="default">

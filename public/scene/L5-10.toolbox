@@ -10,7 +10,7 @@
 	</block>
 	<block type="turn_left"></block>
 	<block type="turn_right"></block>
-	<block type="jump"></block>
+	<block type="jump" limit="3"></block>
 	<block type="remove_obstacle_fence"></block>
 </xml>
 

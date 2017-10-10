@@ -41,7 +41,15 @@ class VoxManager_{
                 continue;
             }
             count++;
+            /**
+             * 这里假设每个.vox都有一个.voz压缩文件与其对应
+             */
+            //let filez = file.replace(/(.*)\.vox$/,($0,name)=>{return `${name}.voz`});
             fetchBin(file,(data)=>{
+//                let rarContent = readRARContent({name:filez,content:data},'',()=>{
+//                    console.log(arguments);
+//                });
+//                console.log(rarContent);
                 this.voxs[file].vox = voxparser(data);
                 this.voxs[file].state='ready';
                 if(!(--count)){

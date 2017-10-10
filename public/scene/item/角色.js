@@ -543,7 +543,7 @@ function initItemBlockly(_this){
 			.appendField(Blockly.Msg.FORWARD_IS)
 			.appendField(new Blockly.FieldDropdown([
 			[Blockly.Msg.BARRIER,"barrier"], 
-			[Blockly.Msg.FLAG,"flag"],
+			[Blockly.Msg.DIAMOND,"diamond"],
 			[Blockly.Msg.BOX,"chest"], 
 			[Blockly.Msg.STON,"ston"], 
 			[Blockly.Msg.LADDER,"ladder"],

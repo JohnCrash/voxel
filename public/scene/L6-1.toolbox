@@ -10,7 +10,7 @@
 			</shadow>
 		</value>
 	</block>
-	<block type="jump"></block>
+	<block type="jump" limit="1"></block>
 	<block type="controls_if"></block>
 </xml>
 

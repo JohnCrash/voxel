@@ -10,9 +10,9 @@
 	</block>
 	<block type="turn_left"></block>
 	<block type="turn_right"></block>
-	<block type="jump"></block>
+	<block type="jump" limit="1"></block>
 	<block type="controls_if"></block>
-	<block type="remove_obstacle_fence"></block>
+	<block type="remove_obstacle_fence" limit="1"></block>
 </xml>
 
 <xml id="default">

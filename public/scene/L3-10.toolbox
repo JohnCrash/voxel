@@ -13,12 +13,12 @@
 			</shadow>
 		</value>
 	</block>
-	<block type="turn_left"></block>
+	<block type="turn_left" limit="2"></block>
 	<block type="turn_right"></block>
-	<block type="jump"></block>
-	<block type="open_box"></block>
-	<block type="lift_up"></block>
-	<block type="put_down"></block>
+	<block type="jump" limit="1"></block>
+	<block type="open_box" limit="1"></block>
+	<block type="lift_up" limit="1"></block>
+	<block type="put_down" limit="1"></block>
 	<block type="remove_obstacle_fence"></block>
 </xml>
 

@@ -1,5 +1,5 @@
 <xml id="toolbox">
-	<block type="forward">
+	<block type="forward" limit="3">
 		<value name="STEP">
 			<shadow type="math_number">
 				<field name="NUM">1</field>
@@ -10,5 +10,5 @@
 </xml>
 
 <xml id="default">
-	<block movable="false" deletable="flase" type="when_start" x="20" y="20"><next><block movable="true" deletable="flase" type="forward"><value name="STEP"><shadow type="math_number"><field name="NUM">1</field></shadow></value></next></block>
+	<block movable="false" deletable="flase" type="when_start" x="20" y="20"><next><block movable="true" deletable="true" type="forward"><value name="STEP"><shadow type="math_number"><field name="NUM">1</field></shadow></value></next></block>
 </xml>

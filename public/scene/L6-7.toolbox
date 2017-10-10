@@ -8,15 +8,15 @@
 			</shadow>
 		</value>
 	</block>
-	<block type="turn_left"></block>
+	<block type="turn_left" limit="1"></block>
 	<block type="turn_right"></block>
 	<block type="jump"></block>
 	<block type="controls_if"></block>
 	<block type="controls_if">
 		<mutation else="1"></mutation>
 	</block>
-	<block type="remove_obstacle_fence"></block>
-	<block type="open_box"></block>
+	<block type="remove_obstacle_fence" limit="1"></block>
+	<block type="open_box" limit="1"></block>
 </xml>
 
 <xml id="default">

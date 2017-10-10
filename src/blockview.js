@@ -135,15 +135,20 @@ class BlockView extends Component{
             this.workspace.dispose();
         try{
             //块数限制
-            let tree = Blockly.Options.parseToolboxTree(this.toolboxXML);
             this.blockLimits = {};
-            for(let node of tree.children){
+            let tree = Blockly.Options.parseToolboxTree(this.toolboxXML);
+            for(let i = 0;i < tree.children.length;i++){
+                let node = tree.children[i];
                 let block_type = node.getAttributeNode('type');
                 let limit = node.getAttributeNode('limit');
                 if(block_type&&limit&&limit.value){
                     this.blockLimits[block_type.value] = limit.value;
                 }
-            }
+            }            
+        }catch(e){
+            console.log(e);
+        }
+        try{
             this.workspace = Blockly.inject(this.blockDiv,
                 {toolbox: this.toolboxXML,
                     media: 'blockly/media/',
@@ -160,13 +165,16 @@ class BlockView extends Component{
         }catch(e){
             this.workspace = Blockly.inject(this.blockDiv);
             console.log(`Can not inject blocly workspace \n${e}`);
+            return;
         }
 
         this.workspace.addChangeListener((event)=>{
             this.blockLimiteEvent();
 
-            if(this.toolboxMode!=="expand")
-                this.workspace.flyout_.setVisible(false);
+            if(this.toolboxMode!=="expand"){
+                let flyout = this.workspace.getFlyout_();
+                if(flyout)flyout.setVisible(false);
+            }
             if(this.props.onBlockCount)
                 this.props.onBlockCount(this.getBlockCount());
             this.reset();
@@ -192,7 +200,9 @@ class BlockView extends Component{
             if(trashcan)
                 trashcan.svgGroup_.style.opacity=0;
             this.workspace.svgBackground_.onmousedown = function(e){
-                _this.workspace.flyout_.setVisible(false);
+                let flyout = _this.workspace.getFlyout_();
+                if(flyout)
+                    flyout.setVisible(false);
             }
             //设置拖动挂钩监视块的拖动
             Blockly.BlockDragger.prototype.startBlockDrag = function(xy){
@@ -212,7 +222,10 @@ class BlockView extends Component{
                 },400);
             }
 
-            this.workspace.flyout_.setVisible(false);
+            let flyout = this.workspace.getFlyout_();
+            if(flyout){
+                flyout.setVisible(false);
+            }
             let metrics = this.workspace.getMetrics();
             let w = metrics.contentWidth - metrics.viewWidth;
             let h = metrics.contentHeight - metrics.viewHeight;
@@ -368,12 +381,15 @@ class BlockView extends Component{
     }
     //打开创建对话栏
     openFlyOut(){
-        if(this.workspace && this.workspace.flyout_){
-            if(this.workspace.flyout_.isVisible_){
-                this.workspace.flyout_.setVisible(false);
-            }else{
-                this.workspace.flyout_.setVisible(true);
-                this.workspace.deleteAreaToolbox_ = null;
+        if(this.workspace){
+            let flyout = this.workspace.getFlyout_();
+            if(flyout){
+                if(flyout.isVisible_){
+                    flyout.setVisible(false);
+                }else{
+                    flyout.setVisible(true);
+                    this.workspace.deleteAreaToolbox_ = null;
+                }
             }
         }
     }

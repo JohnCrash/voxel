@@ -14,6 +14,7 @@ export default function en(){
     Blockly.Msg["FORWARD_IS"] = "front is";
     Blockly.Msg["BARRIER"] = "barrier";
     Blockly.Msg["FLAG"] = "flag";
+    Blockly.Msg["DIAMOND"] = "diamond";
     Blockly.Msg["BOX"] = "box";
     Blockly.Msg["STON"] = "stone";
     Blockly.Msg["LADDER"] = "stairs";

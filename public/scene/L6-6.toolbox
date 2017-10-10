@@ -9,8 +9,8 @@
 		</value>
 	</block>
 	<block type="turn_left"></block>
-	<block type="turn_right"></block>
-	<block type="jump"></block>
+	<block type="turn_right" limit="3"></block>
+	<block type="jump" limit="1"></block>
 	<block type="controls_if"></block>
 	<block type="controls_if">
 		<mutation else="1"></mutation>

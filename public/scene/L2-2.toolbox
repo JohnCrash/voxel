@@ -6,14 +6,14 @@
 			</shadow>
 		</value>
 	</block>
-	<block type="forward">
+	<block type="forward" limit="1">
 		<value name="STEP">
 			<shadow type="math_number">
 				<field name="NUM">1</field>
 			</shadow>
 		</value>
 	</block>
-	<block type="turn_right"></block>
+	<block type="turn_right" limit="1"></block>
 </xml>
 
 <xml id="default">

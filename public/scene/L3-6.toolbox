@@ -15,7 +15,7 @@
 	</block>
 	<block type="turn_left"></block>
 	<block type="turn_right"></block>
-	<block type="jump"></block>
+	<block type="jump" limit="2"></block>
 	<block type="lift_up"></block>
 	<block type="put_down"></block>
 </xml>
