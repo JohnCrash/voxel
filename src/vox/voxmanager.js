@@ -44,30 +44,49 @@ class VoxManager_{
             /**
              * 这里假设每个.vox都有一个.voz压缩文件与其对应
              */
-            //let filez = file.replace(/(.*)\.vox$/,($0,name)=>{return `${name}.voz`});
-            fetchBin(file,(data)=>{
-//                let rarContent = readRARContent({name:filez,content:data},'',()=>{
-//                    console.log(arguments);
-//                });
-//                console.log(rarContent);
-                this.voxs[file].vox = voxparser(data);
-                this.voxs[file].state='ready';
-                if(!(--count)){
-                    for(let cb of this.voxs[file].cbs){ //调用所有请求该文件的回调
-                        cb(b);
-                    }
-                    this.voxs[file].cbs = undefined;
-                }
-            },(err)=>{
-                this.voxs[file].err = err;
-                this.voxs[file].state='error';
+            let filez = file.replace(/(.*)\.vox$/,($0,name)=>{return `${name}.voz`});
+            let _this = this;
+            function errorHandle(err){
+                _this.voxs[file].err = err;
+                _this.voxs[file].state='error';
                 b = true;
                 if(!(--count)){
-                    for(let cb of this.voxs[file].cbs){ //调用所有请求该文件的回调
+                    for(let cb of _this.voxs[file].cbs){ //调用所有请求该文件的回调
                         cb(b);
                     }
-                    this.voxs[file].cbs = undefined;
+                    _this.voxs[file].cbs = undefined;
                 }
+            }
+            fetchBin(filez,(data)=>{
+                let rarContent;
+                try{
+                    rarContent = readRARContent([{name:'tmp.rar',content:new Uint8Array(data)}],'',()=>{});
+                }catch(err){
+                    errorHandle(err);
+                    return;
+                }
+                let voxdata;
+                if(rarContent&&rarContent.ls){
+                    for(let k in rarContent.ls){
+                        if( rarContent.ls[k].fileSize > 0 ){
+                            voxdata = rarContent.ls[k].fileContent;
+                        }
+                    }
+                }
+                if(voxdata){
+                    this.voxs[file].vox = voxparser(voxdata.buffer);
+                    this.voxs[file].state='ready';
+                    if(!(--count)){
+                        for(let cb of this.voxs[file].cbs){ //调用所有请求该文件的回调
+                            cb(b);
+                        }
+                        this.voxs[file].cbs = undefined;
+                    }
+                }else{
+                    errorHandle(`${filez} does not contain ${file}`);                 
+                }
+            },(err)=>{
+                errorHandle(err);
             });
         }
     }

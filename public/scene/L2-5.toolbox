@@ -13,7 +13,7 @@
 			</shadow>
 		</value>
 	</block>
-	<block type="turn_left" limit="1"></block>
+	<block type="turn_left" limit="2"></block>
 	<block type="turn_right"></block>
 	<block type="jump"></block>
 	<block type="remove_obstacle_fence"></block>

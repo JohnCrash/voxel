@@ -207,7 +207,7 @@
 				"y": 0,
 				"z": 80.61012589846001
 			},
-			"name": "金币",
+			"name": "宝石",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -216,7 +216,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/金币.item"
+			"template": "scene/item/紫宝石.item"
 		},
 		{
 			"position": {

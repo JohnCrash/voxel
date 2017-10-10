@@ -1,5 +1,6 @@
 var express = require('express');
 var path = require('path');
+var os = require('os');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -29,7 +30,7 @@ app.use(function(req,res,next){
   next();
 });
 */
-app.use(express.static(path.join(__dirname, config.public)));
+app.use(express.static(config.public));
 
 app.use('/', index);
 app.use('/users', users);
