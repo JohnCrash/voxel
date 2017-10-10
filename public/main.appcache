@@ -1,0 +1,10 @@
+CACHE MANIFEST
+#
+main_compress.js
+libs/*
+blockly/*
+media/*
+scene/*
+
+NETWORK:
+*
