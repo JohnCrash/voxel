@@ -28,6 +28,12 @@ global.appTitle = function(t){
     app.appTitle(t);
 }
 
+let root = document.getElementById('root');
+root.style.display="none";
+function loadingBar(b){
+    if(window.loadingProgressBar)window.loadingProgressBar(b);
+}
+
 class Main extends Component{
     constructor(props){
         super(props);
@@ -101,9 +107,16 @@ class Main extends Component{
         switch(s[0]){
             case '':
             case 'login':
+                loadingBar(100);
                 content = <Login />;
                 break;            
             case 'main':
+                if(window.closeLoadingUI){
+                    setTimeout(()=>{
+                        root.style.display="";
+                        if(window.closeLoadingUI)window.closeLoadingUI();
+                    },200);
+                }
                 content = [<AppBar key='mainbar' title={this.state.title} onLeftIconButtonTouchTap={this.onMenu.bind(this)}/>,
                             <Popover
                             open={this.state.openMenu}
@@ -145,8 +158,8 @@ function App(){
 }
 
 function render(){
-    ReactDOM.render(<App />,document.getElementById('root'));
-  }
+    ReactDOM.render(<App />,root);
+}
   
   window.addEventListener('hashchange', render);
   render();

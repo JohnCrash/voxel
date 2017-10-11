@@ -41,7 +41,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 	</div>
 	<div id="root"></div>
 	<script>
-		window.platfrom = 'ios';
+		window.platfrom = 'windows';
 		var progress = document.getElementById('progress');
 		var bar = document.getElementById('bar');
 		function progressBar(d){
@@ -61,7 +61,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 			head.appendChild(script);
 			console.log('load '+js);
 		}
-		var jss = ['libs/three.min.js','libs/stats.min.js','libs/dat.gui.min.js','libs/libunrar.js','blockly/blockly_compressed.js','blockly/blocks_compressed.js','blockly/javascript_compressed.js','blockly/msg/js/zh-hans.js','blockly/acorn.js','blockly/interpreter.js','main_compress.js',];
+		var jss = ['libs/three.min.js','libs/stats.min.js','libs/dat.gui.min.js','libs/libunrar.js','blockly/blockly_compressed.js','blockly/blocks_compressed.js','blockly/javascript_compressed.js','blockly/msg/js/zh-hans.js','blockly/acorn.js','blockly/interpreter.js','main.js',];
 		var i = 0;var s = 0;
 		function cb(){
 			if(i<jss.length){
@@ -76,7 +76,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 					var l = document.getElementById('loading');
 					if(l)l.parentElement.removeChild(l);
 					window.closeLoadingUI = null;
-					window.loadingProgressBar = null;					
+					window.loadingProgressBar = null;
 				}
 			}
 		}

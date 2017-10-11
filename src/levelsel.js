@@ -43,7 +43,7 @@ class LevelSel extends Component{
     }
     loadJson(json,cur){
         let stage = 0;
-        appTitle( json.title );
+        appTitle(json.title);
         this.level = json.level.map((item)=>{
             let bl = [];
             let m = item.rang.match(/(\d+)-(\d+)/);

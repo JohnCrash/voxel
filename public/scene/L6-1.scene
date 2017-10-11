@@ -163,7 +163,7 @@
 				"y": 0,
 				"z": 1.5707963267948966
 			},
-			"name": "女孩",
+			"name": "男孩",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -172,7 +172,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/女孩.item"
+			"template": "scene/item/男孩.item"
 		},
 		{
 			"position": {

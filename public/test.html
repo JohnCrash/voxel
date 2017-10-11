@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+
+<html>
+  <head>
+    <title>level</title>
+    <meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">   <meta
+name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, 
+minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>	
+    <style type="text/css">
+      body {
+        background-color: #f0f0f0;
+        margin: 0px;
+        overflow: hidden;
+      }
+    </style>  
+  </head>
+  <body>
+    <div id="root"></div>
+	<script>
+		window.platfrom = 'windows';
+		function loadJs(js,cb){
+			var head = document.getElementsByTagName('head')[0];
+			var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = js;
+			script.onload=function(){
+				cb();
+			}
+			head.appendChild(script);
+			console.log('load '+js);
+		}
+		var jss = [
+			'libs/three.min.js',
+			'libs/stats.min.js',
+			'libs/dat.gui.min.js',
+			'libs/libunrar.js',
+			'blockly/blockly_compressed.js',
+			'blockly/blocks_compressed.js',
+			'blockly/javascript_compressed.js',
+			'blockly/msg/js/zh-hans.js',
+			'blockly/acorn.js',
+			'blockly/interpreter.js',
+		];
+		var i = 0;
+		function cb(){
+			if(i<jss.length)
+				loadJs(jss[i++],cb);
+		}
+		loadJs(jss[i++],cb);
+	</script>		
+    <script type="text/javascript" src="main_compress.js"></script>
+  </body>
+</html>

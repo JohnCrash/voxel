@@ -194,7 +194,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/黄宝石.item"
+			"template": "scene/item/紫宝石.item"
 		},
 		{
 			"position": {
