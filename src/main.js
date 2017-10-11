@@ -33,7 +33,16 @@ root.style.display="none";
 function loadingBar(b){
     if(window.loadingProgressBar)window.loadingProgressBar(b);
 }
-
+function closeLoading(){
+    console.log('closeLoading...2');
+    if(window.closeLoadingUI){
+        console.log('closeLoading...');
+        setTimeout(()=>{
+            root.style.display="";
+            if(window.closeLoadingUI)window.closeLoadingUI();
+        },200);
+    }
+}
 class Main extends Component{
     constructor(props){
         super(props);
@@ -111,12 +120,7 @@ class Main extends Component{
                 content = <Login />;
                 break;            
             case 'main':
-                if(window.closeLoadingUI){
-                    setTimeout(()=>{
-                        root.style.display="";
-                        if(window.closeLoadingUI)window.closeLoadingUI();
-                    },200);
-                }
+                closeLoading();
                 content = [<AppBar key='mainbar' title={this.state.title} onLeftIconButtonTouchTap={this.onMenu.bind(this)}/>,
                             <Popover
                             open={this.state.openMenu}
@@ -136,6 +140,7 @@ class Main extends Component{
             case 'setting':
                 break;
             case 'level':
+                closeLoading();
                 Global.setLayout(window.innerWidth>window.innerHeight?"landscape":"portrait");
                 content = <Level level={s[1]}/>;
                 break;
