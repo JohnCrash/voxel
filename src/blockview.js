@@ -248,6 +248,7 @@ class BlockView extends Component{
         if(Global.getPlatfrom()!=='windows'){
             Blockly.FieldTextInput.prototype.showEditor_ = function(opt_quietInput){
                 _this.fieldTextInput = this;
+                Global.push(_this.handleClose.bind(_this));
                 _this.setState({openNumInput: true,num:Number(this.getValue())});
             }
         }
@@ -413,6 +414,7 @@ class BlockView extends Component{
         this.setState({num:this.state.num-1});
     }
     handleClose(result){
+        Global.pop();
         if(result==='ok'){
             this.fieldTextInput.setValue(this.state.num);
         }

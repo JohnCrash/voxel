@@ -21,7 +21,10 @@ class MessageBox extends Component{
     }
     static globalNode = null;
     static globalCB = null;
-    static show(type,title,content,result,style){
+    static globalG = false;
+    static show(type,title,content,result,style,g){
+        MessageBox.globalG = g;
+        if(!g)Global.push(MessageBox.globalNode.handleClose.bind(MessageBox.globalNode));
         BlocklyInterface.pause();
         if(!style){
             if(Global.getPlatfrom()==='android')
@@ -51,6 +54,7 @@ class MessageBox extends Component{
         }
     }
     handleClose(result){
+        if(!MessageBox.globalG)Global.pop();
         BlocklyInterface.resume();
         this.setState({open: false,type:'',title:'',content:''});
         if(MessageBox.globalCB){

@@ -157,6 +157,13 @@ class Level extends Component{
         });
     }
     onGameStart(props){
+        Global.push(()=>{
+            MessageBox.show("okcancel","游戏退出","你确定要返回主界面吗？",(result)=>{
+                if(result==='ok'){
+                    this.onReturnMain();
+                }
+            },undefined,true);
+        },true);     
         this.loadTest(props.level);
         this.btms = Date.now();
         this.btpms = this.btms;
@@ -189,7 +196,8 @@ class Level extends Component{
         if(this.motifyConfig){
             this.motifyConfig = false;
             Global.pushConfig();
-        }        
+        }
+        Global.pop();
         location.href='#main';
     }
     loadTest(name){

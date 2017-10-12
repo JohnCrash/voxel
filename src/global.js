@@ -12,6 +12,26 @@ class _Global_{
         this._muteMusic = true;
         this._muteSound = true;
         this._userName = 'None';
+        this._ui = [];
+    }
+    push(cb,g){
+        console.log('push');
+        this._ui.push({cb,n:!g?1:11});
+    }
+    pop(cb){
+        console.log('pop');
+        this._ui.pop();
+    }
+    callTop(){
+        if(this._ui && this._ui.length>0 && this._ui[this._ui.length-1]){
+            let b = this._ui[this._ui.length-1];
+            if(b.n === 1){
+                b.n = 0;
+                b.cb();
+            }else if(b.n===11){
+                b.cb();
+            }
+        }
     }
     isDebug(){
         return this._debug;

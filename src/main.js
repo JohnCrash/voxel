@@ -28,21 +28,45 @@ global.appTitle = function(t){
     app.appTitle(t);
 }
 
+/**
+ * 当有加载界面时,加载界面提供这几个函数
+ * closeLoadingUI 关闭加载界面
+ * loadingProgressBar 进度条函数
+ */
 let root = document.getElementById('root');
-root.style.display="none";
+if(window.closeLoadingUI)root.style.display="none";
+
 function loadingBar(b){
-    if(window.loadingProgressBar)window.loadingProgressBar(b);
+    if(window.loadingProgressBar)loadingProgressBar(b);
 }
 function closeLoading(){
-    console.log('closeLoading...2');
     if(window.closeLoadingUI){
-        console.log('closeLoading...');
         setTimeout(()=>{
             root.style.display="";
-            if(window.closeLoadingUI)window.closeLoadingUI();
+            closeLoadingUI();
         },200);
     }
 }
+/**
+ * NAVTIVE 界面
+ */
+if(window.native){
+    if(native.quit){
+        native.onBack = function(){
+            Global.callTop();
+        }
+        if(native.registerOnBack)
+            native.registerOnBack(true);
+        Global.push(()=>{
+            MessageBox.show("okcancel","游戏退出","你确定要退出游戏吗？",(result)=>{
+                if(result==='ok'){
+                    native.quit();
+                }
+            },undefined,true);
+        },true);
+    }
+}
+
 class Main extends Component{
     constructor(props){
         super(props);
