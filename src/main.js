@@ -43,7 +43,7 @@ function closeLoading(){
     if(window.closeLoadingUI){
         setTimeout(()=>{
             root.style.display="";
-            closeLoadingUI();
+            if(window.closeLoadingUI)closeLoadingUI();
         },200);
     }
 }
@@ -141,7 +141,7 @@ class Main extends Component{
             case '':
             case 'login':
                 loadingBar(100);
-                content = <Login />;
+                content = <Login uid={s[1]} uname={s[2]} clsid={s[3]} schoolid={s[4]} typeid={s[5]} cookie={s[6]} />;
                 break;            
             case 'main':
                 closeLoading();

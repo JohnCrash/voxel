@@ -11,50 +11,11 @@ class Login extends Component{
     constructor(props){
         super(props);
         this.state={
-            open:false,
-            errorMsg:'',        
+            exitButton : false,
+            msg:'正在登录请稍后...',
         };
-    }
-    messageBar(str,f){
-        console.log(str);
-        /*
-        MessageBox.show('ok',undefined,str,(result)=>{
-            console.log(result);
-        });*/
-    }      
-    login(user,pwd){
-        let data={
-            user:user?user:'',
-            passwd:pwd?pwd:''
-        };
-        fetch('/users/login',{method:'POST',
-        credentials: 'same-origin',
-        headers: {'Content-Type': 'application/json'},
-        body:JSON.stringify(data)}).then(function(responese){
-			return responese.text();
-		}).then(function(data){
-            console.log(data);
-            let json = JSON.parse(data);
-            if(json.result==='ok'){
-                //成功登录
-                //this.props.onLogin(json.user);
-                this.setState({open:false});
-                Global.loadConfig(json.config);
-                console.log("setMaxPassLevel "+(json.lv+1));
-                Global.setMaxPassLevel(json.lv+1);
-                Global.setUserName(json.user);
-                location.href='#main#'+(json.lv+1);
-            }else{
-                if(user)this.messageBar(json.result);
-                this.setState({open:true,errorMsg:json.result});
-            }
-        }.bind(this)).catch(function(e){
-            this.messageBar(e);
-            this.setState({open:true,errorMsg:json.result});
-        }.bind(this));
     }
     logout(){
-        this.setState({open:true});
         fetch('/users/logout',{method:'POST',
         credentials: 'same-origin',
         headers: {'Content-Type': 'application/json'}}).then(function(responese){
@@ -64,31 +25,71 @@ class Login extends Component{
             this.messageBar(e);
         });        
     }
-    componentDidMount(){
-        this.login();
+    login(uid,uname,cookie,clsid,typeid,schoolid){
+        if(!(uid && uname && cookie)){
+            this.setState({exitButton:true,msg:"用户信息不正确"});
+            return;
+        }
+        let data={uid,uname,cookie,clsid,typeid,schoolid};
+        fetch('/users/login',{method:'POST',
+        credentials: 'same-origin',
+        headers: {'Content-Type': 'application/json'},
+        body:JSON.stringify(data)}).then(function(responese){
+			return responese.text();
+		}).then(function(data){
+            let json;
+            try{
+                json = JSON.parse(data);
+            }catch(e){
+                this.setState({exitButton:true,msg:"服务器故障请稍后再试."});
+                return;
+            }
+            if(json.result==='ok'){
+                //成功登录
+                //this.props.onLogin(json.user);
+                this.setState({open:false});
+                Global.loadConfig(json.config);
+                console.log("setMaxPassLevel "+(json.lv+1));
+                Global.setMaxPassLevel(json.lv+1);
+                Global.setUserName(json.user);
+                this.setState({msg:"登录成功"});
+                location.href='#main#'+(json.lv+1);
+            }else{
+                if(json&&json.result)
+                    this.setState({exitButton:true,msg:json.result});
+                else
+                    this.setState({exitButton:true,msg:"服务器返回错误."});
+            }
+        }.bind(this)).catch(function(e){
+            this.setState({exitButton:true,msg:e.toString()});
+        }.bind(this));
     }
-    openLogin(){
-        let user = this.user.getValue();
-        let pwd = this.pwd.getValue();
-        this.login(user,pwd);
+    componentDidMount(){
+        let {uid,uname,cookie,clsid,typeid,schoolid} = this.props;
+        this.login(uid,uname,cookie,clsid,typeid,schoolid);
+    }
+    componentWillReceiveProps(nextProps){
+        let {uid} = this.props;
+        if(uid!==nextProps.uid){
+            let {uid,uname,cookie,clsid,typeid,schoolid} = nextProps;
+            this.login(uid,uname,cookie,clsid);
+        }
+    }
+    quitApp(){
+        native.quit();
+    }
+    tryAgin(){
+        let {uid,uname,cookie,clsid,typeid,schoolid} = this.props;
+        this.login(uid,uname,cookie,clsid,typeid,schoolid);
     }
     render(){
-        return <Dialog open={this.state.open}
+        return <Dialog open={true}
             autoScrollBodyContent={true}
             contentStyle={Global.getPlatfrom()!=="windows"?{width:"95%"}:undefined}
-            actions={[<FlatButton label='登录' primary={true} onClick={this.openLogin.bind(this)}/>]}>
-            <MarkdownElement file={`scene/ui/login.md`}/>
-            <TextField
-                hintText="用户名"
-                floatingLabelText="请输入用户名"
-                ref={(ref)=>{this.user=ref}}/>
-            <TextField
-                hintText="密码"
-                type="password"
-                floatingLabelText="请输入密码"
-                ref={(ref)=>{this.pwd=ref}}/>
-            <br/>
-            {this.state.errorMsg}
+            actions={this.state.exitButton?
+            [<FlatButton label='重试' primary={true} onClick={this.tryAgin.bind(this)}/>,
+            (window.native&&window.native.quit)?<FlatButton label='退出' primary={true} onClick={this.quitApp.bind(this)}/>:undefined]:undefined}>
+            {this.state.msg}
             </Dialog>;
     }
 };

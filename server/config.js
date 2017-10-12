@@ -5,7 +5,7 @@ const config = {
         server:'192.168.2.83',
         database:'voxel'
     },
-    public: '../public',
+    public: 'public',
     upload: 'public/',
 };
 

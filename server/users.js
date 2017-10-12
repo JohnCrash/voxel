@@ -48,39 +48,35 @@ router.use(function(req,res,next){
   }
 });
 
-function login(req,res,user,passwd){
-  if(!user){
-    res.json({result:'请输入用户名密码'});
+function setCookie(res,cookie){
+  res.cookie('cc',cookie);
+}
+/**
+ * 系统登入一个新的用户
+ * 登入一个用户需要6类信息
+ * 用户ID uid，用户名uname，班级ID cls，学校ID school，身份ID typeid，用户cookie
+ */
+function login(req,res,uid,uname,cls,school,typeid,cookie){
+  let {uid,uname,clsid,schoolid,typeid,cookie} = req.body;
+  if(!cookie || !uid || !uname){
+    res.json({result:'请从乐教乐学大厅进入'});
     return;
   } 
-  sql(`select * from UserInfo where UserName='${user}'`).then((result)=>{
-    if( result.recordset[0] && 'UserPwd' in result.recordset[0]){
-      let pwd = stripTailSpace(result.recordset[0].UserPwd);
-      if(pwd===passwd){
-        let {cookie,userName,lv,config} = result.recordset[0];
-        if(!cookie){//产生一个新的cookie
-          var md5sum = crypto.createHash('md5');
-          md5sum.update(user+passwd);
-          cookie = md5sum.digest('hex');
-          sql(`update UserInfo set cookie='${cookie}' where UserName='${user}'`);
-        }
-        sql(`update UserInfo set lastlogin=getdate() where UserName='${user}'`);
-        res.cookie('cc',cookie);
-        res.json({
-          result:'ok',
-          lv,
-          config,
-          user
-        });
-      }else throw'密码不正确';
+  sql(`select * from UserInfo where uid=${uid}`).then((result)=>{
+    if( result.recordset[0] && 'UserName' in result.recordset[0]){
+      let {UserName,lv,config} = result.recordset[0];
+      sql(`update UserInfo set lastlogin=getdate() where uid=${uid}`);
+      setCookie(res,cookie);
+      res.json({
+        result:'ok',
+        lv,
+        config,
+        user:UserName
+      });
     }else{
       //这里插入一个新的用户
-      let cookie;
-      var md5sum = crypto.createHash('md5');
-      md5sum.update(user+passwd);
-      cookie = md5sum.digest('hex');
-      res.cookie('cc',cookie);
-      sql(`insert into UserInfo (cookie,lv,cls,UserName,UserPwd) values ('${cookie}',0,0,N'${user}','${passwd}')`).then((result)=>{
+      sql(`insert into UserInfo (cookie,lv,cls,UserName,school,typeid,lastlogin) values ('${cookie}',0,${cls},N'${uname}',${schoolid},${typeid}),getdate()`).then((result)=>{
+        setCookie(res,cookie);
         res.json({
           result:'ok',
           lv:0,
@@ -98,8 +94,8 @@ function login(req,res,user,passwd){
  * 登录，返回关卡进行状况
  */
 router.post('/login',function(req,res){
-  if(req.UserInfo){ //通过cookie登录
-    sql(`update UserInfo set lastlogin=getdate() where UserName='${req.UserInfo.UserName}'`);
+  if(req.UserInfo){ //已经通过cookie成功登录
+    sql(`update UserInfo set lastlogin=getdate() where uid=${req.UserInfo.uid}`);
     let {cookie,UserName,lv,config} = req.UserInfo;
     res.json({
       lv,
@@ -108,7 +104,7 @@ router.post('/login',function(req,res){
       user:stripTailSpace(UserName)
     });
   }else
-    login(req,res,req.body.user,req.body.passwd);
+    login(req,res);
 });
 
 function tops(req,res){
