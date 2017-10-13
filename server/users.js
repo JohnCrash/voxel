@@ -24,12 +24,12 @@ function sql(query){
 }
 
 /**
- * cookies => UserInfo
+ * uid => UserInfo
  */
 router.use(function(req,res,next){
-  let cc = req.cookies.cc;
-  if(cc){
-    sql(`select * from UserInfo where cookie='${cc}'`).then((result)=>{
+  let uid = req.body.uid;
+  if(uid){
+    sql(`select * from UserInfo where uid=${uid}`).then((result)=>{
       req.UserInfo = result.recordset[0];
       if(req.UserInfo){
         next();
@@ -49,14 +49,23 @@ router.use(function(req,res,next){
 });
 
 function setCookie(res,cookie){
-  res.cookie('cc',cookie);
+  let key,value;
+  cookie.replace(/(.*)=(.*)/,($0,k,v)=>{
+    key = k;
+    value = v;
+    return $0;
+  });
+  if(key && value)
+    res.cookie(key,value);
+  else
+    throw `setCookie Error ${cookie}`;
 }
 /**
  * 系统登入一个新的用户
  * 登入一个用户需要6类信息
  * 用户ID uid，用户名uname，班级ID cls，学校ID school，身份ID typeid，用户cookie
  */
-function login(req,res,uid,uname,cls,school,typeid,cookie){
+function login(req,res){
   let {uid,uname,clsid,schoolid,typeid,cookie} = req.body;
   if(!cookie || !uid || !uname){
     res.json({result:'请从乐教乐学大厅进入'});
@@ -65,22 +74,26 @@ function login(req,res,uid,uname,cls,school,typeid,cookie){
   sql(`select * from UserInfo where uid=${uid}`).then((result)=>{
     if( result.recordset[0] && 'UserName' in result.recordset[0]){
       let {UserName,lv,config} = result.recordset[0];
+      let dbCookie = result.recordset[0].cookie;
       sql(`update UserInfo set lastlogin=getdate() where uid=${uid}`);
+      if(cookie!==dbCookie){
+        sql(`update UserInfo set cookie='${cookie}' where uid=${uid}`);
+      }
       setCookie(res,cookie);
       res.json({
         result:'ok',
         lv,
         config,
-        user:UserName
+        user:uname
       });
     }else{
       //这里插入一个新的用户
-      sql(`insert into UserInfo (cookie,lv,cls,UserName,school,typeid,lastlogin) values ('${cookie}',0,${cls},N'${uname}',${schoolid},${typeid}),getdate()`).then((result)=>{
+      sql(`insert into UserInfo (uid,cookie,lv,cls,UserName,school,typeid,lastlogin) values (${uid},'${cookie}',0,${clsid},N'${uname}',${schoolid},${typeid},getdate())`).then((result)=>{
         setCookie(res,cookie);
         res.json({
           result:'ok',
           lv:0,
-          user      
+          user:uname    
         });
       }).catch((err)=>{
         res.send({result:err});
@@ -217,6 +230,7 @@ router.post('/config',function(req,res){
  */
 router.post('/logout',function(req,res){
     res.clearCookie('cc');
+    res.clearCookie('sc1');
     res.json({result:'ok'});
 });
 
