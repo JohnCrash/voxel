@@ -102,7 +102,8 @@ class SceneManager extends EventEmitter{
      * 当加载完全结束时调用cb(true),如果失败调用cb(false)
      */
     loadFromJson(json,cb){
-        if(this._exit)return;
+        if(this._exit || this._doloadstate)return;
+
         this.json = json;
         this._doloadstate = true;
         this.game.scene.visible = false;
@@ -114,7 +115,7 @@ class SceneManager extends EventEmitter{
         this.script = json.script;
         this.musicFile = json.music||'';
         this.musicLoop = !!json.loop;
-        if(json.bgcolor)this.setBackgroundColor(json.bgcolor);
+        this.setBackgroundColor(json.bgcolor);
         this.loadSkybox(json.skybox);
         this.loadMaterial(json.material);
         this.loadZFog(json.zfog);
@@ -124,7 +125,8 @@ class SceneManager extends EventEmitter{
     }
 
     resetItem(cb){
-        if(this.json){
+        if(this.json && !this._doReset && !this._doloadstate){
+            this._doReset = true;
             this.loadItem(this.json.item,cb);
         }
     }
@@ -180,6 +182,7 @@ class SceneManager extends EventEmitter{
                     return;
                 else if(item.state==='error'){
                     clearInterval(id);
+                    this._doReset = false;
                     this._doloadstate = false;
                     this.game.scene.visible = true;
                     if(this._exit){
@@ -197,6 +200,7 @@ class SceneManager extends EventEmitter{
                     if(item.live)item.live('init');
                 }
             }
+            this._doReset = false;
             this._doloadstate = false;
             this.game.scene.visible = true;
             if(cb)cb(false);

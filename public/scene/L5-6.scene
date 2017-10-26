@@ -1,17 +1,17 @@
 {
 	"music": "",
 	"loop": true,
-	"bgcolor": 5504221,
+	"bgcolor": 56575,
 	"camera": {
 		"position": {
-			"x": 229.52011232943508,
-			"y": 34.98025956055889,
-			"z": 160.31288207747463
+			"x": -126.4125473372367,
+			"y": -212.82692380185304,
+			"z": 177.23699873001908
 		},
 		"rotation": {
-			"x": 1.0378891285192977,
+			"x": 1.0314895879286445,
 			"y": 0,
-			"z": 1.6691165413239166
+			"z": -0.5457062794568898
 		}
 	},
 	"material": {
@@ -50,6 +50,7 @@
 			"shininess": 32,
 			"shading": 1,
 			"vertexColors": 2,
+			"opacity": 0.7000000000000001,
 			"depthFunc": 3,
 			"depthTest": true,
 			"depthWrite": true,
@@ -86,23 +87,23 @@
 			"type": "ambient",
 			"name": "环境灯3",
 			"color": {
-				"r": 0.4666666666666667,
-				"g": 0.3411764705882353,
-				"b": 0.3411764705882353
+				"r": 0.4117647058823529,
+				"g": 0.4117647058823529,
+				"b": 0.4117647058823529
 			}
 		},
 		{
 			"type": "direct",
 			"name": "方向灯4",
 			"color": {
-				"r": 0.8313725490196079,
-				"g": 0.7803921568627451,
-				"b": 0.7803921568627451
+				"r": 0.47843137254901963,
+				"g": 0.47843137254901963,
+				"b": 0.47843137254901963
 			},
 			"position": {
-				"x": 587.7378435517971,
-				"y": -494.7145877378436,
-				"z": 971.106412966878
+				"x": 133.89626055488543,
+				"y": -439.60020678959154,
+				"z": 1000
 			},
 			"rotation": {
 				"x": 0,
@@ -183,9 +184,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 1.5707963267948966
 			},
-			"name": "栅栏",
+			"name": "木桩",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -194,7 +195,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/栅栏.item"
+			"template": "scene/item/木桩.item"
 		},
 		{
 			"position": {
@@ -207,7 +208,7 @@
 				"y": 0,
 				"z": 0
 			},
-			"name": "栅栏1",
+			"name": "木桩1",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -216,7 +217,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/栅栏.item"
+			"template": "scene/item/木桩.item"
 		},
 		{
 			"position": {
@@ -227,7 +228,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1.5707963267948966
+				"z": 1650.9320722024434
 			},
 			"name": "宝石",
 			"visible": true,
@@ -251,7 +252,7 @@
 				"y": 0,
 				"z": 0
 			},
-			"name": "栅栏2",
+			"name": "木桩2",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -260,16 +261,82 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/栅栏.item"
+			"template": "scene/item/木桩.item"
+		},
+		{
+			"position": {
+				"x": 19,
+				"y": -39,
+				"z": 2
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 3.141592653589793
+			},
+			"name": "水花",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/水花.item"
+		},
+		{
+			"position": {
+				"x": 42,
+				"y": -27,
+				"z": 2
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "水花1",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/水花.item"
+		},
+		{
+			"position": {
+				"x": -54,
+				"y": 18,
+				"z": 1.5
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 3.141592653589793
+			},
+			"name": "水花2",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/水花.item"
 		}
 	],
 	"zfog": {
 		"color": {
-			"r": 0.3254901960784314,
-			"g": 0.9882352941176471,
-			"b": 0.8666666666666667
+			"r": 0.03137254901960784,
+			"g": 0.6588235294117647,
+			"b": 1
 		},
-		"high": 40,
+		"high": 10,
 		"low": 0
 	}
 }

@@ -29,6 +29,9 @@ import {ItemTemplate} from './vox/itemtemplate';
 import {fetchJson,postJson} from './vox/fetch';
 import {Global} from './global';
 import Tops from './tops';
+import {
+    Redirect
+  } from 'react-router-dom';
 
 const ToggleStyle = {marginBottom: 16,marginLeft:16,width:"85%"};
 const redIcon = {color:"#F44336"};
@@ -157,6 +160,7 @@ class Level extends Component{
         });
     }
     onGameStart(props){
+        if(!this.voxview)return;
         Global.push(()=>{
             MessageBox.show("okcancel","游戏退出","你确定要返回主界面吗？",(result)=>{
                 if(result==='ok'){
@@ -198,7 +202,7 @@ class Level extends Component{
             Global.pushConfig();
         }
         Global.pop();
-        location.href='#main';
+        location.href='#/main';
     }
     loadTest(name){
         if(!Global.isDebug())return;
@@ -219,7 +223,7 @@ class Level extends Component{
                         this.blockview.loadXML(this.testXML[0]);
                     }
                     this.setState({curSelectTest:0});
-                },1000);
+                },2000);
             }
         },(err)=>{
             this.testXML = [];
@@ -421,6 +425,9 @@ class Level extends Component{
         </div>;
     }
     render(){
+        if(Global.getMaxPassLevel()===null){
+            return <Redirect to='/login' />;
+        }        
         return this.state.landscape?this.landscape():this.portrait();
     }
 };

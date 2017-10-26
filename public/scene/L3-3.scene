@@ -252,7 +252,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 115.33414949858678
 			},
 			"name": "宝石",
 			"visible": true,
@@ -268,7 +268,7 @@
 		{
 			"position": {
 				"x": 2,
-				"y": 18.5,
+				"y": 17.5,
 				"z": 40.5
 			},
 			"rotation": {
@@ -284,7 +284,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/地板.item",
 			"flatColor": "yellow"
 		},
@@ -314,7 +314,7 @@
 		{
 			"position": {
 				"x": -1.5,
-				"y": 18.5,
+				"y": 17.5,
 				"z": 40.5
 			},
 			"rotation": {
@@ -330,7 +330,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/地板.item",
 			"flatColor": "yellow"
 		},

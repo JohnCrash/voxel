@@ -69,6 +69,10 @@ class VoxView extends Component{
             BlocklyInterface.blocklyEvent('SceneReset');
             fetchJson(`/load?file=scene/${file}.scene`,(json)=>{
                 if(json.result==='ok'){
+                    //这里主动设置下背景颜色,因为在BlocklyInterface.pause后界面停止更新
+                    this.sceneManager.setBackgroundColor(json.bgcolor);
+                    this.sceneManager.game.render();
+
                     BlocklyInterface.pause();
                     this.initCharacter(json);
                     this.sceneManager.loadFromJson(json.content,(iserr)=>{

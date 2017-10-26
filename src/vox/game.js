@@ -125,7 +125,7 @@ Game.prototype.run=function(){
         if(this.stats)this.stats.update();
         var nt = Date.now();
         if(!this.paused){
-            let dt = nt - t > 100?100:nt-t; //保证时间的连续
+            let dt = nt - t > 50?50:nt-t; //保证时间的连续
             this.emit('update',dt);
             if(this.composer)
                 this.composer.render();
@@ -136,6 +136,10 @@ Game.prototype.run=function(){
     }.bind(this);
     animate();    
 };
+
+Game.prototype.render=function(){
+    this.renderer.render( this.scene, this.camera );
+}
 
 Game.prototype.stop=function(){
     this.stoped = true;

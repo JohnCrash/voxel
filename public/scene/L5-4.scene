@@ -1,17 +1,17 @@
 {
 	"music": "",
 	"loop": true,
-	"bgcolor": 5504221,
+	"bgcolor": 56575,
 	"camera": {
 		"position": {
-			"x": -152.74732233268855,
-			"y": -232.86165525488133,
-			"z": 187.62347017767547
+			"x": -160.64445209735703,
+			"y": -204.31605555249757,
+			"z": 233.20368148104578
 		},
 		"rotation": {
-			"x": 1.1100294042683971,
+			"x": 0.9535315480062334,
 			"y": 0,
-			"z": -0.5922483928434025
+			"z": -0.6707882091831451
 		}
 	},
 	"material": {
@@ -87,18 +87,18 @@
 			"type": "ambient",
 			"name": "环境灯3",
 			"color": {
-				"r": 0.4666666666666667,
-				"g": 0.3411764705882353,
-				"b": 0.3411764705882353
+				"r": 0.4117647058823529,
+				"g": 0.4117647058823529,
+				"b": 0.4117647058823529
 			}
 		},
 		{
 			"type": "direct",
 			"name": "方向灯4",
 			"color": {
-				"r": 1,
-				"g": 1,
-				"b": 1
+				"r": 0.47843137254901963,
+				"g": 0.47843137254901963,
+				"b": 0.47843137254901963
 			},
 			"position": {
 				"x": 133.89626055488543,
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 33,
 					"curIndex": 0
 				}
 			],
@@ -184,7 +184,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 1777.428300399275
 			},
 			"name": "宝石",
 			"visible": true,
@@ -196,15 +196,103 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/黄宝石.item"
+		},
+		{
+			"position": {
+				"x": 5,
+				"y": -18,
+				"z": 1.5
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 3.141592653589793
+			},
+			"name": "水花",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/水花.item"
+		},
+		{
+			"position": {
+				"x": -38,
+				"y": 7.5,
+				"z": 1
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 4.71238898038469
+			},
+			"name": "水花1",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/水花.item"
+		},
+		{
+			"position": {
+				"x": 19,
+				"y": 15,
+				"z": 2
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "水花2",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/水花.item"
+		},
+		{
+			"position": {
+				"x": 41,
+				"y": 53,
+				"z": 1.5
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 3.141592653589793
+			},
+			"name": "水花3",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/水花.item"
 		}
 	],
 	"zfog": {
 		"color": {
-			"r": 0.3254901960784314,
-			"g": 0.9882352941176471,
-			"b": 0.8666666666666667
+			"r": 0.03137254901960784,
+			"g": 0.6588235294117647,
+			"b": 1
 		},
-		"high": 40,
+		"high": 10,
 		"low": 0
 	}
 }

@@ -6,6 +6,21 @@ var JUMP_SPEED = 47;
 var JUMP_STEP = 1;
 var characters = [];
 
+var lastArrowHelper = null;
+/**
+ * 加入一个方向
+ */
+function AddArrowHelper(sceneManager,dir,origin,length, hex){
+	var arrowHelper = new THREE.ArrowHelper( dir, origin, length, hex );
+	sceneManager.game.scene.add(arrowHelper);
+	return arrowHelper;
+}
+
+function RemoveArrowHelper(sceneManager,arrowHelper){
+	if(arrowHelper)
+		sceneManager.game.scene.remove(arrowHelper);
+}
+
 function initItemBlockly(_this){
 	if(typeof(Blockly)==='undefined')return;
 	_this.forwardAngle = _this.rotation.z;
@@ -568,16 +583,22 @@ function initItemBlockly(_this){
 		if(!item)return;
 
 		var d = (item.forwardT!==undefined && item.forwardT!=1) ? (calcD(item)) : (1*STEP);
-			
 		var pt = {
 			x:item.position.x+Math.cos(item.rotation.z-Math.PI/2)*d,
 			y:item.position.y+Math.sin(item.rotation.z-Math.PI/2)*d,
 			z:item.position.z+7.9
 		};
+		
+//		RemoveArrowHelper(item.sceneManager,lastArrowHelper);
+//		lastArrowHelper = AddArrowHelper(item.sceneManager,
+//			new THREE.Vector3(0,0,1),
+//			new THREE.Vector3(pt.x,pt.y,pt.z));
+		
 		var ar = item.sceneManager.ptItem(pt);
 		var i,z;
 		switch(it){
 			case 'barrier':
+				console.log(ar);
 				for(i=0;i<ar.length;i++){
 					if(ar[i].typeName==='栅栏')return true;
 				}
@@ -599,16 +620,16 @@ function initItemBlockly(_this){
 				break;				
 			case 'ladder':
 				if(ar.length===0){
-					pt.z = item.position.z+1;
+					pt.z = item.position.z+1;				
 					ar = item.sceneManager.ptItem(pt);
 					for(i=0;i<ar.length;i++){
 						if(ar[i].ground)return true;
 					}
-					pt.z = item.position.z-7.9;
-					ar = item.sceneManager.ptItem(pt);
-					for(i=0;i<ar.length;i++){
-						if(ar[i].ground)return true;
-					}					
+				//	pt.z = item.position.z+7.9;
+				//	ar = item.sceneManager.ptItem(pt);
+				//	for(i=0;i<ar.length;i++){
+				//		if(ar[i].ground){return true;}
+				//	}
 				}
 				break;
 			case 'cliff':

@@ -1,13 +1,7 @@
 <xml id="toolbox">
 	<block type="controls_whileUntil"></block>
 	<block type="what_is_it"></block>
-	<block type="forward">
-		<value name="STEP">
-			<shadow type="math_number">
-				<field name="NUM">1</field>
-			</shadow>
-		</value>
-	</block>
+	<block type="forward"></block>
 	<block type="turn_left" limit="2"></block>
 	<block type="turn_right"></block>
 	<block type="jump"></block>
@@ -15,6 +9,26 @@
 	<block type="lift_up" limit="1"></block>
 	<block type="put_down" limit="1"></block>
 	<block type="remove_obstacle_fence" limit="1"></block>
+	<block type="math_arithmetic">
+		<field name="OP">MULTIPLY</field>
+		<value name="A"></value>
+        <value name="B">
+            <shadow type="math_number">
+				<field name="NUM">3</field>
+            </shadow>
+        </value>
+	</block>
+    <block type="variables_set" limit="1">
+		<field name="VAR" variabletype=""> x </field>
+		<value name="VALUE">
+			<shadow type="math_number">
+				<field name="NUM">1</field>
+			</shadow>
+		</value>
+	</block>
+	<block type="variables_get">
+		<field name="VAR" variabletype=""> x </field>
+	</block>
 </xml>
 
 <xml id="default">

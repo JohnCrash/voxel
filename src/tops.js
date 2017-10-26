@@ -45,20 +45,24 @@ class Tops extends Component{
         BlocklyInterface.resume();
         this.setState({open: false});
         let info = Global.appGetLevelInfo(this.props.level);
-        if(!info)return;
+        if(!info){
+            console.log("Global.appGetLevelInfo return null! tops.js");
+            return;
+        }
 
         switch(result){
             case 'exit':
-                location.href='#main#'+info.next;
+                //location.href='/main/'+info.next;
+                location.href='#/main';
                 break;
             case 'agin':
                 if(this._isagin)this._isagin();
                 break;
             case 'next':
                 if(info.nextName){
-                    location.href=`#level#${info.nextName}`;
+                    location.href=`#/level/${info.nextName}`;
                 }else{//打通了全部
-                    location.href='#main#'+info.next;
+                    location.href='#/main';
                 }
                 break;
         }
@@ -74,7 +78,8 @@ class Tops extends Component{
         this.blocks = blocks;
         BlocklyInterface.pause();
         postJson('/users/commit',
-            {lv:info.next-1,
+            {uid:Global.getUID(),
+             lv:info.next-1,
              lname:this.props.level,
              blocks,
              total,

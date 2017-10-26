@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html manifest="main.appcache>
+<html>
   <head>
     <title>level</title>
     <meta charset="utf-8">
@@ -41,7 +41,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 	</div>
 	<div id="root"></div>
 	<script>
-		window.platfrom = 'android';
+		window.platfrom = 'windows';
 		var progress = document.getElementById('progress');
 		var bar = document.getElementById('bar');
 		function progressBar(d){
@@ -61,7 +61,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 			head.appendChild(script);
 			console.log('load '+js);
 		}
-		var jss = ['libs/three.min.js','libs/stats.min.js','libs/dat.gui.min.js','libs/libunrar.js','blockly/blockly_compressed.js','blockly/blocks_compressed.js','blockly/javascript_compressed.js','blockly/msg/js/zh-hans.js','blockly/acorn.js','blockly/interpreter.js','app_compress.js',];
+		var jss = ['libs/three.min.js','libs/stats.min.js','libs/dat.gui.min.js','libs/libunrar.js','blockly/blockly_compressed.js','blockly/blocks_compressed.js','blockly/javascript_compressed.js','blockly/msg/js/zh-hans.js','blockly/acorn.js','blockly/interpreter.js','app.js',];
 		var i = 0;var s = 0;
 		window.closeLoadingUI = function(){
 			console.log('close loading ui.');

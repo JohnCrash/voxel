@@ -54,12 +54,12 @@ class LevelSel extends Component{
                     let s,link;
                     if(i===current){
                         s = 'current';
-                        link = `#level#L${stage}-${i-Number(m[1])+1}`;
+                        link = `#/level/L${stage}-${i-Number(m[1])+1}`;
                     }else if(i>=json.closed)
                         s = 'closed';
                     else if(i<current){
                         s = 'opened';
-                        link = `#level#L${stage}-${i-Number(m[1])+1}`;
+                        link = `#/level/L${stage}-${i-Number(m[1])+1}`;
                     }else if(i>current)
                         s = 'unfinished';
                     if(i===Number(m[1]))

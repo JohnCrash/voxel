@@ -1,17 +1,17 @@
 {
 	"music": "",
 	"loop": true,
-	"bgcolor": 5504221,
+	"bgcolor": 0,
 	"camera": {
 		"position": {
-			"x": 199.20541670453053,
-			"y": -152.71711942860045,
-			"z": 164.0448977839039
+			"x": 199.90094893083537,
+			"y": -182.83106745859052,
+			"z": 177.60069648125014
 		},
 		"rotation": {
-			"x": 1.0646508437165427,
+			"x": 1.1210831561976955,
 			"y": 0,
-			"z": 0.9128071987930423
+			"z": 0.8109963257600356
 		}
 	},
 	"material": {
@@ -87,18 +87,18 @@
 			"type": "ambient",
 			"name": "环境灯3",
 			"color": {
-				"r": 0.4666666666666667,
-				"g": 0.3411764705882353,
-				"b": 0.3411764705882353
+				"r": 0.3607843137254902,
+				"g": 0.3215686274509804,
+				"b": 0.3215686274509804
 			}
 		},
 		{
 			"type": "direct",
 			"name": "方向灯4",
 			"color": {
-				"r": 1,
-				"g": 1,
-				"b": 1
+				"r": 0.47843137254901963,
+				"g": 0.47843137254901963,
+				"b": 0.47843137254901963
 			},
 			"position": {
 				"x": 133.89626055488543,
@@ -147,11 +147,11 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 35,
 					"curIndex": 0
 				}
 			],
-			"water": 177
+			"water": 205
 		},
 		{
 			"position": {
@@ -184,7 +184,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 4.71238898038469
+				"z": 306.75453147447274
 			},
 			"name": "宝石",
 			"visible": true,
@@ -206,9 +206,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 1.5707963267948966
 			},
-			"name": "栅栏",
+			"name": "木桩",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -217,7 +217,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/栅栏.item"
+			"template": "scene/item/木桩.item"
 		},
 		{
 			"position": {
@@ -230,7 +230,7 @@
 				"y": 0,
 				"z": 0
 			},
-			"name": "栅栏2",
+			"name": "木桩1",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -239,7 +239,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/栅栏.item"
+			"template": "scene/item/木桩.item"
 		},
 		{
 			"position": {
@@ -250,9 +250,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 1.5707963267948966
 			},
-			"name": "栅栏3",
+			"name": "木桩3",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -261,7 +261,7 @@
 			"specificGravity": 0.2,
 			"castShadow": true,
 			"receiveShadow": false,
-			"template": "scene/item/栅栏.item"
+			"template": "scene/item/木桩.item"
 		},
 		{
 			"position": {
@@ -272,7 +272,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 693.8270207305823
+				"z": 995.8691632245964
 			},
 			"name": "金币",
 			"visible": true,
@@ -288,9 +288,9 @@
 	],
 	"zfog": {
 		"color": {
-			"r": 0.3254901960784314,
-			"g": 0.9882352941176471,
-			"b": 0.8666666666666667
+			"r": 0,
+			"g": 0,
+			"b": 0
 		},
 		"high": 40,
 		"low": 0

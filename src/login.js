@@ -25,12 +25,17 @@ class Login extends Component{
             this.messageBar(e);
         });        
     }
-    login(uid,uname,cookie,clsid,typeid,schoolid){
+    login(uid,uname,cookie){
         if(!(uid && uname && cookie)){
-            this.setState({exitButton:true,msg:"用户信息不正确"});
-            return;
+            //this.setState({exitButton:true,msg:"用户信息不正确"});
+            console.log('Use cookie login...');
+            //return;
+        }else{
+            console.log('login...');
+            console.log(`${uid} , ${uname} ,${cookie}`);
+            Global.setUserInfo(uid,uname,cookie);
         }
-        let data={uid,uname,cookie,clsid,typeid,schoolid};
+        let data={uid,uname,cookie};
         fetch('/users/login',{method:'POST',
         credentials: 'same-origin',
         headers: {'Content-Type': 'application/json'},
@@ -46,14 +51,17 @@ class Login extends Component{
             }
             if(json.result==='ok'){
                 //成功登录
-                //this.props.onLogin(json.user);
                 this.setState({open:false});
                 Global.loadConfig(json.config);
                 console.log("setMaxPassLevel "+(json.lv+1));
                 Global.setMaxPassLevel(json.lv+1);
                 Global.setUserName(json.user);
+                //通过cookie登录
+                if(json.cookie)
+                    Global.setUserInfo(json.uid,json.uname,json.cookie);
                 this.setState({msg:"登录成功"});
-                location.href='#main#'+(json.lv+1);
+                //location.href='#main/'+(json.lv+1);
+                location.href='#/main';
             }else{
                 if(json&&json.result)
                     this.setState({exitButton:true,msg:json.result});
@@ -65,22 +73,22 @@ class Login extends Component{
         }.bind(this));
     }
     componentDidMount(){
-        let {uid,uname,cookie,clsid,typeid,schoolid} = this.props;
-        this.login(uid,uname,cookie,clsid,typeid,schoolid);
+        let {uid,uname,cookie} = this.props;
+        this.login(uid,uname,cookie);
     }
     componentWillReceiveProps(nextProps){
         let {uid} = this.props;
         if(uid!==nextProps.uid){
-            let {uid,uname,cookie,clsid,typeid,schoolid} = nextProps;
-            this.login(uid,uname,cookie,clsid);
+            let {uid,uname,cookie} = nextProps;
+            this.login(uid,uname,cookie);
         }
     }
     quitApp(){
         native.quit();
     }
     tryAgin(){
-        let {uid,uname,cookie,clsid,typeid,schoolid} = this.props;
-        this.login(uid,uname,cookie,clsid,typeid,schoolid);
+        let {uid,uname,cookie} = this.props;
+        this.login(uid,uname,cookie);
     }
     render(){
         return <Dialog open={true}

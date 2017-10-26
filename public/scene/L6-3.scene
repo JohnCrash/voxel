@@ -1,17 +1,17 @@
 {
 	"music": "",
 	"loop": true,
-	"bgcolor": 5504221,
+	"bgcolor": 0,
 	"camera": {
 		"position": {
-			"x": 165.20808320444206,
-			"y": -197.29257064811728,
-			"z": 168.17989579435707
+			"x": 205.53357656574912,
+			"y": -219.3782036525065,
+			"z": 191.81032772301364
 		},
 		"rotation": {
-			"x": 1.086758347575137,
+			"x": 1.1117747335203907,
 			"y": 0,
-			"z": 0.7382742735936089
+			"z": 0.7667813180428451
 		}
 	},
 	"material": {
@@ -87,18 +87,18 @@
 			"type": "ambient",
 			"name": "环境灯3",
 			"color": {
-				"r": 0.4666666666666667,
-				"g": 0.3411764705882353,
-				"b": 0.3411764705882353
+				"r": 0.3607843137254902,
+				"g": 0.3215686274509804,
+				"b": 0.3215686274509804
 			}
 		},
 		{
 			"type": "direct",
 			"name": "方向灯4",
 			"color": {
-				"r": 1,
-				"g": 1,
-				"b": 1
+				"r": 0.47843137254901963,
+				"g": 0.47843137254901963,
+				"b": 0.47843137254901963
 			},
 			"position": {
 				"x": 133.89626055488543,
@@ -184,7 +184,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 396.7517362218704
 			},
 			"name": "宝石",
 			"visible": true,
@@ -199,16 +199,16 @@
 		},
 		{
 			"position": {
-				"x": 36,
-				"y": -1,
-				"z": 43.999998739992705
+				"x": 18,
+				"y": 18,
+				"z": 44
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 1.5707963267948966
 			},
-			"name": "栅栏",
+			"name": "木桩",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -216,21 +216,21 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/栅栏.item"
+			"receiveShadow": true,
+			"template": "scene/item/木桩.item"
 		},
 		{
 			"position": {
 				"x": -54,
 				"y": -0.5,
-				"z": 43.99999922241278
+				"z": 44
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
 				"z": 0
 			},
-			"name": "栅栏1",
+			"name": "木桩1",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -238,15 +238,15 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/栅栏.item"
+			"receiveShadow": true,
+			"template": "scene/item/木桩.item"
 		}
 	],
 	"zfog": {
 		"color": {
-			"r": 0.3254901960784314,
-			"g": 0.9882352941176471,
-			"b": 0.8666666666666667
+			"r": 0,
+			"g": 0,
+			"b": 0
 		},
 		"high": 40,
 		"low": 0

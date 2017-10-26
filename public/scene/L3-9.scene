@@ -460,7 +460,7 @@
 				"y": 0,
 				"z": 0
 			},
-			"name": "栅栏1",
+			"name": "冰柱1",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -482,7 +482,7 @@
 				"y": 0,
 				"z": 1.5707963267948966
 			},
-			"name": "栅栏",
+			"name": "冰柱",
 			"visible": true,
 			"ground": false,
 			"collision": true,

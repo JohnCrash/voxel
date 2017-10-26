@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+
+<html>
+  <head>
+    <title>level</title>
+    <meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">   <meta
+name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, 
+minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>	
+    <style type="text/css">
+      body {
+        background-color: #f0f0f0;
+        margin: 0px;
+        overflow: hidden;
+      }
+    </style>  
+  </head>
+  <body>
+    <div id="root"></div>
+	<script>
+		window.platfrom = 'windows';
+		window.callJs = function(){
+			alert("You call Javascript");
+		}
+		try{
+			CallNative("close","Hello World~~",function(r){
+				CallNative('message',r,function(a){
+					alert(r);
+				});
+			});
+			CallNative("close","Hello World~~",function(r){
+				CallNative('message',r,function(a){
+					alert(r);
+				});
+			});			
+		}catch(e){
+			alert("CATCH:"+e.toString());
+		}
+		//alert(v8_extension_test()); // Shows an alert box with "My Value!"
+	</script>		
+    <script type="text/javascript" src="main_compress.js"></script>
+  </body>
+</html>

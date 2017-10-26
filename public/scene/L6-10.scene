@@ -1,17 +1,17 @@
 {
 	"music": "",
 	"loop": true,
-	"bgcolor": 5504221,
+	"bgcolor": 0,
 	"camera": {
 		"position": {
-			"x": 208.47483724973185,
-			"y": -137.781627795289,
-			"z": 162.53564499181655
+			"x": 155.47446111804226,
+			"y": -221.68540608544888,
+			"z": 170.58806299886967
 		},
 		"rotation": {
-			"x": 1.0890854532444616,
+			"x": 1.1705341516708665,
 			"y": 0,
-			"z": 0.9541133244235804
+			"z": 0.6097016853633552
 		}
 	},
 	"material": {
@@ -87,18 +87,18 @@
 			"type": "ambient",
 			"name": "环境灯3",
 			"color": {
-				"r": 0.4666666666666667,
-				"g": 0.3411764705882353,
-				"b": 0.3411764705882353
+				"r": 0.3607843137254902,
+				"g": 0.3215686274509804,
+				"b": 0.3215686274509804
 			}
 		},
 		{
 			"type": "direct",
 			"name": "方向灯4",
 			"color": {
-				"r": 1,
-				"g": 1,
-				"b": 1
+				"r": 0.47843137254901963,
+				"g": 0.47843137254901963,
+				"b": 0.47843137254901963
 			},
 			"position": {
 				"x": 133.89626055488543,
@@ -147,17 +147,17 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 34,
 					"curIndex": 0
 				}
 			],
-			"water": 177
+			"water": 0
 		},
 		{
 			"position": {
 				"x": -42.5,
 				"y": -36.5,
-				"z": 43.999998564484585
+				"z": 43.99999898245854
 			},
 			"rotation": {
 				"x": 0,
@@ -172,14 +172,14 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/男孩.item"
 		},
 		{
 			"position": {
 				"x": 55.5,
 				"y": 34.5,
-				"z": 44.00000139697751
+				"z": 44.00000181495147
 			},
 			"rotation": {
 				"x": 0,
@@ -194,7 +194,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/女孩.item"
 		},
 		{
@@ -216,7 +216,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/地板开关.item",
 			"flatColor": "green"
 		},
@@ -239,7 +239,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/地板.item",
 			"flatColor": "green"
 		},
@@ -247,7 +247,7 @@
 			"position": {
 				"x": 10.5,
 				"y": -37.5,
-				"z": 43.99999887086605
+				"z": 43.99999928884001
 			},
 			"rotation": {
 				"x": 0,
@@ -262,7 +262,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/石块.item"
 		},
 		{
@@ -284,7 +284,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/地板.item",
 			"flatColor": "blue"
 		},
@@ -307,7 +307,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/地板开关.item",
 			"flatColor": "blue"
 		},
@@ -315,14 +315,14 @@
 			"position": {
 				"x": -25,
 				"y": 53,
-				"z": 59.999999321778276
+				"z": 59.99999973975223
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
 				"z": 0
 			},
-			"name": "栅栏",
+			"name": "木桩",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -330,19 +330,19 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/栅栏.item"
+			"receiveShadow": true,
+			"template": "scene/item/木桩.item"
 		},
 		{
 			"position": {
 				"x": 56,
 				"y": -19,
-				"z": 43.9999982441452
+				"z": 43.99999866211916
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 789.4288267719547
 			},
 			"name": "宝石",
 			"visible": true,
@@ -352,15 +352,15 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/黄宝石.item"
 		}
 	],
 	"zfog": {
 		"color": {
-			"r": 0.3254901960784314,
-			"g": 0.9882352941176471,
-			"b": 0.8666666666666667
+			"r": 0,
+			"g": 0,
+			"b": 0
 		},
 		"high": 40,
 		"low": 0

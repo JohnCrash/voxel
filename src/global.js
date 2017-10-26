@@ -1,10 +1,11 @@
 import {postJson,fetchJson} from './vox/fetch';
 import Log from './vox/log';
 
+//if(window.closeLoadingUI)root.style.display="none";
 class _Global_{
     constructor(){
         this.LevelJson = null;
-        this.maxpasslv = 0;
+        this.maxpasslv = null;
         this._debug = false;
         this._layout = 'landscape';
         this._btb = 'expand';
@@ -13,6 +14,24 @@ class _Global_{
         this._muteSound = true;
         this._userName = 'None';
         this._ui = [];
+    }
+    /**
+     * 当有加载界面时,加载界面提供这几个函数
+     * closeLoadingUI 关闭加载界面
+     * loadingProgressBar 进度条函数
+     */    
+    closeLoading(){
+        if(window.closeLoadingUI){
+            setTimeout(()=>{
+                console.log('call closeLoadingUI()');
+                let root = document.getElementById('root');
+                root.style.display="";
+                if(window.closeLoadingUI)closeLoadingUI();
+            },200);
+        }
+    }
+    loadingBar(b){
+        if(window.loadingProgressBar)loadingProgressBar(b);
     }
     push(cb,g){
         console.log('push');
@@ -39,11 +58,22 @@ class _Global_{
     setDebugMode(b){
         this._debug = b;
     }
+    setUserInfo(uid,uname,cookie){
+        this._uid = uid;
+        this._uname = uname;
+        this._cookie = cookie;
+    }
+    getUID(){
+        return this._uid;
+    }
+    getCookie(){
+        return this._cookie;
+    }
     getUserName(){
-        return this._userName;
+        return this._uname;
     }
     setUserName(name){
-        this._userName = name;
+        this._uname = name;
     }
     loadConfig(jsonStr){
         if(jsonStr){
@@ -67,6 +97,7 @@ class _Global_{
     pushConfig(){
         postJson('/users/config',
         {
+            uid:Global.getUID(),
             config : JSON.stringify({
             music : this._muteMusic,
             sound : this._muteSound,
