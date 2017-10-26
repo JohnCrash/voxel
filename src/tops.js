@@ -158,6 +158,7 @@ class Tops extends Component{
         return <Dialog
             actions={actions}
             open={open}
+            autoScrollBodyContent={true}
             contentStyle={Global.getPlatfrom()!=="windows"?{width:"95%"}:undefined}>
             <MarkdownElement text={md(this.title,dict)}/>
             <MarkdownElement file={`scene/${level}-top.md`}/>

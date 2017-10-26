@@ -441,7 +441,7 @@ class SceneManager extends EventEmitter{
         let dts = dt/1000.0;
         let groundItem = this.getGroundItem();
         
-        if(this._doloadstate)return; //如果真正读取就不要更新
+        if(this._doloadstate||this._doReset)return; //如果真正读取就不要更新
 
         if(this._pause || !groundItem){//没有地面，直接简单更新
             for(let item of this.items){

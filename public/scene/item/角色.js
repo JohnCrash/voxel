@@ -16,6 +16,16 @@ function AddArrowHelper(sceneManager,dir,origin,length, hex){
 	return arrowHelper;
 }
 
+function AddCrossHelper(sceneManager,origin,length){
+	var arrowHelper = new THREE.ArrowHelper( new THREE.Vector3(1,0,0), origin, length, 0xff0000 );
+	sceneManager.game.scene.add(arrowHelper);
+	arrowHelper = new THREE.ArrowHelper( new THREE.Vector3(0,1,0), origin, length, 0x00ff00 );
+	sceneManager.game.scene.add(arrowHelper);
+	arrowHelper = new THREE.ArrowHelper( new THREE.Vector3(0,0,1), origin, length, 0x0000ff );
+	sceneManager.game.scene.add(arrowHelper);	
+	return arrowHelper;
+}
+
 function RemoveArrowHelper(sceneManager,arrowHelper){
 	if(arrowHelper)
 		sceneManager.game.scene.remove(arrowHelper);
@@ -620,10 +630,14 @@ function initItemBlockly(_this){
 				break;				
 			case 'ladder':
 				if(ar.length===0){
-					pt.z = item.position.z+1;				
+					pt.z = item.position.z+1;
 					ar = item.sceneManager.ptItem(pt);
+					//AddCrossHelper(item.sceneManager,new THREE.Vector3(pt.x,pt.y,pt.z),10);	
+					//console.log(ar);
 					for(i=0;i<ar.length;i++){
-						if(ar[i].ground)return true;
+						if(ar[i].ground){
+							return true;
+						}
 					}
 				//	pt.z = item.position.z+7.9;
 				//	ar = item.sceneManager.ptItem(pt);
