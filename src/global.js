@@ -138,10 +138,11 @@ class _Global_{
      * 根据当前关卡名称得到本关卡的信息
      * @param {*} level 当前关卡名称例如:L3-1
      * current 当前段的当前关
-     * next     全局的下一关
-     * begin    全局本段开始
-     * end      全局本段结束
-     * nextName 下一关名称
+     * next     全局的下一关(1,2,3,....
+     * begin    全局本段开始(51
+     * end      全局本段结束(-59
+     * nextName 下一关名称 'L5-1'
+     * unlock   需要解锁的金币数量"100",或者undefined
      * closed   全局未开放关卡
      */
     appGetLevelInfo(level){
@@ -171,6 +172,15 @@ class _Global_{
                 }
             }
             return null;        
+    }
+    /**
+     * 设置最大解锁的关卡
+     */
+    setMaxUnlockLevel(olv){
+        this.maxunlocklv = olv;
+    }
+    getMaxUnlockLevel(){
+        return this.maxunlocklv;
     }
     /**
      * 设置当前通的最远的关

@@ -133,7 +133,7 @@ function login(req,res){
     //return;
     //暂时允许cookie登录
     if(req.UserInfo && req.UserInfo.cookie){
-      let {UserName,uid,cookie} = req.UserInfo;
+      let {UserName,uid,cookie,lv,olv,config} = req.UserInfo;
       res.json({
         result:'ok',
         lv,
@@ -220,9 +220,10 @@ function login(req,res){
 router.post('/login',function(req,res){
   if(req.UserInfo){ //已经通过cookie成功登录
     sql(`update UserInfo set lastlogin=getdate() where uid=${req.UserInfo.uid}`);
-    let {cookie,UserName,lv,config} = req.UserInfo;
+    let {cookie,UserName,lv,olv,config} = req.UserInfo;
     res.json({
       lv,
+      olv,
       result:'ok',
       config,
       user:stripTailSpace(UserName)
@@ -336,6 +337,17 @@ router.post('/config',function(req,res){
   });
 });
 
+/**
+ * 解锁关卡
+ */
+router.post('/unlock',function(req,res){
+  sql(`update UserInfo set olv=${req.body.olv} where uid='${req.UserInfo.uid}'`).
+  then((result)=>{
+    res.json({result:'ok'});
+  }).catch((err)=>{
+    res.json({result:err});
+  });
+});
 /**
  * 登出
  */

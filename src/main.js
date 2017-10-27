@@ -14,6 +14,7 @@ import MarkdownElement from './ui/markdownelement';
 import {
     Redirect
   } from 'react-router-dom';
+import LevelDebug from './leveldebug';
 
 let app;
 /**
@@ -67,6 +68,12 @@ class Main extends Component{
         this.handleRequestClose();
         Global.pushConfig();
     }
+    onLevelDebug(){
+        this.levelDbg.open((result)=>{
+            if(result==='ok')
+                this.forceUpdate();
+        })
+    }
     onDownload(s){
         this.handleRequestClose();
         switch(s){
@@ -102,11 +109,13 @@ class Main extends Component{
             <Menu>
                 <MenuItem primaryText="下载Windows版本"  onClick={this.onDownload.bind(this,'windows')}/>
                 <MenuItem primaryText="下载Android版本"  onClick={this.onDownload.bind(this,'android')}/>
+                <MenuItem primaryText="关卡调试界面"  onClick={this.onLevelDebug.bind(this)} />
                 <MenuItem primaryText="关卡调试"  onClick={this.onDebug.bind(this)} checked={this.state.isdebug}/>
                 <MenuItem primaryText={`登出(${Global.getUserName()})`} onClick={this.onLogout.bind(this)}/>
             </Menu>
         </Popover>
-        <LevelSel key='levelselect' index='main' current={Global.getMaxPassLevel()} />
+        <LevelSel key='levelselect' index='main' current={Global.getMaxPassLevel()} unlock={Global.getMaxUnlockLevel()}/>
+        <LevelDebug ref={ref=>this.levelDbg=ref} />
         </div>;
     }
 };

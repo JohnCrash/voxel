@@ -170,7 +170,7 @@ class Tops extends Component{
                         <TableHeaderColumn>块数</TableHeaderColumn>
                         <TableHeaderColumn>人数</TableHeaderColumn>
                         <TableHeaderColumn>使用者</TableHeaderColumn>
-                    </TableRow>                    
+                    </TableRow>
                 </TableHeader>
                 <TableBody displayRowCheckbox={false}>
                     {tops}

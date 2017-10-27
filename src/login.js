@@ -55,6 +55,7 @@ class Login extends Component{
                 Global.loadConfig(json.config);
                 console.log("setMaxPassLevel "+(json.lv+1));
                 Global.setMaxPassLevel(json.lv+1);
+                Global.setMaxUnlockLevel(json.olv);
                 Global.setUserName(json.user);
                 //通过cookie登录
                 if(json.cookie)

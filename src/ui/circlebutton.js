@@ -76,6 +76,19 @@ const unfinished = {
 
 const closed = {
     normal : {
+        borderColor:'rgb(178, 182, 185)',
+        color:'rgb(91, 103, 112)',
+        backgroundColor:'rgb(178, 182, 185)'
+    },
+    hover : {
+        borderColor:'rgb(178, 182, 185)',
+        color:'rgb(91, 103, 112)',
+        backgroundColor:'rgb(178, 182, 185)'        
+    }
+};
+
+const locked = {
+    normal : {
         borderColor:'rgb(198, 202, 205)',
         color:'rgb(91, 103, 112)',
         backgroundColor:'rgb(198, 202, 205)'
@@ -85,7 +98,7 @@ const closed = {
         color:'rgb(91, 103, 112)',
         backgroundColor:'rgb(198, 202, 205)'        
     }
-};
+}
 
 function m() {
     var res = {};
@@ -103,6 +116,7 @@ function cc(state){
         case 'unfinished':return unfinished;
         case 'current':return current;
         case 'closed':return closed;
+        case 'locked':return locked;
     }
 }
 class CircleButton extends Component{
