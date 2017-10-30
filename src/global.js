@@ -152,22 +152,36 @@ class _Global_{
             if(m){
                 let b = Number(m[1])-1;
                 let e = Number(m[2])-1;
-                m = this.LevelJson.level[b].rang.match(/(\d+)-(\d+)/);
+                let item = this.LevelJson.level[b]; //当前关卡
+                m = item.rang.match(/(\d+)-(\d+)/);
                 if(m){
                     let begin = Number(m[1]);
                     let end = Number(m[2]);
                     let nextName;
                     let next = begin + e + 1;
+                    let next_unlock_gold = item.unlock?Number(item.unlock):0;
+                    let next_begin = begin;
+                    let next_end = end;
                     if(e<end-begin){
-                        nextName = `L${b+1}-${e+2}`;
-                    }else if(this.LevelJson.level[b+2]){
-                        nextName = `L${b+2}-${1}`;
+                        nextName = `L${b+1}-${e+2}`; //next还在当前段中
+                    }else if(this.LevelJson.level[b+1]){
+                        nextName = `L${b+2}-${1}`; //进行到下一段了
+                        let nextItem = this.LevelJson.level[b+1];
+                        let nm = nextItem.rang.match(/(\d+)-(\d+)/);
+                        next_begin = Number(nm[1]);
+                        next_end = Number(nm[2]);
+                        next_unlock_gold = nextItem.unlock?Number(nextItem.unlock):0;
                     }
+                    let next_need_unlock = next_unlock_gold>0?(this.maxunlocklv<=next):false;
                     return Object.assign({current:e,
                         begin,
                         end,
                         nextName,
+                        next_begin,
+                        next_end,
                         next,
+                        next_unlock_gold,
+                        next_need_unlock,
                         closed:this.LevelJson.closed},this.LevelJson.level[b]);
                 }
             }

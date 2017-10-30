@@ -20,6 +20,7 @@ import {TextManager} from './ui/textmanager';
 import MarkdownElement from './ui/markdownelement';
 import md from './mdtemplate';
 import BlocklyInterface from './vox/blocklyinterface';
+import Unlock from './unlock';
 
 class Tops extends Component{
     constructor(props){
@@ -49,7 +50,12 @@ class Tops extends Component{
             console.log("Global.appGetLevelInfo return null! tops.js");
             return;
         }
-
+        let p = {
+            unlock_gold:info.next_unlock_gold,
+            seg_begin:info.next_begin,
+            seg_end:info.next_end,
+            need_unlock:info.next_need_unlock
+        };        
         switch(result){
             case 'exit':
                 //location.href='/main/'+info.next;
@@ -59,12 +65,25 @@ class Tops extends Component{
                 if(this._isagin)this._isagin();
                 break;
             case 'next':
-                if(info.nextName){
-                    location.href=`#/level/${info.nextName}`;
-                }else{//打通了全部
-                    location.href='#/main';
+                if(p.need_unlock){
+                    this.unlock.open(p,(b)=>{
+                        if(b){
+                            this.gonext(info.nextName);
+                        }else{
+                            location.href='#/main';
+                        }
+                    });
+                }else{
+                    this.gonext(info.nextName);
                 }
                 break;
+        }
+    }
+    gonext(nextName){
+        if(nextName){
+            location.href=`#/level/${nextName}`;
+        }else{//打通了全部
+            location.href='#/main';
         }
     }
     open(blocks,method,total,each,cb){
@@ -155,7 +174,7 @@ class Tops extends Component{
             method_num : this.tops?this.tops.length:0,
         };
 
-        return <Dialog
+        return <div><Dialog
             actions={actions}
             open={open}
             autoScrollBodyContent={true}
@@ -180,6 +199,8 @@ class Tops extends Component{
             <LevelOf level={level}/>
             <MarkdownElement text={md(this.bottom,dict)}/>
         </Dialog>
+        <Unlock ref={ref=>this.unlock=ref} />
+        </div>
     }
 };
 
