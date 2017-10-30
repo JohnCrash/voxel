@@ -12,6 +12,7 @@ import IconAdd from 'material-ui/svg-icons/content/add';
 import IconDec from 'material-ui/svg-icons/content/remove';
 import FlatButton from 'material-ui/FlatButton';
 import {CreateIcon} from './ui/myicon';
+import cloneDeep from 'clone-deep';
 
 function parserXML(id,text){
     let result;
@@ -34,6 +35,15 @@ const startBlockDrag = Blockly.BlockDragger.prototype.startBlockDrag;
 const endBlockDrag = Blockly.BlockDragger.prototype.endBlockDrag;
 const startDrag = Blockly.WorkspaceDragger.prototype.startDrag;
 const endDrag = Blockly.WorkspaceDragger.prototype.endDrag;
+
+/**
+ * FIXBUG : blockly 在处理下拉菜单的时候trimOptions_修改全局的结构，做一个
+ */
+const trimOptions_ = Blockly.FieldDropdown.prototype.trimOptions_;
+Blockly.FieldDropdown.prototype.trimOptions_ = function(){
+    this.menuGenerator_ = cloneDeep(this.menuGenerator_);
+    trimOptions_.call(this);
+}
 
 class BlockView extends Component{
     constructor(props){

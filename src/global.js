@@ -172,7 +172,7 @@ class _Global_{
                         next_end = Number(nm[2]);
                         next_unlock_gold = nextItem.unlock?Number(nextItem.unlock):0;
                     }
-                    let next_need_unlock = next_unlock_gold>0?(this.maxunlocklv<=next):false;
+                    let next_need_unlock = next_unlock_gold>0?(this.maxunlocklv<next):false;
                     return Object.assign({current:e,
                         begin,
                         end,

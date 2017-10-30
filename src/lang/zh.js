@@ -14,6 +14,7 @@ export default function zh(){
     Blockly.Msg["FORWARD_IS"] = "前面是";
     Blockly.Msg["BARRIER"] = "障碍";
     Blockly.Msg["FLAG"] = "旗子";
+    Blockly.Msg["DIAMOND"] = "钻石";    
     Blockly.Msg["BOX"] = "宝箱";
     Blockly.Msg["STON"] = "石头";
     Blockly.Msg["LADDER"] = "楼梯";
@@ -73,8 +74,8 @@ export default function zh(){
     Blockly.Msg["CONTROLS_REPEAT_TITLE"] = "重复 %1 次";
     Blockly.Msg["CONTROLS_REPEAT_TOOLTIP"] = "多次执行一些语句。";
     Blockly.Msg["CONTROLS_WHILEUNTIL_HELPURL"] = "https://github.com/google/blockly/wiki/Loops#repeat";  // untranslated
-    Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_UNTIL"] = "重复直到";
-    Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_WHILE"] = "重复当";
+    Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_UNTIL"] = "重复 直到";
+    Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_WHILE"] = "重复 当";
     Blockly.Msg["CONTROLS_WHILEUNTIL_TOOLTIP_UNTIL"] = "只要值为假，执行一些语句。";
     Blockly.Msg["CONTROLS_WHILEUNTIL_TOOLTIP_WHILE"] = "只要值为真，执行一些语句。";
     Blockly.Msg["DELETE_ALL_BLOCKS"] = "删除所有%1块吗？";
