@@ -153,6 +153,7 @@ class _Global_{
                 let b = Number(m[1])-1;
                 let e = Number(m[2])-1;
                 let item = this.LevelJson.level[b]; //当前关卡
+                if(!item)return null;
                 m = item.rang.match(/(\d+)-(\d+)/);
                 if(m){
                     let begin = Number(m[1]);

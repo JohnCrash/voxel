@@ -48,6 +48,8 @@ class Tops extends Component{
         let info = Global.appGetLevelInfo(this.props.level);
         if(!info){
             console.log("Global.appGetLevelInfo return null! tops.js");
+            //可能全部打通了
+            location.href='#/main';
             return;
         }
         let p = {
@@ -68,19 +70,20 @@ class Tops extends Component{
                 if(p.need_unlock){
                     this.unlock.open(p,(b)=>{
                         if(b){
-                            this.gonext(info.nextName);
+                            this.gonext(info.nextName,info);
                         }else{
                             location.href='#/main';
                         }
                     });
                 }else{
-                    this.gonext(info.nextName);
+                    this.gonext(info.nextName,info);
                 }
                 break;
         }
     }
     gonext(nextName){
-        if(nextName){
+        //info.next < info.closed 全部做完
+        if(nextName && info.next < info.closed){
             location.href=`#/level/${nextName}`;
         }else{//打通了全部
             location.href='#/main';
