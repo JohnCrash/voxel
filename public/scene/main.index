@@ -4,94 +4,94 @@
 	"level" : [
 		{
 			"name" : "一、序列",
-			"desc" : "",
+			"desc" : "Sequence",
 			"rang" : "1-10"
 		},
 		{
 			"name" : "二、简单循环",
-			"desc" : "",
+			"desc" : "Simple Loop",
 			"rang" : "11-20"
 		},
 		{
 			"name" : "三、对象",
-			"desc" : "",
+			"desc" : "Objects",
 			"rang" : "21-30"
 		},
 		{
 			"name" : "四、变量",
-			"desc" : "",
+			"desc" : "Variable",
 			"rang" : "31-40",
 			"unlock" : "100"
 		},
 		{
 			"name" : "五、条件循环",
-			"desc" : "",
+			"desc" : "While / Until",
 			"rang" : "41-50",
 			"unlock" : "100"
 		},
 		{
 			"name" : "六、如果条件",
-			"desc" : "",
+			"desc" : "If else",
 			"rang" : "51-60",
 			"unlock" : "100"
 		},	
 		{
 			"name" : "七、逻辑（与或非）",
-			"desc" : "建造中...",
+			"desc" : "Logic",
 			"rang" : "61-70",
 			"unlock" : "100"
 		},
 		{
 			"name" : "八、计数循环",
-			"desc" : "",
+			"desc" : "For",
 			"rang" : "71-80",
 			"unlock" : "100"
 		},
 		{
 			"name" : "九、组合循环",
-			"desc" : "",
+			"desc" : "Flexible Loop",
 			"rang" : "81-90",
 			"unlock" : "100"
 		},
 		{
 			"name" : "十、数组",
-			"desc" : "",
+			"desc" : "Array",
 			"rang" : "91-100",
 			"unlock" : "100"
 		},
 		{
 			"name" : "十一、函数",
-			"desc" : "",
+			"desc" : "Function",
 			"rang" : "101-110",
 			"unlock" : "100"
 		},
 		{
 			"name" : "十二、数学计算",
-			"desc" : "",
+			"desc" : "Math",
 			"rang" : "111-120",
 			"unlock" : "100"
 		},
 		{
 			"name" : "十三、字符串",
-			"desc" : "",
+			"desc" : "String",
 			"rang" : "121-130",
 			"unlock" : "100"
 		},
 		{
 			"name" : "十四、颜色",
-			"desc" : "",
+			"desc" : "Color",
 			"rang" : "131-140",
 			"unlock" : "100"
 		},
 		{
 			"name" : "十五、经典算法",
-			"desc" : "",
+			"desc" : "Classical algorithm",
 			"rang" : "141-150",
 			"unlock" : "100"
 		},
 		{
 			"name" : "十六、综合挑战",
-			"desc" : "",
+			"desc" : "Comprehensive challenge",
 			"rang" : "151-200",
 			"unlock" : "100"
 		}

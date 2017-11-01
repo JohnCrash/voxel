@@ -32,7 +32,10 @@
     "babelify": "^7.3.0",
     "beefy": "^2.1.8",
     "browserify": "^14.4.0",
-    "google-closure-compiler": "^20170806.0.0"
+    "envify": "^4.1.0",
+    "google-closure-compiler": "^20170806.0.0",
+    "uglify-js": "^3.1.6",
+    "uglifyify": "^4.0.4"
   },
   "dependencies": {
     "aabb-3d": "^0.1.0",

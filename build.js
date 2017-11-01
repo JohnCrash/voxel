@@ -1,7 +1,9 @@
 var browserify = require('browserify');
 var fs = require('fs');
-const { spawn } = require('child_process');
+//const { spawn } = require('child_process');
+//var envify = require('envify/custom');
 
+/*
 function build(src,des){
   browserify(src)
   .transform("babelify", {presets: ["es2015","es2016","es2017","react","stage-0"]})
@@ -18,9 +20,16 @@ function build(src,des){
     c.on('close',(code)=>{
       fs.unlink(`${des}z`);
     });
-  }));  
+  }));
 }
-
+*/
+process.env.NODE_ENV = 'production';
+function build(src,des){
+  browserify(src)
+  .transform("babelify", {presets: ["es2015","es2016","es2017","react","stage-0"]})
+  .transform("uglifyify",{mangle: true,global: true})
+  .bundle().pipe(fs.createWriteStream(des));
+}
 //build('src/levelindex.js','public/levelindex_compress.js');
 //build('src/editor.js','public/editor_compress.js');
 build('src/app.js','public/app_compress.js');

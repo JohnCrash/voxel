@@ -37,7 +37,8 @@ const startDrag = Blockly.WorkspaceDragger.prototype.startDrag;
 const endDrag = Blockly.WorkspaceDragger.prototype.endDrag;
 
 /**
- * FIXBUG : blockly 在处理下拉菜单的时候trimOptions_修改全局的结构，做一个
+ * FIXBUG : blockly 在处理下拉菜单的时候trimOptions_修改全局的结构
+ * 下面修复代码挂住trimOptions_对menuGenerator_做完整的复制。
  */
 const trimOptions_ = Blockly.FieldDropdown.prototype.trimOptions_;
 Blockly.FieldDropdown.prototype.trimOptions_ = function(){
