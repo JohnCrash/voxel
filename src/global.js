@@ -57,9 +57,12 @@ class _Global_{
     }
     setDebugMode(b){
         this._debug = b;
+        if(this._immDebug){
+            this._immDebug(b);
+        }
     }
     setUserInfo(uid,uname,cookie){
-        this._uid = uid;
+        this._uid = Number(uid);
         this._uname = uname;
         this._cookie = cookie;
     }
@@ -183,7 +186,8 @@ class _Global_{
                         next,
                         next_unlock_gold,
                         next_need_unlock,
-                        closed:this.LevelJson.closed},this.LevelJson.level[b]);
+                        closed:this.LevelJson.closed,
+                        total:this.LevelJson.total},this.LevelJson.level[b]);
                 }
             }
             return null;        
@@ -255,12 +259,18 @@ class _Global_{
     }
     setLayout(layout){
         this._layout = layout;
+        if(this._immLayout){
+            this._immLayout(layout);
+        }
     }
     getLayout(){
         return this._layout;
     }
     setBlocklyToolbar(m){
         this._btb = m;
+        if(this._immBlocklytoolbox){
+            this._immBlocklytoolbox(m);
+        }
     }
     getBlocklyToolbar(){
         return this._btb;
@@ -274,6 +284,15 @@ class _Global_{
     }
     getPlatfrom(){
         return window.platfrom;
+    }
+    /**
+     * 设置login信息
+     */
+    setLoginJson(json){
+        this._loginJson = json;
+    }
+    getLoginJson(){
+        return this._loginJson;
     }
 };
 

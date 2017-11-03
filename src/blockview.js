@@ -31,6 +31,16 @@ function xmlHead(s){
     return `<xml xmlns="http://www.w3.org/1999/xhtml">${s}</xml>`;
 }
 
+//将dom中的id和x,y值给删除掉
+function filterDom(dom){
+    dom.removeAttribute('id');
+    dom.removeAttribute('x');
+    dom.removeAttribute('y');
+    for(let node of dom.children){
+        filterDom(node);
+    }
+}
+
 const startBlockDrag = Blockly.BlockDragger.prototype.startBlockDrag;
 const endBlockDrag = Blockly.BlockDragger.prototype.endBlockDrag;
 const startDrag = Blockly.WorkspaceDragger.prototype.startDrag;
@@ -120,7 +130,7 @@ class BlockView extends Component{
             }
         }
     }
-    //做块数限制
+    //做块数限制做块数限制
     blockLimiteEvent(){
         for(let blockName in this.blockLimits){
             let c = Number(this.blockLimits[blockName]);
@@ -287,6 +297,7 @@ class BlockView extends Component{
     }
     toXML(){
         let dom = Blockly.Xml.workspaceToDom(this.workspace);
+        filterDom(dom);
         return splitXML(Blockly.Xml.domToText(dom));
     }
     loadXML(xml){

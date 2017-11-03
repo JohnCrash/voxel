@@ -22,6 +22,27 @@ import md from './mdtemplate';
 import BlocklyInterface from './vox/blocklyinterface';
 import Unlock from './unlock';
 
+const HighLightStyle = {
+    backgroundColor : "#b0e0e6"
+}
+const FixedWidthStyle = {
+    width : "32px"
+}
+const FixedHeaderStyle = {
+    fontSize : "normal",
+    fontWeight:"bold",
+    width : "32px",
+    height : "24px",
+    paddingTop : "0px",
+    paddingBottom : "0px"
+}
+const FixedHeaderStyle2 = {
+    fontSize : "normal",
+    fontWeight:"bold",
+    height : "24px",
+    paddingTop : "0px",
+    paddingBottom : "0px"
+}
 class Tops extends Component{
     constructor(props){
         super(props);
@@ -70,21 +91,21 @@ class Tops extends Component{
                 if(p.need_unlock){
                     this.unlock.open(p,(b)=>{
                         if(b){
-                            this.gonext(info.nextName,info);
+                            this.gonext(info);
                         }else{
                             location.href='#/main';
                         }
                     });
                 }else{
-                    this.gonext(info.nextName,info);
+                    this.gonext(info);
                 }
                 break;
         }
     }
-    gonext(nextName){
+    gonext(info){
         //info.next < info.closed 全部做完
-        if(nextName && info.next < info.closed){
-            location.href=`#/level/${nextName}`;
+        if(info && info.nextName && info.next < info.closed && info.next < info.total){
+            location.href=`#/level/${info.nextName}`;
         }else{//打通了全部
             location.href='#/main';
         }
@@ -141,18 +162,35 @@ class Tops extends Component{
         let rank = 6;
         if(!loading&&this.tops){
             let bcls = {};
+            let uid = Global.getUID();
+            /**
+             * this.tops 是一个最多前5的块数排行榜，表明这种块数排多少名
+             *  lname | lv | blocks | count(使用的次数)
+             * this.cls 返回和玩家同班的玩家在这关的成绩表
+             *  lname | lv | uid | cls | uname | blocks | try 
+             */
             for(let i=0;i<this.cls.length;i++){
                 if(this.cls[i].uname){
-                    if(bcls[this.cls[i].blocks]){
-                        bcls[this.cls[i].blocks] += ",";
-                    }else{
-                        bcls[this.cls[i].blocks] = "";
+                    if(!bcls[this.cls[i].blocks])
+                        bcls[this.cls[i].blocks] = [];
+                    if(uid===this.cls[i].uid)
+                        bcls[this.cls[i].blocks] = [this.cls[i],...bcls[this.cls[i].blocks]];
+                    else{
+                        bcls[this.cls[i].blocks].push(this.cls[i]);
                     }
-                    bcls[this.cls[i].blocks] += this.cls[i].uname;
                 }
             }
-            function clsblock(b){
-                if(bcls[b])return bcls[b];
+            function clsblockMap(b){
+                if(bcls[b]){
+                    let i = 1;
+                    return bcls[b].map((stu)=>{
+                        if(stu.uid===uid){
+                            return <b key={i++}>{stu.uname}</b>
+                        }else{
+                            return <span key={i++}>{stu.uname}</span>
+                        }
+                    });
+                }
             }
             for(let i=0;i<this.tops.length;i++){
                 if(this.tops[i].blocks < best_block_num){
@@ -161,11 +199,12 @@ class Tops extends Component{
                 if(this.tops[i].blocks===this.blocks){
                     rank = i+1;
                 }
-                tops.push(<TableRow selectable={false} selected={this.tops[i].blocks===this.blocks} key={"top"+i}>
-                    <TableRowColumn>{i+1}</TableRowColumn>
-                    <TableRowColumn><span style={{verticalAlign:"top"}}>{this.tops[i].blocks}×</span><img src="media/title-beta.png" height="22px" /></TableRowColumn>
-                    <TableRowColumn>{this.tops[i].count}</TableRowColumn>
-                    <TableRowColumn>{clsblock(this.tops[i].blocks)}</TableRowColumn>
+                //当前选择 selected={this.tops[i].blocks===this.blocks}
+                tops.push(<TableRow selectable={false} key={"top"+i} style={this.tops[i].blocks===this.blocks?HighLightStyle:{}} >
+                    <TableRowColumn  style={FixedWidthStyle}>{i+1}</TableRowColumn>
+                    <TableRowColumn  style={FixedWidthStyle}><span style={{verticalAlign:"top"}}>{this.tops[i].blocks}×</span><img src="media/title-beta.png" height="22px" /></TableRowColumn>
+                    <TableRowColumn  style={FixedWidthStyle}>{this.tops[i].count}</TableRowColumn>
+                    <TableRowColumn>{clsblockMap(this.tops[i].blocks)}</TableRowColumn>
                 </TableRow>);
             }
         }
@@ -186,15 +225,15 @@ class Tops extends Component{
             <MarkdownElement file={`scene/${level}-top.md`}/>
             {loading?<LinearProgress />:
             <Table>
-                <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
-                    <TableRow>
-                        <TableHeaderColumn>排名</TableHeaderColumn>
-                        <TableHeaderColumn>块数</TableHeaderColumn>
-                        <TableHeaderColumn>人数</TableHeaderColumn>
-                        <TableHeaderColumn>使用者</TableHeaderColumn>
+                <TableHeader style={{height:"24px"}} displaySelectAll={false} adjustForCheckbox={false}>
+                    <TableRow style={{height:"24px"}}>
+                        <TableHeaderColumn style={FixedHeaderStyle}>排名</TableHeaderColumn>
+                        <TableHeaderColumn style={FixedHeaderStyle}>块数</TableHeaderColumn>
+                        <TableHeaderColumn style={FixedHeaderStyle}>人数</TableHeaderColumn>
+                        <TableHeaderColumn style={FixedHeaderStyle2}>并列</TableHeaderColumn>
                     </TableRow>
                 </TableHeader>
-                <TableBody displayRowCheckbox={false}>
+                <TableBody displayRowCheckbox={false} >
                     {tops}
                 </TableBody>
             </Table>}

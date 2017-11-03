@@ -49,6 +49,16 @@ class Login extends Component{
                 this.setState({exitButton:true,msg:"服务器故障请稍后再试."});
                 return;
             }
+            /**
+             * login 返回的结构
+             * result = 'ok' 表示成功，其他是错误信息
+             * lv   当前关卡
+             * olv  解锁关卡
+             * uid | user | cookie
+             * config 配置字串
+             * cls  当前班级其他人的完成情况
+             */
+            Global.setLoginJson(json);
             if(json.result==='ok'){
                 //成功登录
                 this.setState({open:false});
@@ -59,7 +69,7 @@ class Login extends Component{
                 Global.setUserName(json.user);
                 //通过cookie登录
                 if(json.cookie)
-                    Global.setUserInfo(json.uid,json.uname,json.cookie);
+                    Global.setUserInfo(json.uid,json.user,json.cookie);
                 this.setState({msg:"登录成功"});
                 //location.href='#main/'+(json.lv+1);
                 location.href='#/main';

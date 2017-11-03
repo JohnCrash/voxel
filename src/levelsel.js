@@ -1,13 +1,14 @@
 /**
  * 关卡选择
  */
-import React, {Component} from 'react';
+import React, {Component,PureComponent} from 'react';
 import CircleButton from './ui/circlebutton';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import Paper from 'material-ui/Paper';
 import {Global} from './global';
 import SelectChar from './selectchar';
 import Unlock from './unlock';
+import PropTypes from 'prop-types';
 
 const buttonStyle = {
     borderRadius:'18px',
@@ -22,7 +23,7 @@ const titleStyle = {
     fontWeight : 'bold',
 };
 
-class LevelSel extends Component{
+class LevelSel extends PureComponent{
     constructor(props){
         super(props);
         this.state={
@@ -56,6 +57,21 @@ class LevelSel extends Component{
         let lv = Global.getMaxPassLevel();
         appTitle(json.title);
         console.log(`lv=${lv} olv=${olv}`);
+        /**
+         * props.other 是一个数组，表示同班的其他进度
+         * [ uid | UserName | lv | lastcommit ]
+         * 重新映射为以lv为key的对象
+         */
+        let others = {};
+        if(this.props && this.props.other){
+            for(let o of this.props.other){
+                //这里最近的
+                others[o.lv] = o;
+            }
+        }
+        function lvtoid(lv){
+            return others[lv];
+        }
         this.level = json.level.map((item)=>{
             let bl = [];
             let m = item.rang.match(/(\d+)-(\d+)/);
@@ -112,11 +128,11 @@ class LevelSel extends Component{
                         need_unlock:islock && i===current, //需要解锁
                     };
                     if(i===seg_begin)
-                        bl.push(<CircleButton key={i} label={i} onClick={this.onSelectLevel.bind(this,link,p)} pos='first' state={s} />);
+                        bl.push(<CircleButton key={i} label={i} bob={lvtoid(i)} onClick={this.onSelectLevel.bind(this,link,p)} pos='first' state={s} />);
                     else if(i===seg_end)
-                        bl.push(<CircleButton key={i} label={i} onClick={this.onSelectLevel.bind(this,link,p)} pos='last' state={s} />);
+                        bl.push(<CircleButton key={i} label={i} bob={lvtoid(i)} onClick={this.onSelectLevel.bind(this,link,p)} pos='last' state={s} />);
                     else
-                        bl.push(<CircleButton key={i} label={i} onClick={this.onSelectLevel.bind(this,link,p)} state={s} />);
+                        bl.push(<CircleButton key={i} label={i} bob={lvtoid(i)} onClick={this.onSelectLevel.bind(this,link,p)} state={s} />);
                 }
             }
             return <Card key={item.name}>
@@ -160,6 +176,18 @@ class LevelSel extends Component{
             <Unlock ref={ref=>this.unlock=ref} />
         </div>;
     }
+};
+
+LevelSel.defaultProps = {
+    current : 0,
+    other : []
+};
+
+LevelSel.propTypes = {
+    index : PropTypes.string,
+    current : PropTypes.number,
+    other : PropTypes.array,
+    unlock : PropTypes.number
 };
 
 export default LevelSel;

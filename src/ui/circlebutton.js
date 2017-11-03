@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import Bob from './bob';
+import PropTypes from 'prop-types';
 
 /**
  * opened   已经完成
@@ -135,11 +137,12 @@ class CircleButton extends Component{
             this.props.onClick();
     }
     render(){
-        let {link,state,pos,disable} = this.props;
+        let {link,state,pos,disable,bob} = this.props;
         let c = cc(state);
         let hover = disable?c.normal : (this.state.hovered)?c.hover:c.normal;
-        return <div style={{display: 'inline-block',position: 'relative'}}>
+        return <div style={m({display: 'inline-block',position: 'relative'},bob&&{marginTop:"48px"})}>
             <div style={m(bgstyle,pos==='first'&&{left:bhelf},pos==='last'&&{right:bhelf})}></div>
+            {bob?<Bob icon={`http://image-static.lejiaolexue.com/userlogo/${bob.uid}_99.jpg`} text={bob.UserName} />:undefined}
             <a onClick={this.onClick.bind(this)} style={{position:'relative',textDecoration: 'none',cursor:"pointer"}}>
                 <div style={m(style,hover)}
                     onMouseLeave = {this.handleMouseLeave.bind(this)}
@@ -150,6 +153,14 @@ class CircleButton extends Component{
             </a>
         </div>;
     }
+};
+
+CircleButton.propTypes={
+    label : PropTypes.string,
+    bob : PropTypes.object,
+    onClick : PropTypes.func,
+    state : PropTypes.string,
+    pos : PropTypes.string
 };
 
 export default CircleButton;

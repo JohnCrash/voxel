@@ -1,13 +1,10 @@
 import React, {Component} from 'react';
-import Drawer from 'material-ui/Drawer';
 import {Toolbar, ToolbarGroup, ToolbarSeparator} from 'material-ui/Toolbar';
 import SelectField from 'material-ui/SelectField';
-import Toggle from 'material-ui/Toggle';
 import MenuItem from 'material-ui/MenuItem';
 import VoxView from './voxview';
 import BlockView from './blockview';
 import IconButton from 'material-ui/IconButton';
-import FontIcon from 'material-ui/FontIcon';
 import MarkdownElement from './ui/markdownelement';
 import {MessageBox} from './ui/messagebox';
 import {IconPlayArrow,IconPause,IconReplay,IconRotateLeft,IconRotateRight,IconHelp,IconStep} from './ui/myicon';
@@ -16,7 +13,6 @@ import {IconPlayArrow,IconPause,IconReplay,IconRotateLeft,IconRotateRight,IconHe
 //import IconReplay from 'material-ui/svg-icons/av/replay';
 //import IconRotateLeft from 'material-ui/svg-icons/image/rotate-left';
 //import IconRotateRight from 'material-ui/svg-icons/image/rotate-right';
-import IconHome from 'material-ui/svg-icons/action/home';
 import IconMenu from 'material-ui/svg-icons/navigation/menu';
 //import IconStep from 'material-ui/svg-icons/maps/directions-walk';
 //import IconHelp from 'material-ui/svg-icons/action/help';
@@ -32,8 +28,9 @@ import Tops from './tops';
 import {
     Redirect
   } from 'react-router-dom';
+import MainDrawer from "./drawer";
+import PropTypes from 'prop-types';
 
-const ToggleStyle = {marginBottom: 16,marginLeft:16,width:"85%"};
 const redIcon = {color:"#F44336"};
 
 function parserXML(id,text){
@@ -56,22 +53,30 @@ class Level extends Component{
             levelDesc:'',
             curSelectTest:-1,
             openTops:true,
-            openMenu:false,
-            music:false,
-            sound:false,
-            lang:false,
+            isDebug:Global.isDebug(),
             landscape:Global.getLayout()==="landscape",
             blocklytoolbox:Global.getPlatfrom()==='windows'?Global.getBlocklyToolbar():"close", //展开blockly工具条
         }
-        this.motifyConfig = false;
+    }
+    componentDidMount(){
+        this.onGameStart(this.props);
+        Global._immLayout = ((layout)=>{
+            this.setState({landscape:layout==="landscape"});
+        }).bind(this);
+        Global._immBlocklytoolbox = ((b)=>{
+            this.setState({blocklytoolbox:Global.getPlatfrom()==='windows'?b:"close"});
+        }).bind(this);
+        Global._immDebug = ((b)=>{
+            this.setState({isDebug:b});
+        }).bind(this);        
+    }    
+    componentWillUnmount(){
+        Global._immLayout = null;
+        Global._immBlocklytoolbox = null;
+        Global._immDebug = null;
     }
     Menu(){
-        BlocklyInterface.pause();
-        this.setState({openMenu:true,
-            music:Global.isMusic(),
-            sound:Global.isSound(),
-            lang:Global.getCurrentLang()!=="zh",
-            landscape:Global.getLayout()==="landscape"});
+        this.drawer.open(true);
     }
     Reset(){
         if(Global.isDebug()){
@@ -164,7 +169,7 @@ class Level extends Component{
         Global.push(()=>{
             MessageBox.show("okcancel","游戏退出","你确定要返回主界面吗？",(result)=>{
                 if(result==='ok'){
-                    this.onReturnMain();
+                    this.drawer.onReturnMain();
                 }
             },undefined,true);
         },true);     
@@ -186,23 +191,11 @@ class Level extends Component{
 
         });
     }
-    componentDidMount(){
-        this.onGameStart(this.props);
-    }
     componentWillReceiveProps(nextProps){
         if(nextProps.level!=this.props.level){
             this.onGameStart(nextProps);
             this.setState({playPause:true,landscape:Global.getLayout()==="landscape"});         
         }
-    }
-    onReturnMain(){
-        console.log('exit..');
-        if(this.motifyConfig){
-            this.motifyConfig = false;
-            Global.pushConfig();
-        }
-        Global.pop();
-        location.href='#/main';
     }
     loadTest(name){
         if(!Global.isDebug())return;
@@ -276,57 +269,19 @@ class Level extends Component{
         if(this.blockcount)
             this.blockcount.innerText = `${count}×`;
     }
-    optionEle(){
-        let {music,sound,lang,openMenu,landscape,blocklytoolbox} = this.state;
-        return <Drawer docked={false} open={openMenu} onRequestChange={(open) => {
-                BlocklyInterface.resume();
-                this.setState({openMenu:open});
-                if(this.motifyConfig){
-                    this.motifyConfig = false;
-                    Global.pushConfig();
-                }
-            }}>
-            <MenuItem primaryText="返回选择关卡" style={{marginBottom:32}} leftIcon={<IconHome /> } onClick={this.onReturnMain.bind(this)} />
-            <Toggle label="背影音乐" style={ToggleStyle} defaultToggled={music} onToggle={(e,b)=>{
-                this.setState({music:b});
-                this.motifyConfig = true;
-                Global.muteMusic(b);
-            }} />
-            <Toggle label="音效" style={ToggleStyle} defaultToggled={sound} onToggle={(e,b)=>{
-                this.setState({sound:b});
-                this.motifyConfig = true;
-                Global.muteSound(b);
-            }} />
-            <Toggle label="使用英语" style={ToggleStyle} defaultToggled={lang} onToggle={(e,b)=>{
-                this.setState({lang:b});
-                this.motifyConfig = true;
-                Global.setCurrentLang(b?"en":"zh");
-            }} />   
-            <Toggle label="使用竖屏" style={ToggleStyle} defaultToggled={!landscape} onToggle={(e,b)=>{
-                this.setState({landscape:!b});
-                this.motifyConfig = true;
-                Global.setLayout(!b?"landscape":"portrait");
-            }} />   
-            <Toggle label="Blockly紧凑工具条" style={ToggleStyle} defaultToggled={blocklytoolbox!=="expand"} onToggle={(e,b)=>{
-                this.setState({blocklytoolbox:b?"close":"expand"});
-                this.motifyConfig = true;
-                Global.setBlocklyToolbar(b?"close":"expand");
-            }} />
-        </Drawer>;
-    }
     Help(){
         MessageBox.show('ok',undefined,<MarkdownElement file={`scene/${this.props.level}.md`}/>,(result)=>{
             console.log(result);
         });         
     }
     toolbarEle(){
-        let {playPause,curSelectTest} = this.state;   
+        let {playPause,curSelectTest,isDebug} = this.state;   
         let tests = [];
         if(this.testXML){
             for(let i=0;i<this.testXML.length;i++)
                 tests.push(<MenuItem value={i} key={i} primaryText={`test ${i}`} />);
         }
-        let debugTool = Global.isDebug()?
+        let debugTool = isDebug?
         [<IconButton touch={true} onClick={this.AddTest.bind(this)}>
             <AddTest />
         </IconButton>,
@@ -372,7 +327,7 @@ class Level extends Component{
     }
     //横屏
     landscape(){
-        let {levelDesc,music,sound,lang,curSelectTest,openTops,openMenu,blocklytoolbox} = this.state;
+        let {levelDesc,curSelectTest,openTops,blocklytoolbox} = this.state;
         let {level} = this.props;
         return <div>
             <div style={{position:"absolute",left:"0px",top:"0px",right:"50%",bottom:"56px"}}>
@@ -394,13 +349,13 @@ class Level extends Component{
             <div style={{position:"absolute",display:"flex",flexDirection:"column",left:"0px",right:"50%",bottom:"0px"}}>
                 {this.toolbarEle()}
             </div>
-            {this.optionEle()}
+            <MainDrawer key="mydrawer" ref={ref=>this.drawer=ref}/>
             <Tops ref={ref=>this.Tops=ref} level={level}/>
         </div>;
     }
     //竖屏
     portrait(){
-        let {levelDesc,music,sound,lang,curSelectTest,openTops,openMenu,blocklytoolbox} = this.state;
+        let {levelDesc,curSelectTest,openTops,blocklytoolbox} = this.state;
         let {level} = this.props;
         return <div>
             <div style={{position:"absolute",left:"0px",top:"0px",right:"0px",bottom:"60%"}}>
@@ -420,7 +375,7 @@ class Level extends Component{
                     <img src="media/title-beta.png" height="24px" />
                 </div>
             </div>
-            {this.optionEle()}
+            <MainDrawer key="mydrawer" ref={ref=>this.drawer=ref}/>
             <Tops ref={ref=>this.Tops=ref} level={level}/>
         </div>;
     }
@@ -430,6 +385,10 @@ class Level extends Component{
         }        
         return this.state.landscape?this.landscape():this.portrait();
     }
+};
+
+Level.propTypes = {
+    level : PropTypes.string
 };
 
 export default Level;
