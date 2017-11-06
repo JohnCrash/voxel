@@ -238,7 +238,7 @@ class Tops extends Component{
                 </TableBody>
             </Table>}
             <MarkdownElement text={md(this.content,dict)}/>
-            <LevelOf level={level}/>
+            <LevelOf other={ Global.getLoginJson()? Global.getLoginJson().cls:null} />
             <MarkdownElement text={md(this.bottom,dict)}/>
         </Dialog>
         <Unlock ref={ref=>this.unlock=ref} />

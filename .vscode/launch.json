@@ -17,10 +17,17 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Debug client",
+            "name": "Debug client 郑娇娇",
             "url": "http://localhost:3000/cc.html#/login/18789679/郑娇娇/sc1=A4F3E200FBDD06D1350E10597563F986AC0F313FakV4OgjpCZ%2fCym8IIV1n7lAiaB%2bgPhi%2f7EyJgcKT71Z0FlaLnXt7ZCP%2bpU7U91ryHujimogBkWydgHJd%2bCFTYeMvm%2bXs1e%2bC8VYGeQMLzGXXdqBY4XlDFw%3d%3d",
             "webRoot": "${workspaceRoot}"
         },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Debug client 金老师 ",
+            "url": "http://localhost:3000/cc.html#/login/24321614/金老师/sc1=295C24B689782BFB6D8F8171DE2F9D7A28A5D07DaUl8MADpD5LCiGYNJ1Rn71kqax%2buIFjj8FGGl96b%2bxYpBkvagGZydmOutQmN6kfyEuLokIgBkWzOhncNpSFQbrEvnODr2bmFqwBVfldfzzSJJada4XdFRA%3d%3d",
+            "webRoot": "${workspaceRoot}"
+        },        
         {
             "type": "chrome",
             "request": "launch",

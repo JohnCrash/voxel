@@ -242,7 +242,7 @@ router.post('/commit',function(req,res){
   if(method && (req.UserInfo.lv+1)>=lv){
     //更新用户做到第几关了
     if(req.UserInfo.lv+1==lv)
-      sql(`update UserInfo set lv='${lv}' lastcommit=getdate() where uid='${req.UserInfo.uid}'`);
+      sql(`update UserInfo set lv='${lv}',lastcommit=getdate() where uid='${req.UserInfo.uid}'`);
     //提交成绩
     var md5sum = crypto.createHash('md5');
     md5sum.update(method);

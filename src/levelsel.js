@@ -10,14 +10,6 @@ import SelectChar from './selectchar';
 import Unlock from './unlock';
 import PropTypes from 'prop-types';
 
-const buttonStyle = {
-    borderRadius:'18px',
-    width:'36px'
-};
-const style = {
-    marginRight: 20,
-  };
-
 const titleStyle = {
     fontSize : '18px',
     fontWeight : 'bold',
@@ -66,7 +58,8 @@ class LevelSel extends PureComponent{
         if(this.props && this.props.other){
             for(let o of this.props.other){
                 //这里最近的
-                others[o.lv] = o;
+                if(!others[o.lv] || (others[o.lv] && others[o.lv].lvdate > o.lvdate))
+                    others[o.lv] = o;
             }
         }
         function lvtoid(lv){
@@ -157,8 +150,19 @@ class LevelSel extends PureComponent{
         if(nextProps.index!=index || nextProps.current!=current || nextProps.unlock!=unlock){
             this.load(index,nextProps.current);
         }
-    }    
+    }
+    /**
+     * 使用context传递style信息
+     */
+    getChildContext(){
+        let r = Global.getPlatfrom()==="windows"?48:Math.floor((window.innerWidth*0.9-32)/10-12);
+        return {
+            circleRadius : r
+        }
+    }
     render(){
+        let circleRadius = this.getChildContext().circleRadius;
+        let maxWidth = (circleRadius+12)*10+32+'px';
         return <div>  
             <div style={{
                 overflowY:'auto',
@@ -168,7 +172,7 @@ class LevelSel extends PureComponent{
                 bottom :'0px',
                 top :'64px'
             }}>
-                <Paper style={{width:"90%",margin:'auto',marginTop:'20px',marginBottom:'20px',maxWidth:'520px'}}>
+                <Paper style={{width:"90%",margin:'auto',marginTop:'20px',marginBottom:'20px',maxWidth}}>
                 {this.level}
                 </Paper>
             </div>
@@ -188,6 +192,10 @@ LevelSel.propTypes = {
     current : PropTypes.number,
     other : PropTypes.array,
     unlock : PropTypes.number
+};
+
+LevelSel.childContextTypes = {
+    circleRadius : PropTypes.number 
 };
 
 export default LevelSel;

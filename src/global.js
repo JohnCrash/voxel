@@ -137,6 +137,19 @@ class _Global_{
     levelJson(){
         return this.LevelJson;
     }
+    //将关卡映射为关卡名称
+    levelToLeveName(level){
+        if(this.LevelJson && this.LevelJson.level){
+            for(let seg of this.LevelJson.level){
+                if( seg.rang ){
+                    let m = seg.rang.match(/(\d+)-(\d+)/);
+                    if(m && m[1] <= level || m[2] >= level){
+                        return `L${m[1]}-${level-m[1]+1}`;
+                    }
+                }
+            }
+        }
+    }
     /**
      * 根据当前关卡名称得到本关卡的信息
      * @param {*} level 当前关卡名称例如:L3-1
@@ -206,6 +219,7 @@ class _Global_{
      */
     setMaxPassLevel(lv){
         this.maxpasslv = lv;
+        this.updateCls();
     }
     getMaxPassLevel(lv){
         return this.maxpasslv;
@@ -217,6 +231,7 @@ class _Global_{
         if(lv > this.maxpasslv){
             this.maxpasslv = lv;
         }
+        this.updateCls();
     }
     setCurrentSceneManager(sceneManager){
         this._sceneManager = sceneManager;
@@ -290,6 +305,23 @@ class _Global_{
      */
     setLoginJson(json){
         this._loginJson = json;
+        //cls做一个时间转换
+        if(json && json.cls){
+            for(let o of json.cls){
+                o.lvdate = new Date(o.lastcommit);
+            }
+        }
+    }
+    //更新cls表中自己的关卡进度
+    updateCls(){
+        if(this._loginJson){
+            let json = this._loginJson;
+            for(let o of json.cls){
+                if(o.uid===this._uid){
+                    o.lv = this.maxpasslv-1;
+                }
+            }
+        }
     }
     getLoginJson(){
         return this._loginJson;
