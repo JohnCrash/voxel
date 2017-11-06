@@ -3,18 +3,18 @@ import {CircleArrowIcon} from './myicon';
 import PropTypes from 'prop-types';
 
 const parentWidth = 48; //父节点的宽度
-const width = 48;
-const iconWidth = width-16;
+const width = 64;
+const iconWidth = Math.floor(width*2/3)+1;
 
 const px = "px"
 const style = {
     width : width+px,
     height : width+px,
-    //position : "absolute",
+    position : "absolute",
     borderRadius : width+px,
     overflow : "hidden",
-    marginTop : -width+px,
-    marginLeft : (parentWidth-width)+px
+    top : -width+px,
+    left : (parentWidth-width)/2+px
 };
 const svgStyle = {
     width:width+px,
@@ -24,9 +24,10 @@ const iconStyle = {
     width:iconWidth+px,
     height:iconWidth+px,
     overflow:"hidden",
+    position : "relative",
     borderRadius :iconWidth,
-    marginTop:-width+px,
-    marginLeft : (parentWidth-width)+px
+    top : -width+((width-48)/12+1)+px,
+    left : Math.floor((width-iconWidth)/2)+px
 };
 const imgStyle = {
     width : "100%"

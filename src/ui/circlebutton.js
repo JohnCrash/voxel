@@ -140,7 +140,7 @@ class CircleButton extends Component{
         let {link,state,pos,disable,bob} = this.props;
         let c = cc(state);
         let hover = disable?c.normal : (this.state.hovered)?c.hover:c.normal;
-        return <div style={m({display: 'inline-block',position: 'relative'},bob&&{marginTop:"48px"})}>
+        return <div style={m({display: 'inline-block',position: 'relative'},bob&&{marginTop:"64px"})}>
             <div style={m(bgstyle,pos==='first'&&{left:bhelf},pos==='last'&&{right:bhelf})}></div>
             {bob?<Bob icon={`http://image-static.lejiaolexue.com/userlogo/${bob.uid}_99.jpg`} text={bob.UserName} />:undefined}
             <a onClick={this.onClick.bind(this)} style={{position:'relative',textDecoration: 'none',cursor:"pointer"}}>
