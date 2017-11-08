@@ -44,6 +44,7 @@
     "cookie-parser": "^1.4.3",
     "debug": "^2.6.8",
     "express": "^4.15.3",
+    "faye-websocket": "^0.11.1",
     "highlight.js": "^9.12.0",
     "interact": "0.0.3",
     "jade": "^1.11.0",

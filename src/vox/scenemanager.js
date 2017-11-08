@@ -4,6 +4,7 @@
 import {Item} from './item';
 import {ZDepthPhongMaterial} from './depthphong';
 import {AudioManager} from './audiomanager';
+import Spe from './spe';
 
 var EventEmitter = require("events");
 var aabb = require('aabb-3d');
@@ -116,6 +117,7 @@ class SceneManager extends EventEmitter{
         this.musicFile = json.music||'';
         this.musicLoop = !!json.loop;
         this.setBackgroundColor(json.bgcolor);
+        this.loadSPE(json.spe);
         this.loadSkybox(json.skybox);
         this.loadMaterial(json.material);
         this.loadZFog(json.zfog);
@@ -128,6 +130,18 @@ class SceneManager extends EventEmitter{
         if(this.json && !this._doReset && !this._doloadstate){
             this._doReset = true;
             this.loadItem(this.json.item,cb);
+        }
+    }
+
+    loadSPE(t){
+        this._speJson = t;
+        if(this._spe){
+            this.game.scene.remove(this._spe.node());
+            this._spe.dispose();
+        }
+        if(t){
+            this._spe = new Spe(t);
+            this.game.scene.add(this._spe.node());
         }
     }
 
@@ -181,6 +195,7 @@ class SceneManager extends EventEmitter{
                 if(item.state==='loading')
                     return;
                 else if(item.state==='error'){
+                    console.warn(item);
                     clearInterval(id);
                     this._doReset = false;
                     this._doloadstate = false;
@@ -325,6 +340,7 @@ class SceneManager extends EventEmitter{
                     y:this.game.camera.rotation.y,
                     z:this.game.camera.rotation.z}                   
             },
+            spe:this._speJson,
             skybox:this.game.skyboxToJson(),
             material:{
                 item:this.itemMaterial.toJSON(),
@@ -442,6 +458,8 @@ class SceneManager extends EventEmitter{
         let groundItem = this.getGroundItem();
         
         if(this._doloadstate||this._doReset)return; //如果真正读取就不要更新
+
+        if(this._spe)this._spe.update(dt); //更新粒子效果
 
         if(this._pause || !groundItem){//没有地面，直接简单更新
             for(let item of this.items){
@@ -684,6 +702,10 @@ class SceneManager extends EventEmitter{
         this.game.camera.position.x = a*this.game.camera.position.x;
         this.game.camera.position.y = a*this.game.camera.position.y;        
         this.game.camera.position.z = a*this.game.camera.position.z;        
+    }
+    //创建一个粒子引擎
+    createSpe(json){
+        return new Spe(json);
     }
 };
 

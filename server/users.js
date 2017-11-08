@@ -23,7 +23,6 @@ function sql(query){
     return pool.request().query(query);
   });
 }
-
 /**
  * cookie => UserInfo
  */
@@ -130,8 +129,8 @@ function responeseLogin(req,res){
   let {UserName,uid,cookie,lv,olv,config,cls} = req.UserInfo;
   sql(`select uid,UserName,lv,lastcommit from UserInfo where cls=${cls}`).then((result)=>{
     sql(`update UserInfo set lastlogin=getdate() where uid=${uid}`);
-    let cls = result.recordset;
-    for(let c of cls){
+    let clss = result.recordset;
+    for(let c of clss){
       c.UserName = stripTailSpace(c.UserName);
     }
     res.json({
@@ -142,7 +141,8 @@ function responeseLogin(req,res){
       user:stripTailSpace(UserName),
       uid,
       cookie,
-      cls
+      clsid:cls,
+      cls:clss
     });
   }).catch((err)=>{
     res.json({result:err});

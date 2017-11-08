@@ -764,7 +764,7 @@ function(event,dt,z){
 				if(this._noidle)break;
 				//idle
 				this.idleAcc += dt;
-				this.syncLiftItem();
+				if(this.syncLiftItem)this.syncLiftItem();
 				if(this._isobstruct&&this.curAction.name==='remove_cones'){
 				//正在开栅栏
 				}else if(this.idleAcc>300){

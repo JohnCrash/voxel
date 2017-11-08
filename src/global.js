@@ -1,9 +1,12 @@
 import {postJson,fetchJson} from './vox/fetch';
 import Log from './vox/log';
+import EventEmitter from 'events';
+import {MessageBox} from './ui/messagebox';
 
 //if(window.closeLoadingUI)root.style.display="none";
-class _Global_{
+class _Global_ extends EventEmitter{
     constructor(){
+        super();
         this.LevelJson = null;
         this.maxpasslv = null;
         this._debug = false;
@@ -140,11 +143,14 @@ class _Global_{
     //将关卡映射为关卡名称
     levelToLeveName(level){
         if(this.LevelJson && this.LevelJson.level){
-            for(let seg of this.LevelJson.level){
+            for(let i = 0 ;i<this.LevelJson.level.length;i++){
+                let seg = this.LevelJson.level[i];
                 if( seg.rang ){
                     let m = seg.rang.match(/(\d+)-(\d+)/);
-                    if(m && m[1] <= level || m[2] >= level){
-                        return `L${m[1]}-${level-m[1]+1}`;
+                    let b = Number(m[1]);
+                    let e = Number(m[2]);
+                    if(b <= level && e >= level){
+                        return `L${i+1}-${level-b+1}`;
                     }
                 }
             }
@@ -219,7 +225,6 @@ class _Global_{
      */
     setMaxPassLevel(lv){
         this.maxpasslv = lv;
-        this.updateCls();
     }
     getMaxPassLevel(lv){
         return this.maxpasslv;
@@ -231,7 +236,8 @@ class _Global_{
         if(lv > this.maxpasslv){
             this.maxpasslv = lv;
         }
-        this.updateCls();
+        this.updateCls(this._uid,lv-1);
+        this.wsPassLevel(lv-1);
     }
     setCurrentSceneManager(sceneManager){
         this._sceneManager = sceneManager;
@@ -313,18 +319,88 @@ class _Global_{
         }
     }
     //更新cls表中自己的关卡进度
-    updateCls(){
+    updateCls(uid,lv){
         if(this._loginJson){
             let json = this._loginJson;
             for(let o of json.cls){
-                if(o.uid===this._uid){
-                    o.lv = this.maxpasslv-1;
+                if(o.uid===uid && o.lv < lv){
+                    o.lv = lv;
+                    return true;
                 }
             }
         }
+        return false;
     }
     getLoginJson(){
         return this._loginJson;
+    }
+    wsPassLevel(lv){
+        if(this._wsClsLv){
+            //通知同班同学我过了一个
+            this._wsClsLv.sendMsg({event:'pass',
+                uid:this._uid,
+                name:this._uname,
+                lv,
+                cls:this._loginJson.clsid
+            });
+        }
+    }
+    //初始化websocket
+    wsLogin(){
+        let ws = new WebSocket(`ws://${location.host}/clslv`);
+        this._wsClsLv = ws;
+        ws.sendMsg = function(t){
+            try{
+                this.send(JSON.stringify(t));
+            }catch(e){
+                console.log(e);
+            }
+        }
+        ws.reciveMsg=function(event){
+            try{
+                return JSON.parse(event.data);
+            }catch(e){
+                console.log(e);
+            }            
+        }
+        ws.onopen = (event)=>{
+            ws.sendMsg({event:'login',
+                uid:this._uid,
+                name:this._uname,
+                lv:this.maxpasslv,
+                cls:this._loginJson.clsid});
+        }
+        ws.onmessage = (event)=>{
+            let t = ws.reciveMsg(event);
+            if(t){
+                this.emit('ws',t);
+                switch(t.event){
+                    case 'pass'://处理班级其他同学关卡
+                        {
+                            if(this.updateCls(t.uid,t.lv)){
+                                this.emit('clslv'); //更新关卡列表
+                            }
+                            let levelName = Global.levelToLeveName(t.lv);
+                            MessageBox.msg(`${t.name} 过了 ${levelName}`);
+                        }                        
+                        break;
+                    case 'enter':
+                        MessageBox.msg(`${t.name} 进入游戏`);
+                        break;
+                    case 'exit':
+                        MessageBox.msg(`${t.name} 退出游戏`);
+                        break;
+                }
+            }
+        }
+        ws.onclose = ()=>{
+            this._wsClsLv = null;
+            ws = null;
+        }
+        ws.onerror = (event)=>{
+            this._wsClsLv = null;
+            ws = null;
+        }
     }
 };
 

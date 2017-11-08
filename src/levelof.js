@@ -27,8 +27,10 @@ class LevelOf extends Component{
     render(){
         let bl = [];
         let title = '';
-        let levelName = Global.levelToLeveName(Global.getMaxPassLevel());
-        let info = Global.appGetLevelInfo(levelName);
+        //this.props.level 当前完成的
+        let maxpasslevel = Global.getMaxPassLevel();
+       // let maxpasslevelName = Global.levelToLeveName(maxpasslevel);
+        let info = Global.appGetLevelInfo(this.props.level);
         if(info){
             /**
              * props.other 是一个数组，表示同班的其他进度
@@ -45,19 +47,19 @@ class LevelOf extends Component{
             }      
             function lvtoid(lv){
                 return others[lv];
-            }                  
-            let current = info.begin+info.current+1;
+            }         
+           // let current = info.begin+info.current+1;
             let closed = info.closed;
             title = info.name;
             for(let i=info.begin;i<=info.end;i++){
                 let s;
-                if(i===current){
+                if(i===maxpasslevel){
                     s = 'current';
                 }else if(i>=closed)
                     s = 'closed';
-                else if(i<current){
+                else if(i<maxpasslevel){
                     s = 'opened';
-                }else if(i>current)
+                }else if(i>maxpasslevel)
                     s = 'unfinished';            
                 if(i===info.begin)
                     bl.push(<CircleButton key={i} label={i} bob={lvtoid(i)} pos='first' state={s} disable={true}/>);
@@ -78,6 +80,7 @@ LevelOf.defaultProps = {
 };
 
 LevelOf.propTypes = {
+    level : PropTypes.string,
     other : PropTypes.array,
 };
 

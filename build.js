@@ -1,5 +1,7 @@
 var browserify = require('browserify');
 var fs = require('fs');
+var process = require('process');
+
 //const { spawn } = require('child_process');
 //var envify = require('envify/custom');
 
@@ -31,5 +33,10 @@ function build(src,des){
   .bundle().pipe(fs.createWriteStream(des));
 }
 //build('src/levelindex.js','public/levelindex_compress.js');
-//build('src/editor.js','public/editor_compress.js');
-build('src/app.js','public/app_compress.js');
+if(process.argv[2] && process.argv[2]==='editor'){
+  console.log('Compile editor...');
+  build('src/editor.js','public/editor_compress.js');
+}else{
+  console.log('Compile app...');
+  build('src/app.js','public/app_compress.js');
+}

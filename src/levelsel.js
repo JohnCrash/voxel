@@ -144,6 +144,15 @@ class LevelSel extends PureComponent{
     componentDidMount(){
         let {index,current} = this.props;
         this.load(index,current);
+        this._clslvlistener = (t)=>{
+            let {index,current} = this.props;
+            this.load(index,current);
+            this.forceUpdate();
+        };
+        Global.on('clslv',this._clslvlistener);
+    }
+    componentWillUnmount(){
+        Global.removeListener('clslv',this._clslvlistener);
     }
     componentWillReceiveProps(nextProps){
         let {index,current,unlock} = this.props;

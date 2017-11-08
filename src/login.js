@@ -12,7 +12,7 @@ class Login extends Component{
         super(props);
         this.state={
             exitButton : false,
-            msg:'正在登录请稍后...',
+            msg:'正在登录请稍候...',
         };
     }
     logout(){
@@ -25,7 +25,7 @@ class Login extends Component{
             this.messageBar(e);
         });        
     }
-    login(uid,uname,cookie){
+    login(uid,uname,cookie){        
         if(!(uid && uname && cookie)){
             //this.setState({exitButton:true,msg:"用户信息不正确"});
             console.log('Use cookie login...');
@@ -71,6 +71,7 @@ class Login extends Component{
                 if(json.cookie)
                     Global.setUserInfo(json.uid,json.user,json.cookie);
                 this.setState({msg:"登录成功"});
+                Global.wsLogin();
                 //location.href='#main/'+(json.lv+1);
                 location.href='#/main';
             }else{

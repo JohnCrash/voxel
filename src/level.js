@@ -282,13 +282,14 @@ class Level extends Component{
                 tests.push(<MenuItem value={i} key={i} primaryText={`test ${i}`} />);
         }
         let debugTool = isDebug?
-        [<IconButton touch={true} onClick={this.AddTest.bind(this)}>
+        [<IconButton touch={true} key='add' onClick={this.AddTest.bind(this)}>
             <AddTest />
         </IconButton>,
-        <IconButton touch={true} onClick={this.RemoveTest.bind(this)}>
+        <IconButton touch={true} key='remove' onClick={this.RemoveTest.bind(this)}>
             <RemoveTest />
         </IconButton> ,                       
         <SelectField
+            key = 'test'
             value={curSelectTest}
             onChange={this.handleTestChange.bind(this)}
             maxHeight={200}

@@ -140,6 +140,15 @@ class Tops extends Component{
             this.setState({loading:false});
         });
     }
+    componentDidMount(){
+        this._clslvlistener = ()=>{
+            this.forceUpdate();
+        };
+        Global.on('clslv',this._clslvlistener);        
+    }
+    componentWillUnmount(){
+        Global.removeListener('clslv',this._clslvlistener);
+    }    
     render(){
         let {level} = this.props;
         let {open,loading} = this.state;
@@ -238,7 +247,7 @@ class Tops extends Component{
                 </TableBody>
             </Table>}
             <MarkdownElement text={md(this.content,dict)}/>
-            <LevelOf other={ Global.getLoginJson()? Global.getLoginJson().cls:null} />
+            <LevelOf level={level} other={ Global.getLoginJson()? Global.getLoginJson().cls:null} />
             <MarkdownElement text={md(this.bottom,dict)}/>
         </Dialog>
         <Unlock ref={ref=>this.unlock=ref} />

@@ -53,6 +53,7 @@ class ItemTemplate_{
             },(err)=>{
                 s.state = 'error';
                 s.err = err;
+                console.error(err);
                 for(let cbc of s.cbs){
                     cbc(true,err);
                 }

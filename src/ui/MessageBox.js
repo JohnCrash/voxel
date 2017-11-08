@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import Snackbar from 'material-ui/Snackbar';
 import {Global} from '../global';
 import BlocklyInterface from '../vox/blocklyinterface';
 
@@ -17,7 +18,10 @@ class MessageBox extends Component{
             open: false,
             title:'',
             content:'',
-            style:null};
+            style:null,
+            snackbarOpen:false,
+            snackbarMsg:''
+            };
     }
     static globalNode = null;
     static globalCB = null;
@@ -62,6 +66,16 @@ class MessageBox extends Component{
             MessageBox.globalCB = null;
         }
     }
+    static msg(msg){
+        if(MessageBox.globalNode){
+            MessageBox.globalNode.setState({snackbarOpen:true,snackbarMsg:msg});
+        }
+    }
+    handleRequestClose(){
+        this.setState({
+            snackbarOpen: false,
+        });
+    }
     render(){
         let actions;
         switch(this.state.type){
@@ -105,6 +119,10 @@ class MessageBox extends Component{
             >
             {this.state.content}
             </Dialog>
+            <Snackbar open={this.state.snackbarOpen}
+                message={this.state.snackbarMsg}
+                autoHideDuration={4000}
+                onRequestClose={this.handleRequestClose.bind(this)}/>
         </div>;
     }
 }

@@ -49,6 +49,7 @@ class VoxManager_{
             function errorHandle(err){
                 _this.voxs[file].err = err;
                 _this.voxs[file].state='error';
+                console.error(err);
                 b = true;
                 if(!(--count)){
                     for(let cb of _this.voxs[file].cbs){ //调用所有请求该文件的回调
