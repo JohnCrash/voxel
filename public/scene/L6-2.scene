@@ -184,7 +184,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 799.748958638999
+				"z": 1026.3740278909331
 			},
 			"name": "宝石",
 			"visible": true,
@@ -216,7 +216,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/火炬.item"
 		},
 		{
@@ -238,7 +238,29 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/火炬.item"
+		},
+		{
+			"position": {
+				"x": 18,
+				"y": 58,
+				"z": 75
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "火炬2",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/火炬.item"
 		}
 	],

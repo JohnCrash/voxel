@@ -27,9 +27,15 @@ function sql(query){
  * cookie => UserInfo
  */
 router.use(function(req,res,next){
-  let cookie = req.cookies.sc1;
+  let cookie;
+
+  if(req.body.cookie){
+    cookie = req.body.cookie;
+  }else{
+    cookie = "sc1="+req.cookie.sc1;
+  }
   if(cookie){
-    sql(`select * from UserInfo where cookie='sc1=${cookie}'`).then((result)=>{
+    sql(`select * from UserInfo where cookie='${cookie}'`).then((result)=>{
       req.UserInfo = result.recordset[0];
       if(req.UserInfo){
         next();
@@ -107,8 +113,9 @@ function pullUserInfo(req,cb){
       if(json.result==0){
         if(json.zone&&json.zone[0])
           cb(json.zone[0]);
-        else
+        else{
           cb(false,"http://api.lejiaolexue.com/rest/userzone/zone.ashx have not zone[0]");
+        }
       }else{
         cb(false,json.msg);
       }

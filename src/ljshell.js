@@ -27,19 +27,14 @@ class _ljshell{
             cb(true);
         }else if(this.lj){
             let n = 0;
-            this.lj.nickname((msg,status)=>{
-                if(status){
-                    this._nickName = msg;
-                    if((++n)===2)cb(true);
-                }else{
-                    this._userInfo = null;
-                    cb(false,`nickname 返回错误 ${status}`);
-                }
-            });
             this.lj.userinfo((msg,status)=>{
                 if(status){
-                    this._userInfo = JSON.stringify(msg);
-                    if((++n)===2)cb(true);
+                    try{
+                        this._userInfo = JSON.stringify(msg);
+                    }catch(e){
+                        cb(false,"userinfo "+e.toString());
+                    }
+                    if((++n)===1)cb(true);
                 }else{
                     this._userInfo = null;
                     cb(false,`userinfo 返回错误 ${status}`);

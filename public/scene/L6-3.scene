@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 33,
+					"acc": 34,
 					"curIndex": 0
 				}
 			],
@@ -184,7 +184,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1612.048579929015
+				"z": 1777.984362298966
 			},
 			"name": "宝石",
 			"visible": true,
@@ -255,19 +255,19 @@
 			"name": "火盆",
 			"visible": true,
 			"ground": false,
-			"collision": false,
+			"collision": true,
 			"fixed": false,
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/火盆.item"
 		},
 		{
 			"position": {
 				"x": 34,
 				"y": 60,
-				"z": 72
+				"z": 75
 			},
 			"rotation": {
 				"x": 0,
@@ -282,14 +282,14 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/火炬.item"
 		},
 		{
 			"position": {
 				"x": -62,
 				"y": -54,
-				"z": 72
+				"z": 75
 			},
 			"rotation": {
 				"x": 0,
@@ -304,14 +304,14 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/火炬.item"
 		},
 		{
 			"position": {
 				"x": -62,
 				"y": -18,
-				"z": 72
+				"z": 75
 			},
 			"rotation": {
 				"x": 0,
@@ -326,14 +326,14 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/火炬.item"
 		},
 		{
 			"position": {
 				"x": -62,
 				"y": 18,
-				"z": 72
+				"z": 75
 			},
 			"rotation": {
 				"x": 0,
@@ -348,7 +348,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/火炬.item"
 		}
 	],

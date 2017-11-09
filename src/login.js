@@ -89,10 +89,18 @@ class Login extends Component{
         ljshell.init((b,e)=>{
             if(b){
                 let userinfo = ljshell.getUserInfo();
-                let nickname = ljshell.getNickName();
-                this.login();
+                if(userinfo && userinfo.userid && userinfo.nickname && userinfo.token){
+                    this.login(userinfo.userid,userinfo.nickname,"sc1="+userinfo.token);
+                }else{
+                    this.setState({exitButton:false,msg:"getUserInfo 返回非预期的值:\n"+userinfo.toString()});
+                }
             }else{
-                this.setState({exitButton:false,msg:e});
+                //调试进入游戏
+                let m = location.hash.match(/#\/login\/(.*)\/(.*)\/(.*)/);
+                if(m){
+                    this.login(m[1],m[2],m[3]);
+                }else
+                    this.setState({exitButton:false,msg:e});
             }
         });
     }

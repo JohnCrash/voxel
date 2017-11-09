@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 34,
+					"acc": 0,
 					"curIndex": 0
 				}
 			],
@@ -172,7 +172,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/男孩.item"
 		},
 		{
@@ -194,7 +194,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/女孩.item"
 		},
 		{
@@ -216,7 +216,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/地板开关.item",
 			"flatColor": "green"
 		},
@@ -239,7 +239,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/地板.item",
 			"flatColor": "green"
 		},
@@ -262,7 +262,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/石块.item"
 		},
 		{
@@ -284,7 +284,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/地板.item",
 			"flatColor": "blue"
 		},
@@ -307,7 +307,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/地板开关.item",
 			"flatColor": "blue"
 		},
@@ -330,7 +330,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/木桩.item"
 		},
 		{
@@ -342,7 +342,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 789.4288267719547
+				"z": 1543.948275977178
 			},
 			"name": "宝石",
 			"visible": true,
@@ -352,8 +352,118 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/黄宝石.item"
+		},
+		{
+			"position": {
+				"x": 29,
+				"y": -37,
+				"z": 21
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "火盆",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/火盆.item"
+		},
+		{
+			"position": {
+				"x": 16,
+				"y": 60,
+				"z": 86
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "火炬",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/火炬.item"
+		},
+		{
+			"position": {
+				"x": 54,
+				"y": 60,
+				"z": 86
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "火炬1",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/火炬.item"
+		},
+		{
+			"position": {
+				"x": -24,
+				"y": 60,
+				"z": 86
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "火炬2",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/火炬.item"
+		},
+		{
+			"position": {
+				"x": -60,
+				"y": -38,
+				"z": 86
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "火炬3",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/火炬.item"
 		}
 	],
 	"zfog": {
