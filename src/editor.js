@@ -709,6 +709,7 @@ class Edit{
                         });
             let id = setInterval(()=>{
                 if(item.state!=='loading'){
+                    if(item.live)item.live('init');
                     this.itemUI.push(new ItemUI(item));
                     clearInterval(id);
                 }

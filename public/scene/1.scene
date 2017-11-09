@@ -169,11 +169,6 @@
 			"fixed": false,
 			"gravity": false,
 			"specificGravity": 0.2,
-			"velocity": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
 			"castShadow": true,
 			"receiveShadow": false,
 			"file": "scene/vox/人物.vox",
@@ -208,11 +203,6 @@
 			"fixed": false,
 			"gravity": false,
 			"specificGravity": 0.2,
-			"velocity": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
 			"castShadow": true,
 			"receiveShadow": false,
 			"file": "scene/vox/人物.vox",
@@ -247,11 +237,6 @@
 			"fixed": false,
 			"gravity": false,
 			"specificGravity": 0.2,
-			"velocity": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
 			"castShadow": true,
 			"receiveShadow": false,
 			"file": "scene/vox/人物.vox",
@@ -286,11 +271,6 @@
 			"fixed": false,
 			"gravity": false,
 			"specificGravity": 0.2,
-			"velocity": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
 			"castShadow": true,
 			"receiveShadow": false,
 			"file": "scene/vox/T-Rex.vox",
@@ -322,6 +302,50 @@
 					"acc": 67
 				}
 			]
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 45.666034809581106
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "火盆",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/火盆.item"
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 67.7235912459073
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "火炬",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/火炬.item"
 		}
 	],
 	"zfog": {

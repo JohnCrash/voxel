@@ -184,7 +184,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 125.56003358602149
+				"z": 1062.071945213651
 			},
 			"name": "金币",
 			"visible": true,
@@ -206,7 +206,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1441.8088156237422
+				"z": 2378.320727251684
 			},
 			"name": "金币4",
 			"visible": true,
@@ -272,7 +272,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 852.4554585882473
+				"z": 1788.967370215948
 			},
 			"name": "钥匙",
 			"visible": true,
@@ -306,6 +306,160 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/盒子.item"
+		},
+		{
+			"position": {
+				"x": -15,
+				"y": 58,
+				"z": 75
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "火炬",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/火炬.item"
+		},
+		{
+			"position": {
+				"x": 20,
+				"y": 58,
+				"z": 75
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "火炬1",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/火炬.item"
+		},
+		{
+			"position": {
+				"x": 54,
+				"y": 58,
+				"z": 75
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "火炬2",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/火炬.item"
+		},
+		{
+			"position": {
+				"x": -60,
+				"y": 58,
+				"z": 75
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "火炬3",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/火炬.item"
+		},
+		{
+			"position": {
+				"x": -60,
+				"y": 20,
+				"z": 75
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "火炬4",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/火炬.item"
+		},
+		{
+			"position": {
+				"x": -60,
+				"y": -18,
+				"z": 75
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "火炬5",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/火炬.item"
+		},
+		{
+			"position": {
+				"x": -60,
+				"y": -55,
+				"z": 75
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "火炬6",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/火炬.item"
 		}
 	],
 	"zfog": {

@@ -35,6 +35,7 @@ class Position{
         this.p = p;
         this.op = {x:p.x,y:p.y,z:p.z}; //老的位置
         this.item = item;
+        this.item.node.position.set(p.x,p.y,p.z);
     }
     reset(){
         this.op = {x:this.p.x,y:this.p.y,z:this.p.z};
@@ -44,33 +45,33 @@ class Position{
     }
     set x(v){
         this.p.x = v;
-        if(this.item.curMesh)this.item.curMesh.position.x = v;
+        this.item.node.position.x = v;
     }
     get y(){
         return this.p.y;
     }
     set y(v){
         this.p.y = v;
-        if(this.item.curMesh)this.item.curMesh.position.y = v;
+        this.item.node.position.y = v;
     }
     get z(){
         return this.p.z;
     }
     set z(v){
         this.p.z = v;
-        if(this.item.curMesh)this.item.curMesh.position.z = v;
+        this.item.node.position.z = v;
     }
     set(x,y,z){
         this.p.x = x;
         this.p.y = y;
         this.p.z = z;
-        if(this.item.curMesh)this.item.curMesh.position.set(x,y,z);
+        this.item.node.position.set(x,y,z);
     }
     add(x,y,z){
         this.p.x += x;
         this.p.y += y;
         this.p.z += z;
-        if(this.item.curMesh)this.item.curMesh.position.set(this.p.x,this.p.y,this.p.z);
+        this.item.node.position.set(this.p.x,this.p.y,this.p.z);
     }
     get(){
         return this.p;
@@ -81,33 +82,34 @@ class Rotation{
     constructor(p,item){
         this.p = p;
         this.item = item;
+        this.item.node.rotation.set(p.x,p.y,p.z);
     }
     get x(){
         return this.p.x;
     }
     set x(v){
         this.p.x = v;
-        if(this.item.curMesh)this.item.curMesh.rotation.x = v;
+        this.item.node.rotation.x = v;
     }
     get y(){
         return this.p.y;
     }
     set y(v){
         this.p.y = v;
-        if(this.item.curMesh)this.item.curMesh.rotation.y = v;
+        this.item.node.rotation.y = v;
     }
     get z(){
         return this.p.z;
     }
     set z(v){
         this.p.z = v;
-        if(this.item.curMesh)this.item.curMesh.rotation.z = v;
+        this.item.node.rotation.z = v;
     }   
     set(x,y,z){
         this.p.x = x;
         this.p.y = y;
         this.p.z = z;
-        if(this.item.curMesh)this.item.curMesh.rotation.set(x,y,z);
+        this.item.node.rotation.set(x,y,z);
     } 
     get(){
         return this.p;
@@ -124,6 +126,8 @@ class Item{
         //默认每个Item有一个声音
         this.audio = new THREE.Audio(this.sceneManager.audioListener);
         this.collisionWithGround = true; //默认都可以与地面发生碰撞
+        this.node = new THREE.Group();
+        this.scene.add(this.node);
         this.fromJson(json);
     }
     removeSelf(){
@@ -148,6 +152,8 @@ class Item{
         this.loadedDoAction = 'idle';
         this.state = 'loading';
 
+        this.node.castShadow = this._castShadow;
+        this.node.receiveShadow = this._receiveShadow;
         let load = ()=>{
             VoxManager.loadVox([this.file],(iserr)=>{
                 if(!iserr){
@@ -177,6 +183,8 @@ class Item{
                             this.mesh[i].castShadow = this._castShadow;
                             this.mesh[i].receiveShadow = this._receiveShadow;
                         }
+                        this.mesh[i].visible = false;
+                        this.node.add(this.mesh[i]);
                     }
                     this.curDim = this.vox.getModelSize(0); //给以默认尺寸
                     this.doAction(this.loadedDoAction);
@@ -334,7 +342,7 @@ class Item{
     meshFrame(i){
         if(i < this.mesh.length && i >= 0){
             if(this.curMesh !== this.mesh[i]){
-                if(this.curMesh)this.scene.remove(this.curMesh); //remove old
+                if(this.curMesh)this.curMesh.visible = false;
                 this.curMesh = this.mesh[i];
                 this.curDim = this.vox.getModelSize(i);
                 if(this.water){
@@ -344,9 +352,7 @@ class Item{
                 }else{
                     this.curVox = this.vox.getModelVolume(i);
                 }
-                this.scene.add(this.curMesh);
-                this.curMesh.position.set(this.position.x,this.position.y,this.position.z);
-                this.curMesh.rotation.set(this.rotation.x,this.rotation.y,this.rotation.z);
+                this.curMesh.visible = true;
             }
         }else{
             log(`Item '${this.name}' action '${i}', action sequece out of range`);
@@ -376,16 +382,10 @@ class Item{
         if(this.live)this.live('update',dt);
     }
     get visible(){
-        return this._visible;
+        return this.node.visible;
     }
     set visible(b){
-        if(!b){
-            if(this.curMesh){
-                this.scene.remove(this.curMesh);
-                this.curMesh = null;
-            }
-        }
-        this._visible = b;
+        this.node.visible = b;
     }
     get castShadow(){
         return this._castShadow;
@@ -393,6 +393,7 @@ class Item{
     set castShadow(value){
         if(this._castShadow!=value){
             this._castShadow = value;
+            this.node.castShadow = this._castShadow;            
             if(this.mesh){
                 for(let i=0;i<this.mesh.length;i++){
                     this.mesh[i].castShadow = value;
@@ -411,6 +412,7 @@ class Item{
     set receiveShadow(value){
         if(this._receiveShadow!=value){
             this._receiveShadow = value;
+            this.node.receiveShadow = this._receiveShadow;
             if(this.mesh){
                 for(let i=0;i<this.mesh.length;i++){
                     this.mesh[i].receiveShadow = value;
@@ -426,7 +428,6 @@ class Item{
     destroy(){
         if(this.curMesh){
             if(this.live)this.live('release');
-            this.scene.remove(this.curMesh);
             this.curMesh = null;
             this.curAction = null;
             this.actions = null;
@@ -434,6 +435,10 @@ class Item{
             this.live = null;
             this.mesh = null;
         }
+        if(this.node){
+            this.scene.remove(this.node);
+            this.node = null;
+        }        
     }
     /**
      * 当物体开始下落或者着地会被调用

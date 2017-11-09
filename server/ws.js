@@ -66,8 +66,10 @@ function remove(ws){
                 }
             }
             if(clss.length>0){//通知离线
-                for(let c of clss){
-                    sendMsg(c.ws,{event:'exit',uid:o.uid,cls:o.cls,name:o.name,lv:o.lv});
+                if(o){
+                    for(let c of clss){
+                        sendMsg(c.ws,{event:'exit',uid:o.uid,cls:o.cls,name:o.name,lv:o.lv});
+                    }
                 }
             }else{
                 delete liveUsers[cls]; //都离线了删除班级表

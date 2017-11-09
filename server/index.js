@@ -48,14 +48,18 @@ router.post('/save',function(req,res){
   let filename = config.upload+req.query['file'];
 
   let json = req.body;
-  let jsonStr = JSON.stringify(json,null,'\t');
-  fs.writeFile(filename,jsonStr,(err)=>{
-    if(err){
-      res.json({result:err.toString()});
-    }else{
-      res.json({result:'ok'});
-    }
-  });
+  try{
+    let jsonStr = JSON.stringify(json,null,'\t');
+    fs.writeFile(filename,jsonStr,(err)=>{
+      if(err){
+        res.json({result:err.toString()});
+      }else{
+        res.json({result:'ok'});
+      }
+    });
+  }catch(e){
+    res.json({result:e.toString()});
+  }
 });
 
 /**
@@ -69,7 +73,11 @@ router.get('/load',function(req,res){
       res.json({result:err.toString()});
     }else{
       let s = data.toString();
-      res.json({result:'ok',content:JSON.parse(s)});
+      try{
+        res.json({result:'ok',content:JSON.parse(s)});
+      }catch(e){
+        res.json({result:e.toString()});
+      }
     }
   });
 });

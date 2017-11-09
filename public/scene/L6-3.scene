@@ -4,14 +4,14 @@
 	"bgcolor": 0,
 	"camera": {
 		"position": {
-			"x": 205.53357656574912,
-			"y": -219.3782036525065,
-			"z": 191.81032772301364
+			"x": 195.2440222786345,
+			"y": -214.09555281665337,
+			"z": 182.46817035406474
 		},
 		"rotation": {
-			"x": 1.1117747335203907,
+			"x": 1.1280644732056724,
 			"y": 0,
-			"z": 0.7667813180428451
+			"z": 0.7440920377669193
 		}
 	},
 	"material": {
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 33,
 					"curIndex": 0
 				}
 			],
@@ -184,7 +184,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 396.7517362218704
+				"z": 1612.048579929015
 			},
 			"name": "宝石",
 			"visible": true,
@@ -216,7 +216,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/木桩.item"
 		},
 		{
@@ -238,8 +238,118 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/木桩.item"
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": -20,
+				"z": 24
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "火盆",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/火盆.item"
+		},
+		{
+			"position": {
+				"x": 34,
+				"y": 60,
+				"z": 72
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "火炬",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/火炬.item"
+		},
+		{
+			"position": {
+				"x": -62,
+				"y": -54,
+				"z": 72
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "火炬1",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/火炬.item"
+		},
+		{
+			"position": {
+				"x": -62,
+				"y": -18,
+				"z": 72
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "火炬2",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/火炬.item"
+		},
+		{
+			"position": {
+				"x": -62,
+				"y": 18,
+				"z": 72
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "火炬3",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"template": "scene/item/火炬.item"
 		}
 	],
 	"zfog": {

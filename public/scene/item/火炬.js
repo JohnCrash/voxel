@@ -13,27 +13,27 @@ var spe = {
 			value : 1
 		},
 		position : {
-			value : [0,0,3],
-			spread : [6,6,3]
+			value : [0,0,7.5],
+			spread : [4,4,3]
 		},
 		acceleration : {
-			value : [0,0,3],
-			spread : [0,0,3]
+			value : [0,0,2],
+			spread : [2,2,2]
 		},
 		velocity : {
 			value : [0,0,2],
-			spread : [0,0,2]
+			spread : [2,2,2]
 		},
 		color : ["#a52a2a"],
 		size: {
-			value : 10,
-			spread : 9
+			value : 9,
+			spread : 8
 		},
 		particleCount :300
 	}
 };
 
-regItemEvent('火盆',
+regItemEvent('火炬',
 function(event,dt){
 	switch(event){
 		case 'init':

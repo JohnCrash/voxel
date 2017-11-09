@@ -6,6 +6,7 @@ import {MessageBox} from './ui/messagebox';
 import 'whatwg-fetch';
 import {Global} from './global';
 import MarkdownElement from './ui/markdownelement';
+import {ljshell} from './ljshell';
 
 class Login extends Component{
     constructor(props){
@@ -84,23 +85,25 @@ class Login extends Component{
             this.setState({exitButton:true,msg:e.toString()});
         }.bind(this));
     }
-    componentDidMount(){
-        let {uid,uname,cookie} = this.props;
-        this.login(uid,uname,cookie);
+    ljinit(){
+        ljshell.init((b,e)=>{
+            if(b){
+                let userinfo = ljshell.getUserInfo();
+                let nickname = ljshell.getNickName();
+                this.login();
+            }else{
+                this.setState({exitButton:false,msg:e});
+            }
+        });
     }
-    componentWillReceiveProps(nextProps){
-        let {uid} = this.props;
-        if(uid!==nextProps.uid){
-            let {uid,uname,cookie} = nextProps;
-            this.login(uid,uname,cookie);
-        }
+    componentDidMount(){
+        this.ljinit();
     }
     quitApp(){
-        native.quit();
+        ljshell.quit();
     }
     tryAgin(){
-        let {uid,uname,cookie} = this.props;
-        this.login(uid,uname,cookie);
+        this.ljinit();
     }
     render(){
         return <Dialog open={true}
