@@ -4,6 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
 import {Global} from '../global';
 import BlocklyInterface from '../vox/blocklyinterface';
+import CircularProgress from 'material-ui/CircularProgress';
 
 /**
  * type
@@ -20,7 +21,9 @@ class MessageBox extends Component{
             content:'',
             style:null,
             snackbarOpen:false,
-            snackbarMsg:''
+            snackbarMsg:'',
+            openLoading:false,
+            contentLoading:''
             };
     }
     static globalNode = null;
@@ -57,10 +60,18 @@ class MessageBox extends Component{
             });
         }
     }
+    static showLoading(msg){
+        MessageBox.globalNode.setState({openLoading: true,contentLoading:msg});
+    }
+    static closeLoading(){
+        setTimeout(function() {
+            MessageBox.globalNode.setState({openLoading: false});
+        },1);
+    }
     handleClose(result){
         if(!MessageBox.globalG)Global.pop();
         BlocklyInterface.resume();
-        this.setState({open: false,type:'',title:'',content:''});
+        MessageBox.globalNode.setState({open: false,type:'',title:'',content:''});
         if(MessageBox.globalCB){
             MessageBox.globalCB(result);
             MessageBox.globalCB = null;
@@ -72,7 +83,7 @@ class MessageBox extends Component{
         }
     }
     handleRequestClose(){
-        this.setState({
+        MessageBox.globalNode.setState({
             snackbarOpen: false,
         });
     }
@@ -118,6 +129,15 @@ class MessageBox extends Component{
             onRequestClose={this.handleClose.bind(this,'close')}
             >
             {this.state.content}
+            </Dialog>
+            <Dialog
+                modal={true}
+                open={this.state.openLoading}
+            >
+                <div style={{textAlign:"center"}}>
+                    <CircularProgress/><br/>
+                    <span style={{fontSize:"large",margin:"20px"}}>{this.state.contentLoading}</span>
+                </div>
             </Dialog>
             <Snackbar open={this.state.snackbarOpen}
                 message={this.state.snackbarMsg}

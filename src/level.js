@@ -44,6 +44,10 @@ function parserXML(id,text){
         });
 }
 
+const LOADING = 'loading';
+const READY = 'ready';
+const ERROR = 'error';
+
 class Level extends Component{
     constructor(props){
         super(props);
@@ -125,6 +129,8 @@ class Level extends Component{
         });
     } 
     PlayPause(){
+        if(this._ready!==READY)return;
+
         if(this.needReset){
             this.Reset();
             this.needReset = false;
@@ -149,6 +155,8 @@ class Level extends Component{
         this.setState({playPause:!this.state.playPause});
     }
     Step(){
+        if(this._ready!==READY)return;
+
         if(this.needReset){
             this.Reset();
             this.needReset = false;
@@ -172,7 +180,9 @@ class Level extends Component{
                     this.drawer.onReturnMain();
                 }
             },undefined,true);
-        },true);     
+        },true);
+        this._ready = LOADING;
+        MessageBox.showLoading('正在加载请稍后...');
         this.loadTest(props.level);
         this.btms = Date.now();
         this.btpms = this.btms;
@@ -180,6 +190,8 @@ class Level extends Component{
             TextManager.load(`scene/${props.level}.md`,(iserr,text)=>{
                 //如果voxview ready
                 this.voxview.readyPromise.then(()=>{
+                    this._ready = READY;
+                    MessageBox.closeLoading();
                     setTimeout(()=>{
                         MessageBox.show('ok',undefined,<MarkdownElement text={text}/>,(result)=>{
                             console.log(result);
@@ -188,7 +200,7 @@ class Level extends Component{
                 });
             });
         }).catch((err)=>{
-
+            this._ready = ERROR;
         });
     }
     componentWillReceiveProps(nextProps){

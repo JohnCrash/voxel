@@ -42,7 +42,7 @@ class _ljshell{
             });
         }else{
             this._userInfo = null;
-            cb(false,"没用从乐教乐学大厅进入.");
+            cb(false,`没有从乐教乐学大厅进入. (${window.ljAppObject})`);
         }
     }
     getUserInfo(){

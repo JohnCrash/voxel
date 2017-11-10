@@ -10,22 +10,28 @@ var config = require('./config');
 /**
  * 使用动态编译javascript
  */
-router.get(/.*\.js$/,function(req,res){
-  var stream = browserify(`src${req.url}`,{debug:true})
-      .transform("babelify", {presets: ["es2015","es2016","es2017","react","stage-0"]})
-      .bundle();
-  stream.pipe(res);
-  stream.on('error',(err)=>{
-    /**
-     * javascript在编译的时候发生了错误,这里返回一个报告错误的javascript代码
-     * 这段代码负责在浏览器上创建一个节点并显示错误信息
-     */
-    var msg = err.toString().replace(/\\/g,"/");
-    msg = msg.replace(/"/g,"&quot;");
-    console.log(msg);
-    if(!res.headersSent) //这里仅展示一个错误信息
-      res.send(`document.body.innerHTML = "<h2>${msg}</h2>";`);
-  });
+router.get(/.*\.js$/,function(req,res,next){
+  if(typeof browserify === 'function'){
+    var stream = browserify(`src${req.url}`,{debug:true})
+        .transform("babelify", {presets: ["es2015","es2016","es2017","react","stage-0"]})
+        .bundle();
+    stream.pipe(res);
+    stream.on('error',(err)=>{
+      /**
+       * javascript在编译的时候发生了错误,这里返回一个报告错误的javascript代码
+       * 这段代码负责在浏览器上创建一个节点并显示错误信息
+       */
+      var msg = err.toString().replace(/\\/g,"/");
+      msg = msg.replace(/"/g,"&quot;");
+      console.log(msg);
+      if(!res.headersSent) //这里仅展示一个错误信息
+        res.send(`document.body.innerHTML = "<h2>${msg}</h2>";`);
+    });
+  }else if(next){
+    next();
+  }else{
+    res.send('error');
+  }
 });
 
 /**

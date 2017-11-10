@@ -136,7 +136,7 @@ class Tops extends Component{
                 this.tops = [];
             }
             this.cls = json.cls||[];
-            console.log(json);
+            //console.log(json);
             this.setState({loading:false});
         });
     }

@@ -23,6 +23,17 @@ function sql(query){
     return pool.request().query(query);
   });
 }
+
+function setCookie(res,cookie){
+  let key,value;
+  cookie.replace(/(.*)=(.*)/,($0,k,v)=>{
+    key = k;
+    value = v;
+    return $0;
+  });
+  if(key && value)
+    res.cookie(key,value);
+}
 /**
  * cookie => UserInfo
  */
@@ -31,8 +42,9 @@ router.use(function(req,res,next){
 
   if(req.body.cookie){
     cookie = req.body.cookie;
+    setCookie(res,cookie);
   }else{
-    cookie = "sc1="+req.cookie.sc1;
+    cookie = "sc1="+req.cookies.sc1;
   }
   if(cookie){
     sql(`select * from UserInfo where cookie='${cookie}'`).then((result)=>{
@@ -53,43 +65,6 @@ router.use(function(req,res,next){
     else next();
   }
 });
-
-/**
- * uid => UserInfo
- */
-/*
-router.use(function(req,res,next){
-  let uid = req.body.uid;
-  if(uid){
-    sql(`select * from UserInfo where uid=${uid}`).then((result)=>{
-      req.UserInfo = result.recordset[0];
-      if(req.UserInfo){
-        next();
-      }else{
-        if(req.url!=='/login')
-          throw '没有找到用户';
-        next();
-      }
-    }).catch((err)=>{
-      res.json({result:err});
-    });
-  }else{
-    if(req.url!=='/login')
-      res.json({result:'请登录再进行游戏'});
-    else next();
-  }
-});
-*/
-function setCookie(res,cookie){
-  let key,value;
-  cookie.replace(/(.*)=(.*)/,($0,k,v)=>{
-    key = k;
-    value = v;
-    return $0;
-  });
-  if(key && value)
-    res.cookie(key,value);
-}
 
 /**
  * 从'http://api.lejiaolexue.com/rest/userinfo/simple/current'拉取用户信息
@@ -191,7 +166,6 @@ function login(req,res){
           if(cookie!==dbCookie){
             sql(`update UserInfo set cookie='${cookie}' where uid=${uid}`);
           }          
-          setCookie(res,cookie);
           responeseLogin(req,res);
         }else{
           //这里插入一个新的用户
@@ -201,7 +175,6 @@ function login(req,res){
               if(zone){
                 let {zone_id,school_id,role} = zone;
                 sql(`insert into UserInfo (uid,cookie,lv,UserName,lastlogin,cls,school,role) values (${uid},'${cookie}',0,N'${uname}',getdate(),${zone_id},${school_id},${role})`).then((result)=>{
-                  setCookie(res,cookie);
                   responeseLogin(req,res);
                 }).catch((err)=>{
                   res.send({result:err});
