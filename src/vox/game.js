@@ -63,7 +63,7 @@ function Game(opts){
             }else{
                 width = window.innerWidth;
                 height = window.innerHeight;
-            }            
+            }
             this.setSize(width,height);
         }.bind(this);
     }
@@ -86,8 +86,8 @@ inherits(Game,EventEmitter);
  * 改变尺寸
  */
 Game.prototype.setSize = function(w,h){
-    this.renderer.domElement.style.width = w+'px';
-    this.renderer.domElement.style.height = h+'px';
+    //this.renderer.domElement.style.width = w+'px';
+    //this.renderer.domElement.style.height = h+'px';
     this.camera.aspect = w/h;
     this.camera.updateProjectionMatrix();
     if(this.opts.maxFrameSize && w > this.opts.maxFrameSize){

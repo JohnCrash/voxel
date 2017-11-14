@@ -17,7 +17,19 @@ class _Global_ extends EventEmitter{
         this._muteSound = true;
         this._userName = 'None';
         this._ui = [];
-        
+
+        document.addEventListener("backbutton", ()=>{
+            this.callTop();
+        }, false);
+        this.push(()=>{
+            MessageBox.show("okcancel","游戏退出","你确定要退出游戏吗？",(result)=>{
+                if(result==='ok'){
+                    if(window.ljAppObject)
+                        window.ljAppObject.back();
+                }
+            });
+        },'game');
+        /*
         if(window.native && native.quit){
             native.onBack = ()=>{
                 this.callTop();
@@ -31,7 +43,7 @@ class _Global_ extends EventEmitter{
                     }
                 });
             },'game');
-        }        
+        }*/    
     }
     /**
      * 当有加载界面时,加载界面提供这几个函数

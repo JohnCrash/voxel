@@ -226,10 +226,11 @@ class Tops extends Component{
                     <TableRowColumn  style={FixedWidthStyle}>{i+1}</TableRowColumn>
                     <TableRowColumn  style={FixedWidthStyle}><span style={{verticalAlign:"top"}}>{this.tops[i].blocks}×</span><img src="media/title-beta.png" height="22px" /></TableRowColumn>
                     <TableRowColumn  style={FixedWidthStyle}>{this.tops[i].count}</TableRowColumn>
-                    <TableRowColumn>{clsblockMap(this.tops[i].blocks)}</TableRowColumn>
+                    <TableRowColumn style={{width:"320px"}}><div>{clsblockMap(this.tops[i].blocks)}</div></TableRowColumn>
                 </TableRow>);
             }
         }
+        //textOverflow : "unset"
         let dict = {
             level_name:level,
             best_block_num,
@@ -245,8 +246,7 @@ class Tops extends Component{
             contentStyle={Global.getPlatfrom()!=="windows"?{width:"95%"}:undefined}>
             <MarkdownElement text={md(this.title,dict)}/>
             <MarkdownElement file={`scene/${level}-top.md`}/>
-            {loading?<LinearProgress />:
-            <Table>
+            {loading?<LinearProgress />:<Table bodyStyle={{overflowX:"auto"}}>
                 <TableHeader style={{height:"24px"}} displaySelectAll={false} adjustForCheckbox={false}>
                     <TableRow style={{height:"24px"}}>
                         <TableHeaderColumn style={FixedHeaderStyle}>排名</TableHeaderColumn>
@@ -255,7 +255,7 @@ class Tops extends Component{
                         <TableHeaderColumn style={FixedHeaderStyle2}>并列</TableHeaderColumn>
                     </TableRow>
                 </TableHeader>
-                <TableBody displayRowCheckbox={false} >
+                <TableBody displayRowCheckbox={false}>
                     {tops}
                 </TableBody>
             </Table>}

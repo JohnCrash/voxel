@@ -114,7 +114,7 @@ class VoxView extends Component{
     }
     render(){
         return <div style={{width:"100%",height:"100%"}}>
-                <canvas ref={canvas=>this.canvas=canvas}></canvas>
+                <canvas ref={canvas=>this.canvas=canvas} style={{width:"100%",height:"100%"}}></canvas>
                 <div style={{position:"absolute",left:"0",right:"0",top:"0",bottom:'0',justifyContent:'center',
                     display:this.state.loading?"flex":"none",
                     flexDirection:"column",alignItems:"center"}}>

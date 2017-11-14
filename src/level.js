@@ -60,6 +60,7 @@ class Level extends Component{
             isDebug:Global.isDebug(),
             landscape:Global.getLayout()==="landscape",
             blocklytoolbox:Global.getPlatfrom()==='windows'?Global.getBlocklyToolbar():"close", //展开blockly工具条
+            switchSize:false,
         }
     }
     componentDidMount(){
@@ -367,15 +368,29 @@ class Level extends Component{
             <Tops ref={ref=>this.Tops=ref} level={level}/>
         </div>;
     }
+    switchSize(){
+        //当点击voxview 进行屏幕重新布局
+        if(this._ready === READY){
+            this.setState({switchSize:!this.state.switchSize},()=>{
+                if(this.voxview.game)
+                    this.voxview.game.setSize(this.voxview.canvas.clientWidth,this.voxview.canvas.clientHeight);
+                //FIXBUG : blockview svgGroup_的父节点没有指定高度
+                if(this.blockview && this.blockview.workspace && this.blockview.workspace.svgGroup_){
+                    let p = this.blockview.workspace.svgGroup_.parentNode;
+                    p.style = "height:100%";
+                }
+            });
+        }
+    }
     //竖屏
     portrait(){
-        let {levelDesc,curSelectTest,openTops,blocklytoolbox} = this.state;
+        let {levelDesc,curSelectTest,openTops,blocklytoolbox,switchSize} = this.state;
         let {level} = this.props;
         return <div>
-            <div style={{position:"absolute",left:"0px",top:"0px",right:"0px",bottom:"60%"}}>
-                <VoxView file={level} ref={ref=>this.voxview=ref} layout="portrait"/>
+            <div style={{position:"absolute",left:"0px",top:"0px",right:"0px",bottom:switchSize?"40%":"60%"}} onClick={this.switchSize.bind(this)} >
+                <VoxView file={level} ref={ref=>this.voxview=ref} layout="portrait" style={{width:"100%",height:"100%"}}/>
             </div>
-            <div style={{position:"absolute",left:"0px",top:"40%",right:"0px",bottom:"0px"}}>
+            <div style={{position:"absolute",left:"0px",top:switchSize?"60%":"40%",right:"0px",bottom:"0px"}}>
                 {this.toolbarEle()}
                 <div style={{position:"absolute",left:"0px",right:"0px",top:"56px",bottom:"0px"}}>
                 <BlockView ref={ref=>this.blockview=ref} 

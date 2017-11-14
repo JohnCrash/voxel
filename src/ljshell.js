@@ -34,6 +34,18 @@ class _ljshell{
     exit(){
         this.lj.back();
     }
+    pay(t,cb){
+        try{
+            this.lj.pay(function(msg,status){
+                if(status)
+                    if(cb)cb(true);
+                else
+                    if(cb)cb(false,msg);
+            },t);
+        }catch(e){
+            if(cb)cb(false,"不能正确支付金币，请从乐教乐学大厅进入游戏.");
+        }
+    }
 }
 
 export let ljshell = new _ljshell();
