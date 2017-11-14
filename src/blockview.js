@@ -6,11 +6,11 @@ import {Global} from './global';
 import en from './lang/en';
 import zh from './lang/zh';
 import IconButton from 'material-ui/IconButton';
-//import CreateIcon from 'material-ui/svg-icons/action/build';
 import Dialog from 'material-ui/Dialog';
 import IconAdd from 'material-ui/svg-icons/content/add';
 import IconDec from 'material-ui/svg-icons/content/remove';
 import FlatButton from 'material-ui/FlatButton';
+//import CreateIcon from 'material-ui/svg-icons/action/build';
 import {CreateIcon} from './ui/myicon';
 import cloneDeep from 'clone-deep';
 
@@ -215,7 +215,7 @@ class BlockView extends Component{
             BlocklyInterface.resume();
             endDrag.call(this,currentDragDeltaXY);
         }
-        if(this.toolboxMode!=="expand"){            
+        if(this.toolboxMode!=="expand"){
             let trashcan = this.workspace.trashcan;
             _this.setState({tbopen:true});
             if(trashcan)
@@ -250,10 +250,17 @@ class BlockView extends Component{
             let metrics = this.workspace.getMetrics();
             let w = metrics.contentWidth - metrics.viewWidth;
             let h = metrics.contentHeight - metrics.viewHeight;
+            //console.log(metrics);
+            //console.log(`w : ${w},h : ${h}`);
             this.workspace.scrollbar.set(w-4,h-12);
+            //console.log(this.workspace.scrollbar);
             this.workspace.scrollbar.setContainerVisible(false);
             this.workspace.updateScreenCalculationsIfScrolled();
             this.workspace.deleteAreaToolbox_ = null;
+
+            //debug
+            metrics = this.workspace.getMetrics();
+            this.workspace.scrollbar.set(w-4-(metrics.viewLeft - 12),h-12-(metrics.viewTop - 1));          
         }else{//恢复挂钩
             //拖放优化，当开始拖放的时候暂停刷新
             Blockly.BlockDragger.prototype.startBlockDrag = function(xy){
@@ -297,7 +304,12 @@ class BlockView extends Component{
     }
     toXML(){
         let dom = Blockly.Xml.workspaceToDom(this.workspace);
-        filterDom(dom);
+        try{
+            filterDom(dom);
+        }
+        catch(e){
+            console.error(e);
+        }
         return splitXML(Blockly.Xml.domToText(dom));
     }
     loadXML(xml){
@@ -449,7 +461,7 @@ class BlockView extends Component{
                     onClick={this.openFlyOut.bind(this)}
                     iconStyle={{width:48,height:48,color:"#BDBDBD"}}
                     style={{display:this.state.tbopen?"inline-block":"none",
-                    position:"absolute",
+                    position:"absolute",zIndex:100,
                     right:"12px",bottom:"12px",width:96,height:96,padding:24}}>
                     <CreateIcon />
                 </IconButton>:undefined}

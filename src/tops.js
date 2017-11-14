@@ -78,17 +78,19 @@ class Tops extends Component{
             seg_begin:info.next_begin,
             seg_end:info.next_end,
             need_unlock:info.next_need_unlock
-        };        
+        };
+        Global.pop();  
         switch(result){
             case 'exit':
-                //location.href='/main/'+info.next;
+                Global.popName('level');
                 location.href='#/main';
                 break;
             case 'agin':
                 if(this._isagin)this._isagin();
                 break;
             case 'next':
-                if(p.need_unlock){
+                Global.popName('level');
+                if(p.need_unlock && info.nextName && info.next < info.closed && info.next < info.total){
                     this.unlock.open(p,(b)=>{
                         if(b){
                             this.gonext(info);
@@ -107,13 +109,24 @@ class Tops extends Component{
         if(info && info.nextName && info.next < info.closed && info.next < info.total){
             location.href=`#/level/${info.nextName}`;
         }else{//打通了全部
-            location.href='#/main';
+            //提示通关了
+            TextManager.load('scene/ui/completed.md',(iserr,text)=>{
+                if(iserr)
+                    MessageBox.show("ok",undefined,<MarkdownElement text={text}/>,(result)=>{
+                        location.href='#/main';
+                    });
+                else location.href='#/main';
+            });            
+            
         }
     }
     open(blocks,method,total,each,cb){
         this._isagin = cb;
         this.initText();
         this.setState({open: true,loading:true});
+        Global.push(()=>{
+            this.handleAction('agin');
+        });
         let info = Global.appGetLevelInfo(this.props.level);   
         if(!info)return; 
         Global.passLevel(info.next);

@@ -1,23 +1,3 @@
-/**
- * NAVTIVE 界面
- */
-if(window.native){
-    if(native.quit){
-        native.onBack = function(){
-            Global.callTop();
-        }
-        if(native.registerOnBack)
-            native.registerOnBack(true);
-        Global.push(()=>{
-            MessageBox.show("okcancel","游戏退出","你确定要退出游戏吗？",(result)=>{
-                if(result==='ok'){
-                    native.quit();
-                }
-            },undefined,true);
-        },true);
-    }
-}
-
 class _ljshell{
     constructor(){
         this.lj = window.ljAppObject;
@@ -30,7 +10,7 @@ class _ljshell{
             this.lj.userinfo((msg,status)=>{
                 if(status){
                     try{
-                        this._userInfo = JSON.stringify(msg);
+                        this._userInfo = JSON.parse(msg);
                     }catch(e){
                         cb(false,"userinfo "+e.toString());
                     }
@@ -42,7 +22,7 @@ class _ljshell{
             });
         }else{
             this._userInfo = null;
-            cb(false,`没有从乐教乐学大厅进入. (${window.ljAppObject})`);
+            cb(false,`没有从乐教乐学大厅进入. (${window.ljAppObject}),(${window.cordova})`);
         }
     }
     getUserInfo(){

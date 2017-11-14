@@ -629,7 +629,11 @@ class Item{
      * 向blockly发送事件
      */
     blocklyEvent(event){
-        BlocklyInterface.blocklyEvent(event);
+        try{
+            BlocklyInterface.blocklyEvent(event);
+        }catch(e){
+            console.log(e);
+        }
     }
     /**
      * 播放声音

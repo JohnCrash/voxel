@@ -6,10 +6,14 @@ export default function trans(txt,dict){
         else
             s += `var ${key} = ${dict[key]};\n`;
     }
-    let exestr = s+"`"+txt+"`";
+    let exestr = s+txt;
     try{
-        return eval(exestr);
+        //console.log(exestr);
+        let r =  eval(exestr);
+        //console.log(r);
+        return r;
     }catch(e){
+        //console.log('error : '+e);
         return e.toString();
     }
 };

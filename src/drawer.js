@@ -30,11 +30,12 @@ class MainDrawer extends Component{
     }
     onReturnMain(){
         console.log('exit..');
+        Global.popName('level');
+        Global.pop();
         if(this.motifyConfig){
             this.motifyConfig = false;
             Global.pushConfig();
         }
-        Global.pop();
         if(this.props.loc==="game"){
             location.href='#/main';
         }else{
@@ -42,7 +43,19 @@ class MainDrawer extends Component{
             //退出游戏
         }
     }
+    handleClose(open){
+        Global.pop();
+        BlocklyInterface.resume();
+        this.setState({openMenu:open});
+        if(this.motifyConfig){
+            this.motifyConfig = false;
+            Global.pushConfig();
+        }
+    }
     open(b){
+        Global.push(()=>{
+            this.handleClose(false);
+        });
         BlocklyInterface.pause();
         this.setState({openMenu:b,
             music:Global.isMusic(),
@@ -110,14 +123,7 @@ class MainDrawer extends Component{
             <MenuItem key='drawerdebug' primaryText="关卡调试"  onClick={this.onDebug.bind(this)} checked={this.state.isdebug}/>,
             <MenuItem key='drawerlogout' primaryText={`登出(${Global.getUserName()})`} onClick={this.onLogout.bind(this)}/> 
         ];
-        return <div><Drawer docked={false} open={openMenu} onRequestChange={(open) => {
-                BlocklyInterface.resume();
-                this.setState({openMenu:open});
-                if(this.motifyConfig){
-                    this.motifyConfig = false;
-                    Global.pushConfig();
-                }
-            }}>
+        return <div><Drawer docked={false} open={openMenu} onRequestChange={this.handleClose.bind(this)}>
             <MenuItem primaryText={loc==="game"?"返回选择关卡":"退出游戏"} style={{marginBottom:32}} leftIcon={<IconHome /> } onClick={this.onReturnMain.bind(this)} />
             <Toggle label="背影音乐" style={ToggleStyle} defaultToggled={music} onToggle={(e,b)=>{
                 this.setState({music:b});

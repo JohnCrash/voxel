@@ -177,12 +177,13 @@ class Level extends Component{
         Global.push(()=>{
             MessageBox.show("okcancel","游戏退出","你确定要返回主界面吗？",(result)=>{
                 if(result==='ok'){
-                    this.drawer.onReturnMain();
+                    Global.popName('level');
+                    location.href='#/main';
                 }
-            },undefined,true);
-        },true);
+            });
+        },'level');
         this._ready = LOADING;
-        MessageBox.showLoading('正在加载请稍后...');
+//        MessageBox.showLoading('正在加载请稍后...');
         this.loadTest(props.level);
         this.btms = Date.now();
         this.btpms = this.btms;
@@ -191,7 +192,7 @@ class Level extends Component{
                 //如果voxview ready
                 this.voxview.readyPromise.then(()=>{
                     this._ready = READY;
-                    MessageBox.closeLoading();
+//                    MessageBox.closeLoading();
                     setTimeout(()=>{
                         MessageBox.show('ok',undefined,<MarkdownElement text={text}/>,(result)=>{
                             console.log(result);
@@ -395,8 +396,13 @@ class Level extends Component{
     render(){
         if(Global.getMaxPassLevel()===null){
             return <Redirect to='/login' />;
-        }        
-        return this.state.landscape?this.landscape():this.portrait();
+        }
+        //只有在调试模式
+        if(Global.isDebug())
+            return this.state.landscape?this.landscape():this.portrait();
+        else{
+            return window.innerWidth>window.innerHeight?this.landscape():this.portrait();
+        }
     }
 };
 

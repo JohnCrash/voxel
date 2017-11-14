@@ -17,6 +17,21 @@ class _Global_ extends EventEmitter{
         this._muteSound = true;
         this._userName = 'None';
         this._ui = [];
+        
+        if(window.native && native.quit){
+            native.onBack = ()=>{
+                this.callTop();
+            }
+            if(native.registerOnBack)
+                native.registerOnBack(true);            
+            this.push(()=>{
+                MessageBox.show("okcancel","游戏退出","你确定要退出游戏吗？",(result)=>{
+                    if(result==='ok'){
+                        native.quit();
+                    }
+                });
+            },'game');
+        }        
     }
     /**
      * 当有加载界面时,加载界面提供这几个函数
@@ -36,23 +51,40 @@ class _Global_ extends EventEmitter{
     loadingBar(b){
         if(window.loadingProgressBar)loadingProgressBar(b);
     }
-    push(cb,g){
-        console.log('push');
-        this._ui.push({cb,n:!g?1:11});
+    //gname代表全局名称，如果堆中已经有gname将忽略此次压入操作
+    push(cb,gname){
+        if(gname!==undefined){
+            for(let item of this._ui){
+                if(item.ganem === gname)return;
+            }
+        }
+        console.log('push ' + gname);
+        this._ui.push({cb,gname});
     }
-    pop(cb){
-        console.log('pop');
-        this._ui.pop();
+    pop(){
+        let a = this._ui.pop();
+        console.log('pop '+a.gname);
+    }
+    popName(gname){
+        console.log('popName '+gname);
+        if(gname!==undefined){
+            for(let i=0;i< this._ui.length;i++){
+                let item = this._ui[i];
+                if(item.gname === gname){
+                    this._ui.splice(i,1);
+                    console.log('Done popName '+gname);
+                    return;
+                }
+            }
+        }
     }
     callTop(){
-        if(this._ui && this._ui.length>0 && this._ui[this._ui.length-1]){
-            let b = this._ui[this._ui.length-1];
-            if(b.n === 1){
-                b.n = 0;
-                b.cb();
-            }else if(b.n===11){
-                b.cb();
-            }
+        if(this._ui.length>0){
+            let a = this._ui[this._ui.length-1];
+            console.log('callTop '+a.gname);
+            a.cb();
+        }else{
+            console.log('callTop ui.length <= 0');
         }
     }
     isDebug(){

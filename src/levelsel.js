@@ -22,6 +22,7 @@ class LevelSel extends PureComponent{
             title:'',
             current:0,
             openCharacterSelectDialog:false,
+            n:-1,
         };
     }
     onSelectLevel(link,p){
@@ -133,7 +134,7 @@ class LevelSel extends PureComponent{
                         <CardText>{bl}</CardText>                          
                     </Card>;
         });
-        this.setState({title:json.title});
+        this.setState({title:json.title,n:this.level.length});
     }
     load(name,current){
         Global.loadLevelJson(name,(json)=>{
@@ -165,6 +166,7 @@ class LevelSel extends PureComponent{
      */
     getChildContext(){
         let r = Global.getPlatfrom()==="windows"?48:Math.floor((window.innerWidth*0.9-32)/10-12);
+        if(r < 36)r = 36;
         return {
             circleRadius : r
         }
@@ -182,12 +184,23 @@ class LevelSel extends PureComponent{
                 top :'64px'
             }}>
                 <Paper style={{width:"90%",margin:'auto',marginTop:'20px',marginBottom:'20px',maxWidth}}>
-                {this.level}
+                {this.renderLevel}
                 </Paper>
             </div>
             <SelectChar open={this.state.openCharacterSelectDialog} link={this.selectAfterLink}/>
             <Unlock ref={ref=>this.unlock=ref} />
         </div>;
+    }
+    componentWillUpdate(nextProps, nextState){
+        
+    }
+    componentDidUpdate(prevProps, prevState){
+        if(this.state.n >= 0 && this.level){
+            this.renderLevel = this.level.slice(0,this.level.length-this.state.n);
+            setTimeout(()=>{
+                this.setState({n:this.state.n-1});
+            },1);
+        }
     }
 };
 

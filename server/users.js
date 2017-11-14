@@ -24,6 +24,14 @@ function sql(query){
   });
 }
 
+function sqlAction(uid,action){
+  sql(`insert into UserStream (uid,action,date) values (${uid},N'${action}',getdate())`).then(
+      ()=>{}
+  ).catch((e)=>{
+    console.log(e);
+  });
+}
+
 function setCookie(res,cookie){
   let key,value;
   cookie.replace(/(.*)=(.*)/,($0,k,v)=>{
@@ -89,7 +97,8 @@ function pullUserInfo(req,cb){
         if(json.zone&&json.zone[0])
           cb(json.zone[0]);
         else{
-          cb(false,"http://api.lejiaolexue.com/rest/userzone/zone.ashx have not zone[0]");
+          //设置cls = 0 表示没有任何班级，不进行排行
+          cb(false,"请绑定一个班级在进入游戏.");
         }
       }else{
         cb(false,json.msg);
@@ -115,6 +124,8 @@ function responeseLogin(req,res){
     for(let c of clss){
       c.UserName = stripTailSpace(c.UserName);
     }
+    //记录动作
+    sqlAction(uid,'login');
     res.json({
       result:'ok',
       lv,
@@ -252,6 +263,8 @@ router.post('/commit',function(req,res){
         sql(`insert into Level (lv,lname,blocks,try,md5,uid,cls,uname,tms,avgms) values (${lv},'${lname}',${blocks},1,'${md5}',${req.UserInfo.uid},${req.UserInfo.cls},'${req.UserInfo.UserName}',${tms},${avgms})`);
       }
     });
+    //记录动作
+    sqlAction(req.UserInfo.uid,`L${lv}-${blocks}`);
     //Tops是总排行，方法排行，取保留前5
     sql(`select count,blocks from Tops where lname='${lname}'`).then((result)=>{
       let data = result.recordset;
@@ -308,6 +321,8 @@ router.post('/config',function(req,res){
  * 解锁关卡
  */
 router.post('/unlock',function(req,res){
+  //记录动作
+  sqlAction(req.UserInfo.uid,`unlock(${req.body.olv})`);
   sql(`update UserInfo set olv=${req.body.olv} where uid='${req.UserInfo.uid}'`).
   then((result)=>{
     res.json({result:'ok'});

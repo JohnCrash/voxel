@@ -1,5 +1,20 @@
 var WebSocket = require('faye-websocket');
+var config = require('./config');
+var Sql = require('mssql');
 
+function sql(query){
+    return new Sql.ConnectionPool(config.sqlserver).connect().then(pool=>{
+      return pool.request().query(query);
+    });
+}
+
+function sqlAction(uid,action){
+    sql(`insert into UserStream (uid,action,date) values (${uid},N'${action}',getdate())`).then(
+        ()=>{}
+    ).catch((e)=>{
+        console.log(e);
+    });
+}
 //在线的用户
 var liveUsers = {};
 var wsToCls = new WeakMap(); //将ws映射为一个cls
@@ -62,6 +77,7 @@ function remove(ws){
                 if(clss[i] && clss[i].ws===ws){
                     o = clss[i];
                     clss.splice(i,1);
+                    sqlAction(o.uid,'exit');
                     break;
                 }
             }
