@@ -38,14 +38,19 @@ function reciveMsg(event){
  * 加入一个在线用户
  */
 function add(uid,cls,lv,name,ws){
-    if( !liveUsers[cls] )
-        liveUsers[cls] = [];
-    let clss = liveUsers[cls];
-    for(let c of clss){
-        sendMsg(c.ws,{event:'enter',uid,lv,cls,name});
+    if(cls==='0' || cls===0){
+        //忽略cls为0的无班级用户
+        ws.close();
+    }else{
+        if( !liveUsers[cls] )
+            liveUsers[cls] = [];
+        let clss = liveUsers[cls];
+        for(let c of clss){
+            sendMsg(c.ws,{event:'enter',uid,lv,cls,name});
+        }
+        liveUsers[cls].push({uid,cls,lv,name,ws});
+        wsToCls.set(ws,cls);
     }
-    liveUsers[cls].push({uid,cls,lv,name,ws});
-    wsToCls.set(ws,cls);
 }
 /**
  * 在线用户uid的关卡前进了
@@ -109,7 +114,7 @@ function upgrade(request, socket, body){
                                 add(t.uid,t.cls,t.lv,t.name,ws);
                                 break;
                             case 'pass':
-                                    pass(t.uid,t.cls,t.lv,ws);
+                                pass(t.uid,t.cls,t.lv,ws);
                                 break;
                         }
                     }

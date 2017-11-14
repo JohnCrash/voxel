@@ -212,14 +212,27 @@ router.post('/login',function(req,res){
 
 function tops(req,res){
   let lname = req.body.lname;
-  Promise.all([sql(`select blocks,count from Tops where lname='${lname}'`),
-  sql(`select uname,blocks,try,uid from Level where lname='${lname}' and cls='${req.UserInfo.cls}'`)]).then(([data,cls])=>{
-    res.json({result:'ok',
-    tops:data.recordset,
-    cls:cls.recordset});
-  }).catch((err)=>{
-    res.json({result:err});
-  });
+  let cls = req.UserInfo.cls;
+  if(cls==='0' || cls===0){
+    //不进行排名
+    sql(`select blocks,count from Tops where lname='${lname}'`).then((data)=>{
+      res.json({result:'ok',
+        tops:data.recordset,
+        cls:[]});
+    }).catch((err)=>{
+      res.json({result:err});
+    });
+  }else{
+    //正常排名
+    Promise.all([sql(`select blocks,count from Tops where lname='${lname}'`),
+    sql(`select uname,blocks,try,uid from Level where lname='${lname}' and cls='${req.UserInfo.cls}'`)]).then(([data,cls])=>{
+      res.json({result:'ok',
+      tops:data.recordset,
+      cls:cls.recordset});
+    }).catch((err)=>{
+      res.json({result:err});
+    });
+  }
 }
 /**
  * 提交成绩，返回排名情况

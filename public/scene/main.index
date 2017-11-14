@@ -5,34 +5,40 @@
 	"level" : [
 		{
 			"name" : "一、序列",
+			"preview" : "scene/image/1.png",
 			"desc" : "Sequence",
 			"rang" : "1-10"
 		},
 		{
 			"name" : "二、简单循环",
+			"preview" : "scene/image/2.png",
 			"desc" : "Simple Loop",
 			"rang" : "11-20"
 		},
 		{
 			"name" : "三、对象",
+			"preview" : "scene/image/3.png",
 			"desc" : "Objects",
 			"rang" : "21-30"
 		},
 		{
 			"name" : "四、变量",
 			"desc" : "Variable",
+			"preview" : "scene/image/4.png",
 			"rang" : "31-40",
 			"unlock" : "100"
 		},
 		{
 			"name" : "五、条件循环",
 			"desc" : "While / Until",
+			"preview" : "scene/image/5.png",
 			"rang" : "41-50",
 			"unlock" : "100"
 		},
 		{
 			"name" : "六、如果条件",
 			"desc" : "If else",
+			"preview" : "scene/image/6.png",
 			"rang" : "51-60",
 			"unlock" : "100"
 		},	

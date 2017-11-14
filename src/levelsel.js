@@ -131,6 +131,9 @@ class LevelSel extends PureComponent{
             }
             return <Card key={item.name}>
                         <CardHeader avatar={icon} title={item.name} titleColor={titleColor} titleStyle={titleStyle} subtitle={item.desc}/>
+                        <CardMedia>
+                            <img src={item.preview} alt="" />
+                        </CardMedia>
                         <CardText>{bl}</CardText>                          
                     </Card>;
         });
