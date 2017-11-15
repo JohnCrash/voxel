@@ -105,7 +105,7 @@ class MainDrawer extends Component{
     render(){
         let {music,sound,lang,openMenu,landscape,blocklytoolbox} = this.state;
         let {loc} = this.props;
-        let DebugItem = [
+        let DebugItem = Global.isDebug()?[
             <hr key='drawerhr' />,
             <Toggle key='drawerlayout' label="使用竖屏" style={ToggleStyle} defaultToggled={!landscape} onToggle={(e,b)=>{
                 this.setState({landscape:!b});
@@ -122,7 +122,7 @@ class MainDrawer extends Component{
             <MenuItem key='drawerleveldebug' primaryText="关卡调试界面"  onClick={this.onLevelDebug.bind(this)} />,  
             <MenuItem key='drawerdebug' primaryText="关卡调试"  onClick={this.onDebug.bind(this)} checked={this.state.isdebug}/>,
             <MenuItem key='drawerlogout' primaryText={`登出(${Global.getUserName()})`} onClick={this.onLogout.bind(this)}/> 
-        ];
+        ]:[];
         return <div><Drawer docked={false} open={openMenu} onRequestChange={this.handleClose.bind(this)}>
             <MenuItem primaryText={loc==="game"?"返回选择关卡":"退出游戏"} style={{marginBottom:32}} leftIcon={<IconHome /> } onClick={this.onReturnMain.bind(this)} />
             <Toggle label="背影音乐" style={ToggleStyle} defaultToggled={music} onToggle={(e,b)=>{

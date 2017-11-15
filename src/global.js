@@ -18,6 +18,20 @@ class _Global_ extends EventEmitter{
         this._userName = 'None';
         this._ui = [];
 
+        //windows,android,ios
+        try{
+            let plow = navigator.platform.toLocaleLowerCase();
+            console.log('PLATFORM : '+plow);
+            if( plow.match(/win32/) )
+                this._platform = 'windows';
+            else if( plow.match(/android|linux/))
+                this._platform = 'android';
+            else if( plow.match(/ipad|iphone|ios/))
+                this._platform = 'ios';
+            else this._platform = 'unknow';
+        }catch(e){
+            this._platform = 'unknow';
+        }
         document.addEventListener("backbutton", ()=>{
             this.callTop();
         }, false);
@@ -133,7 +147,8 @@ class _Global_ extends EventEmitter{
                 this.muteSound(config.sound);
                 this.setLayout(config.layout);
                 this.setCharacter(config.character);
-                this.setDebugMode(config.debug);
+                if(this._uid===144970||this._uid===25911300)
+                    this.setDebugMode(true);
                 return;
             }
         }
@@ -152,8 +167,7 @@ class _Global_ extends EventEmitter{
             music : this._muteMusic,
             sound : this._muteSound,
             layout : this._layout,
-            character : this._character,
-            debug : this._debug})
+            character : this._character})
         },
         (json)=>{
             if(json.result!=='ok'){
@@ -348,7 +362,7 @@ class _Global_ extends EventEmitter{
         return this._character;
     }
     getPlatfrom(){
-        return window.platfrom;
+        return this._platform;
     }
     /**
      * 设置login信息

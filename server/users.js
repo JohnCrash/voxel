@@ -124,8 +124,9 @@ function responeseLogin(req,res){
     for(let c of clss){
       c.UserName = stripTailSpace(c.UserName);
     }
+    let platform = req.body.platform;
     //记录动作
-    sqlAction(uid,'login');
+    sqlAction(uid,'login '+platform);
     res.json({
       result:'ok',
       lv,

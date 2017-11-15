@@ -72,6 +72,7 @@ class LevelSel extends PureComponent{
             let unlock_gold = item.unlock?Number(item.unlock):0;
             let icon;
             let titleColor;
+            let curSeg = false;
             if(m){
                 let current = Number(cur || 1);
                 stage++;
@@ -99,6 +100,7 @@ class LevelSel extends PureComponent{
                 for(let i=seg_begin;i<=seg_end;i++){
                     let s,link;
                     if(i===current){
+                        curSeg = true;
                         s = 'current';
                         link = `#/level/L${stage}-${i-seg_begin+1}`;
                     }else if(i>=json.closed)
@@ -129,7 +131,7 @@ class LevelSel extends PureComponent{
                         bl.push(<CircleButton key={i} label={i} bob={lvtoid(i)} onClick={this.onSelectLevel.bind(this,link,p)} state={s} />);
                 }
             }
-            return <Card key={item.name}>
+            return <Card key={item.name} onLoad={curSeg?(event)=>{event.target.scrollIntoViewIfNeeded();}:undefined}>
                         <CardHeader avatar={icon} title={item.name} titleColor={titleColor} titleStyle={titleStyle} subtitle={item.desc}/>
                         <CardMedia>
                             <img src={item.preview} alt="" />

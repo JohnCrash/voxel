@@ -36,7 +36,7 @@ class Login extends Component{
             console.log(`${uid} , ${uname} ,${cookie}`);
             Global.setUserInfo(uid,uname,cookie);
         }
-        let data={uid,uname,cookie};
+        let data={uid,uname,cookie,platform:Global.getPlatfrom()};
         fetch('/users/login',{method:'POST',
         credentials: 'same-origin',
         headers: {'Content-Type': 'application/json'},

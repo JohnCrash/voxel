@@ -31,7 +31,7 @@ class Main extends Component{
         this.setState({title:t});
     }
     componentDidMount(){
-        document.title = "学编程";
+        document.title = "乐学编程";
     }
     onMenu(event){
         event.preventDefault();

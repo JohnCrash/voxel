@@ -209,6 +209,7 @@ function initItemBlockly(_this){
 		item.blocklyStop('turn_left');
 		item.currentAction = 'empty';
 		item.rotation.z += Math.PI/2;
+		if(item.liftItem)item.liftItem.rotation.z += Math.PI/2;
 		ItemAction(item,'walk');
 		setTimeout(function(){
 			item.currentAction = '';
@@ -240,6 +241,7 @@ function initItemBlockly(_this){
 		item.blocklyStop('turn_right');
 		item.currentAction = 'empty';
 		item.rotation.z -= Math.PI/2;
+		if(item.liftItem)item.liftItem.rotation.z -= Math.PI/2;
 		ItemAction(item,'walk');
 		setTimeout(function(){
 			item.currentAction = '';
