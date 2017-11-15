@@ -1,5 +1,5 @@
 {
-	"music": "",
+	"music": "scene\\audio\\background\\背景音乐_灵动欢快.ogg",
 	"loop": true,
 	"bgcolor": 56575,
 	"camera": {
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 34,
+					"acc": 0,
 					"curIndex": 0
 				}
 			]
@@ -183,7 +183,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 3.141592653589793
+				"z": 15.601149117726951
 			},
 			"name": "宝石",
 			"visible": true,

@@ -144,6 +144,8 @@ class Level extends Component{
                             MessageBox.show('ok',undefined,<MarkdownElement file={'scene/ui/program_error.md'}/>,(result)=>{});
                         }else if(state === 'nolink'){
                             MessageBox.show('ok',undefined,<MarkdownElement file={'scene/ui/link_error.md'}/>,(result)=>{});
+                        }else if(state==='end'){
+                            Global.playSound('scene/audio/effect/通关失败.ogg');
                         }
                         this.setState({playPause:true});
                         this.needReset = true;
@@ -163,8 +165,12 @@ class Level extends Component{
             this.needReset = false;
         }
         this.blockview.setEndCB((state)=>{
-            if(state === 'end'||state === 'error')
+            if(state === 'end'||state === 'error'){
+                if(state==='end'){
+                    Global.playSound('scene/audio/effect/通关失败.ogg');
+                }
                 this.needReset = true;
+            }
             if(state === 'error'){
                 MessageBox.show('ok',undefined,<MarkdownElement file={'scene/ui/program_error.md'}/>,(result)=>{});
             }            
@@ -188,22 +194,24 @@ class Level extends Component{
         this.loadTest(props.level);
         this.btms = Date.now();
         this.btpms = this.btms;
-        this.voxview.readyPromise.then(()=>{
-            TextManager.load(`scene/${props.level}.md`,(iserr,text)=>{
-                //如果voxview ready
-                this.voxview.readyPromise.then(()=>{
-                    this._ready = READY;
-//                    MessageBox.closeLoading();
-                    setTimeout(()=>{
-                        MessageBox.show('ok',undefined,<MarkdownElement text={text}/>,(result)=>{
-                            console.log(result);
-                        });    
-                    },200);
+        if(this.voxview.readyPromise){
+            this.voxview.readyPromise.then(()=>{
+                TextManager.load(`scene/${props.level}.md`,(iserr,text)=>{
+                    //如果voxview ready
+                    this.voxview.readyPromise.then(()=>{
+                        this._ready = READY;
+    //                    MessageBox.closeLoading();
+                        setTimeout(()=>{
+                            MessageBox.show('ok',undefined,<MarkdownElement text={text}/>,(result)=>{
+                                console.log(result);
+                            });    
+                        },200);
+                    });
                 });
+            }).catch((err)=>{
+                this._ready = ERROR;
             });
-        }).catch((err)=>{
-            this._ready = ERROR;
-        });
+        }
     }
     componentWillReceiveProps(nextProps){
         if(nextProps.level!=this.props.level){

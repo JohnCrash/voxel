@@ -1,5 +1,5 @@
 {
-	"music": "",
+	"music": "scene\\audio\\background\\背景音乐_神秘古堡.ogg",
 	"loop": true,
 	"bgcolor": 0,
 	"camera": {
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 33,
+					"acc": 34,
 					"curIndex": 0
 				}
 			],
@@ -184,7 +184,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 957.4694762197514
+				"z": 969.2473070780565
 			},
 			"name": "宝石",
 			"visible": true,
@@ -206,7 +206,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1159.5995475516802
+				"z": 1171.3773784099892
 			},
 			"name": "金币",
 			"visible": true,
@@ -228,7 +228,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1068.389688040019
+				"z": 1080.1675188983281
 			},
 			"name": "金币1",
 			"visible": true,
@@ -260,7 +260,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/火炬.item"
 		},
 		{
@@ -282,7 +282,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/火炬.item"
 		},
 		{
@@ -304,7 +304,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/火炬.item"
 		},
 		{
@@ -326,7 +326,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/火炬.item"
 		},
 		{
@@ -348,7 +348,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/火炬.item"
 		},
 		{
@@ -370,7 +370,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/火炬.item"
 		},
 		{
@@ -392,7 +392,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/火炬.item"
 		}
 	],

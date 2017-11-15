@@ -1,5 +1,5 @@
 {
-	"music": "",
+	"music": "scene\\audio\\background\\背景音乐_节奏感强.ogg",
 	"loop": true,
 	"bgcolor": 5504221,
 	"camera": {
@@ -149,7 +149,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 2164.7301259192604
+				"z": 2174.8806117830127
 			},
 			"name": "钥匙",
 			"visible": true,
@@ -213,7 +213,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 34,
+					"acc": 0,
 					"curIndex": 0
 				}
 			]

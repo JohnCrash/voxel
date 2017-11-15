@@ -1,5 +1,5 @@
 {
-	"music": "",
+	"music": "scene\\audio\\background\\背景音乐_神秘古堡.ogg",
 	"loop": true,
 	"bgcolor": 0,
 	"camera": {
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 33,
+					"acc": 34,
 					"curIndex": 0
 				}
 			],
@@ -184,7 +184,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1265.3989633466383
+				"z": 1275.7033872504128
 			},
 			"name": "宝石",
 			"visible": true,
@@ -250,7 +250,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 928.3249211724209
+				"z": 938.6293450761921
 			},
 			"name": "金币",
 			"visible": true,

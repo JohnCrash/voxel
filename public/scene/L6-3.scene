@@ -1,5 +1,5 @@
 {
-	"music": "",
+	"music": "scene\\audio\\background\\背景音乐_神秘古堡.ogg",
 	"loop": true,
 	"bgcolor": 0,
 	"camera": {
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 34,
+					"acc": 33,
 					"curIndex": 0
 				}
 			],
@@ -184,7 +184,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1777.984362298966
+				"z": 1788.8197153611973
 			},
 			"name": "宝石",
 			"visible": true,

@@ -41,8 +41,8 @@ class SceneManager extends EventEmitter{
         this.audioListener = new THREE.AudioListener();
         game.camera.add(this.audioListener);
         this.music = new THREE.Audio(this.audioListener);
-        this._muteSound = true;
-        this._muteMusic = true;
+        this._muteSound = undefined;
+        this._muteMusic = undefined;
 
         this.setBackgroundColor(0);
         this.itemMaterial = new ZDepthPhongMaterial({ color: 0xffffff,
@@ -82,6 +82,7 @@ class SceneManager extends EventEmitter{
      * 删除场景全部的对象
      */
     destroy(){
+        this.stopMusic();
         this.clearLight();
         this.clearItem();
     }
@@ -632,6 +633,9 @@ class SceneManager extends EventEmitter{
      * 播放场景背景音乐
      */
     playMusic(file,loop){
+        this.currentMusicFile = file;
+        console.log('PLAY MUSIC:'+file);
+        this.stopMusic();
         AudioManager.load(file,(b,buffer)=>{
             if(!b){
                 this.music.setBuffer(buffer);
@@ -666,6 +670,22 @@ class SceneManager extends EventEmitter{
             }
         }
     }
+    playSound(file,loop,volume){
+        if(file){
+            if(this.isMute())return;
+            let audio = new THREE.Audio(this.audioListener);
+            AudioManager.load(file,(b,buffer)=>{
+                if(!b){
+                    audio.setBuffer(buffer);
+                    audio.setLoop(!!loop);
+                    audio.setVolume(volume||1.0);
+                    audio.play();
+                }else{
+                    try{audio.stop();}catch(e){}
+                }
+            });
+        }
+    }    
     muteMusic(b){
         console.log('muteMusic:'+b);
         if(this._muteMusic!==!!b){
@@ -673,6 +693,11 @@ class SceneManager extends EventEmitter{
             if(b){
                 this.stopMusic();
             }else{
+                this.playMusic(this.musicFile,this.musicLoop);
+            }
+        }
+        if(!b){
+            if(this.currentMusicFile !== this.musicFile){
                 this.playMusic(this.musicFile,this.musicLoop);
             }
         }

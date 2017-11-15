@@ -1,5 +1,5 @@
 {
-	"music": "",
+	"music": "scene\\audio\\background\\背景音乐_节奏感强.ogg",
 	"loop": true,
 	"bgcolor": 16575933,
 	"camera": {
@@ -183,7 +183,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 2046.4554456970327
+				"z": 2053.97013532442
 			},
 			"name": "宝石",
 			"visible": true,
@@ -205,9 +205,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1917.634438936576
+				"z": 1925.1491285639624
 			},
-			"name": "宝石",
+			"name": "宝石18",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -227,9 +227,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1838.3374987672996
+				"z": 1845.852188394686
 			},
-			"name": "宝石",
+			"name": "宝石19",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -249,9 +249,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1741.8434804122653
+				"z": 1749.3581700396517
 			},
-			"name": "宝石",
+			"name": "宝石20",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -271,9 +271,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1650.8095500891702
+				"z": 1658.3242397165566
 			},
-			"name": "宝石",
+			"name": "宝石21",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -293,9 +293,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1530.5022594199258
+				"z": 1538.0169490473122
 			},
-			"name": "宝石",
+			"name": "宝石22",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -347,7 +347,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/L4-6瀑布.item"
 		},
 		{

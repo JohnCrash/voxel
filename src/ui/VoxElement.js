@@ -128,11 +128,16 @@ class VoxElement extends Component{
         super(props);
     }
     componentDidMount(){
-        this.game = new Game({enableStats:false,
-            enableAA:true,
-            enableLight:true,
-            enableShaodw:true,
-            canvas:this.canvas});
+		try{
+			this.game = new Game({enableStats:false,
+				enableAA:true,
+				enableLight:true,
+				enableShaodw:true,
+				canvas:this.canvas});
+		}catch(e){
+			Global.notSupportWebGL();
+			return;
+		}
         this.sceneManager = new SceneManager(this.game);
         this.game.observer = true;
         this.game.camera.rotation.order = 'ZXY';

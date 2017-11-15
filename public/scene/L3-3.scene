@@ -1,5 +1,5 @@
 {
-	"music": "",
+	"music": "scene\\audio\\background\\背景音乐_舒缓轻柔.ogg",
 	"loop": true,
 	"bgcolor": 9225456,
 	"camera": {
@@ -12,6 +12,63 @@
 			"x": 1.0908307824964512,
 			"y": 0,
 			"z": 0.9768026046995015
+		}
+	},
+	"spe": {
+		"group": {
+			"texture": {
+				"value": "/SPE/img/smokeparticle.png"
+			}
+		},
+		"emitter": {
+			"type": 1,
+			"maxAge": {
+				"value": 12
+			},
+			"position": {
+				"value": [
+					0,
+					0,
+					120
+				],
+				"spread": [
+					150,
+					150,
+					150
+				]
+			},
+			"acceleration": {
+				"value": [
+					0,
+					0,
+					0
+				],
+				"spread": [
+					0,
+					0,
+					0
+				]
+			},
+			"velocity": {
+				"value": [
+					0,
+					3,
+					-9
+				],
+				"spread": [
+					0,
+					3,
+					9
+				]
+			},
+			"color": [
+				"white"
+			],
+			"size": {
+				"value": 3,
+				"spread": 2
+			},
+			"particleCount": 300
 		}
 	},
 	"material": {
@@ -252,7 +309,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 115.33414949858678
+				"z": 127.8062723333378
 			},
 			"name": "宝石",
 			"visible": true,
@@ -284,7 +341,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/地板.item",
 			"flatColor": "yellow"
 		},
@@ -330,7 +387,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/地板.item",
 			"flatColor": "yellow"
 		},
@@ -366,36 +423,5 @@
 		},
 		"high": 40,
 		"low": 0
-	},
-	"spe": {
-		"group":{
-			"texture" :{
-				"value" : "/SPE/img/smokeparticle.png"
-			}
-		},
-		"emitter":{
-			"type" : 1,
-			"maxAge" : {
-				"value" : 12
-			},
-			"position" : {
-				"value" : [0,0,120],
-				"spread" : [150,150,150]
-			},
-			"acceleration" : {
-				"value" : [0,0,0],
-				"spread" : [0,0,0]
-			},
-			"velocity" : {
-				"value" : [0,3,-9],
-				"spread" : [0,3,9]			
-			},
-			"color" : ["white"],
-			"size": {
-				"value" : 3,
-				"spread" : 2
-			},
-			"particleCount":300
-		}
 	}
 }

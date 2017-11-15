@@ -1,5 +1,5 @@
 {
-	"music": "",
+	"music": "scene\\audio\\background\\背景音乐_节奏感强.ogg",
 	"loop": true,
 	"bgcolor": 16575933,
 	"camera": {
@@ -344,7 +344,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 8.513716091228341
 			},
 			"name": "宝石",
 			"visible": true,
@@ -464,7 +464,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/图腾.item"
 		}
 	],

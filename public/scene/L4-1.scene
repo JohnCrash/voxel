@@ -1,5 +1,5 @@
 {
-	"music": "",
+	"music": "scene\\audio\\background\\背景音乐_节奏感强.ogg",
 	"loop": true,
 	"bgcolor": 16575933,
 	"camera": {
@@ -184,7 +184,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 305.5387351175367
 			},
 			"name": "宝石",
 			"visible": true,
@@ -360,7 +360,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1512.6328804063103
+				"z": 1818.1716155238137
 			},
 			"name": "金币",
 			"visible": true,

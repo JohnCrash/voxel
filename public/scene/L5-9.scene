@@ -1,5 +1,5 @@
 {
-	"music": "",
+	"music": "scene\\audio\\background\\背景音乐_灵动欢快.ogg",
 	"loop": true,
 	"bgcolor": 56575,
 	"camera": {
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 33,
+					"acc": 0,
 					"curIndex": 0
 				}
 			],
@@ -366,7 +366,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 2877.9533396935185
+				"z": 2885.7382062891143
 			},
 			"name": "钥匙",
 			"visible": true,
@@ -442,7 +442,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/水花.item"
 		},
 		{
@@ -464,7 +464,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/水花.item"
 		}
 	],

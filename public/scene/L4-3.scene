@@ -1,5 +1,5 @@
 {
-	"music": "",
+	"music": "scene\\audio\\background\\背景音乐_节奏感强.ogg",
 	"loop": true,
 	"bgcolor": 16575933,
 	"camera": {
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 34,
+					"acc": 18,
 					"curIndex": 0
 				}
 			]
@@ -183,7 +183,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1404.5055444550237
+				"z": 1415.513685113202
 			},
 			"name": "宝石",
 			"visible": true,
@@ -205,9 +205,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1321.4229851381783
+				"z": 1332.4311257963566
 			},
-			"name": "宝石",
+			"name": "宝石1",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -227,9 +227,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1266.0272818774217
+				"z": 1277.0354225356
 			},
-			"name": "宝石",
+			"name": "宝石2",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -249,9 +249,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1208.617817725708
+				"z": 1219.6259583838862
 			},
-			"name": "宝石",
+			"name": "宝石3",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -271,9 +271,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1126.245258348574
+				"z": 1137.2533990067523
 			},
-			"name": "宝石",
+			"name": "宝石4",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -293,9 +293,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1057.403538530454
+				"z": 1068.4116791886322
 			},
-			"name": "宝石",
+			"name": "宝石5",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -315,9 +315,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 946.2225745199202
+				"z": 957.2307151780965
 			},
-			"name": "宝石",
+			"name": "宝石6",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -337,9 +337,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 883.682889564922
+				"z": 894.6910302230983
 			},
-			"name": "宝石",
+			"name": "宝石7",
 			"visible": true,
 			"ground": false,
 			"collision": true,

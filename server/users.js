@@ -98,6 +98,7 @@ function pullUserInfo(req,cb){
           cb(json.zone[0]);
         else{
           //设置cls = 0 表示没有任何班级，不进行排行
+          //cb(true,{zone_id:0,school_id:0,role:0});
           cb(false,"请绑定一个班级在进入游戏.");
         }
       }else{
@@ -352,7 +353,16 @@ router.post('/logout',function(req,res){
     res.clearCookie('sc1');
     res.json({result:'ok'});
 });
-
+/**
+ * 报告错误
+ */
+router.post('/report',function(req,res){
+  let {errmsg,platform} = req.body;
+  if(errmsg==='NotSupportWebGL'){
+    sqlAction(req.UserInfo.uid,'NotGL '+platform);
+  }
+  res.json({result:'ok'});
+});
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');

@@ -1,5 +1,5 @@
 {
-	"music": "",
+	"music": "scene\\audio\\background\\背景音乐_神秘古堡.ogg",
 	"loop": true,
 	"bgcolor": 0,
 	"camera": {
@@ -342,7 +342,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1543.948275977178
+				"z": 1554.4506202181287
 			},
 			"name": "宝石",
 			"visible": true,
@@ -374,7 +374,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/火盆.item"
 		},
 		{
@@ -396,7 +396,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/火炬.item"
 		},
 		{
@@ -418,7 +418,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/火炬.item"
 		},
 		{
@@ -440,7 +440,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/火炬.item"
 		},
 		{
@@ -462,7 +462,7 @@
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/火炬.item"
 		}
 	],

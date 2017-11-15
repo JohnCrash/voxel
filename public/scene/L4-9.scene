@@ -1,5 +1,5 @@
 {
-	"music": "",
+	"music": "scene\\audio\\background\\背景音乐_节奏感强.ogg",
 	"loop": true,
 	"bgcolor": 16575933,
 	"camera": {
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 33,
 					"curIndex": 0
 				}
 			],
@@ -564,7 +564,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 562.2288460644027
+				"z": 570.1173852175659
 			},
 			"name": "宝石",
 			"visible": true,
@@ -596,7 +596,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		},
 		{
@@ -608,7 +608,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 94.35145216526149
+				"z": 102.23999131842518
 			},
 			"name": "宝石1",
 			"visible": true,
@@ -618,7 +618,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/黄宝石.item"
 		}
 	],

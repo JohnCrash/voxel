@@ -1,5 +1,5 @@
 {
-	"music": "",
+	"music": "scene\\audio\\background\\背景音乐_节奏感强.ogg",
 	"loop": true,
 	"bgcolor": 16575933,
 	"camera": {
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 33,
 					"curIndex": 0
 				}
 			]
@@ -183,7 +183,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 2664.4852604745074
+				"z": 2673.9037552499717
 			},
 			"name": "宝石",
 			"visible": true,
@@ -205,9 +205,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 2375.675506237321
+				"z": 2385.094001012785
 			},
-			"name": "宝石",
+			"name": "宝石11",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -227,9 +227,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 2176.4639744804585
+				"z": 2185.882469255923
 			},
-			"name": "宝石",
+			"name": "宝石12",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -249,9 +249,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1762.380071588699
+				"z": 1771.7985663641607
 			},
-			"name": "宝石",
+			"name": "宝石13",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -271,9 +271,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1557.7053102073196
+				"z": 1567.1238049827814
 			},
-			"name": "宝石",
+			"name": "宝石14",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -293,9 +293,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1133.48977100776
+				"z": 1142.9082657832219
 			},
-			"name": "宝石",
+			"name": "宝石15",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -315,9 +315,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1008.4732329507762
+				"z": 1017.8917277262369
 			},
-			"name": "宝石",
+			"name": "宝石16",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -337,9 +337,9 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 922.6574880253277
+				"z": 932.0759828007884
 			},
-			"name": "宝石",
+			"name": "宝石17",
 			"visible": true,
 			"ground": false,
 			"collision": true,
@@ -391,7 +391,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		},
 		{
@@ -413,7 +413,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		},
 		{
@@ -435,7 +435,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		},
 		{
@@ -457,7 +457,7 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
+			"receiveShadow": false,
 			"template": "scene/item/栅栏.item"
 		}
 	],

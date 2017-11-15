@@ -20,11 +20,17 @@ class VoxView extends Component{
         };
     }
     componentDidMount(){
-        this.game = new Game({enableStats:false,
-            enableAA:Global.getPlatfrom()==='windows'?true:false,
-            enableLight:true,
-            enableShaodw:true,
-            canvas:this.canvas});
+        try{
+            this.game = new Game({enableStats:false,
+                enableAA:Global.getPlatfrom()==='windows'?true:false,
+                enableLight:true,
+                enableShaodw:true,
+                canvas:this.canvas});
+        }catch(e){
+            Global.notSupportWebGL();
+            return;
+        }     
+    
         this.sceneManager = new SceneManager(this.game);
         this.game.observer = true;
         this.game.camera.rotation.order = 'ZXY';
@@ -65,7 +71,6 @@ class VoxView extends Component{
         this.setState({loading:true});
         this.readyPromise = new Promise((resolve,reject)=>{
             console.log('load '+file);
-            Global.initAudio();
             BlocklyInterface.blocklyEvent('SceneReset');
             fetchJson(`/load?file=scene/${file}.scene`,(json)=>{
                 if(json.result==='ok'){
@@ -77,6 +82,7 @@ class VoxView extends Component{
                     this.initCharacter(json);
                     this.sceneManager.loadFromJson(json.content,(iserr)=>{
                         if(!iserr){
+                            Global.initAudio();
                             BlocklyInterface.blocklyEvent('SceneReady');
                             this.sceneManager.zoom(Global.getPlatfrom()!=='windows'?0.85:1);
                             this.sceneManager.enablePhysical(true);

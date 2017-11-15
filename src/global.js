@@ -2,6 +2,7 @@ import {postJson,fetchJson} from './vox/fetch';
 import Log from './vox/log';
 import EventEmitter from 'events';
 import {MessageBox} from './ui/messagebox';
+import React, {Component} from 'react';
 
 //if(window.closeLoadingUI)root.style.display="none";
 class _Global_ extends EventEmitter{
@@ -309,6 +310,11 @@ class _Global_ extends EventEmitter{
             this._sceneManager.muteSound(!this._muteSound);
         }        
     }
+    playSound(file){
+        if(this._sceneManager){
+            this._sceneManager.playSound(file);
+        }
+    }
     isMusic(){
         return this._muteMusic;
     }
@@ -459,6 +465,18 @@ class _Global_ extends EventEmitter{
             this._wsClsLv = null;
             ws = null;
         }
+    }
+    notSupportWebGL(){    
+        if(!this._reportDone){
+            postJson('/users/report',{errmsg:'NotSupportWebGL',platform:this._platform},(json)=>{
+                if(json.result==='ok'){
+                    this._reportDone = true;
+                }
+            });
+        }
+        MessageBox.show('ok','错误',<span>抱歉系统的版本过低，<b>乐学编程</b>无法运行.</span>,(result)=>{
+            if(window.ljAppObject)window.ljAppObject.back();
+        });      
     }
 };
 

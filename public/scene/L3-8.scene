@@ -1,5 +1,5 @@
 {
-	"music": "",
+	"music": "scene\\audio\\background\\背景音乐_舒缓轻柔.ogg",
 	"loop": true,
 	"bgcolor": 9225456,
 	"camera": {
@@ -12,6 +12,63 @@
 			"x": 1.1443542128909439,
 			"y": 0,
 			"z": 0.8621926504852071
+		}
+	},
+	"spe": {
+		"group": {
+			"texture": {
+				"value": "/SPE/img/smokeparticle.png"
+			}
+		},
+		"emitter": {
+			"type": 1,
+			"maxAge": {
+				"value": 12
+			},
+			"position": {
+				"value": [
+					0,
+					0,
+					120
+				],
+				"spread": [
+					150,
+					150,
+					150
+				]
+			},
+			"acceleration": {
+				"value": [
+					0,
+					0,
+					0
+				],
+				"spread": [
+					0,
+					0,
+					0
+				]
+			},
+			"velocity": {
+				"value": [
+					0,
+					3,
+					-9
+				],
+				"spread": [
+					0,
+					3,
+					9
+				]
+			},
+			"color": [
+				"white"
+			],
+			"size": {
+				"value": 3,
+				"spread": 2
+			},
+			"particleCount": 300
 		}
 	},
 	"material": {
@@ -147,7 +204,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 33,
 					"curIndex": 0
 				}
 			],
@@ -274,7 +331,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
+				"z": 9.971415082494008
 			},
 			"name": "宝石",
 			"visible": true,
@@ -319,36 +376,5 @@
 		},
 		"high": 40,
 		"low": 0
-	},
-	"spe": {
-		"group":{
-			"texture" :{
-				"value" : "/SPE/img/smokeparticle.png"
-			}
-		},
-		"emitter":{
-			"type" : 1,
-			"maxAge" : {
-				"value" : 12
-			},
-			"position" : {
-				"value" : [0,0,120],
-				"spread" : [150,150,150]
-			},
-			"acceleration" : {
-				"value" : [0,0,0],
-				"spread" : [0,0,0]
-			},
-			"velocity" : {
-				"value" : [0,3,-9],
-				"spread" : [0,3,9]			
-			},
-			"color" : ["white"],
-			"size": {
-				"value" : 3,
-				"spread" : 2
-			},
-			"particleCount":300
-		}
 	}
 }
