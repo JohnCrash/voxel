@@ -357,8 +357,8 @@ class Level extends Component{
                     toolbox={blocklytoolbox} />
                 </div>
                 <div style={{position:"absolute",right:"12px",top:"12px"}}>
-                    <span ref={ref=>this.blockcount=ref} style={{fontSize:"24px",fontWeight:"bold",verticalAlign:"top"}}>0×</span>
-                    <img src="media/title-beta.png" height="24px" />
+                    <span ref={ref=>this.blockcount=ref} style={{fontSize:"24px",fontWeight:"bold",verticalAlign:"middle"}}>0×</span>
+                    <img src="media/title-beta.png" style={{height:"24px",verticalAlign:"middle"}} />
                 </div>
             </div>
             <div style={{position:"absolute",display:"flex",flexDirection:"column",left:"0px",right:"50%",bottom:"0px"}}>
@@ -400,8 +400,8 @@ class Level extends Component{
                     toolbox={blocklytoolbox} />
                 </div>
                 <div style={{position:"absolute",right:"12px",top:"78px"}}>
-                    <span ref={ref=>this.blockcount=ref} style={{fontSize:"24px",fontWeight:"bold",verticalAlign:"top"}}>0×</span>
-                    <img src="media/title-beta.png" height="24px" />
+                    <span ref={ref=>this.blockcount=ref} style={{fontSize:"24px",fontWeight:"bold",verticalAlign:"middle"}}>0×</span>
+                    <img src="media/title-beta.png" style={{height:"24px",verticalAlign:"middle"}} />
                 </div>
             </div>
             <MainDrawer key="mydrawer" ref={ref=>this.drawer=ref}/>

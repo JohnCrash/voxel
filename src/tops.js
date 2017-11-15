@@ -224,7 +224,7 @@ class Tops extends Component{
                 //当前选择 selected={this.tops[i].blocks===this.blocks}
                 tops.push(<TableRow selectable={false} key={"top"+i} style={this.tops[i].blocks===this.blocks?HighLightStyle:{}} >
                     <TableRowColumn  style={FixedWidthStyle}>{i+1}</TableRowColumn>
-                    <TableRowColumn  style={FixedWidthStyle}><span style={{verticalAlign:"top"}}>{this.tops[i].blocks}×</span><img src="media/title-beta.png" height="22px" /></TableRowColumn>
+                    <TableRowColumn  style={FixedWidthStyle}><span style={{verticalAlign:"middle"}}>{this.tops[i].blocks}×</span><img src="media/title-beta.png" style={{height:"24px",verticalAlign:"middle"}} /></TableRowColumn>
                     <TableRowColumn  style={FixedWidthStyle}>{this.tops[i].count}</TableRowColumn>
                     <TableRowColumn style={{width:"320px"}}><div>{clsblockMap(this.tops[i].blocks)}</div></TableRowColumn>
                 </TableRow>);
@@ -246,7 +246,7 @@ class Tops extends Component{
             contentStyle={Global.getPlatfrom()!=="windows"?{width:"95%"}:undefined}>
             <MarkdownElement text={md(this.title,dict)}/>
             <MarkdownElement file={`scene/${level}-top.md`}/>
-            {loading?<LinearProgress />:<Table bodyStyle={{overflowX:"auto"}}>
+            {loading?<LinearProgress />:<Table bodyStyle={{overflowX:"initial",overflowY:"initial"}}>
                 <TableHeader style={{height:"24px"}} displaySelectAll={false} adjustForCheckbox={false}>
                     <TableRow style={{height:"24px"}}>
                         <TableHeaderColumn style={FixedHeaderStyle}>排名</TableHeaderColumn>
