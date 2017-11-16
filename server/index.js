@@ -4,6 +4,7 @@ var express = require('express');
 var multiparty = require('multiparty');
 var crypto = require('crypto');
 var browserify = require("browserify");
+var watchify = require("watchify");
 var router = express.Router();
 var config = require('./config');
 
@@ -12,7 +13,7 @@ var config = require('./config');
  */
 router.get(/.*\.js$/,function(req,res,next){
   if(typeof browserify === 'function'){
-    var stream = browserify(`src${req.url}`,{debug:true})
+    var stream = browserify(`src${req.url}`,{debug:true,cache: {}, packageCache: {},plugin: [watchify]})
         .transform("babelify", {presets: ["es2015","es2016","es2017","react","stage-0"]})
         .bundle();
     stream.pipe(res);

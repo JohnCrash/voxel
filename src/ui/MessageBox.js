@@ -35,9 +35,6 @@ class MessageBox extends Component{
         let s = 0;
         if(type==='help1'){
             s = 1;
-            type = 'help';
-        }else if(type==='help0'){
-            type = 'help';
         }
         Global.push(MessageBox.globalNode.handleClose.bind(MessageBox.globalNode));
         BlocklyInterface.pause();
@@ -127,7 +124,7 @@ class MessageBox extends Component{
                                 primary={true}
                                 onClick={this.handleClose.bind(this,'yes')}/>];
                 break;
-            case 'help':
+            case 'help1':
                 actions = [<FlatButton
                     label={this.state.switchContent===0?"关卡说明":"操作说明"}
                     secondary={true}
@@ -136,6 +133,19 @@ class MessageBox extends Component{
                     label="确定"
                     primary={true}
                     onClick={this.handleClose.bind(this,'ok')}/>];
+                break;
+            case 'help0':
+                if(this.state.switchContent===0){
+                    actions = [<FlatButton
+                        label={"关卡说明"}
+                        secondary={true}
+                        onClick={this.handleSwitch.bind(this)}/>]; 
+                }else{
+                    actions = [<FlatButton
+                        label="确定"
+                        primary={true}
+                        onClick={this.handleClose.bind(this,'ok')}/>]; 
+                }           
                 break;
             case 'ok':
             default:

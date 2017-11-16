@@ -301,7 +301,7 @@ class Level extends Component{
     Help(){
         let type = 'help1';
         if(Global.getMaxPassLevel()<=1)
-            type = 'help';
+            type = 'help0';
         MessageBox.show(type,undefined,[<MarkdownElement file={`scene/ui/help.md`}/>,
             <MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
             console.log(result);
