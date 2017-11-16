@@ -3,6 +3,7 @@ import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import Toggle from 'material-ui/Toggle';
 import IconHome from 'material-ui/svg-icons/action/home';
+import HelpIcon from 'material-ui/svg-icons/action/help';
 import {Global} from './global';
 import BlocklyInterface from './vox/blocklyinterface';
 import {MessageBox} from './ui/messagebox';
@@ -102,7 +103,15 @@ class MainDrawer extends Component{
                 this.forceUpdate();
         })
     }
-    render(){
+    onHelp = (event)=>{
+        let f = "scene/ui/help.md";
+        TextManager.load(f,()=>{
+            MessageBox.show('ok',undefined,<MarkdownElement file={f}/>,(result)=>{
+                console.log(result);
+            });
+        });
+    }
+   render(){
         let {music,sound,lang,openMenu,landscape,blocklytoolbox} = this.state;
         let {loc} = this.props;
         let DebugItem = Global.isDebug()?[
@@ -140,6 +149,7 @@ class MainDrawer extends Component{
                 this.motifyConfig = true;
                 Global.setCurrentLang(b?"en":"zh");
             }} />   
+            <MenuItem primaryText="帮助..." leftIcon={<HelpIcon />} onClick={this.onHelp}/> 
             {DebugItem}
         </Drawer>
         <LevelDebug ref={ref=>this.levelDbg=ref} />

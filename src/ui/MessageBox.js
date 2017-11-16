@@ -33,7 +33,7 @@ class MessageBox extends Component{
         MessageBox.globalNode._content = content;
         //根据type类切换到第几页
         let s = 0;
-        if(type==='help1'){
+        if(type==='help'){
             s = 1;
         }
         Global.push(MessageBox.globalNode.handleClose.bind(MessageBox.globalNode));
@@ -124,20 +124,10 @@ class MessageBox extends Component{
                                 primary={true}
                                 onClick={this.handleClose.bind(this,'yes')}/>];
                 break;
-            case 'help1':
-                actions = [<FlatButton
-                    label={this.state.switchContent===0?"关卡说明":"操作说明"}
-                    secondary={true}
-                    onClick={this.handleSwitch.bind(this)}/>,
-                <FlatButton
-                    label="确定"
-                    primary={true}
-                    onClick={this.handleClose.bind(this,'ok')}/>];
-                break;
-            case 'help0':
-                if(this.state.switchContent===0){
+            case 'help':
+                if(this.state.switchContent===1){
                     actions = [<FlatButton
-                        label={"关卡说明"}
+                        label={"界面说明"}
                         secondary={true}
                         onClick={this.handleSwitch.bind(this)}/>]; 
                 }else{

@@ -62,7 +62,6 @@ class Level extends Component{
             blocklytoolbox:Global.getPlatfrom()==='windows'?Global.getBlocklyToolbar():"close", //展开blockly工具条
             switchSize:false,
         }
-        TextManager.load(`scene/ui/help.md`,()=>{});
     }
     componentDidMount(){
         this.onGameStart(this.props);
@@ -299,13 +298,18 @@ class Level extends Component{
             this.blockcount.innerText = `${count}×`;
     }
     Help(){
-        let type = 'help1';
-        if(Global.getMaxPassLevel()<=1)
-            type = 'help0';
-        MessageBox.show(type,undefined,[<MarkdownElement file={`scene/ui/help.md`}/>,
-            <MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
-            console.log(result);
-        });         
+        if(Global.getMaxPassLevel()<=1){
+            TextManager.load(`scene/ui/help.md`,()=>{
+                MessageBox.show('help',undefined,[<MarkdownElement file={`scene/ui/help.md`}/>,
+                    <MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
+                    console.log(result);
+                });
+            });
+        }else{
+            MessageBox.show('ok',undefined,[<MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
+                console.log(result);
+            });             
+        }
     }
     toolbarEle(){
         let {playPause,curSelectTest,isDebug} = this.state;   
