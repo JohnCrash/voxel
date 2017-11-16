@@ -38,5 +38,5 @@ if(process.argv[2] && process.argv[2]==='editor'){
   build('src/editor.js','public/editor_compress.js');
 }else{
   console.log('Compile app...');
-  build('src/app.js','public/app_compress.js');
+  build('src/index.js','public/app_compress.js');
 }

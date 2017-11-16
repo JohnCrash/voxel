@@ -9,14 +9,6 @@ import {
   } from 'react-router-dom';
 import MainDrawer from './drawer';
 
-let app;
-/**
- * 全局函数为应用指定一个标题
- */
-global.appTitle = function(t){
-    app.appTitle(t);
-}
-
 class Main extends Component{
     constructor(props){
         super(props);
@@ -25,7 +17,9 @@ class Main extends Component{
             anchorEl : null,
             isdebug : false,
         }
-        app = this;
+        Global.regAppTitle((t)=>{
+            this.appTitle(t);
+        });
     }
     appTitle(t){
         this.setState({title:t});

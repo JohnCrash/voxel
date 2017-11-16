@@ -1,6 +1,7 @@
 /**
  * 游戏关卡对象场景
  */
+/*global THREE*/
 import {Item} from './item';
 import {ZDepthPhongMaterial} from './depthphong';
 import {AudioManager} from './audiomanager';
@@ -91,7 +92,7 @@ class SceneManager extends EventEmitter{
      * 从场景文件创建场景
      */
     loadFromString(str){
-        return loadFromJson(JSON.parse(str));
+        return this.loadFromJson(JSON.parse(str));
     }
 
     /**

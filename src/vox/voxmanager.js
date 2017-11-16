@@ -1,6 +1,7 @@
 /**
  * 场景中要出现的物体
  */
+/*global readRARContent*/
 import {fetchBin} from './fetch';
 var voxparser = require('./vox').Parser;
 
@@ -44,6 +45,7 @@ class VoxManager_{
             /**
              * 这里假设每个.vox都有一个.voz压缩文件与其对应
              */
+            /*global THREE*/
             let filez = file.replace(/(.*)\.vox$/,($0,name)=>{return `${name}.voz`});
             let _this = this;
             function errorHandle(err){

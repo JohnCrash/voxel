@@ -1,7 +1,7 @@
 /**
  * @author mpk / http://polko.me/
  */
-
+/*global THREE*/
 THREE.SMAAPass = function ( width, height ) {
 
 	THREE.Pass.call( this );

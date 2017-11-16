@@ -1,6 +1,7 @@
 /**
  * 创建一个和z深度相关的雾(或者叫渐变)
  */
+/*global THREE*/
 THREE.DepthZFogShader = {
 
 	uniforms: {

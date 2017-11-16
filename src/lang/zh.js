@@ -1,3 +1,4 @@
+/*global Blockly*/
 export default function zh(){
     Blockly.Msg["BOY"] = "男孩";
     Blockly.Msg["GIRL"] = "女孩";

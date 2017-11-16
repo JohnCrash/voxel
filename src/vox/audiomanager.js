@@ -1,3 +1,4 @@
+/*global THREE*/
 class _AudioManager{
     constructor(){
         this.audios = {};

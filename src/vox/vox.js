@@ -2,6 +2,7 @@
  * parser vox format ArrayBuffer
  * https://github.com/ephtracy/voxel-model/blob/master/MagicaVoxel-file-format-vox.txt
  */
+/*global THREE*/
 var meshers = require("voxel").meshers;
 module.exports.Parser = VoxParser;
 

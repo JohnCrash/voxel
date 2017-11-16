@@ -1,7 +1,7 @@
 /**
  * @author alteredq / http://alteredqualia.com/
  */
-
+/*global THREE*/
 THREE.ShaderPass = function ( shader, textureID ) {
 
 	THREE.Pass.call( this );

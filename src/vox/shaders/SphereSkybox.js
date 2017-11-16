@@ -1,6 +1,7 @@
 /**
  * 创建一个球形天空盒
  */
+/*global THREE*/
 THREE.SphereSkyboxShader = {
 
 	uniforms: {

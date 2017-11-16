@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import marked from 'marked';
-import {TextManager} from './textmanager';
+import {TextManager} from './TextManager';
 //require('./mui-github-markdown.css');
 
 const styles = {

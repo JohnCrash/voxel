@@ -36,11 +36,11 @@ class LevelSel extends PureComponent{
                 if(p.need_unlock){
                     this.unlock.open(p,(b)=>{
                         if(b){//成功解锁
-                            location.href=link;
+                            location.href=link;//eslint-disable-line
                         }
                     });
                 }else
-                    location.href=link;
+                    location.href=link;//eslint-disable-line
             }
         }
     }
@@ -48,7 +48,7 @@ class LevelSel extends PureComponent{
         let stage = 0;
         let olv = Global.getMaxUnlockLevel();
         let lv = Global.getMaxPassLevel();
-        appTitle(json.title);
+        Global.appTitle(json.title);
         console.log(`lv=${lv} olv=${olv}`);
         /**
          * props.other 是一个数组，表示同班的其他进度

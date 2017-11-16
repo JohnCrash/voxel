@@ -16,11 +16,12 @@ import {
 import LevelOf from './levelof';
 import {postJson} from './vox/fetch';
 import {Global} from './global';
-import {TextManager} from './ui/textmanager';
-import MarkdownElement from './ui/markdownelement';
+import {TextManager} from './ui/TextManager';
+import MarkdownElement from './ui/MarkdownElement';
 import md from './mdtemplate';
 import BlocklyInterface from './vox/blocklyinterface';
 import Unlock from './unlock';
+import {MessageBox} from './ui/MessageBox';
 
 const HighLightStyle = {
     backgroundColor : "#b0e0e6"
@@ -70,7 +71,7 @@ class Tops extends Component{
         if(!info){
             console.log("Global.appGetLevelInfo return null! tops.js");
             //可能全部打通了
-            location.href='#/main';
+            location.href='#/main';//eslint-disable-line
             return;
         }
         let p = {
@@ -83,7 +84,7 @@ class Tops extends Component{
         switch(result){
             case 'exit':
                 Global.popName('level');
-                location.href='#/main';
+                location.href='#/main';//eslint-disable-line
                 break;
             case 'agin':
                 if(this._isagin)this._isagin();
@@ -95,7 +96,7 @@ class Tops extends Component{
                         if(b){
                             this.gonext(info);
                         }else{
-                            location.href='#/main';
+                            location.href='#/main';//eslint-disable-line
                         }
                     });
                 }else{
@@ -107,15 +108,15 @@ class Tops extends Component{
     gonext(info){
         //info.next < info.closed 全部做完
         if(info && info.nextName && info.next < info.closed && info.next < info.total){
-            location.href=`#/level/${info.nextName}`;
+            location.href=`#/level/${info.nextName}`;//eslint-disable-line
         }else{//打通了全部
             //提示通关了
             TextManager.load('scene/ui/completed.md',(iserr,text)=>{
                 if(iserr)
                     MessageBox.show("ok",undefined,<MarkdownElement text={text}/>,(result)=>{
-                        location.href='#/main';
+                        location.href='#/main';//eslint-disable-line
                     });
-                else location.href='#/main';
+                else location.href='#/main';//eslint-disable-line
             });            
             
         }

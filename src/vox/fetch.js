@@ -1,5 +1,5 @@
-require("whatwg-fetch");
 import log from './log';
+require("whatwg-fetch");
 
 function fetchBin(s,cb,errcb){
     fetch(s)

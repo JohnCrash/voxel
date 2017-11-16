@@ -1,3 +1,4 @@
+/*global Blockly*/
 export default function en(){
     Blockly.Msg["BOY"] = "boy";
     Blockly.Msg["GIRL"] = "girl";

@@ -1,9 +1,9 @@
 import {postJson,fetchJson} from './vox/fetch';
-import Log from './vox/log';
+import log from './vox/log';
 import EventEmitter from 'events';
-import {MessageBox} from './ui/messagebox';
+import {MessageBox} from './ui/MessageBox';
 import React, {Component} from 'react';
-
+/*global closeLoadingUI,loadingProgressBar*/
 //if(window.closeLoadingUI)root.style.display="none";
 class _Global_ extends EventEmitter{
     constructor(){
@@ -411,7 +411,7 @@ class _Global_ extends EventEmitter{
     }
     //初始化websocket
     wsLogin(){
-        let ws = new WebSocket(`ws://${location.host}/clslv`);
+        let ws = new WebSocket(`ws://${location.host}/clslv`);//eslint-disable-line
         this._wsClsLv = ws;
         ws.sendMsg = function(t){
             try{
@@ -477,6 +477,12 @@ class _Global_ extends EventEmitter{
         MessageBox.show('ok','错误',<span>抱歉系统的版本过低，<b>乐学编程</b>无法运行.</span>,(result)=>{
             if(window.ljAppObject)window.ljAppObject.back();
         });      
+    }
+    regAppTitle(cb){
+        this._appTitle = cb;
+    }
+    appTitle(t){
+        if(this._appTitle)this._appTitle(t);
     }
 };
 

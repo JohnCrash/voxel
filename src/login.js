@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
-import {MessageBox} from './ui/messagebox';
+import {MessageBox} from './ui/MessageBox';
 import 'whatwg-fetch';
 import {Global} from './global';
-import MarkdownElement from './ui/markdownelement';
+import MarkdownElement from './ui/MarkdownElement';
 import {ljshell} from './ljshell';
 
 class Login extends Component{
@@ -75,7 +75,7 @@ class Login extends Component{
                 this.setState({msg:"登录成功"});
                 Global.wsLogin();
                 //location.href='#main/'+(json.lv+1);
-                location.href='#/main';
+                location.href='#/main';//eslint-disable-line
             }else{
                 if(json&&json.result)
                     this.setState({exitButton:true,msg:json.result});
@@ -98,7 +98,7 @@ class Login extends Component{
                 }
             }else{
                 //调试进入游戏
-                let m = location.hash.match(/#\/login\/(.*)\/(.*)\/(.*)/);
+                let m = location.hash.match(/#\/login\/(.*)\/(.*)\/(.*)/);//eslint-disable-line
                 if(m){
                     this.login(m[1],m[2],m[3]);
                 }else{

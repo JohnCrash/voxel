@@ -21,6 +21,7 @@
  *      },...
  *  ]
  */
+/* global THREE */
 import {VoxManager} from './voxmanager';
 import {ItemTemplate} from './itemtemplate'
 import {ScriptManager} from './scriptmanager';

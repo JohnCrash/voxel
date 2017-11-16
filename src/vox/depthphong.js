@@ -1,7 +1,7 @@
 /**
  * 创建一个和z深度相关的雾(或者叫渐变)
  */
-
+/*global THREE*/
  class ZDepthPhongMaterial extends THREE.MeshPhongMaterial{
     constructor(parameters){
         super(parameters);

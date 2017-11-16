@@ -6,9 +6,9 @@ import IconHome from 'material-ui/svg-icons/action/home';
 import HelpIcon from 'material-ui/svg-icons/action/help';
 import {Global} from './global';
 import BlocklyInterface from './vox/blocklyinterface';
-import {MessageBox} from './ui/messagebox';
-import {TextManager} from './ui/textmanager';
-import MarkdownElement from './ui/markdownelement';
+import {MessageBox} from './ui/MessageBox';
+import {TextManager} from './ui/TextManager';
+import MarkdownElement from './ui/MarkdownElement';
 import {postJson,fetchJson} from './vox/fetch';
 import LevelDebug from './leveldebug';
 import PropTypes from 'prop-types';
@@ -38,7 +38,7 @@ class MainDrawer extends Component{
             Global.pushConfig();
         }
         if(this.props.loc==="game"){
-            location.href='#/main';
+            location.href='#/main';//eslint-disable-line
         }else{
             //...
             //退出游戏
@@ -71,7 +71,7 @@ class MainDrawer extends Component{
             TextManager.load('scene/ui/download_windows.md',(iserr,text)=>{
                 MessageBox.show('okcancel',undefined,<MarkdownElement text={text}/>,(result)=>{
                     if(result==='ok')
-                        location.href = 'http://60.205.177.108:3000/html5_windows.zip';
+                        location.href = 'http://60.205.177.108:3000/html5_windows.zip';//eslint-disable-line
                 });                
             });
             break;
@@ -79,7 +79,7 @@ class MainDrawer extends Component{
             TextManager.load('scene/ui/download_android.md',(iserr,text)=>{
                 MessageBox.show('okcancel',undefined,<MarkdownElement text={text}/>,(result)=>{
                     if(result==='ok')
-                        location.href = 'http://60.205.177.108:3000/html5_android.apk';
+                        location.href = 'http://60.205.177.108:3000/html5_android.apk';//eslint-disable-line
                 });                
             });
             break;
@@ -93,7 +93,7 @@ class MainDrawer extends Component{
     onLogout(){
         postJson('/users/logout',{},(json)=>{
             if(json.result==='ok'){
-                location.href = '#login';
+                location.href = '#login';//eslint-disable-line
             }
         });
     }    

@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-var Game = require("../vox/game");
 import {fetchJson,postJson} from '../vox/fetch';
 import SceneManager from '../vox/scenemanager';
 import log from '../vox/log';
+import {Global} from '../global';
+var Game = require("../vox/game");
 
 const env = {
 	"bgcolor": 5504221,

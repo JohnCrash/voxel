@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import VoxElement from './ui/VoxElement';
-import MarkdownElement from './ui/markdownelement';
+import MarkdownElement from './ui/MarkdownElement';
 import {Global} from './global';
 
 const selectedColor = 0x64B5F6;
@@ -27,7 +27,7 @@ class SelectChar extends Component{
         this.setState({open:false});
         Global.setCharacter(this.state.select);
         Global.pushConfig();
-        location.href=this.props.link;
+        location.href=this.props.link;//eslint-disable-line
     }
     onSelect(c){
         this.setState({select:c});

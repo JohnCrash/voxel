@@ -1,14 +1,15 @@
 /**
  * 初始化一个THREE环境，包括创建场景，摄像机，灯光等等...
  */
+/*global THREE,Stats*/
 require('./postprocessing/EffectComposer');
 require('./postprocessing/RenderPass');
 require('./postprocessing/ShaderPass');
 require('./shaders/CopyShader');
 require('./shaders/SMAAShader');
 require('./postprocessing/SMAAPass');
-require('./shaders/sphereskybox');
-require('./shaders/depthphong');
+require('./shaders/SphereSkybox');
+require('./shaders/DepthPhong');
 var EventEmitter = require("events");
 var inherits = require("inherits");
 var Observer = require("./observer");

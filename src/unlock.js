@@ -4,9 +4,9 @@
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import MarkdownElement from './ui/markdownelement';
+import MarkdownElement from './ui/MarkdownElement';
 import md from './mdtemplate';
-import {TextManager} from './ui/textmanager';
+import {TextManager} from './ui/TextManager';
 import {Global} from './global';
 import {postJson} from './vox/fetch';
 import {ljshell} from './ljshell';

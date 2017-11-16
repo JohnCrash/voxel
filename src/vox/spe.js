@@ -1,6 +1,7 @@
 /**
  * 描述SPE
  */
+/*global THREE,SPE*/
 function vec3(v){
     if(v){
         switch(typeof v){

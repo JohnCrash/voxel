@@ -5,8 +5,8 @@ import MenuItem from 'material-ui/MenuItem';
 import VoxView from './voxview';
 import BlockView from './blockview';
 import IconButton from 'material-ui/IconButton';
-import MarkdownElement from './ui/markdownelement';
-import {MessageBox} from './ui/messagebox';
+import MarkdownElement from './ui/MarkdownElement';
+import {MessageBox} from './ui/MessageBox';
 import {IconPlayArrow,IconPause,IconReplay,IconRotateLeft,IconRotateRight,IconHelp,IconStep} from './ui/myicon';
 //import IconPlayArrow from 'material-ui/svg-icons/av/play-arrow';
 //import IconPause from 'material-ui/svg-icons/av/pause';
@@ -20,7 +20,7 @@ import AddTest from 'material-ui/svg-icons/content/add';
 import RemoveTest from 'material-ui/svg-icons/content/remove';
 import BlocklyInterface from './vox/blocklyinterface';
 import {ScriptManager} from './vox/scriptmanager';
-import {TextManager} from './ui/textmanager';
+import {TextManager} from './ui/TextManager';
 import {ItemTemplate} from './vox/itemtemplate';
 import {fetchJson,postJson} from './vox/fetch';
 import {Global} from './global';
@@ -190,7 +190,7 @@ class Level extends Component{
             MessageBox.show("okcancel","游戏退出","你确定要返回主界面吗？",(result)=>{
                 if(result==='ok'){
                     Global.popName('level');
-                    location.href='#/main';
+                    location.href='#/main'; //eslint-disable-line
                 }
             });
         },'level');

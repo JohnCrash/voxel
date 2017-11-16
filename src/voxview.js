@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-var Game = require("./vox/game");
 import {fetchJson,postJson} from './vox/fetch';
 import SceneManager from './vox/scenemanager';
 import log from './vox/log';
-import {MessageBox} from './ui/messagebox';
+import {MessageBox} from './ui/MessageBox';
 import BlocklyInterface from './vox/blocklyinterface';
 import {Global} from './global';
 import CircularProgress from 'material-ui/CircularProgress';
+var Game = require("./vox/game");
 
 /**
  * VoxView的属性

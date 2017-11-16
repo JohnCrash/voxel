@@ -3,7 +3,7 @@
  *
  * Full-screen textured quad shader
  */
-
+/*global THREE*/
 THREE.CopyShader = {
 
 	uniforms: {

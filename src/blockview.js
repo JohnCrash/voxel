@@ -1,7 +1,8 @@
+/*global Blockly,Interpreter*/
 import React, {Component} from 'react';
 import VoxView from './voxview';
 import BlocklyInterface from './vox/blocklyinterface';
-import {TextManager} from './ui/textmanager';
+import {TextManager} from './ui/TextManager';
 import {Global} from './global';
 import en from './lang/en';
 import zh from './lang/zh';
