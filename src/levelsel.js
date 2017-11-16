@@ -66,6 +66,7 @@ class LevelSel extends PureComponent{
         function lvtoid(lv){
             return others[lv];
         }
+        let curSeg;
         this.level = json.level.map((item)=>{
             let bl = [];
             let m = item.rang.match(/(\d+)-(\d+)/);
@@ -131,7 +132,13 @@ class LevelSel extends PureComponent{
                         bl.push(<CircleButton key={i} label={i} bob={lvtoid(i)} onClick={this.onSelectLevel.bind(this,link,p)} state={s} />);
                 }
             }
-            return <Card key={item.name} onLoad={curSeg?(event)=>{event.target.scrollIntoViewIfNeeded();}:undefined}>
+            return <Card key={item.name} onLoad={curSeg?(event)=>{
+                //event.target 是<img />,向上找4层父节点
+                let p = event.target;
+                for(let i =0;i<4;i++){
+                    if(p)p = p.parentNode;
+                }
+                if(p)p.scrollIntoViewIfNeeded();}:undefined}>
                         <CardHeader avatar={icon} title={item.name} titleColor={titleColor} titleStyle={titleStyle} subtitle={item.desc}/>
                         <CardMedia>
                             <img src={item.preview} alt="" />

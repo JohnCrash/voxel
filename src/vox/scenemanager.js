@@ -640,6 +640,7 @@ class SceneManager extends EventEmitter{
             if(!b){
                 this.music.setBuffer(buffer);
                 this.music.setLoop(!!this.musicLoop);
+                this.music.setVolume(0.2);
                 this.music.play();
             }
         });             

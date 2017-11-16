@@ -7,7 +7,7 @@ regItemEvent('地板',
 function(event,dt){
 	switch(event){
 		case 'collision':
-			//this.playSound('scene/audio/effect/正确的宝石声音.ogg');
+			//this.playSound('scene/audio/effect/正确的宝石声音.mp3');
 			break;
 		case 'construct':
 			this.ground = true;

@@ -23,16 +23,26 @@ class MessageBox extends Component{
             snackbarOpen:false,
             snackbarMsg:'',
             openLoading:false,
-            contentLoading:''
+            contentLoading:'',
+            switchContent:-1
             };
     }
     static globalNode = null;
     static globalCB = null;
     static show(type,title,content,result,style){
+        MessageBox.globalNode._content = content;
+        //根据type类切换到第几页
+        let s = 0;
+        if(type==='help1'){
+            s = 1;
+            type = 'help';
+        }else if(type==='help0'){
+            type = 'help';
+        }
         Global.push(MessageBox.globalNode.handleClose.bind(MessageBox.globalNode));
         BlocklyInterface.pause();
         if(!style){
-            if(Global.getPlatfrom()==='android')
+            if(Global.getPlatfrom()!=='windows')
                 style = {width:"95%"};
         }
         if(MessageBox.globalNode.state.open){
@@ -43,9 +53,10 @@ class MessageBox extends Component{
                     open:true,
                     type:type,
                     title:title,
-                    content:content,
+                    switchContent:s,
+                    content:(content instanceof Array)?content[s]:content,
                     style:style
-                });                
+                });
             }, 1000);
         }else{
             MessageBox.globalCB = result;
@@ -53,7 +64,8 @@ class MessageBox extends Component{
                 open:true,
                 type:type,
                 title:title,
-                content:content,
+                switchContent:s,
+                content:(content instanceof Array)?content[s]:content,
                 style:style
             });
         }
@@ -85,13 +97,20 @@ class MessageBox extends Component{
             snackbarOpen: false,
         });
     }
+    handleSwitch(){
+        let s = this.state.switchContent==0?1:0;
+        this.setState({
+            switchContent:s,
+            content:this._content[s]
+        });
+    }
     render(){
         let actions;
         switch(this.state.type){
             case 'okcancel':
                 actions = [<FlatButton
                         label="取消"
-                        primary={true}
+                        secondary={true}
                         onClick={this.handleClose.bind(this,'cancel')}/>,
                     <FlatButton
                         label="确定"
@@ -101,12 +120,22 @@ class MessageBox extends Component{
             case 'yesno':
                 actions = [<FlatButton
                                 label="否"
-                                primary={true}
+                                secondary={true}
                                 onClick={this.handleClose.bind(this,'no')}/>,
                             <FlatButton
                                 label="是"
                                 primary={true}
                                 onClick={this.handleClose.bind(this,'yes')}/>];
+                break;
+            case 'help':
+                actions = [<FlatButton
+                    label={this.state.switchContent===0?"关卡说明":"操作说明"}
+                    secondary={true}
+                    onClick={this.handleSwitch.bind(this)}/>,
+                <FlatButton
+                    label="确定"
+                    primary={true}
+                    onClick={this.handleClose.bind(this,'ok')}/>];
                 break;
             case 'ok':
             default:

@@ -4,7 +4,7 @@ regItemEvent('石块',
 function(event,dt){
 	switch(event){
 		case 'collision':
-			//this.playSound('scene/audio/effect/正确的宝石声音.ogg');
+			//this.playSound('scene/audio/effect/正确的宝石声音.mp3');
 			if(this.currentAction!=='forward'){
 				var item = dt;
 				if(item.obstruct){

@@ -148,7 +148,7 @@ class _Global_ extends EventEmitter{
                 this.muteSound(config.sound);
                 this.setLayout(config.layout);
                 this.setCharacter(config.character);
-                if(this._uid===144970||this._uid===25911300)
+                if(this._uid===144970||this._uid===25911300||this._uid===24321614)
                     this.setDebugMode(true);
                 return;
             }
@@ -311,7 +311,7 @@ class _Global_ extends EventEmitter{
         }        
     }
     playSound(file){
-        if(this._sceneManager){
+        if(this._sceneManager && file){
             this._sceneManager.playSound(file);
         }
     }

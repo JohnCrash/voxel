@@ -5,7 +5,7 @@ function(event,dt){
 	switch(event){
 		case 'collision':
 			this.blocklyEvent('MissionCompleted');
-			this.playSound('scene/audio/effect/成功.ogg');
+			this.playSound('scene/audio/effect/成功.mp3');
 			this.removeSelf();
 			break;			
 		case 'init':

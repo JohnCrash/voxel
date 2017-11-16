@@ -2,6 +2,10 @@
 	"title" : "像搭积木一样学编程",
 	"total" : 200,
 	"closed" : 61,
+	"failSound" : "scene/audio/effect/通关失败.mp3",
+	"successSound" : "scene/audio/effect/通关成功.mp3",
+	"wrongSound" : "scene/audio/effect/通关失败.mp3",
+	"fallDeadSound" : "scene/audio/effect/通关失败.mp3",
 	"level" : [
 		{
 			"name" : "一、序列",

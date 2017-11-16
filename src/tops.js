@@ -130,7 +130,6 @@ class Tops extends Component{
         let info = Global.appGetLevelInfo(this.props.level);   
         if(!info)return; 
         Global.passLevel(info.next);
-        Global.playSound('scene/audio/effect/通关成功.ogg');
         //commit
         this.blocks = blocks;
         BlocklyInterface.pause();

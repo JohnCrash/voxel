@@ -7,7 +7,7 @@ function(event,dt){
 	switch(event){
 		case 'collision':
 			{
-				this.playSound('scene/audio/effect/正确的宝石声音.ogg');
+				this.playSound('scene/audio/effect/正确的宝石声音.mp3');
 				this.removeSelf();
 				//赋予被碰撞物一个函数
 				var item  = dt;

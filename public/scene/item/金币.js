@@ -5,7 +5,7 @@ regItemEvent('金币',
 function(event,dt){
 	switch(event){
 		case 'collision':
-			this.playSound('scene/audio/effect/比赛成绩金光闪闪.ogg');
+			this.playSound('scene/audio/effect/比赛成绩金光闪闪.mp3');
 			this.removeSelf();
 			break;
 		case 'init':

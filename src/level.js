@@ -62,6 +62,7 @@ class Level extends Component{
             blocklytoolbox:Global.getPlatfrom()==='windows'?Global.getBlocklyToolbar():"close", //展开blockly工具条
             switchSize:false,
         }
+        TextManager.load(`scene/ui/help.md`,()=>{});
     }
     componentDidMount(){
         this.onGameStart(this.props);
@@ -106,12 +107,15 @@ class Level extends Component{
     onGameOver(event){
         let md;
         let now = Date.now();
+        let lj = Global.levelJson();
         switch(event){
             case 'OutOfBounds':
             case 'Dead':
                 md = 'scene/ui/gameover.md';
+                Global.playSound(lj.failSound);
                 break;
             case 'MissionCompleted':
+                Global.playSound(lj.successSound);
                 this.Tops.open(this.blockview.getBlockCount(),
                 this.blockview.toXML(),now-this.btms,now-this.btpms,
                 ()=>{this.Reset();});
@@ -119,9 +123,11 @@ class Level extends Component{
                 return;
             case 'WrongAction':
                 md = 'scene/ui/wrongaction.md';
+                Global.playSound(lj.wrongSound);
                 break;
             case 'FallDead':
                 md = 'scene/ui/falldead.md';
+                Global.playSound(lj.fallDeadSound);
                 break;
         }
         this.btpms = now;
@@ -145,7 +151,7 @@ class Level extends Component{
                         }else if(state === 'nolink'){
                             MessageBox.show('ok',undefined,<MarkdownElement file={'scene/ui/link_error.md'}/>,(result)=>{});
                         }else if(state==='end'){
-                            Global.playSound('scene/audio/effect/通关失败.ogg');
+                            Global.playSound(Global.levelJson().failSound);
                         }
                         this.setState({playPause:true});
                         this.needReset = true;
@@ -167,7 +173,7 @@ class Level extends Component{
         this.blockview.setEndCB((state)=>{
             if(state === 'end'||state === 'error'){
                 if(state==='end'){
-                    Global.playSound('scene/audio/effect/通关失败.ogg');
+                    Global.playSound(Global.levelJson().failSound);
                 }
                 this.needReset = true;
             }
@@ -202,9 +208,10 @@ class Level extends Component{
                         this._ready = READY;
     //                    MessageBox.closeLoading();
                         setTimeout(()=>{
-                            MessageBox.show('ok',undefined,<MarkdownElement text={text}/>,(result)=>{
-                                console.log(result);
-                            });    
+                            //MessageBox.show('ok',undefined,<MarkdownElement text={text}/>,(result)=>{
+                            //    console.log(result);
+                            //});    
+                            this.Help();
                         },200);
                     });
                 });
@@ -292,7 +299,11 @@ class Level extends Component{
             this.blockcount.innerText = `${count}×`;
     }
     Help(){
-        MessageBox.show('ok',undefined,<MarkdownElement file={`scene/${this.props.level}.md`}/>,(result)=>{
+        let type = 'help1';
+        if(Global.getMaxPassLevel()<=1)
+            type = 'help';
+        MessageBox.show(type,undefined,[<MarkdownElement file={`scene/ui/help.md`}/>,
+            <MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
             console.log(result);
         });         
     }
@@ -386,6 +397,9 @@ class Level extends Component{
                 if(this.blockview && this.blockview.workspace && this.blockview.workspace.svgGroup_){
                     let p = this.blockview.workspace.svgGroup_.parentNode;
                     p.style = "height:100%";
+                    //this.blockview.workspace.resize(); //不工作
+                    //Blockly.svgResize(this.blockview.workspace); //工作
+                    window.dispatchEvent(new Event('resize'));
                 }
             });
         }
