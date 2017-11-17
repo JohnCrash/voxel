@@ -1,5 +1,5 @@
 {
-	"music": "scene\\audio\\background\\背景音乐_节奏感强.ogg",
+	"music": "scene\\audio\\background\\背景音乐_节奏感强.mp3",
 	"loop": true,
 	"bgcolor": 5504221,
 	"camera": {
@@ -161,7 +161,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 14.024069605624865
+				"z": 103.04738063039726
 			},
 			"name": "宝石",
 			"visible": true,
@@ -205,7 +205,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 2843.9738735522315
+				"z": 2932.9971845770206
 			},
 			"name": "金币1",
 			"visible": true,
@@ -227,7 +227,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 2473.702621807222
+				"z": 2562.725932832011
 			},
 			"name": "金币2",
 			"visible": true,

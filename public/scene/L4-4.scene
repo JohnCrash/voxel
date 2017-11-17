@@ -1,5 +1,5 @@
 {
-	"music": "scene\\audio\\background\\背景音乐_节奏感强.ogg",
+	"music": "scene\\audio\\background\\背景音乐_节奏感强.mp3",
 	"loop": true,
 	"bgcolor": 16575933,
 	"camera": {
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 34,
 					"curIndex": 0
 				}
 			]
@@ -183,7 +183,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 3746.6005668188063
+				"z": 3764.554768834069
 			},
 			"name": "宝石",
 			"visible": true,
@@ -205,7 +205,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 3608.3170829857095
+				"z": 3626.271285000972
 			},
 			"name": "宝石8",
 			"visible": true,
@@ -227,7 +227,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 3525.3853201162406
+				"z": 3543.339522131503
 			},
 			"name": "宝石9",
 			"visible": true,
@@ -249,7 +249,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 3372.025333138589
+				"z": 3389.9795351538514
 			},
 			"name": "宝石10",
 			"visible": true,

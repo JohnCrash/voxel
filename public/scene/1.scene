@@ -1,5 +1,5 @@
 {
-	"music": "scene/audio/Acheron.ogg",
+	"music": "scene/audio/Acheron.mp3",
 	"loop": true,
 	"bgcolor": 12064451,
 	"camera": {

@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "用来载入.vox并渲染的库",
   "main": "index.js",
+  "proxy" : "http://localhost:3000",
   "scripts": {
     "test": "npm test",
     "start": "node server/www",
+    "dev" : "react-scripts start",
     "release": "node build.js"
   },
   "repository": {
@@ -34,6 +36,7 @@
     "browserify": "^14.4.0",
     "envify": "^4.1.0",
     "google-closure-compiler": "^20170806.0.0",
+    "react-scripts": "^1.0.17",
     "uglify-js": "^3.1.6",
     "uglifyify": "^4.0.4",
     "watchify": "^3.9.0"

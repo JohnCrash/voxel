@@ -1,5 +1,5 @@
 {
-	"music": "scene\\audio\\background\\背景音乐_灵动欢快.ogg",
+	"music": "scene\\audio\\background\\背景音乐_灵动欢快.mp3",
 	"loop": true,
 	"bgcolor": 56575,
 	"camera": {

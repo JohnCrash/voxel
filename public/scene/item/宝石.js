@@ -5,7 +5,7 @@ regItemEvent('宝石',
 function(event,dt){
 	switch(event){
 		case 'collision':
-			this.playSound('scene/audio/effect/比赛成绩金光闪闪.mp4');
+			this.playSound('scene/audio/effect/比赛成绩金光闪闪.mp3');
 			this.removeSelf();
 			var b = false;
 			var i;

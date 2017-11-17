@@ -133,8 +133,21 @@ class MainDrawer extends Component{
             <MenuItem key='drawerdebug' primaryText="关卡调试"  onClick={this.onDebug.bind(this)} checked={this.state.isdebug}/>,
             <MenuItem key='drawerlogout' primaryText={`登出(${Global.getUserName()})`} onClick={this.onLogout.bind(this)}/> 
         ]:[];
-        return <div><Drawer docked={false} open={openMenu} onRequestChange={this.handleClose.bind(this)}>
-            <MenuItem primaryText={loc==="game"?"返回选择关卡":"退出游戏"} style={{marginBottom:32}} leftIcon={<IconHome /> } onClick={this.onReturnMain.bind(this)} />
+        return <div><Drawer 
+            docked={false} 
+            open={openMenu} 
+            disableSwipeToOpen={true}
+            onRequestChange={this.handleClose.bind(this)}>
+            <MenuItem primaryText={loc==="game"?"返回选择关卡":"退出游戏"} style={{marginBottom:32}} leftIcon={<IconHome /> } onClick={
+                    (event)=>{
+                        if(loc==="game")
+                            this.onReturnMain();
+                        else{
+                            if(window.ljAppObject)
+                                window.ljAppObject.back();
+                        }
+                    }
+                } />
             <Toggle label="背影音乐" style={ToggleStyle} defaultToggled={music} onToggle={(e,b)=>{
                 this.setState({music:b});
                 this.motifyConfig = true;

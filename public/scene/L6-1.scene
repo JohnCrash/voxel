@@ -1,5 +1,5 @@
 {
-	"music": "scene\\audio\\background\\背景音乐_神秘古堡.ogg",
+	"music": "scene\\audio\\background\\背景音乐_神秘古堡.mp3",
 	"loop": true,
 	"bgcolor": 0,
 	"camera": {

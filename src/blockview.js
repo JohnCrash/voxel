@@ -314,9 +314,11 @@ class BlockView extends Component{
         return splitXML(Blockly.Xml.domToText(dom));
     }
     loadXML(xml){
-        this.workspace.clear();
-        let dom = Blockly.Xml.textToDom(xmlHead(xml));
-        Blockly.Xml.domToWorkspace(dom,this.workspace);
+        if(this.workspace){
+            this.workspace.clear();
+            let dom = Blockly.Xml.textToDom(xmlHead(xml));
+            Blockly.Xml.domToWorkspace(dom,this.workspace);
+        }
     }
     checkLink(){
         let blocks = this.workspace.getAllBlocks();

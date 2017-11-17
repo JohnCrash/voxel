@@ -1,28 +1,33 @@
 class _ljshell{
     constructor(){
-        this.lj = window.ljAppObject;
     }
     init(cb){
         if(this._userinfo){
             cb(true);
-        }else if(this.lj){
-            let n = 0;
-            this.lj.userinfo((msg,status)=>{
-                if(status){
-                    try{
-                        this._userInfo = JSON.parse(msg);
-                    }catch(e){
-                        cb(false,"userinfo "+e.toString());
-                    }
-                    if((++n)===1)cb(true);
-                }else{
-                    this._userInfo = null;
-                    cb(false,`userinfo 返回错误 ${status}`);
-                }
-            });
         }else{
-            this._userInfo = null;
-            cb(false,`没有从乐教乐学大厅进入. (${window.ljAppObject}),(${window.cordova})`);
+            document.addEventListener('deviceready', ()=>{
+                this.lj = window.ljAppObject;
+                let n = 0;
+                this.lj.userinfo((msg,status)=>{
+                    if(status){
+                        try{
+                            this._userInfo = JSON.parse(msg);
+                        }catch(e){
+                            cb(false,"userinfo "+e.toString());
+                        }
+                        if((++n)===1)cb(true);
+                    }else{
+                        this._userInfo = null;
+                        cb(false,`userinfo 返回错误 ${status}`);
+                    }
+                });    
+            }, false);
+            setTimeout(()=>{
+                if(!this.lj){
+                    this._userInfo = null;
+                    cb(false,`没有从乐教乐学大厅进入. (${window.ljAppObject}),(${window.cordova})`);    
+                }
+            },1000);
         }
     }
     getUserInfo(){

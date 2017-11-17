@@ -1,5 +1,5 @@
 {
-	"music": "scene\\audio\\background\\背景音乐_节奏感强.ogg",
+	"music": "scene\\audio\\background\\背景音乐_节奏感强.mp3",
 	"loop": true,
 	"bgcolor": 5504221,
 	"camera": {
@@ -183,7 +183,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 11.856370674647899
+				"z": 30.803315968447865
 			},
 			"name": "宝石",
 			"visible": true,
@@ -205,7 +205,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 92.46649657310748
+				"z": 111.41344186690685
 			},
 			"name": "宝石1",
 			"visible": true,

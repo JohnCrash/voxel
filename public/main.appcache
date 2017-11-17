@@ -1,6 +1,6 @@
 CACHE MANIFEST
-#7
-main_compress.js
+#4
+app_compress.js
 libs/three.min.js
 libs/stats.min.js
 libs/dat.gui.min.js
@@ -15,6 +15,18 @@ blockly/interpreter.js
 scene/main.index
 scene/game_launch.png
 libs/SPE.min.js
-
+scene/ui/unlock.md
+scene/ui/unlocking.md
+scene/ui/unlock_failed.md
+scene/ui/unlock_complete.md
+scene/ui/unlocking.md
+scene/image/1.png
+scene/image/2.png
+scene/image/3.png
+scene/image/4.png
+scene/image/5.png
+scene/image/6.png
+scene/image/lock.png
+scene/image/level_build.png
 NETWORK:
 *

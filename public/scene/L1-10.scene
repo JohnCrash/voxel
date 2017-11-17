@@ -1,5 +1,5 @@
 {
-	"music": "scene\\audio\\background\\背景音乐_灵动欢快.ogg",
+	"music": "scene\\audio\\background\\背景音乐_灵动欢快.mp3",
 	"loop": true,
 	"bgcolor": 56575,
 	"camera": {
@@ -183,7 +183,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 410.2260271131236
+				"z": 429.1101405538538
 			},
 			"name": "宝石",
 			"visible": true,
@@ -205,7 +205,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 304.04647860708224
+				"z": 322.9305920478124
 			},
 			"name": "宝石1",
 			"visible": true,
@@ -227,7 +227,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 107.72521209159261
+				"z": 126.60932553232017
 			},
 			"name": "宝石2",
 			"visible": true,

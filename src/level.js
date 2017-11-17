@@ -30,7 +30,7 @@ import {
   } from 'react-router-dom';
 import MainDrawer from "./drawer";
 import PropTypes from 'prop-types';
-
+/*global Blockly*/
 const redIcon = {color:"#F44336"};
 
 function parserXML(id,text){
@@ -239,12 +239,16 @@ class Level extends Component{
             }
             this.forceUpdate();
             if(this.testXML.length>0&&this.testXML[0]){
-                setTimeout(()=>{
-                    if(this.blockview){
-                        this.blockview.loadXML(this.testXML[0]);
-                    }
-                    this.setState({curSelectTest:0});
-                },2000);
+                if(this.blockview.readyPromise){
+                    this.blockview.readyPromise.then(()=>{
+                        if(this.blockview){
+                            this.blockview.loadXML(this.testXML[0]);
+                        }
+                        this.setState({curSelectTest:0});
+                    }).catch((e)=>{
+                        console.error(e);
+                    });
+                }
             }
         },(err)=>{
             this.testXML = [];
@@ -402,8 +406,8 @@ class Level extends Component{
                     let p = this.blockview.workspace.svgGroup_.parentNode;
                     p.style = "height:100%";
                     //this.blockview.workspace.resize(); //不工作
-                    //Blockly.svgResize(this.blockview.workspace); //工作
-                    window.dispatchEvent(new Event('resize'));
+                    Blockly.svgResize(this.blockview.workspace); //工作
+                    //window.dispatchEvent(new Event('resize'));
                 }
             });
         }
@@ -413,7 +417,10 @@ class Level extends Component{
         let {levelDesc,curSelectTest,openTops,blocklytoolbox,switchSize} = this.state;
         let {level} = this.props;
         return <div>
-            <div style={{position:"absolute",left:"0px",top:"0px",right:"0px",bottom:switchSize?"40%":"60%"}} onClick={this.switchSize.bind(this)} >
+            <div style={{position:"absolute",left:"0px",top:"0px",right:"0px",bottom:switchSize?"40%":"60%"}}
+                onClick={(event)=>{this.switchSize(this);}
+                }
+            >
                 <VoxView file={level} ref={ref=>this.voxview=ref} layout="portrait" style={{width:"100%",height:"100%"}}/>
             </div>
             <div style={{position:"absolute",left:"0px",top:switchSize?"60%":"40%",right:"0px",bottom:"0px"}}>
