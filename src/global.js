@@ -44,6 +44,17 @@ class _Global_ extends EventEmitter{
                 }
             });
         },'game');
+        //到后台
+        document.addEventListener("pause", (event)=>{
+            if(this._muteMusic && this._sceneManager){
+                this._sceneManager.stopMusic();
+            }                        
+        }, false);  
+        //到前台     
+        document.addEventListener("resume", (event)=>{
+            if(this._muteMusic && this._sceneManager)
+                this._sceneManager.muteMusic(false);        
+        }, false);
         /*
         if(window.native && native.quit){
             native.onBack = ()=>{
@@ -331,7 +342,7 @@ class _Global_ extends EventEmitter{
         this._muteSound = b;
         if(this._sceneManager){
             this._sceneManager.muteSound(!this._muteSound);
-        }        
+        }
     }
     setCurrentLang(lang){
         this._lang = lang;

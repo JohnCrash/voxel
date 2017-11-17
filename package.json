@@ -15,8 +15,10 @@
   "scripts": {
     "test": "npm test",
     "start": "node server/www",
+    "www" : "node server/www",
     "dev" : "react-scripts start",
-    "release": "node build.js"
+    "build": "node build.js",
+    "release" : "node build.js release"
   },
   "repository": {
     "type": "git",

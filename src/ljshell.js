@@ -28,7 +28,7 @@ class _ljshell{
                         this._userInfo = null;
                         cb(false,`没有从乐教乐学大厅进入. (${window.ljAppObject}),(${window.cordova})`);    
                     }
-                },2000);
+                },5000);
             }
         }
     }

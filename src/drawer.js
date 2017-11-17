@@ -148,7 +148,7 @@ class MainDrawer extends Component{
                         }
                     }
                 } />
-            <Toggle label="背影音乐" style={ToggleStyle} defaultToggled={music} onToggle={(e,b)=>{
+            <Toggle label="背景音乐" style={ToggleStyle} defaultToggled={music} onToggle={(e,b)=>{
                 this.setState({music:b});
                 this.motifyConfig = true;
                 Global.muteMusic(b);
