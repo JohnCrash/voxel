@@ -105,6 +105,7 @@ class MainDrawer extends Component{
     }
     onHelp = (event)=>{
         let f = "scene/ui/help.md";
+        this.setState({openMenu:false});
         TextManager.load(f,()=>{
             MessageBox.show('ok',undefined,<MarkdownElement file={f}/>,(result)=>{
                 console.log(result);
