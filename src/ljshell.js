@@ -22,12 +22,14 @@ class _ljshell{
                     }
                 });    
             }, false);
-            setTimeout(()=>{
-                if(!this.lj){
-                    this._userInfo = null;
-                    cb(false,`没有从乐教乐学大厅进入. (${window.ljAppObject}),(${window.cordova})`);    
-                }
-            },1000);
+            if(window.LOCALHOST){//eslint-disable-line
+                setTimeout(()=>{
+                    if(!this.lj){
+                        this._userInfo = null;
+                        cb(false,`没有从乐教乐学大厅进入. (${window.ljAppObject}),(${window.cordova})`);    
+                    }
+                },2000);
+            }
         }
     }
     getUserInfo(){

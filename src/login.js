@@ -98,11 +98,13 @@ class Login extends Component{
                 }
             }else{
                 //调试进入游戏
-                let m = location.hash.match(/#\/login\/(.*)\/(.*)\/(.*)/);//eslint-disable-line
-                if(m){
-                    this.login(m[1],m[2],m[3]);
-                }else{
-                    this.login(24321614,"金老师","sc1=295C24B689782BFB6D8F8171DE2F9D7A28A5D07DaUl8MADpD5LCiGYNJ1Rn71kqax%2buIFjj8FGGl96b%2bxYpBkvagGZydmOutQmN6kfyEuLokIgBkWzOhncNpSFQbrEvnODr2bmFqwBVfldfzzSJJada4XdFRA%3d%3d");
+                if(window.LOCALHOST){//eslint-disable-line
+                    let m = location.hash.match(/#\/login\/(.*)\/(.*)\/(.*)/);//eslint-disable-line
+                    if(m){
+                        this.login(m[1],m[2],m[3]);
+                    }else{
+                        this.login(24321614,"金老师","sc1=295C24B689782BFB6D8F8171DE2F9D7A28A5D07DaUl8MADpD5LCiGYNJ1Rn71kqax%2buIFjj8FGGl96b%2bxYpBkvagGZydmOutQmN6kfyEuLokIgBkWzOhncNpSFQbrEvnODr2bmFqwBVfldfzzSJJada4XdFRA%3d%3d");
+                    }
                 }
                 this.setState({exitButton:false,msg:e});
             }

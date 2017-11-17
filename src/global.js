@@ -411,7 +411,11 @@ class _Global_ extends EventEmitter{
     }
     //初始化websocket
     wsLogin(){
-        let ws = new WebSocket(`ws://${location.host}/clslv`);//eslint-disable-line
+        let addr = `ws://${location.host}/clslv`//eslint-disable-line
+        if(window.LOCALHOST){ //eslint-disable-line
+            addr = `ws://localhost:3000/clslv`;
+        }
+        let ws = new WebSocket(addr);
         this._wsClsLv = ws;
         ws.sendMsg = function(t){
             try{

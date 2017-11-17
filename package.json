@@ -3,7 +3,15 @@
   "version": "1.0.0",
   "description": "用来载入.vox并渲染的库",
   "main": "index.js",
-  "proxy" : "http://localhost:3000",
+  "proxy" : {
+    "/" : {
+      "target" : "http://localhost:3000"
+    },
+    "/clslv" : {
+      "target" : "ws://localhost:3000/clslv",
+      "ws" : true
+    }
+  },
   "scripts": {
     "test": "npm test",
     "start": "node server/www",
