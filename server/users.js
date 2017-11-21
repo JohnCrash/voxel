@@ -98,8 +98,8 @@ function pullUserInfo(req,cb){
           cb(json.zone[0]);
         else{
           //设置cls = 0 表示没有任何班级，不进行排行
-          //cb(true,{zone_id:0,school_id:0,role:0});
-          cb(false,"请绑定一个班级在进入游戏.");
+          cb({zone_id:0,school_id:0,role:0});
+          //cb(false,"请绑定一个班级在进入游戏.");
         }
       }else{
         cb(false,json.msg);
@@ -188,6 +188,15 @@ function login(req,res){
               if(zone){
                 let {zone_id,school_id,role} = zone;
                 sql(`insert into UserInfo (uid,cookie,lv,UserName,lastlogin,cls,school,role) values (${uid},'${cookie}',0,N'${uname}',getdate(),${zone_id},${school_id},${role})`).then((result)=>{
+                  //新产生的对象还没有数据
+                  req.UserInfo = {
+                    UserName:uname,
+                    uid,
+                    cookie,
+                    lv:0,
+                    olv:0,
+                    cls:0
+                  };
                   responeseLogin(req,res);
                 }).catch((err)=>{
                   res.send({result:err});

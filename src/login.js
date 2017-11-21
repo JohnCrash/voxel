@@ -108,6 +108,8 @@ class Login extends Component{
                 }
                 this.setState({exitButton:false,msg:e});
             }
+        },(msg)=>{
+            this.setState({exitButton:false,msg:msg});
         });
     }
     componentDidMount(){

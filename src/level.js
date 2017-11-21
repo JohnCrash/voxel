@@ -52,6 +52,13 @@ class Level extends Component{
     constructor(props){
         super(props);
         BlocklyInterface.setCurrentLevel(this);
+        //让工具条根据屏幕的宽度来自己觉得是否展开
+        let toolboxMode;
+        if(window.innerWidth < 500){//展开模式
+            toolboxMode = 'close'; 
+        }else{
+            toolboxMode = 'expand'; //工具条精简模式
+        }
         this.state={
             playPause:true,
             levelDesc:'',
@@ -59,11 +66,14 @@ class Level extends Component{
             openTops:true,
             isDebug:Global.isDebug(),
             landscape:Global.getLayout()==="landscape",
-            blocklytoolbox:Global.getPlatfrom()==='windows'?Global.getBlocklyToolbar():"close", //展开blockly工具条
+            blocklytoolbox:toolboxMode, //展开blockly工具条
             switchSize:false,
+            uiStyle:Global.getUIStyle(),
+            uiColor:'#000000',
         }
     }
     componentDidMount(){
+        Global.setCurrentLevelComponent(this);
         this.onGameStart(this.props);
         Global._immLayout = ((layout)=>{
             this.setState({landscape:layout==="landscape"});
@@ -74,16 +84,25 @@ class Level extends Component{
         Global._immDebug = ((b)=>{
             this.setState({isDebug:b});
         }).bind(this);        
-    }    
+    }
     componentWillUnmount(){
+        Global.setCurrentLevelComponent(null);
         Global._immLayout = null;
         Global._immBlocklytoolbox = null;
         Global._immDebug = null;
     }
-    Menu(){
+    setUIStyle(s){
+        this.setState({uiStyle:s});
+    }
+    setUIColor(c){
+        this.setState({uiColor:c});
+    }
+    Menu(event){
+        event.stopPropagation();
         this.drawer.open(true);
     }
-    Reset(){
+    Reset(event){
+        if(event)event.stopPropagation();
         if(Global.isDebug()){
             //重新加载全部资源
             ItemTemplate.reset();
@@ -94,10 +113,12 @@ class Level extends Component{
         this.blockview.reset();
         this.setState({playPause:true});
     }
-    RotationRight(){
+    RotationRight(event){
+        if(event)event.stopPropagation();
         this.voxview.RotationRight();
     }
-    RotationLeft(){
+    RotationLeft(event){
+        if(event)event.stopPropagation();
         this.voxview.RotationLeft();
     }
     /**
@@ -134,7 +155,8 @@ class Level extends Component{
             this.Reset();
         });
     } 
-    PlayPause(){
+    PlayPause(event){
+        event.stopPropagation();
         if(this._ready!==READY)return;
 
         if(this.needReset){
@@ -162,7 +184,8 @@ class Level extends Component{
         }
         this.setState({playPause:!this.state.playPause});
     }
-    Step(){
+    Step(event){
+        event.stopPropagation();
         if(this._ready!==READY)return;
 
         if(this.needReset){
@@ -186,6 +209,7 @@ class Level extends Component{
     }
     onGameStart(props){
         if(!this.voxview)return;
+
         Global.push(()=>{
             MessageBox.show("okcancel","游戏退出","你确定要返回主界面吗？",(result)=>{
                 if(result==='ok'){
@@ -194,6 +218,18 @@ class Level extends Component{
                 }
             });
         },'level');
+
+        /**
+         * 取得关卡段
+         */
+        if(window.innerWidth<window.innerHeight){
+            //portrait
+            let info = Global.appGetLevelInfo(props.level);
+            if(info ){
+                this.setState({uiColor:info.uicolor?info.uicolor:'#000000'});
+            }else this.setState({uiColor:'#FFFF00'});
+        }
+
         this._ready = LOADING;
 //        MessageBox.showLoading('正在加载请稍后...');
         this.loadTest(props.level);
@@ -301,22 +337,27 @@ class Level extends Component{
         if(this.blockcount)
             this.blockcount.innerText = `${count}×`;
     }
-    Help(){
-        if(Global.getMaxPassLevel()<=1){
+    Help(event){
+        if(event)event.stopPropagation();
+        if(1){//Global.getMaxPassLevel()<=1){
+            /* //帮助提示
             TextManager.load(`scene/ui/help.md`,()=>{
                 MessageBox.show('help',undefined,[<MarkdownElement file={`scene/ui/help.md`}/>,
                     <MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
                     console.log(result);
                 });
-            });
+            }); */
+            MessageBox.show('',undefined,[<MarkdownElement file={`scene/ui/guid.md`}/>],(result)=>{
+                this.blockview.openGuid();
+            },'tips');   
         }else{
             MessageBox.show('ok',undefined,[<MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
                 console.log(result);
             });             
         }
     }
-    toolbarEle(){
-        let {playPause,curSelectTest,isDebug} = this.state;   
+    toolbarEle(portrait){
+        let {uiColor,playPause,curSelectTest,isDebug} = this.state;   
         let tests = [];
         if(this.testXML){
             for(let i=0;i<this.testXML.length;i++)
@@ -338,32 +379,37 @@ class Level extends Component{
             {tests}
         </SelectField>]:[];
         let b = Global.getPlatfrom()==='windows';
-        return <Toolbar>
-                    <ToolbarGroup>
+        let styles = {color:uiColor};
+        return <Toolbar style={portrait?{width:"100%",
+                background:"rgba(0,0,0,0)",
+                bottom:"0px",
+                position:"absolute"}:undefined}>
+                    {portrait?undefined:<ToolbarGroup>
                         <IconButton touch={true} onClick={this.Menu.bind(this)} tooltip={b?"菜单...":undefined} tooltipPosition="top-center">
                             <IconMenu />
                         </IconButton>                          
-                    </ToolbarGroup>
-                    <ToolbarGroup>
+                    </ToolbarGroup>}
+                    <ToolbarGroup lastChild={true}>
                         {debugTool}
-                        <IconButton touch={true} onClick={this.Help.bind(this)} tooltip={b?"打开帮助":undefined} tooltipPosition="top-center">
+                        <IconButton touch={true} iconStyle = {styles} onClick={this.Help.bind(this)} tooltip={b?"打开帮助":undefined} tooltipPosition="top-center">
                             <IconHelp />
                         </IconButton>                        
-                        <IconButton touch={true} onClick={this.RotationLeft.bind(this)} tooltip={b?"向左转动视角":undefined} tooltipPosition="top-center">
+                        <IconButton touch={true} iconStyle = {styles} onClick={this.RotationLeft.bind(this)} tooltip={b?"向左转动视角":undefined} tooltipPosition="top-center">
                             <IconRotateLeft />
                         </IconButton>  
-                        <IconButton touch={true} onClick={this.RotationRight.bind(this)} tooltip={b?"向右转动视角":undefined} tooltipPosition="top-center">
+                        <IconButton touch={true} iconStyle = {styles} onClick={this.RotationRight.bind(this)} tooltip={b?"向右转动视角":undefined} tooltipPosition="top-center">
                             <IconRotateRight />
                         </IconButton>                                                  
-                        <IconButton touch={true} onClick={this.Reset.bind(this)} tooltip={b?"重新开始":undefined} tooltipPosition="top-center">
+                        <IconButton touch={true} iconStyle = {styles} onClick={this.Reset.bind(this)} tooltip={b?"重新开始":undefined} tooltipPosition="top-center">
                             <IconReplay />
                         </IconButton>                                                
-                        <IconButton touch={true} onClick={this.Step.bind(this)} tooltip={b?"单步执行你的程序":undefined} tooltipPosition="top-center">
+                        <IconButton touch={true} iconStyle = {styles} onClick={this.Step.bind(this)} tooltip={b?"单步执行你的程序":undefined} tooltipPosition="top-center">
                             <IconStep />
-                        </IconButton>                        
+                        </IconButton>
+                        {portrait?undefined:
                         <IconButton touch={true} onClick={this.PlayPause.bind(this)} iconStyle={redIcon} tooltip={b?"执行你的程序":undefined} tooltipPosition="top-center">
                             {playPause?<IconPlayArrow/>:<IconPause/>}
-                        </IconButton>
+                        </IconButton>}
                     </ToolbarGroup>
                 </Toolbar>;
     }
@@ -371,6 +417,7 @@ class Level extends Component{
     landscape(){
         let {levelDesc,curSelectTest,openTops,blocklytoolbox} = this.state;
         let {level} = this.props;
+        let divStyle = Global.getPlatfrom()==='ios'?{position:"fixed",left:'0px',right:'0px',top:'0px',bottom:'0px'}:undefined;
         return <div>
             <div style={{position:"absolute",left:"0px",top:"0px",right:"50%",bottom:"56px"}}>
                 <VoxView file={level} ref={ref=>this.voxview=ref}  layout="landscape"/>
@@ -389,9 +436,9 @@ class Level extends Component{
                 </div>
             </div>
             <div style={{position:"absolute",display:"flex",flexDirection:"column",left:"0px",right:"50%",bottom:"0px"}}>
-                {this.toolbarEle()}
+                {this.toolbarEle(false)}
             </div>
-            <MainDrawer key="mydrawer" ref={ref=>this.drawer=ref}/>
+            <MainDrawer ref={ref=>this.drawer=ref}/>
             <Tops ref={ref=>this.Tops=ref} level={level}/>
         </div>;
     }
@@ -403,8 +450,8 @@ class Level extends Component{
                     this.voxview.game.setSize(this.voxview.canvas.clientWidth,this.voxview.canvas.clientHeight);
                 //FIXBUG : blockview svgGroup_的父节点没有指定高度
                 if(this.blockview && this.blockview.workspace && this.blockview.workspace.svgGroup_){
-                    let p = this.blockview.workspace.svgGroup_.parentNode;
-                    p.style = "height:100%";
+                    //let p = this.blockview.workspace.svgGroup_.parentNode;
+                    //p.style = "height:100%";
                     //this.blockview.workspace.resize(); //不工作
                     Blockly.svgResize(this.blockview.workspace); //工作
                     //window.dispatchEvent(new Event('resize'));
@@ -414,30 +461,46 @@ class Level extends Component{
     }
     //竖屏
     portrait(){
-        let {levelDesc,curSelectTest,openTops,blocklytoolbox,switchSize} = this.state;
+        let {uiColor,uiStyle,playPause,levelDesc,curSelectTest,openTops,blocklytoolbox,switchSize} = this.state;
         let {level} = this.props;
-        return <div>
-            <div style={{position:"absolute",left:"0px",top:"0px",right:"0px",bottom:switchSize?"40%":"60%"}}
-                onClick={(event)=>{this.switchSize(this);}
-                }
+        //ios关闭滚动
+        let divStyle = Global.getPlatfrom()==='ios'?{position:"fixed",left:'0px',right:'0px',top:'0px',bottom:'0px'}:undefined;
+        return <div style={divStyle}>
+            <div style={{position:"absolute",left:"0px",top:"0px",right:"0px",bottom:switchSize?"40%":"50%"}}
+                /* onClick={(event)=>{this.switchSize(this);} 
+                }*/
             >
                 <VoxView file={level} ref={ref=>this.voxview=ref} layout="portrait" style={{width:"100%",height:"100%"}}/>
+                {uiStyle==='simple'?undefined:this.toolbarEle(true)}
+                <div style={{position:"absolute",right:"0px",bottom:"0px"}}>
+                    <IconButton 
+                        style={{width:"70px",height:"70px",padding:"12px"}}
+                        iconStyle={{width:"36px",height:"36px",color:"#F44336"}}
+                        touch={true} onClick={this.PlayPause.bind(this)} tooltipPosition="top-center">
+                        {playPause?<IconPlayArrow/>:<IconPause/>}
+                    </IconButton>
+                </div>                
             </div>
-            <div style={{position:"absolute",left:"0px",top:switchSize?"60%":"40%",right:"0px",bottom:"0px"}}>
-                {this.toolbarEle()}
-                <div style={{position:"absolute",left:"0px",right:"0px",top:"56px",bottom:"0px"}}>
+            <div style={{position:"absolute",left:"0px",top:switchSize?"60%":"50%",right:"0px",bottom:"0px"}}>
+                <div style={{position:"absolute",left:"0px",right:"0px",top:"0px",bottom:"0px"}}>
                 <BlockView ref={ref=>this.blockview=ref} 
                     file={`scene/${level}.toolbox`} 
                     onBlockCount={this.onBlockCount.bind(this)}
                     layout="portrait"
+                    guid={true}
                     toolbox={blocklytoolbox} />
                 </div>
-                <div style={{position:"absolute",right:"12px",top:"78px"}}>
-                    <span ref={ref=>this.blockcount=ref} style={{fontSize:"24px",fontWeight:"bold",verticalAlign:"middle"}}>0×</span>
-                    <img src="media/title-beta.png" style={{height:"24px",verticalAlign:"middle"}} />
-                </div>
             </div>
-            <MainDrawer key="mydrawer" ref={ref=>this.drawer=ref}/>
+            <div style={{position:"absolute",right:"12px",top:"12px"}}>
+                    <span ref={ref=>this.blockcount=ref} style={{fontSize:"24px",fontWeight:"bold",verticalAlign:"middle",color:uiColor}}>0×</span>
+                    <img src="media/title-beta.png" style={{height:"24px",verticalAlign:"middle"}} />
+            </div>
+            <div>
+                <IconButton touch={true} iconStyle={{color:uiColor}} onClick={this.Menu.bind(this)} tooltipPosition="top-center">
+                    <IconMenu />
+                </IconButton>
+            </div>
+            <MainDrawer ref={ref=>this.drawer=ref}/>
             <Tops ref={ref=>this.Tops=ref} level={level}/>
         </div>;
     }
@@ -445,12 +508,7 @@ class Level extends Component{
         if(Global.getMaxPassLevel()===null){
             return <Redirect to='/login' />;
         }
-        //只有在调试模式
-        if(Global.isDebug())
-            return this.state.landscape?this.landscape():this.portrait();
-        else{
-            return window.innerWidth>window.innerHeight?this.landscape():this.portrait();
-        }
+        return window.innerWidth>window.innerHeight?this.landscape():this.portrait();
     }
 };
 

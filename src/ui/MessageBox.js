@@ -41,6 +41,10 @@ class MessageBox extends Component{
         if(!style){
             if(Global.getPlatfrom()!=='windows')
                 style = {width:"95%"};
+        }else{
+            if(style==='tips'){
+                style = {width:"100%",maxWidth:"100%",top:"0px",position:"fixed",transform:""};
+            }
         }
         if(MessageBox.globalNode.state.open){
             MessageBox.globalNode.handleClose();
@@ -138,18 +142,18 @@ class MessageBox extends Component{
                 }           
                 break;
             case 'ok':
-            default:
                 actions = [<FlatButton
                     label="确定"
                     primary={true}
-                    onClick={this.handleClose.bind(this,'ok')}/>];
+                    onClick={this.handleClose.bind(this,'ok')}/>];            
+            default:
                 break;
         }
         return <div>
             <Dialog
             title={this.state.title}
             actions={actions}
-            modal={true}
+            modal={false}
             open={this.state.open}
             autoScrollBodyContent={true}
             contentStyle={this.state.style}

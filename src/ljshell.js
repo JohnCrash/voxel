@@ -1,14 +1,22 @@
 class _ljshell{
     constructor(){
     }
-    init(cb){
+    init(cb,log){
         if(this._userinfo){
             cb(true);
         }else{
+            console.log('call document.addEventListener');
+            log('call document.addEventListener');
             document.addEventListener('deviceready', ()=>{
                 this.lj = window.ljAppObject;
                 let n = 0;
+                console.log('document.addEventListener return');
+                log('document.addEventListener return');
                 this.lj.userinfo((msg,status)=>{
+                    console.log('userinfo return :'+msg);
+                    log('userinfo return :'+msg);
+                    console.log('status :'+status);
+                    log('userinfo return :'+msg);
                     if(status){
                         try{
                             this._userInfo = JSON.parse(msg);
@@ -28,7 +36,7 @@ class _ljshell{
                         this._userInfo = null;
                         cb(false,`没有从乐教乐学大厅进入. (${window.ljAppObject}),(${window.cordova})`);    
                     }
-                },5000);
+                },1);
             }
         }
     }

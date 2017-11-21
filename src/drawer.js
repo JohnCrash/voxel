@@ -4,6 +4,12 @@ import MenuItem from 'material-ui/MenuItem';
 import Toggle from 'material-ui/Toggle';
 import IconHome from 'material-ui/svg-icons/action/home';
 import HelpIcon from 'material-ui/svg-icons/action/help';
+//import IconMusic from 'material-ui/svg-icons/image/music-note';
+//import IconAudio from 'material-ui/svg-icons/image/audiotrack';
+//import IconLang from 'material-ui/svg-icons/action/language';
+import IconDebug from 'material-ui/svg-icons/action/bug-report';
+import IconAbout from 'material-ui/svg-icons/action/face';
+import IconTips from 'material-ui/svg-icons/communication/live-help';
 import {Global} from './global';
 import BlocklyInterface from './vox/blocklyinterface';
 import {MessageBox} from './ui/MessageBox';
@@ -25,9 +31,12 @@ class MainDrawer extends Component{
             lang:false,
             landscape:Global.getLayout()==="landscape",
             blocklytoolbox:Global.getPlatfrom()==='windows'?Global.getBlocklyToolbar():"close",
-            isdebug : Global.isDebug()
+            isdebug : Global.isDebug(),
+            openDebug : false,
+            uistyle : Global.getUIStyle()
         };
         this.motifyConfig = false;
+        this.debugClick = 0;
     }
     onReturnMain(){
         console.log('exit..');
@@ -112,28 +121,52 @@ class MainDrawer extends Component{
             });
         });
     }
+    onAbout = (event)=>{
+        let f = "scene/ui/about.md";
+        this.setState({openMenu:false});
+        TextManager.load(f,()=>{
+            MessageBox.show('ok',undefined,<MarkdownElement file={f}/>,(result)=>{
+                console.log(result);
+            });
+        });        
+    }
+    handleOpenDebug=(event)=>{
+        if(this.debugClick===0){
+            setTimeout(()=>{
+                if(this.debugClick>3)
+                    this.setState({openDebug:!this.state.openDebug});
+                this.debugClick = 0;
+            },600);
+        }
+        this.debugClick++;
+    }
+    onTip = (event)=>{
+        this.setState({openMenu:false});
+        Global.openLevelTips();
+    }
    render(){
-        let {music,sound,lang,openMenu,landscape,blocklytoolbox} = this.state;
+        let {music,sound,lang,uistyle,openMenu,landscape,blocklytoolbox,openDebug} = this.state;
         let {loc} = this.props;
-        let DebugItem = Global.isDebug()?[
-            <hr key='drawerhr' />,
-            <Toggle key='drawerlayout' label="使用竖屏" style={ToggleStyle} defaultToggled={!landscape} onToggle={(e,b)=>{
-                this.setState({landscape:!b});
-                this.motifyConfig = true;
-                Global.setLayout(!b?"landscape":"portrait");
-            }} />,
-            <Toggle key='drawertoolbar' label="Blockly紧凑工具条" style={ToggleStyle} defaultToggled={blocklytoolbox!=="expand"} onToggle={(e,b)=>{
-                this.setState({blocklytoolbox:b?"close":"expand"});
-                this.motifyConfig = true;
-                Global.setBlocklyToolbar(b?"close":"expand");
-            }} />,
-            <MenuItem key='downloadwindows' primaryText="下载Windows版本"  onClick={this.onDownload.bind(this,'windows')}/>,
-            <MenuItem key='downloadandroid' primaryText="下载Android版本"  onClick={this.onDownload.bind(this,'android')}/>,
-            <MenuItem key='drawerleveldebug' primaryText="关卡调试界面"  onClick={this.onLevelDebug.bind(this)} />,  
-            <MenuItem key='drawerdebug' primaryText="关卡调试"  onClick={this.onDebug.bind(this)} checked={this.state.isdebug}/>,
-            <MenuItem key='drawerlogout' primaryText={`登出(${Global.getUserName()})`} onClick={this.onLogout.bind(this)}/> 
-        ]:[];
-        return <div><Drawer 
+        let DebugItem = window.LOCALHOST?[
+                <hr key='drawerhr' />,
+                <Toggle key='drawerlayout' label="使用竖屏" style={ToggleStyle} defaultToggled={!landscape} onToggle={(e,b)=>{
+                    this.setState({landscape:!b});
+                    this.motifyConfig = true;
+                    Global.setLayout(!b?"landscape":"portrait");
+                }} />,
+                <Toggle key='drawertoolbar' label="Blockly紧凑工具条" style={ToggleStyle} defaultToggled={blocklytoolbox!=="expand"} onToggle={(e,b)=>{
+                    this.setState({blocklytoolbox:b?"close":"expand"});
+                    this.motifyConfig = true;
+                    Global.setBlocklyToolbar(b?"close":"expand");
+                }} />,
+                <MenuItem key='downloadwindows' primaryText="下载Windows版本"  onClick={this.onDownload.bind(this,'windows')}/>,
+                <MenuItem key='downloadandroid' primaryText="下载Android版本"  onClick={this.onDownload.bind(this,'android')}/>,
+                <MenuItem key='drawerleveldebug' primaryText="关卡调试界面"  onClick={this.onLevelDebug.bind(this)} />,  
+                <MenuItem key='drawerdebug' primaryText="关卡调试"  onClick={this.onDebug.bind(this)} checked={this.state.isdebug}/>,
+                <MenuItem key='drawerlogout' primaryText={`登出(${Global.getUserName()})`} onClick={this.onLogout.bind(this)}/> 
+            ]:[];
+
+        return <div onClick={this.handleOpenDebug}><Drawer 
             docked={false} 
             open={openMenu} 
             disableSwipeToOpen={true}
@@ -148,26 +181,36 @@ class MainDrawer extends Component{
                         }
                     }
                 } />
-            <Toggle label="背景音乐" style={ToggleStyle} defaultToggled={music} onToggle={(e,b)=>{
+            <Toggle label={'背景音乐'} style={ToggleStyle} defaultToggled={music} onToggle={(e,b)=>{
                 this.setState({music:b});
                 this.motifyConfig = true;
                 Global.muteMusic(b);
             }} />
-            <Toggle label="音效" style={ToggleStyle} defaultToggled={sound} onToggle={(e,b)=>{
+            <Toggle label={'游戏音效'} style={ToggleStyle} defaultToggled={sound} onToggle={(e,b)=>{
                 this.setState({sound:b});
                 this.motifyConfig = true;
                 Global.muteSound(b);
             }} />
-            <Toggle label="使用英语" style={ToggleStyle} defaultToggled={lang} onToggle={(e,b)=>{
+            <Toggle label={'使用英语'} style={ToggleStyle} defaultToggled={lang} onToggle={(e,b)=>{
                 this.setState({lang:b});
                 this.motifyConfig = true;
                 Global.setCurrentLang(b?"en":"zh");
-            }} />   
-            <MenuItem primaryText="帮助..." leftIcon={<HelpIcon />} onClick={this.onHelp}/> 
+            }} />
+            <Toggle label={'精简界面'} style={ToggleStyle} defaultToggled={uistyle} onToggle={(e,b)=>{
+                this.setState({uistyle:b});
+                this.motifyConfig = true;
+                Global.setUIStyle(b?"simple":"features");
+            }} />       
+            {this.props.loc==="game"?<MenuItem primaryText="任务提示..." leftIcon={<IconTips />} onClick={this.onTip}/>:undefined}
+            <MenuItem primaryText="操作帮助..." leftIcon={<HelpIcon />} onClick={this.onHelp}/> 
+            <MenuItem primaryText="关于..." leftIcon={<IconAbout />} onClick={this.onAbout}/> 
+            {openDebug?<MenuItem primaryText="DEBUG..." leftIcon={<IconDebug />} onClick={(event)=>{
+                window.location = 'http://192.168.2.83:3001/#/login'
+            }}/>:undefined}
             {DebugItem}
         </Drawer>
         <LevelDebug ref={ref=>this.levelDbg=ref} />
-        </div>;    
+        </div>;
     }
 }
 MainDrawer.defaultProps = {

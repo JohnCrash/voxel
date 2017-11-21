@@ -46,14 +46,15 @@ class _Global_ extends EventEmitter{
         },'game');
         //到后台
         document.addEventListener("pause", (event)=>{
-            if(this._muteMusic && this._sceneManager){
-                this._sceneManager.stopMusic();
-            }                        
+           // 
+           // if(this._muteMusic && this._sceneManager){
+           //     this._sceneManager.stopMusic();
+           // }                        
         }, false);  
         //到前台     
         document.addEventListener("resume", (event)=>{
-            if(this._muteMusic && this._sceneManager)
-                this._sceneManager.muteMusic(false);        
+           // if(this._muteMusic && this._sceneManager)
+           //     this._sceneManager.muteMusic(false);        
         }, false);
         /*
         if(window.native && native.quit){
@@ -157,6 +158,7 @@ class _Global_ extends EventEmitter{
             if(config){
                 this.muteMusic(config.music);
                 this.muteSound(config.sound);
+                this.setUIStyle(config.uisyle);
                 this.setLayout(config.layout);
                 this.setCharacter(config.character);
                 if(this._uid===144970||this._uid===25911300||this._uid===24321614)
@@ -179,6 +181,7 @@ class _Global_ extends EventEmitter{
             music : this._muteMusic,
             sound : this._muteSound,
             layout : this._layout,
+            uisyle : this._uiStyle,
             character : this._character})
         },
         (json)=>{
@@ -221,6 +224,23 @@ class _Global_ extends EventEmitter{
                     let e = Number(m[2]);
                     if(b <= level && e >= level){
                         return `L${i+1}-${level-b+1}`;
+                    }
+                }
+            }
+        }
+    }
+    //取得关卡的段结构
+    //level = 0,1,...
+    getLevelSegment(level){
+        if(this.LevelJson && this.LevelJson.level){
+            for(let i = 0 ;i<this.LevelJson.level.length;i++){
+                let seg = this.LevelJson.level[i];
+                if( seg.rang ){
+                    let m = seg.rang.match(/(\d+)-(\d+)/);
+                    let b = Number(m[1]);
+                    let e = Number(m[2]);
+                    if(b <= level && e >= level){
+                        return seg;
                     }
                 }
             }
@@ -498,6 +518,32 @@ class _Global_ extends EventEmitter{
     }
     appTitle(t){
         if(this._appTitle)this._appTitle(t);
+    }
+    //设置界面颜色simple 精简,features 功能
+    setCurrentLevelComponent(t){
+        this._currentLevelComponent = t;
+    }
+    setUIStyle(s){
+        if(s==='simple' || s==='features'){
+            this._uiStyle = s;
+            if(this._currentLevelComponent){
+                this._currentLevelComponent.setUIStyle(s);
+            }
+        }
+    }
+    setUIColor(c){
+        if(this._currentLevelComponent){
+            this._currentLevelComponent.setUIColor(c);
+        }
+    }
+    getUIStyle(){
+        if(this._uiStyle)return this._uiStyle;
+        return 'simple';
+    }
+    openLevelTips(){
+        if(this._currentLevelComponent){
+            this._currentLevelComponent.Help();
+        }
     }
 };
 

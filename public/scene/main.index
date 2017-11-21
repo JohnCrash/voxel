@@ -44,6 +44,7 @@
 			"desc" : "If else",
 			"preview" : "scene/image/6.png",
 			"rang" : "51-60",
+			"uicolor" : "#FFFFFF",
 			"unlock" : "100"
 		},	
 		{

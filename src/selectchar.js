@@ -1,12 +1,21 @@
 import React, {Component} from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import VoxElement from './ui/VoxElement';
 import MarkdownElement from './ui/MarkdownElement';
 import {Global} from './global';
 
-const selectedColor = 0x64B5F6;
-const unselectColor = 0xFFFFFF;
+const selectedColor = '#64B5F6';
+const unselectColor = '#FFFFFF';
+
+function m() {
+    var res = {};
+    for (var i = 0; i < arguments.length; ++i) {
+      if (arguments[i]) {
+        Object.assign(res, arguments[i]);
+      };
+    }; 
+    return res;
+}
 
 class SelectChar extends Component{
     constructor(props){
@@ -39,9 +48,9 @@ class SelectChar extends Component{
             onClick={this.handleOk.bind(this)}/>];
         let {open,select} = this.state;
         let WIDTH = Global.getPlatfrom()==="windows"?220:140;
-        let HEIGHT = Global.getPlatfrom()==="windows"?300:220;        
+        let HEIGHT = Global.getPlatfrom()==="windows"?250:180;        
         let styles = {
-            width:WIDTH,height:HEIGHT,marginRight:12,marginLeft:12
+            width:WIDTH,height:HEIGHT,padding:12
         };        
         return <Dialog
             actions={actions}
@@ -50,11 +59,11 @@ class SelectChar extends Component{
             open={open}>
                 <MarkdownElement file="scene/ui/select_top.md"/>
                 <div style={{display:"inline-flex", display:"-webkit-flex",justifyContent:"center",width:"100%"}}>
-                    <div style={styles} onClick={this.onSelect.bind(this,'boy')}>
-                        <VoxElement file={'男孩'} bgcolor={select==="boy"?selectedColor:unselectColor}/>
+                    <div style={m(styles,select==='boy'?{backgroundColor:selectedColor}:{backgroundColor:unselectColor})} onClick={this.onSelect.bind(this,'boy')}>
+                        <img style={{width:"100%",height:"100%"}} src='scene/image/boys.png'/>
                     </div>
-                    <div style={styles} onClick={this.onSelect.bind(this,'girl')}>
-                        <VoxElement file={'女孩'} bgcolor={select==="girl"?selectedColor:unselectColor}/>
+                    <div style={m(styles,select==='girl'?{backgroundColor:selectedColor}:{backgroundColor:unselectColor})} onClick={this.onSelect.bind(this,'girl')}>
+                        <img style={{width:"100%",height:"100%"}} src='scene/image/grils.png'/>
                     </div>
                 </div>
                 <MarkdownElement file="scene/ui/select_bottom.md"/>

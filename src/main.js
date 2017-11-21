@@ -35,7 +35,12 @@ class Main extends Component{
         if(Global.getMaxPassLevel()===null){
             return <Redirect to='/login' />;
         }
-        return <div><AppBar key='mainbar' title={this.state.title} onLeftIconButtonTouchTap={this.onMenu.bind(this)}/>
+        //ios关闭滚动
+        let appbarStyle = Global.getPlatfrom()==='ios'?{position:"fixed"}:undefined;
+        return <div><AppBar 
+            title={this.state.title}
+            style={appbarStyle}
+            onLeftIconButtonTouchTap={this.onMenu.bind(this)}/>
             <MainDrawer key='mydrawer' loc='main' ref={ref=>this.drawer=ref}/>
         <LevelSel key='levelselect' index='main' current={Global.getMaxPassLevel()} 
             other={ Global.getLoginJson()? Global.getLoginJson().cls:null} 

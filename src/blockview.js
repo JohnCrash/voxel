@@ -11,9 +11,12 @@ import Dialog from 'material-ui/Dialog';
 import IconAdd from 'material-ui/svg-icons/content/add';
 import IconDec from 'material-ui/svg-icons/content/remove';
 import FlatButton from 'material-ui/FlatButton';
+import {MessageBox} from './ui/MessageBox';
+import MarkdownElement from './ui/MarkdownElement';
 //import CreateIcon from 'material-ui/svg-icons/action/build';
 import {CreateIcon} from './ui/myicon';
 import cloneDeep from 'clone-deep';
+import Guid from './guid';
 
 function parserXML(id,text){
     let result;
@@ -57,6 +60,22 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function(){
     trimOptions_.call(this);
 }
 
+/**
+ * 去掉右键功能
+ */
+const handleRightClick = Blockly.Gesture.prototype.handleRightClick;
+Blockly.Gesture.prototype.handleRightClick = function(e){
+}
+
+const GUID_ENABLE = 7;
+const GUID_DISABLE = 0;
+const GUID_OPENFLYOUT = 1;
+const GUID_DRAG = 2;
+const GUID_LINK = 3;
+const GUID_NUM = 4;
+const GUID_RUN = 5;
+const GUID_SUCCESS = 6;
+
 class BlockView extends Component{
     constructor(props){
         super(props);
@@ -70,6 +89,7 @@ class BlockView extends Component{
             toolboxMode:this.props.toolbox,
             openNumInput:false,
             num:1,
+            guid:this.props.guid?GUID_ENABLE:GUID_DISABLE,
         };
     }
     componentDidMount(){
@@ -192,10 +212,21 @@ class BlockView extends Component{
 
         this.workspace.addChangeListener((event)=>{
             this.blockLimiteEvent();
-
+            console.log(event);
             if(this.toolboxMode!=="expand"){
                 let flyout = this.workspace.getFlyout_();
                 if(flyout)flyout.setVisible(false);
+            }
+            if(this.props.guid){ //在进行指南
+                if(event instanceof Blockly.Events.Move){
+                    if(this.getBlockCount()>=3){
+                        if(this.checkLink()){
+                            this.openGuid(GUID_NUM);
+                        }else{
+                            this.openGuid(GUID_LINK);
+                        }
+                    }
+                }
             }
             if(this.props.onBlockCount)
                 this.props.onBlockCount(this.getBlockCount());
@@ -241,12 +272,25 @@ class BlockView extends Component{
                 setTimeout(()=>{ //有个合上垃圾桶的过程
                     trashcan.svgGroup_.style.opacity=0;
                     _this.setState({tbopen:true});
-                },400);
+                },500);
             }
 
             let flyout = this.workspace.getFlyout_();
             if(flyout){
                 flyout.setVisible(false);
+            }
+            //点击空白关闭
+            let background = this.workspace.svgBackground_;
+            if(background){
+                background.addEventListener('touchend',(event)=>{
+                    if(this.workspace){
+                        let flyout = this.workspace.getFlyout_();
+                        if(flyout){
+                            if(flyout.isVisible_)
+                                flyout.setVisible(false);
+                        }
+                    }
+                },false);
             }
             let metrics = this.workspace.getMetrics();
             let w = metrics.contentWidth - metrics.viewWidth;
@@ -280,6 +324,58 @@ class BlockView extends Component{
                 Global.push(_this.handleClose.bind(_this));
                 _this.setState({openNumInput: true,num:Number(this.getValue())});
             }
+        }
+    }
+    openGuid(s){ //打开指南
+        if(this.props.guid){
+            let file;
+            let timeout = 500;
+            let {guid} = this.state;
+            switch(s){
+                case GUID_OPENFLYOUT:
+                    file = 'scene/ui/tips_flyout.md';
+                break;
+                case GUID_LINK:
+                if(guid===GUID_DRAG){
+                    file = 'scene/ui/tips_link.md';
+                }else return;
+                break;
+                case GUID_DRAG:
+                if(guid===GUID_OPENFLYOUT||guid===GUID_ENABLE){
+                    file = 'scene/ui/tips_drag.md';
+                }else return;
+                break;
+                case GUID_NUM:
+                if(guid===GUID_DRAG||guid===GUID_LINK){
+                    file = 'scene/ui/tips_num.md';
+                }else return;
+                break;
+                case GUID_RUN:
+                if(guid===GUID_NUM){
+                    file = 'scene/ui/tips_run.md';
+                }else return;
+                break;
+                case GUID_SUCCESS:
+                if(guid===GUID_RUN){
+                    file = 'scene/ui/tips_success.md';
+                }else return;
+                break;
+                default:
+                //开始;
+                if(this.toolboxMode!=="expand"){
+                    setTimeout(()=>{this.openGuid(GUID_OPENFLYOUT);},500);
+                }else{
+                    setTimeout(()=>{this.openGuid(GUID_DRAG);},500);
+                }
+            }
+            setTimeout(()=>{
+                if(file)
+                MessageBox.show('',undefined,[<MarkdownElement file={file}/>],(result)=>{
+                    console.log(result);
+                },'tips');             
+                this.setState({guid:s});                
+            },timeout);
+
         }
     }
     /**
@@ -410,7 +506,11 @@ class BlockView extends Component{
                     console.log('Program complete');
                     this.reset();
                     if(cb)cb('end');
-                    if(this.runComplateCB)this.runComplateCB('end');
+                    if(this.runComplateCB){
+                        //指南提示
+                        this.openGuid(GUID_SUCCESS);
+                        this.runComplateCB('end');
+                    }
                     this.runComplateCB = undefined;
                     return;
                 }
@@ -426,6 +526,8 @@ class BlockView extends Component{
                     flyout.setVisible(false);
                 }else{
                     flyout.setVisible(true);
+                    this.openGuid(GUID_DRAG); //提示拖动
+                    Blockly.svgResize(this.workspace);
                     this.workspace.deleteAreaToolbox_ = null;
                 }
             }
@@ -476,7 +578,7 @@ class BlockView extends Component{
                         <div style={{fontSize:"xx-large",margin:"12px"}}>{num}</div>
                         <IconButton touch={true} onClick={this.add.bind(this)}>
                             <IconAdd />
-                        </IconButton>                        
+                        </IconButton>
                     </div>
                     <br/>
                     <div style={{display:"flex",justifyContent:"center"}}>
