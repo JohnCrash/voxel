@@ -199,7 +199,7 @@ class BlockView extends Component{
                     zoom: {
                         //controls: true,
                         //wheel: false,
-                        //startScale: 1.1,
+                        startScale: !Global.isPad()?1:1.2
                         //maxScale: 1.2,
                         //minScale: 1,
                         //scaleSpeed: 1.2
@@ -212,7 +212,6 @@ class BlockView extends Component{
 
         this.workspace.addChangeListener((event)=>{
             this.blockLimiteEvent();
-            console.log(event);
             if(this.toolboxMode!=="expand"){
                 let flyout = this.workspace.getFlyout_();
                 if(flyout)flyout.setVisible(false);
@@ -225,6 +224,12 @@ class BlockView extends Component{
                         }else{
                             this.openGuid(GUID_LINK);
                         }
+                    }
+                }
+                if(event instanceof Blockly.Events.Change){
+                    if(this.getBlockCount()>=3 && this.checkLink() && event.name==="NUM"){
+                        if(Number(event.newValue) > 2)
+                            this.openGuid(GUID_RUN);
                     }
                 }
             }
@@ -326,7 +331,7 @@ class BlockView extends Component{
             }
         }
     }
-    openGuid(s){ //打开指南
+    openGuid(s,cb){ //打开指南
         if(this.props.guid){
             let file;
             let timeout = 500;
@@ -358,7 +363,10 @@ class BlockView extends Component{
                 case GUID_SUCCESS:
                 if(guid===GUID_RUN){
                     file = 'scene/ui/tips_success.md';
-                }else return;
+                }else{
+                    if(cb)cb();
+                    return;
+                }
                 break;
                 default:
                 //开始;
@@ -372,10 +380,13 @@ class BlockView extends Component{
                 if(file)
                 MessageBox.show('',undefined,[<MarkdownElement file={file}/>],(result)=>{
                     console.log(result);
+                    if(cb)cb();
                 },'tips');             
                 this.setState({guid:s});                
             },timeout);
 
+        }else{
+            if(cb)cb();
         }
     }
     /**
@@ -465,7 +476,7 @@ class BlockView extends Component{
      */
     step(cb){
         if(!this.checkLink()){
-            cb('nolink');
+            if(cb)cb('nolink');
             return;
         }        
         if(!this.myInterpreter){
@@ -507,8 +518,6 @@ class BlockView extends Component{
                     this.reset();
                     if(cb)cb('end');
                     if(this.runComplateCB){
-                        //指南提示
-                        this.openGuid(GUID_SUCCESS);
                         this.runComplateCB('end');
                     }
                     this.runComplateCB = undefined;

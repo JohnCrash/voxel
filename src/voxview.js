@@ -38,6 +38,16 @@ class VoxView extends Component{
         BlocklyInterface.setCurrentVoxView(this);
         Global.setCurrentSceneManager(this.sceneManager);
         this.load(this.props.file);
+
+        /**
+         * 加入
+         */
+        this.canvas.addEventListener('touchstart',this.touchstart,false);
+        this.canvas.addEventListener('touchend',this.touchend,false);
+        this.canvas.addEventListener('touchmove',this.touchmove,false);
+        this.canvas.addEventListener('mousedown',this.touchstart,false);     
+        this.canvas.addEventListener('mouseup',this.touchend,false);              
+        this.canvas.addEventListener('mousemove',this.touchmove,false);
     }
     componentWillReceiveProps(nextProps){
         if(this.props.file!=nextProps.file||this.props.layout!=nextProps.layout){
@@ -49,9 +59,41 @@ class VoxView extends Component{
         }
     }
     componentWillUnmount(){
+        this.canvas.removeEventListener('touchstart',this.touchstart,false);
+        this.canvas.removeEventListener('touchend',this.touchend,false);
+        this.canvas.removeEventListener('touchmove',this.touchmove,false);
+        this.canvas.removeEventListener('mousedown',this.touchstart,false);     
+        this.canvas.removeEventListener('mouseup',this.touchend,false);              
+        this.canvas.removeEventListener('mousemove',this.touchmove,false);         
         this.sceneManager.destroy();
         this.game.destroy();
         Global.setCurrentSceneManager(null);
+    }
+    touchstart = (event)=>{
+        this._down = true;
+        this._lastx = false;
+        event.stopPropagation();
+        return false;
+    }
+    touchend = (event)=>{
+        this._down = false;
+        this._lastx = false;
+        event.stopPropagation();
+        return false;
+    }
+    touchmove = (event)=>{
+        if(this._down){
+            if(event.type==='mousemove'){
+                this.sceneManager.rotateCamera(event.movementX*Math.PI/180); 
+            }else if(event.type==='touchmove'){
+                if(this._lastx){
+                    this.sceneManager.rotateCamera((this._lastx-event.touches[0].screenX)*Math.PI/180);
+                }
+                this._lastx = event.touches[0].screenX;    
+            }
+        }
+        event.stopPropagation();
+        return false;
     }
     initCharacter(json){
         //替换角色
@@ -119,7 +161,7 @@ class VoxView extends Component{
         this.sceneManager.rotateRight();
     }
     render(){
-        return <div style={{width:"100%",height:"100%"}}>
+        return <div style={{width:"100%",height:"100%"}} ref={r=>this.root=r}>
                 <canvas ref={canvas=>this.canvas=canvas} style={{width:"100%",height:"100%"}}></canvas>
                 <div style={{position:"absolute",left:"0",right:"0",top:"0",bottom:'0',justifyContent:'center',
                     display:this.state.loading?"flex":"none",

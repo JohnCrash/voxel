@@ -545,6 +545,9 @@ class _Global_ extends EventEmitter{
             this._currentLevelComponent.Help();
         }
     }
+    isPad(){
+        return !(this.getPlatfrom()==='windows' || window.innerWidth < 500);
+    }
 };
 
 export let Global = new _Global_();

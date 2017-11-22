@@ -21,6 +21,8 @@ import {MessageBox} from './ui/MessageBox';
 injectTapEventPlugin();
 
 let root = document.getElementById('root');
+//禁止浏览器选择
+document.onselectstart = ()=>{return false};
 
 console.log('Platfrom : '+Global.getPlatfrom());
 Global.setLayout(window.innerWidth>window.innerHeight?"landscape":"portrait");
@@ -30,7 +32,7 @@ const store = createStore(reducer);
 function App(){
     return <Provider  store={store}>
         <MuiThemeProvider>
-            <div>
+            <div style={{webkitUserSelect:"none",webkitTouchCallout:"none"}/*禁止ios打开选择*/}>
                 <Router>
                     <Switch>
                         <Route path='/main' component={Main}/>

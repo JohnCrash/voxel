@@ -48,6 +48,11 @@ const LOADING = 'loading';
 const READY = 'ready';
 const ERROR = 'error';
 
+const playNormalStyle = {width:"70px",height:"70px",padding:"12px"};
+const playIconNormalStyle = {width:"36px",height:"36px",color:"#F44336"};
+const playLargStyle = {width:"76px",height:"76px",padding:"12px"};
+const playIconLargStyle = {width:"42px",height:"42px",color:"#F44336"};
+
 class Level extends Component{
     constructor(props){
         super(props);
@@ -135,11 +140,15 @@ class Level extends Component{
                 Global.playSound(lj.failSound);
                 break;
             case 'MissionCompleted':
-                Global.playSound(lj.successSound);
-                this.Tops.open(this.blockview.getBlockCount(),
-                this.blockview.toXML(),now-this.btms,now-this.btpms,
-                ()=>{this.Reset();});
-                this.btpms = now;
+                //如果有指南这里需要先处理指南
+                //指南提示
+                this.blockview.openGuid(6,()=>{//GUID_SUCCESS
+                    Global.playSound(lj.successSound);
+                    this.Tops.open(this.blockview.getBlockCount(),
+                    this.blockview.toXML(),now-this.btms,now-this.btpms,
+                    ()=>{this.Reset();});
+                    this.btpms = now;    
+                });
                 return;
             case 'WrongAction':
                 md = 'scene/ui/wrongaction.md';
@@ -339,7 +348,10 @@ class Level extends Component{
     }
     Help(event){
         if(event)event.stopPropagation();
-        if(1){//Global.getMaxPassLevel()<=1){
+        /**
+         * 如果是第一个就是一个指南关卡
+         */
+        if(this.props.level==='L1-1'){
             /* //帮助提示
             TextManager.load(`scene/ui/help.md`,()=>{
                 MessageBox.show('help',undefined,[<MarkdownElement file={`scene/ui/help.md`}/>,
@@ -351,6 +363,9 @@ class Level extends Component{
                 this.blockview.openGuid();
             },'tips');   
         }else{
+            /**
+             * 其他关卡如果没玩过就提示，如果已经玩过加载最好成绩并且显示你和最少块数的差距
+             */
             MessageBox.show('ok',undefined,[<MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
                 console.log(result);
             });             
@@ -369,7 +384,7 @@ class Level extends Component{
         </IconButton>,
         <IconButton touch={true} key='remove' onClick={this.RemoveTest.bind(this)}>
             <RemoveTest />
-        </IconButton> ,                       
+        </IconButton>,
         <SelectField
             key = 'test'
             value={curSelectTest}
@@ -428,6 +443,7 @@ class Level extends Component{
                     file={`scene/${level}.toolbox`} 
                     onBlockCount={this.onBlockCount.bind(this)}
                     layout="landscape"
+                    guid={level==='L1-1'}
                     toolbox={blocklytoolbox} />
                 </div>
                 <div style={{position:"absolute",right:"12px",top:"12px"}}>
@@ -474,8 +490,8 @@ class Level extends Component{
                 {uiStyle==='simple'?undefined:this.toolbarEle(true)}
                 <div style={{position:"absolute",right:"0px",bottom:"0px"}}>
                     <IconButton 
-                        style={{width:"70px",height:"70px",padding:"12px"}}
-                        iconStyle={{width:"36px",height:"36px",color:"#F44336"}}
+                        style={Global.isPad()?playLargStyle:playNormalStyle}
+                        iconStyle={Global.isPad()?playIconLargStyle:playIconNormalStyle}
                         touch={true} onClick={this.PlayPause.bind(this)} tooltipPosition="top-center">
                         {playPause?<IconPlayArrow/>:<IconPause/>}
                     </IconButton>
@@ -487,7 +503,7 @@ class Level extends Component{
                     file={`scene/${level}.toolbox`} 
                     onBlockCount={this.onBlockCount.bind(this)}
                     layout="portrait"
-                    guid={true}
+                    guid={level==='L1-1'}
                     toolbox={blocklytoolbox} />
                 </div>
             </div>
