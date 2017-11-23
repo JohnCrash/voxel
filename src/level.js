@@ -31,6 +31,8 @@ import {
 import MainDrawer from "./drawer";
 import PropTypes from 'prop-types';
 import { setTimeout } from 'timers';
+import md from './mdtemplate';
+
 /*global Blockly*/
 const redIcon = {color:"#F44336"};
 
@@ -143,13 +145,17 @@ class Level extends Component{
             case 'MissionCompleted':
                 //如果有指南这里需要先处理指南
                 //指南提示
-                this.blockview.openGuid(6,()=>{//GUID_SUCCESS
-                    Global.playSound(lj.successSound);
-                    this.Tops.open(this.blockview.getBlockCount(),
-                    this.blockview.toXML(),now-this.btms,now-this.btpms,
-                    ()=>{this.Reset();});
-                    this.btpms = now;    
-                });
+                if(this.isPlayAgin()){
+                    this.commitAgin();
+                }else{
+                    this.blockview.openGuid(6,()=>{//GUID_SUCCESS
+                        Global.playSound(lj.successSound);
+                        this.Tops.open(this.blockview.getBlockCount(),
+                        this.blockview.toXML(),now-this.btms,now-this.btpms,
+                        ()=>{this.Reset();});
+                        this.btpms = now;    
+                    });    
+                }
                 return;
             case 'WrongAction':
                 md = 'scene/ui/wrongaction.md';
@@ -164,7 +170,12 @@ class Level extends Component{
         MessageBox.show('ok',undefined,<MarkdownElement file={md}/>,(result)=>{
             this.Reset();
         });
-    } 
+    }
+    isPlayAgin(){
+        let name = this.props.level;
+        let info = Global.appGetLevelInfo(name);
+        return (name!=='L1-1' && info && info.next-1 < Global.getMaxPassLevel());
+    }
     PlayPause(event){
         event.stopPropagation();
         if(this._ready!==READY)return;
@@ -276,8 +287,7 @@ class Level extends Component{
     }
     //如果是一个已经通关的关卡，这里加载以前自己提交的最好玩法
     loadLastCommitMethod(name){
-        let info = Global.appGetLevelInfo(name);
-        if(name!=='L1-1' && info && info.next-1 <= Global.getMaxPassLevel()){
+        if(this.isPlayAgin()){
             //加载本关方法
             let json = {
                 lname:name
@@ -408,9 +418,67 @@ class Level extends Component{
             /**
              * 其他关卡如果没玩过就提示，如果已经玩过加载最好成绩并且显示你和最少块数的差距
              */
-            MessageBox.show('ok',undefined,[<MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
-                console.log(result);
-            });             
+            let name = this.props.level;
+            let info = Global.appGetLevelInfo(name);
+            if(this.isPlayAgin()){
+                //已经玩过的，你可以优化代码了
+                let lvs = Global.getLoginJson().lvs;
+                if(lvs && lvs[info.next-1]){
+                    let blocks = lvs[info.next-1].blocks;
+                    let best = lvs[info.next-1].best;
+                    let dict={name,lv:info.next-1,blocks,best};
+                    TextManager.load(`scene/ui/play_again.md`,(iserr,text)=>{
+                        if(!iserr)MessageBox.show('',undefined,<MarkdownElement text={md(text,dict)} />,(result)=>{
+                        },'tips');
+                    });
+                }else{
+                    console.error(`lvs error ? ${info.next-1}`);
+                    console.log(lvs);
+                }
+            }else{
+                MessageBox.show('ok',undefined,[<MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
+                    console.log(result);
+                }); 
+            }          
+        }
+    }
+    //如果再一次成功完成任务
+    commitAgin(){
+        let name = this.props.level;
+        let info = Global.appGetLevelInfo(name);
+        let lvs = Global.getLoginJson().lvs;
+        let now = Date.now();
+        let lj = Global.levelJson();
+        if(lvs && lvs[info.next-1]){
+            let blocks = lvs[info.next-1].blocks;
+            let best = lvs[info.next-1].best;
+            let cur = this.blockview.getBlockCount();
+            let dict={name,lv:info.next-1,blocks:cur,best};
+            if(cur < blocks){
+                //成功提高
+                Global.playSound(lj.successSound);
+                TextManager.load(`scene/ui/best_again.md`,(iserr,text)=>{
+                    if(!iserr)MessageBox.show('',undefined,<MarkdownElement text={md(text,dict)} />,(result)=>{
+                        Global.playSound(lj.successSound);
+                        this.Tops.open(this.blockview.getBlockCount(),
+                        this.blockview.toXML(),now-this.btms,now-this.btpms,
+                        ()=>{this.Reset();});
+                        this.btpms = now;
+                    },'tips');                    
+                });
+            }else{
+                //没有成功
+                this.btpms = now;
+                Global.playSound(lj.failSound);
+                TextManager.load(`scene/ui/fail_again.md`,(iserr,text)=>{
+                    if(!iserr)MessageBox.show('',undefined,<MarkdownElement text={md(text,dict)} />,(result)=>{
+                    },'tips');                    
+                });                
+            }
+        }else{
+            console.error(`commit lvs error ? ${info.next-1}`);
+            console.log(lvs);
+            this.btpms = now;
         }
     }
     toolbarEle(portrait){

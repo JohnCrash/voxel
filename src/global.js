@@ -432,7 +432,8 @@ class _Global_ extends EventEmitter{
     }
     updateLevelRank(lv,rank){
         if(this._loginJson && this._loginJson.lvs){
-            this._loginJson.lvs[lv] = rank;
+            if(this._loginJson.lvs[lv])
+                this._loginJson.lvs[lv].rank = rank;
         }
     }
     getLoginJson(){

@@ -256,7 +256,7 @@ function initItemBlockly(_this){
 			.appendField(Blockly.Msg.JUMP);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
-		this.setColour(0);
+		this.setColour(335);
 	 this.setTooltip("");
 	 this.setHelpUrl("");
 	  }
@@ -315,7 +315,7 @@ function initItemBlockly(_this){
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
-		this.setColour(260);
+		this.setColour(266);
 	 this.setTooltip("");
 	 this.setHelpUrl("");
 	  }
@@ -494,7 +494,7 @@ function initItemBlockly(_this){
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
-		this.setColour(270);
+		this.setColour(230);
 	 this.setTooltip("");
 	 this.setHelpUrl("");
 	  }

@@ -177,10 +177,17 @@ function responeseLogin(req,res){
             }
             return 0;
           }
+          let best = function(lv){
+            let tt = lvtops[lv];
+            if(tt)return tt[0];
+          }
           for(let it of levels){ //计算每一关的排名
             if(it.lv && it.lv===+it.lv){
               if(lvtops[it.lv]){
-                lvs[it.lv] = rank(it.lv,it.blocks);
+                lvs[it.lv] = {rank:rank(it.lv,it.blocks),
+                  lv:it.lv,
+                  blocks:it.blocks,
+                  best:best(it.lv)};
               }
             }
           }

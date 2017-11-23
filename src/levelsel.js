@@ -54,7 +54,13 @@ class LevelSel extends PureComponent{
          * props.other 是一个数组，表示同班的其他进度
          * [ uid | UserName | lv | lastcommit ]
          * 重新映射为以lv为key的对象
-         * props.lvs 是一个数组，表示每一关你的排名
+         * props.lvs 是一个数组
+         * {
+         *  rank ,你的排名
+         *  lv , 关卡数
+         *  blocks ,你的最好块
+         *  best ,本关最佳块数
+         * }
          */
         let lvs = this.props.lvs?this.props.lvs:[];
         let others = {};
@@ -127,11 +133,11 @@ class LevelSel extends PureComponent{
                         need_unlock:islock && i===current, //需要解锁
                     };
                     if(i===seg_begin)
-                        bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} rank={lvs[i]} onClick={this.onSelectLevel.bind(this,link,p)} pos='first' state={s} />);
+                        bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} rank={lvs[i]?lvs[i].rank:0} onClick={this.onSelectLevel.bind(this,link,p)} pos='first' state={s} />);
                     else if(i===seg_end)
-                        bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} rank={lvs[i]} onClick={this.onSelectLevel.bind(this,link,p)} pos='last' state={s} />);
+                        bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} rank={lvs[i]?lvs[i].rank:0} onClick={this.onSelectLevel.bind(this,link,p)} pos='last' state={s} />);
                     else
-                        bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} rank={lvs[i]} onClick={this.onSelectLevel.bind(this,link,p)} state={s} />);
+                        bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} rank={lvs[i]?lvs[i].rank:0} onClick={this.onSelectLevel.bind(this,link,p)} state={s} />);
                 }
             }
             return <Card key={item.name} onLoad={curSeg?(event)=>{
