@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Bob from './bob';
 import PropTypes from 'prop-types';
+import {KingIcon} from './myicon';
 
 /**
  * opened   已经完成
@@ -143,15 +144,19 @@ class CircleButton extends Component{
         return bgstyle;
     }
     render(){
-        let {link,state,pos,disable,bob} = this.props;
+        let {link,state,pos,disable,rank,bob} = this.props;
         let c = cc(state);
         let hover = disable?c.normal : (this.state.hovered)?c.hover:c.normal;
         const style = this.getStyles();
         const bgstyle = this.getBgStyles();
-        let bhelf = this.context.circleRadius/2+"px";
-        return <div style={m({display: 'inline-block',position: 'relative'},bob&&{marginTop:this.context.circleRadius*5/4+12})}>
+        let bhelf = -10+this.context.circleRadius
+        let kingoffset = -(this.context.circleRadius/4+3);
+        return <div style={m({display: 'inline-block',position: 'relative'},bob?{marginTop:this.context.circleRadius*5/4+12}:{marginTop:"10px"})}>
             <div style={m(bgstyle,pos==='first'&&{left:bhelf},pos==='last'&&{right:bhelf})}></div>
             {bob?<Bob icon={`http://image-static.lejiaolexue.com/userlogo/${bob.uid}_99.jpg`} text={bob.UserName} />:undefined}
+            {rank==1 || rank==2?<div style={{position:"absolute",top:kingoffset+"px",left:"5px"}}>
+                <KingIcon style={{width:this.context.circleRadius+"px",height:"100%",color:rank==1?"#ffe800":"silver"}}/>
+            </div>:undefined}
             <a onClick={this.onClick.bind(this)} style={{position:'relative',textDecoration: 'none',cursor:"pointer"}}>
                 <div style={m(style,hover)}
                     onMouseLeave = {this.handleMouseLeave.bind(this)}

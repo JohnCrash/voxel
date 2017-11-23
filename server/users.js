@@ -125,20 +125,84 @@ function responeseLogin(req,res){
     for(let c of clss){
       c.UserName = stripTailSpace(c.UserName);
     }
-    let platform = req.body.platform;
-    //记录动作
-    sqlAction(uid,'login '+platform);
-    res.json({
-      result:'ok',
-      lv,
-      olv,
-      config,
-      user:stripTailSpace(UserName),
-      uid,
-      cookie,
-      clsid:cls,
-      cls:clss
-    });
+    /**
+     * 这里处理用户每一关的排名情况
+     * 首先取得用户关卡完成情况使用sql语句:select lv,blocks from Level where uid=${uid}
+     * 然后取得关卡排行情况sql语句:select lv,blocks from Tops
+     * 然后根据这两个表就可以计算出用户每一关的排行情况了
+     */
+    Promise.all([sql(`select lv,blocks from Level where uid=${uid}`),sql(`select lv,blocks from Tops`)]).then(
+      ([levelss,topss])=>{
+        let levels = levelss.recordset;
+        let tops = topss.recordset;
+        /**
+         *levels 返回的是我的关卡完成情况
+          [
+            {lv,blocks}
+            ...
+          ]
+         *tops 返回每关卡排行榜
+          [
+            {lv,blocks}
+            ...
+          ]
+         将结果填充到lvs中
+         [
+           5, //第一个的排名
+           ....
+         ]    
+         */
+        let lvs = [];
+        if(levels && tops){
+          //将tops做映射成二级数组,第一级是关卡，第二级数组是块数
+          let lvtops = [];
+          for(let it of tops){
+            if(it.lv && it.lv===+it.lv){
+              lvtops[it.lv] = lvtops[it.lv]?lvtops[it.lv]:[];
+              lvtops[it.lv].push(it.blocks);
+            }
+          }
+          //对二级表进行排序
+          for(let it of lvtops){
+            if(it)it.sort((a,b)=>a>b);
+          }
+          let rank = function(lv,blocks){ //关卡，块数返回排名,没有返回0
+            let tt = lvtops[lv];
+            if(tt){
+              for(let i = 0;i<tt.length;i++){
+                if(tt[i] >= blocks){
+                  return i+1;
+                }
+              }
+            }
+            return 0;
+          }
+          for(let it of levels){ //计算每一关的排名
+            if(it.lv && it.lv===+it.lv){
+              if(lvtops[it.lv]){
+                lvs[it.lv] = rank(it.lv,it.blocks);
+              }
+            }
+          }
+        }
+        let platform = req.body.platform;
+        //记录动作
+        sqlAction(uid,'login '+platform);
+        res.json({
+          result:'ok',
+          lv,
+          olv,
+          config,
+          user:stripTailSpace(UserName),
+          uid,
+          cookie,
+          clsid:cls,
+          cls:clss,
+          lvs
+        });        
+      }).catch((err)=>{
+        res.json({result:err});
+      });
   }).catch((err)=>{
     res.json({result:err});
   });
@@ -277,7 +341,7 @@ router.post('/commit',function(req,res){
       let avgms = req.body.each;
       let tms = req.body.total;
       if(data){
-        if(data.blocks>blocks){
+        if(data.blocks>blocks){ //块数降低了
           avgms += data.avgms;
           avgms /= 2;
           tms += data.tms;
@@ -320,6 +384,32 @@ router.post('/commit',function(req,res){
   }else{
     res.json({result:'没有按顺序完成关卡'});
   }
+});
+
+/**
+ * 已经玩过的关卡取得该关卡的自己的最佳玩法
+ * lname 要取的关卡名称
+ * 返回：一个json {method}
+ */
+router.post('/levelmethod',function(req,res){
+  let {lname} = req.body;
+  sql(`select md5 from Level where uid='${req.UserInfo.uid}' and lname='${lname}'`).then((result)=>{
+    let data = result.recordset[0];
+    let method = '';
+    if(data && data.md5){
+      sql(`select method from Method where md5='${data.md5}'`).then((result)=>{
+        let m = result.recordset[0];
+        if(m && m.method){
+          method = m.method;
+        }
+        res.json({result:'ok',method});
+      }).catch((err)=>{
+        res.json({result:err});});
+    }else
+      res.json({result:'ok',method});
+  }).catch((err)=>{
+    res.json({result:err});
+  });
 });
 
 /**

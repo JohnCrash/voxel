@@ -55,7 +55,7 @@ function add(uid,cls,lv,name,ws){
 /**
  * 在线用户uid的关卡前进了
  */
-function pass(uid,cls,lv,ws){
+function pass(uid,cls,lv,name,ws){
     let clss = liveUsers[cls];
     if(clss){
         for(let c of clss){
@@ -63,7 +63,7 @@ function pass(uid,cls,lv,ws){
                 c.lv = lv; //更新自己
                 c.ws = ws;
             }else{//通知同班同学
-                sendMsg(c.ws,{event:'pass',uid,lv,cls,name:c.name})
+                sendMsg(c.ws,{event:'pass',uid,lv,cls,name})
             }
         }
     }
@@ -114,7 +114,7 @@ function upgrade(request, socket, body){
                                 add(t.uid,t.cls,t.lv,t.name,ws);
                                 break;
                             case 'pass':
-                                pass(t.uid,t.cls,t.lv,ws);
+                                pass(t.uid,t.cls,t.lv,t.name,ws);
                                 break;
                         }
                     }

@@ -19,3 +19,7 @@ unlock_complete.md 解锁完成
 download_android.md 主菜单中下载android版本对话栏中显示
 download_windows.md 主菜单中下载windows版本对话栏中显示
 completed.md 所有的关卡完成
+
+play_again.md 开始优化提升
+fail_again.md 优化失败
+best_again.md 成功优化

@@ -40,9 +40,9 @@ class LevelOf extends Component{
             let others = {};
             if(this.props && this.props.other){
                 for(let o of this.props.other){
-                //这里最近的
-                if(!others[o.lv] || (others[o.lv] && others[o.lv].lvdate > o.lvdate))
-                    others[o.lv] = o;
+                    //这里最近的
+                    if(!others[o.lv] || (others[o.lv] && others[o.lv].lvdate > o.lvdate))
+                        others[o.lv] = o;
                 }
             }      
             function lvtoid(lv){
@@ -62,11 +62,11 @@ class LevelOf extends Component{
                 }else if(i>maxpasslevel)
                     s = 'unfinished';            
                 if(i===info.begin)
-                    bl.push(<CircleButton key={i} label={i} bob={lvtoid(i)} pos='first' state={s} disable={true}/>);
+                    bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} pos='first' state={s} disable={true}/>);
                 else if(i===info.end)
-                    bl.push(<CircleButton key={i} label={i} bob={lvtoid(i)} pos='last' state={s} disable={true}/>);
+                    bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} pos='last' state={s} disable={true}/>);
                 else
-                    bl.push(<CircleButton key={i} label={i} bob={lvtoid(i)} state={s} disable={true}/>);
+                    bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} state={s} disable={true}/>);
             }
         }
         return <div style={style}>

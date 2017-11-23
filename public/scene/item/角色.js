@@ -77,7 +77,7 @@ function initItemBlockly(_this){
 	Blockly.Blocks['when_start'] = {
     init: function () {
         Blockly.BlockSvg.START_HAT = true;
-        this.setColour(60);
+        this.setColour(52);
         this.appendDummyInput()
             .setAlign(Blockly.ALIGN_CENTRE)
             .appendField(Blockly.Msg.WHEN_START);
@@ -93,7 +93,7 @@ function initItemBlockly(_this){
 	//前进
 	Blockly.Blocks['forward'] = {
     init: function () {
-        this.setColour(200);
+        this.setColour(205);
         appendCharacterDropdown(this.appendValueInput("STEP")
             .setCheck("Number"))
             .appendField(Blockly.Msg.FORWARD);
@@ -315,7 +315,7 @@ function initItemBlockly(_this){
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
-		this.setColour(230);
+		this.setColour(260);
 	 this.setTooltip("");
 	 this.setHelpUrl("");
 	  }

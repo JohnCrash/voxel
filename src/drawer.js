@@ -205,7 +205,7 @@ class MainDrawer extends Component{
             <MenuItem primaryText="操作帮助..." leftIcon={<HelpIcon />} onClick={this.onHelp}/> 
             <MenuItem primaryText="关于..." leftIcon={<IconAbout />} onClick={this.onAbout}/> 
             {openDebug?<MenuItem primaryText="DEBUG..." leftIcon={<IconDebug />} onClick={(event)=>{
-                window.location = 'http://192.168.2.83:3001/#/login'
+                window.location = `http://192.168.2.83:3001/#/login/${Global.getUID()}/${Global.getUserName()}/${Global.getCookie()}`
             }}/>:undefined}
             {DebugItem}
         </Drawer>

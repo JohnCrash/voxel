@@ -322,11 +322,12 @@ class _Global_ extends EventEmitter{
     /**
      * 通了本关
      */
-    passLevel(lv){
+    passLevel(lv,rank){
         if(lv > this.maxpasslv){
             this.maxpasslv = lv;
         }
         this.updateCls(this._uid,lv-1);
+        this.updateLevelRank(lv-1,rank);
         this.wsPassLevel(lv-1);
     }
     setCurrentSceneManager(sceneManager){
@@ -406,6 +407,9 @@ class _Global_ extends EventEmitter{
      */
     setLoginJson(json){
         this._loginJson = json;
+        console.log("================login=================");
+        console.log(json);
+        console.log("======================================");
         //cls做一个时间转换
         if(json && json.cls){
             for(let o of json.cls){
@@ -426,6 +430,11 @@ class _Global_ extends EventEmitter{
         }
         return false;
     }
+    updateLevelRank(lv,rank){
+        if(this._loginJson && this._loginJson.lvs){
+            this._loginJson.lvs[lv] = rank;
+        }
+    }
     getLoginJson(){
         return this._loginJson;
     }
@@ -444,7 +453,7 @@ class _Global_ extends EventEmitter{
     wsLogin(){
         let addr = `ws://${location.host}/clslv`//eslint-disable-line
         if(window.LOCALHOST){ //eslint-disable-line
-            addr = `ws://localhost:3000/clslv`;
+            addr = `ws://192.168.2.83:3000/clslv`;
         }
         let ws = new WebSocket(addr);
         this._wsClsLv = ws;

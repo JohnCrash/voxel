@@ -30,6 +30,7 @@ import {
   } from 'react-router-dom';
 import MainDrawer from "./drawer";
 import PropTypes from 'prop-types';
+import { setTimeout } from 'timers';
 /*global Blockly*/
 const redIcon = {color:"#F44336"};
 
@@ -241,7 +242,10 @@ class Level extends Component{
 
         this._ready = LOADING;
 //        MessageBox.showLoading('正在加载请稍后...');
+        
+        this.loadLastCommitMethod(props.level);
         this.loadTest(props.level);
+
         this.btms = Date.now();
         this.btpms = this.btms;
         if(this.voxview.readyPromise){
@@ -268,6 +272,35 @@ class Level extends Component{
         if(nextProps.level!=this.props.level){
             this.onGameStart(nextProps);
             this.setState({playPause:true,landscape:Global.getLayout()==="landscape"});         
+        }
+    }
+    //如果是一个已经通关的关卡，这里加载以前自己提交的最好玩法
+    loadLastCommitMethod(name){
+        let info = Global.appGetLevelInfo(name);
+        if(name!=='L1-1' && info && info.next-1 <= Global.getMaxPassLevel()){
+            //加载本关方法
+            let json = {
+                lname:name
+            };
+            let _this = this;
+            let load = (method)=>{
+                if(_this.voxview.readyPromise){
+                    _this.voxview.readyPromise.then(()=>{
+                        if(_this.blockview){
+                            _this.blockview.loadXML(method);
+                        }
+                    }).catch((e)=>{
+                        console.error(e);
+                    });
+                }else setTimeout(load,100);
+            };
+            postJson(`/users/levelmethod`,json,(json)=>{
+                if(json.result==='ok' && json.method){//成功
+                    load(json.method);
+                }else{//失败
+                    console.error(json.result);
+                }
+            });
         }
     }
     loadTest(name){
@@ -359,9 +392,18 @@ class Level extends Component{
                     console.log(result);
                 });
             }); */
-            MessageBox.show('',undefined,[<MarkdownElement file={`scene/ui/guid.md`}/>],(result)=>{
-                this.blockview.openGuid();
-            },'tips');   
+            TextManager.load('scene/ui/guid.md',(iserr,text)=>{
+                this.title = !iserr ? text : "";
+                MessageBox.show('',undefined,[<MarkdownElement text={text}/>],(result)=>{
+                    setTimeout(()=>{
+                        TextManager.load('scene/ui/guid2.md',(iserr,text)=>{
+                            MessageBox.show('',undefined,[<MarkdownElement text={text}/>],(result)=>{
+                                this.blockview.openGuid();
+                            },'tips');
+                        });                        
+                    },200);
+                },'tips');                   
+            });
         }else{
             /**
              * 其他关卡如果没玩过就提示，如果已经玩过加载最好成绩并且显示你和最少块数的差距

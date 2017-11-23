@@ -1,5 +1,7 @@
 /*global Blockly*/
 export default function zh(){
+    Blockly.HSV_SATURATION=.65;
+    Blockly.HSV_VALUE=.78;    
     Blockly.Msg["BOY"] = "男孩";
     Blockly.Msg["GIRL"] = "女孩";
     Blockly.Msg["WHEN_START"] = "开始运行程序";

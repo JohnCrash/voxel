@@ -65,7 +65,6 @@ class Login extends Component{
                 //成功登录
                 this.setState({open:false});
                 Global.loadConfig(json.config);
-                console.log("setMaxPassLevel "+(json.lv+1));
                 Global.setMaxPassLevel(json.lv+1);
                 Global.setMaxUnlockLevel(json.olv);
                 Global.setUserName(json.user);
@@ -103,7 +102,7 @@ class Login extends Component{
                     if(m){
                         this.login(m[1],m[2],m[3]);
                     }else{
-                        this.login(24321614,"金老师","sc1=295C24B689782BFB6D8F8171DE2F9D7A28A5D07DaUl8MADpD5LCiGYNJ1Rn71kqax%2buIFjj8FGGl96b%2bxYpBkvagGZydmOutQmN6kfyEuLokIgBkWzOhncNpSFQbrEvnODr2bmFqwBVfldfzzSJJada4XdFRA%3d%3d");
+                        this.login(144969,"刘国辉","sc1=8B8CE39290C7C1A0C01BAE4250E3429EF24D94ECakl7OwfmBZfKjGwJJVFk7lAsYQvwMBji7UyIisLP61YoQVaIwXsmayP59U6N9kT7EuDokYJfkGeZ1SEPpXZZOrYjwOW7juvVpVYDelFdy2LXfKgNvHozQkyjwT7PHWTJAcMa1NS7wSvmnrVqfljhwtGC5XHjzw%3d%3d");
                     }
                 }
                 this.setState({exitButton:false,msg:e});

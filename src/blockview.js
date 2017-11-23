@@ -235,7 +235,8 @@ class BlockView extends Component{
             }
             if(this.props.onBlockCount)
                 this.props.onBlockCount(this.getBlockCount());
-            this.reset();
+            if(!(event instanceof Blockly.Events.Ui))//不是选择就认为改变了代码，需要重新开始
+                this.reset();
             if(this.runComplateCB)this.runComplateCB();
             this.runComplateCB = undefined;                        
         });
@@ -334,7 +335,7 @@ class BlockView extends Component{
     openGuid(s,cb){ //打开指南
         if(this.props.guid){
             let file;
-            let timeout = 500;
+            let timeout = 200;
             let {guid} = this.state;
             switch(s){
                 case GUID_OPENFLYOUT:
@@ -371,9 +372,9 @@ class BlockView extends Component{
                 default:
                 //开始;
                 if(this.toolboxMode!=="expand"){
-                    setTimeout(()=>{this.openGuid(GUID_OPENFLYOUT);},500);
+                    setTimeout(()=>{this.openGuid(GUID_OPENFLYOUT);},200);
                 }else{
-                    setTimeout(()=>{this.openGuid(GUID_DRAG);},500);
+                    setTimeout(()=>{this.openGuid(GUID_DRAG);},200);
                 }
             }
             setTimeout(()=>{
@@ -424,6 +425,12 @@ class BlockView extends Component{
         if(this.workspace){
             this.workspace.clear();
             let dom = Blockly.Xml.textToDom(xmlHead(xml));
+            //这里将when run块的坐标设置为10,10
+            let block = dom.children[1];
+            if(block && block.localName==='block' && block.getAttribute('type')==='when_start'){
+                block.setAttribute('x',20);
+                block.setAttribute('y',20);
+            }
             Blockly.Xml.domToWorkspace(dom,this.workspace);
         }
     }

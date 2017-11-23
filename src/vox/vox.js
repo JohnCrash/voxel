@@ -71,7 +71,7 @@ function VoxParser(vox){
     }else{
         throw 'not to exist "MAIN"';
     }
-    if(vox.pals.length == 0){
+    if(vox.pals.length === 0){
         vox.pals = default_pals;
     }
     vox.palRGBA = [];

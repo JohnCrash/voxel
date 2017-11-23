@@ -130,7 +130,6 @@ class Tops extends Component{
         });
         let info = Global.appGetLevelInfo(this.props.level);   
         if(!info)return; 
-        Global.passLevel(info.next);
         //commit
         this.blocks = blocks;
         BlocklyInterface.pause();
@@ -142,17 +141,35 @@ class Tops extends Component{
              total,
              each,
              method},(json)=>{
+            console.log('=============commit=============');
+            console.log(json);
+            console.log('================================');
             if(json.tops){
                 this.tops = json.tops.sort((a,b)=>{
                     return a.blocks > b.blocks;
                 });
+                Global.passLevel(info.next,this.getRank());
             }else{
                 this.tops = [];
+                Global.passLevel(info.next,0); //没有排名
             }
             this.cls = json.cls||[];
             //console.log(json);
             this.setState({loading:false});
         });
+    }
+    //取得我的排名
+    getRank(){
+        if(this.tops){
+            let rank = 0;
+            for(let i = 0;i<this.tops.length;i++){
+                if(this.tops[i].blocks===this.blocks){
+                    rank = i+1;
+                }
+            }
+            return rank;
+        }
+        return 0;
     }
     componentDidMount(){
         this._clslvlistener = ()=>{

@@ -1,2 +1,5 @@
-![这里写图片描述](scene/image/team/jxx.jpg)
-点击输入你要移动的步骤.
+<img src="./scene/image/touch_num_pop.png" width = "280" alt="" align=center />
+
+<img src="./scene/image/touch_num_block.png" width = "200" alt="" align=center />
+
+点击代码块的<font color=#00BFFF size=3>** 数字区域 **</font>，输入你要移动的步数。

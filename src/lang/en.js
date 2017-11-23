@@ -1,5 +1,7 @@
 /*global Blockly*/
 export default function en(){
+    Blockly.HSV_SATURATION=.65;
+    Blockly.HSV_VALUE=.78;
     Blockly.Msg["BOY"] = "boy";
     Blockly.Msg["GIRL"] = "girl";
     Blockly.Msg["WHEN_START"] = "when run";

@@ -46,30 +46,16 @@ class MessageBox extends Component{
                 style = {width:"100%",maxWidth:"100%",top:"0px",position:"fixed",transform:""};
             }
         }
-        if(MessageBox.globalNode.state.open){
-            MessageBox.globalNode.handleClose();
-            setTimeout(function() {
-                MessageBox.globalCB = result;
-                MessageBox.globalNode.setState({
-                    open:true,
-                    type:type,
-                    title:title,
-                    switchContent:s,
-                    content:(content instanceof Array)?content[s]:content,
-                    style:style
-                });
-            }, 1000);
-        }else{
-            MessageBox.globalCB = result;
-            MessageBox.globalNode.setState({
-                open:true,
-                type:type,
-                title:title,
-                switchContent:s,
-                content:(content instanceof Array)?content[s]:content,
-                style:style
-            });
-        }
+
+        MessageBox.globalCB = result;
+        MessageBox.globalNode.setState({
+            open:true,
+            type:type,
+            title:title,
+            switchContent:s,
+            content:(content instanceof Array)?content[s]:content,
+            style:style
+        });
     }
     static showLoading(msg){
         MessageBox.globalNode.setState({openLoading: true,contentLoading:msg});
@@ -82,11 +68,12 @@ class MessageBox extends Component{
     handleClose(result){
         Global.pop();
         BlocklyInterface.resume();
-        MessageBox.globalNode.setState({open: false,type:'',title:'',content:''});
-        if(MessageBox.globalCB){
-            MessageBox.globalCB(result);
-            MessageBox.globalCB = null;
-        }
+        MessageBox.globalNode.setState({open: false,type:'',title:'',content:''},()=>{
+            if(MessageBox.globalCB){
+                MessageBox.globalCB(result);
+                MessageBox.globalCB = null;
+            }
+        });
     }
     static msg(msg){
         if(MessageBox.globalNode){
@@ -150,17 +137,18 @@ class MessageBox extends Component{
                 break;
         }
         return <div>
-            <Dialog
-            title={this.state.title}
-            actions={actions}
-            modal={false}
-            open={this.state.open}
-            autoScrollBodyContent={true}
-            contentStyle={this.state.style}
-            onRequestClose={this.handleClose.bind(this,'close')}
-            >
-            {this.state.content}
-            </Dialog>
+            {this.state.open?
+                <Dialog
+                title={this.state.title}
+                actions={actions}
+                modal={false}
+                open={this.state.open}
+                autoScrollBodyContent={true}
+                contentStyle={this.state.style}
+                onRequestClose={this.handleClose.bind(this,'close')}
+                >
+                {this.state.content}
+                </Dialog>:undefined}
             <Dialog
                 modal={true}
                 open={this.state.openLoading}

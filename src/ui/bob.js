@@ -21,6 +21,7 @@ class Bob extends Component{
             borderRadius : width+px,
             overflow : "hidden",
             top : -width+px,
+            zIndex : 1,
             left : (parentWidth-width)/2+px
         };
         return style;

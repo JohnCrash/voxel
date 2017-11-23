@@ -43,7 +43,8 @@ class Main extends Component{
             onLeftIconButtonTouchTap={this.onMenu.bind(this)}/>
             <MainDrawer key='mydrawer' loc='main' ref={ref=>this.drawer=ref}/>
         <LevelSel key='levelselect' index='main' current={Global.getMaxPassLevel()} 
-            other={ Global.getLoginJson()? Global.getLoginJson().cls:null} 
+            other={Global.getLoginJson()? Global.getLoginJson().cls:null} 
+            lvs={Global.getLoginJson()? Global.getLoginJson().lvs:null} 
             unlock={Global.getMaxUnlockLevel()}/>
         </div>;
     }

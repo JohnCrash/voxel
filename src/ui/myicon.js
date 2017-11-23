@@ -85,6 +85,11 @@ function CircleArrowIcon(props){
         </SvgIcon>;
 }    
 
+function KingIcon(props){
+    return <SvgIcon viewBox="0 0 378 512" {...props}>
+        <path d="M35.124 184.799l-24.049-130.372 107.588 48.098 75.945-102.525 72.147 105.058 106.322-60.755-20.252 139.232z"></path>
+    </SvgIcon>;
+}
 export {
     IconStep,
     EmbedIcon,
@@ -97,5 +102,6 @@ export {
     VolumeMediumIcon,
     VolumeMuteIcon,
     CreateIcon,
-    CircleArrowIcon
+    CircleArrowIcon,
+    KingIcon
 };
