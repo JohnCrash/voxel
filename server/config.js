@@ -8,6 +8,7 @@ const config = {
     port:3000,
     public: 'public',
     upload: 'public/',
+    ljlxconfig: __dirname+'/lxc-LXGridMain.txt'
 };
 
 module.exports = config;

@@ -64,25 +64,14 @@ class Unlock extends Component{
         if(result==='unlock'){
             //处理解锁操作...
             this.setState({step:UNLOCKING}); //加载界面
-            ljshell.pay({
-                action:"paygold",
-                count:this.dict.unlock_gold,
-                appid: 1126,
-                userid: Global.getUID()
-            },(b,msg)=>{
-                if(b){
-                    //提交结果 FIXME:存在安全风险
-                    postJson('/users/unlock',{olv:this._p.seg_end},(json)=>{
-                        if(json.result==='ok'){
-                            this.setState({step:LOCKED}); //确定界面
-                        }else{
-                            this.setState({step:LOCKERROR,errmsg:(json&&json.result)?json.result:"解锁失败.."}); //解锁失败        
-                        }
-                    });        
+            postJson('users/unlock',{},(json)=>{
+                //提交结果 FIXME:存在安全风险
+                if(json.result==='ok'){
+                    this.setState({step:LOCKED}); //确定界面
                 }else{
-                    this.setState({step:LOCKERROR,errmsg:msg?msg:"解锁失败."}); //解锁失败
+                    this.setState({step:LOCKERROR,errmsg:(json&&json.result)?json.result:"解锁失败.."}); //解锁失败        
                 }
-            })
+            });
         }else if(result==='cancel'){
             this._cb(false);
             this._cb = null;            

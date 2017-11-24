@@ -560,6 +560,22 @@ class _Global_ extends EventEmitter{
     isPad(){
         return !(this.getPlatfrom()==='windows' || window.innerWidth < 500);
     }
+    //如果有临时代码块
+    hasTrash(lv){
+        if(this._loginJson){
+            return this._loginJson.trashlv === lv && this._loginJson.trash;
+        }
+    }
+    //返回临时代码块
+    getTrash(lv){
+        if(this.hasTrash(lv)){
+            return this._loginJson.trash;
+        }
+    }
+    //设置临时代码块
+    setTrash(lv,method){
+
+    }
 };
 
 export let Global = new _Global_();

@@ -5,6 +5,84 @@ var crypto = require('crypto');
 var config = require('./config');
 var router = express.Router();
 var fetch = require('node-fetch');
+const ljlx = require('lxnodemodules').LXGrid;
+const Ice = require('ice').Ice;
+const {
+  LXSliceInvokerAsset,
+  LXReturnHelper
+} = ljlx;
+const { Asset } = ljlx.Main;
+
+/**
+ * 付金币
+ * @param {*} num 要付的金币数量 > 0 付，< 0 加金币
+ * s 是支付说明
+ *             class LXEnumAssetDbCode
+      {
+                int LXEnumAssetChangeCode_Success = 0;              // 成功
+        int LXEnumAssetChangeCode_MoneyNotEnough = 1;      // 余额不足,操作失败 
+                int LXEnumAssetChangeCode_DbError = 99;              // Db 操作失败      
+                int LXEnumAssetChangeCode_Unknow = 31;            // 未知错误         
+      };
+
+            // 资产变更状态码
+      enum LXEnumAssetChangeCode
+      {
+                LXEnumAssetChangeCode_Success = 0,                  // 成功
+        LXEnumAssetChangeCode_MoneyNotEnough = 1046001,      // 余额不足,操作失败 
+                LXEnumAssetChangeCode_DbError = 1046002,          // Db 操作失败      
+                LXEnumAssetChangeCode_Unknow = 10460100            // 未知错误          
+      };
+
+            // 业务 资产变更状态码
+      enum LXEnumBusinessAssetChangeCode
+      {
+          LXEnumBusinessAssetChangeCode_NotFound = 1046101,        // 未找到配置项
+                LXEnumBusinessAssetChangeCode_ItemAmountUpper = 1046102,  // 单项数额超限
+                LXEnumBusinessAssetChangeCode_ItemTimesUpper = 1046103,      // 单项次数超限
+                LXEnumBusinessAssetChangeCode_TotalAmountUpper = 1046199  // 总额超限
+      };
+ */
+function payGold(uid,num,cb,s){
+  let invoker;
+  try{
+    invoker = new LXSliceInvokerAsset(config.ljlxconfig);
+  }catch(e){
+    cb(false,'支付金币系统异常.');
+    return ;
+  }
+  if(invoker){
+    try{
+      var paras = new Asset.LXAssetParameters();
+      paras.app_id = 1126;
+      paras.sub_id = 0;
+      paras.currecy = Asset.LXEnumCurrecy.LXCurrecy_JINB;
+      invoker.AssetChange(paras,
+        uid,new Ice.Long(0,Math.abs(num)),
+        num>0?Asset.LXEnumAssetChangeState.LXEnumAssetChangeState_Outcome:
+          Asset.LXEnumAssetChangeState.LXEnumAssetChangeState_Income,s,'').then((r)=>{
+        if (LXReturnHelper.IsLXSucceed(r)) {
+          cb(true);
+        }else{
+          if (r.error == Asset.LXEnumAssetChangeCode.LXEnumAssetChangeCode_MoneyNotEnough) {
+            // 余额不足
+            cb(false,'余额不足');
+          }else if(r.error == Asset.LXEnumAssetChangeCode.LXEnumAssetChangeCode_DbError){
+            cb(false,'支付系统: Db 操作失败');
+          }else{
+            cb(false,'支付系统: 未知错误');
+          }          
+        }
+      },(err)=>{
+        cb(false,err.message);
+      });
+    }catch(e){
+      cb(false,e.toString());
+    }
+  }else{
+    cb(false,'支付金币系统暂时不可用.');
+  }
+}
 
 function stripTailSpace(s){
   if(s){
@@ -169,7 +247,7 @@ function reCrown(req,crown){
  * uid | uname | lv | lastcommit
  */
 function responeseLogin(req,res){
-  let {UserName,uid,cookie,lv,olv,config,cls} = req.UserInfo;
+  let {UserName,uid,cookie,lv,olv,config,cls,trashlv,trash} = req.UserInfo;
   
   //一个简单复用函数
   function done(clss){
@@ -263,7 +341,9 @@ function responeseLogin(req,res){
         clsid:cls,
         cls:clss,
         lvs,
-        crown
+        crown,
+        trashlv,
+        trash
       });        
     }).catch((err)=>{
       res.json({result:err});
@@ -509,19 +589,42 @@ router.post('/config',function(req,res){
   });
 });
 
+const UnlockTable = [
+  {lv:31,rang:10,gold:100},
+  {lv:41,rang:10,gold:100},
+  {lv:51,rang:10,gold:100},
+  {lv:61,rang:10,gold:100},
+];
+
 /**
  * 解锁关卡
  */
 router.post('/unlock',function(req,res){
   //记录动作
-  sqlAction(req.UserInfo.uid,`unlock(${req.body.olv})`);
-  sql(`update UserInfo set olv=${req.body.olv} where uid='${req.UserInfo.uid}'`).
-  then((result)=>{
-    res.json({result:'ok'});
-  }).catch((err)=>{
-    reqError(req,err);
-  });
+  let {lv,olv,uid} = req.UserInfo;
+  olv = olv?olv:0;
+  for(let i=0;i<UnlockTable.length;i++){
+    if(olv<=UnlockTable[i].lv){
+      payGold(uid,UnlockTable[i].gold,(b,msg)=>{
+        if(b){
+          olv = UnlockTable[i].lv+UnlockTable[i].lv;
+          sql(`update UserInfo set olv=${olv} where uid='${uid}'`).
+          then((result)=>{
+            sqlAction(uid,`unlock(${olv})`);
+            res.json({result:'ok',olv});
+          }).catch((err)=>{
+            reqError(req,err);
+          });
+        }else{
+          res.json({result: msg});
+        }
+      },"乐学编程解锁");
+      return;
+    }
+  }
+  res.json({result:'没有新的关卡需要解锁.'});
 });
+
 /**
  * 登出
  */

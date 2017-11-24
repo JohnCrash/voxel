@@ -72,6 +72,8 @@ class Login extends Component{
              *          best    本关最佳块数
              *      ]
              * crown 得到到皇冠数量
+             * trashlv     临时代码块对应的关。
+             * trash       临时代码块，还没有通，但是已经有一些编辑了。
              */
             Global.setLoginJson(json);
             if(json.result==='ok'){
@@ -121,7 +123,7 @@ class Login extends Component{
                 this.setState({exitButton:false,msg:e});
             }
         },(msg)=>{
-            this.setState({exitButton:false,msg:msg});
+            //this.setState({exitButton:false,msg:msg});
         });
     }
     componentDidMount(){
