@@ -322,13 +322,13 @@ class _Global_ extends EventEmitter{
     /**
      * 通了本关
      */
-    passLevel(lv,rank){
+    passLevel(lv,rank,blocks){
         if(lv > this.maxpasslv){
             this.maxpasslv = lv;
         }
         this.updateCls(this._uid,lv-1);
-        this.updateLevelRank(lv-1,rank);
-        this.wsPassLevel(lv-1);
+        this.updateLevelRank(lv-1,rank,blocks);
+        this.wsPassLevel(lv-1,rank,blocks);
     }
     setCurrentSceneManager(sceneManager){
         this._sceneManager = sceneManager;
@@ -439,14 +439,16 @@ class _Global_ extends EventEmitter{
     getLoginJson(){
         return this._loginJson;
     }
-    wsPassLevel(lv){
+    wsPassLevel(lv,rank,blocks){
         if(this._wsClsLv){
             //通知同班同学我过了一个
             this._wsClsLv.sendMsg({event:'pass',
                 uid:this._uid,
                 name:this._uname,
                 lv,
-                cls:this._loginJson.clsid
+                cls:this._loginJson.clsid,
+                rank,
+                blocks
             });
         }
     }

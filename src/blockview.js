@@ -67,6 +67,14 @@ const handleRightClick = Blockly.Gesture.prototype.handleRightClick;
 Blockly.Gesture.prototype.handleRightClick = function(e){
 }
 
+/**
+ * 自定义颜色
+ */
+const hueToRgb = Blockly.hueToRgb;
+Blockly.hueToRgb = function(hue){
+    return hueToRgb(hue);
+}
+
 const GUID_ENABLE = 7;
 const GUID_DISABLE = 0;
 const GUID_OPENFLYOUT = 1;

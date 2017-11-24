@@ -58,7 +58,20 @@ class Login extends Component{
              * olv  解锁关卡
              * uid | user | cookie
              * config 配置字串
+             * clsid 班级id
              * cls  当前班级其他人的完成情况
+             *      [
+             *          {uid,UserName,lv,lastcommit},
+             *      ]
+             * lvs  自己对已完成关卡的完成情况
+             *      [
+             *          {rank,lv,blocks,best}, 
+             *          rank    排名数1是第一名,0没有排名
+             *          lv      表示那一关
+             *          blocks  自己完成的块数
+             *          best    本关最佳块数
+             *      ]
+             * crown 得到到皇冠数量
              */
             Global.setLoginJson(json);
             if(json.result==='ok'){

@@ -148,10 +148,10 @@ class Tops extends Component{
                 this.tops = json.tops.sort((a,b)=>{
                     return a.blocks > b.blocks;
                 });
-                Global.passLevel(info.next,this.getRank());
+                Global.passLevel(info.next,this.getRank(),blocks);
             }else{
                 this.tops = [];
-                Global.passLevel(info.next,0); //没有排名
+                Global.passLevel(info.next,0,blocks); //没有排名
             }
             this.cls = json.cls||[];
             //console.log(json);
@@ -183,11 +183,11 @@ class Tops extends Component{
     render(){
         let {level} = this.props;
         let {open,loading} = this.state;
-        let actions = [
-            <FlatButton
-            label="退出"
-            primary={true}
-            onClick={this.handleAction.bind(this,'exit')}/>,            
+        /*<FlatButton
+        label="退出"
+        primary={true}
+        onClick={this.handleAction.bind(this,'exit')}/>, */        
+        let actions = [           
             <FlatButton
             label="再玩一次"
             primary={true}

@@ -24,6 +24,10 @@ function sql(query){
   });
 }
 
+function reqError(req,err){
+  req.json({result:err.toString()});
+}
+
 function sqlAction(uid,action){
   sql(`insert into UserStream (uid,action,date) values (${uid},N'${action}',getdate())`).then(
       ()=>{}
@@ -65,7 +69,7 @@ router.use(function(req,res,next){
         next();
       }
     }).catch((err)=>{
-      res.json({result:err});
+      reqError(req,err);
     });
   }else{
     if(req.url!=='/login')
@@ -111,7 +115,54 @@ function pullUserInfo(req,cb){
     cb(false,e.toString());
   }
 }
+/**
+ * 重新计算皇冠数量crown
+ */
+function reCrown(req,crown){
+  let oldcrown = req.UserInfo.crown;
 
+  if(oldcrown===crown)return;
+
+  if(crown > 200 || crown < 0)return; //Crown数不可能超过该200
+  //操作用户数据crown，并且对Crown中的统计进行增减。
+  sql(`update UserInfo set crown=${crown} where uid=${req.UserInfo.uid}`);
+  sql(`select * from Crown where count=${oldcrown} or count=${crown}`).then((result)=>{
+    let data = result.recordset;
+    if(!data || (data&&data.length===0)){
+      //没有初始化Crown
+      
+      let a = [];
+      for(let i=0;i<201;i++)a.push(i);
+      let s = `insert into Crown (count) values (${a.join('),(')})`;
+      sql(s).then(()=>{
+        reCrown(req,crown); //在执行一遍
+      }).catch((err)=>{
+        console.log(err);
+      });
+    }else if(data.length===2){
+      //正常
+      let oldPeople,People;
+      if(data[0].count === crown){
+        People = data[0].people;
+        oldPeople = data[1].people;
+      }else{
+        People = data[1].people;
+        oldPeople = data[0].people;        
+      }
+      //更新统计表，老的人数-1，新的人数+1
+      Promise.all([sql(`update Crown set people=${oldPeople-1} where count=${oldcrown}`),
+      sql(`update Crown set people=${People+1} where count=${crown}`)]).then(()=>{
+      }).catch((err)=>{
+        console.error(err);  
+      });
+    }else{
+      //Crown表不正常需要重新初始
+      console.error(`Table Crown issue.`);
+    }
+  }).catch((err)=>{
+    console.error(err);
+  });
+}
 /**
  * 回复login
  * 将玩家所在班级的全部信息打包发给玩家
@@ -119,9 +170,10 @@ function pullUserInfo(req,cb){
  */
 function responeseLogin(req,res){
   let {UserName,uid,cookie,lv,olv,config,cls} = req.UserInfo;
-  sql(`select uid,UserName,lv,lastcommit from UserInfo where cls=${cls}`).then((result)=>{
+  
+  //一个简单复用函数
+  function done(clss){
     sql(`update UserInfo set lastlogin=getdate() where uid=${uid}`);
-    let clss = result.recordset;
     for(let c of clss){
       c.UserName = stripTailSpace(c.UserName);
     }
@@ -132,87 +184,100 @@ function responeseLogin(req,res){
      * 然后根据这两个表就可以计算出用户每一关的排行情况了
      */
     Promise.all([sql(`select lv,blocks from Level where uid=${uid}`),sql(`select lv,blocks from Tops`)]).then(
-      ([levelss,topss])=>{
-        let levels = levelss.recordset;
-        let tops = topss.recordset;
-        /**
-         *levels 返回的是我的关卡完成情况
-          [
-            {lv,blocks}
-            ...
-          ]
-         *tops 返回每关卡排行榜
-          [
-            {lv,blocks}
-            ...
-          ]
-         将结果填充到lvs中
-         [
-           5, //第一个的排名
-           ....
-         ]    
-         */
-        let lvs = [];
-        if(levels && tops){
-          //将tops做映射成二级数组,第一级是关卡，第二级数组是块数
-          let lvtops = [];
-          for(let it of tops){
-            if(it.lv && it.lv===+it.lv){
-              lvtops[it.lv] = lvtops[it.lv]?lvtops[it.lv]:[];
-              lvtops[it.lv].push(it.blocks);
-            }
-          }
-          //对二级表进行排序
-          for(let it of lvtops){
-            if(it)it.sort((a,b)=>a>b);
-          }
-          let rank = function(lv,blocks){ //关卡，块数返回排名,没有返回0
-            let tt = lvtops[lv];
-            if(tt){
-              for(let i = 0;i<tt.length;i++){
-                if(tt[i] >= blocks){
-                  return i+1;
-                }
-              }
-            }
-            return 0;
-          }
-          let best = function(lv){
-            let tt = lvtops[lv];
-            if(tt)return tt[0];
-          }
-          for(let it of levels){ //计算每一关的排名
-            if(it.lv && it.lv===+it.lv){
-              if(lvtops[it.lv]){
-                lvs[it.lv] = {rank:rank(it.lv,it.blocks),
-                  lv:it.lv,
-                  blocks:it.blocks,
-                  best:best(it.lv)};
-              }
-            }
+    ([levelss,topss])=>{
+      let levels = levelss.recordset;
+      let tops = topss.recordset;
+      /**
+       *levels 返回的是我的关卡完成情况
+        [
+          {lv,blocks}
+          ...
+        ]
+       *tops 返回每关卡排行榜
+        [
+          {lv,blocks}
+          ...
+        ]
+       将结果填充到lvs中
+       [
+         5, //第一个的排名
+         ....
+       ]    
+       */
+      let crown = 0;
+      let lvs = [];
+      if(levels && tops){
+        //将tops做映射成二级数组,第一级是关卡，第二级数组是块数
+        let lvtops = [];
+        for(let it of tops){
+          if(it.lv && it.lv===+it.lv){
+            lvtops[it.lv] = lvtops[it.lv]?lvtops[it.lv]:[];
+            lvtops[it.lv].push(it.blocks);
           }
         }
-        let platform = req.body.platform;
-        //记录动作
-        sqlAction(uid,'login '+platform);
-        res.json({
-          result:'ok',
-          lv,
-          olv,
-          config,
-          user:stripTailSpace(UserName),
-          uid,
-          cookie,
-          clsid:cls,
-          cls:clss,
-          lvs
-        });        
-      }).catch((err)=>{
-        res.json({result:err});
-      });
-  }).catch((err)=>{
-    res.json({result:err});
-  });
+        //对二级表进行排序
+        for(let it of lvtops){
+          if(it)it.sort((a,b)=>a>b);
+        }
+        let rank = function(lv,blocks){ //关卡，块数返回排名,没有返回0
+          let tt = lvtops[lv];
+          if(tt){
+            for(let i = 0;i<tt.length;i++){
+              if(tt[i] >= blocks){
+                return i+1;
+              }
+            }
+          }
+          return 0;
+        }
+        let best = function(lv){
+          let tt = lvtops[lv];
+          if(tt)return tt[0];
+        }
+        
+        for(let it of levels){ //计算每一关的排名
+          if(it.lv && it.lv===+it.lv){
+            if(lvtops[it.lv]){
+              lvs[it.lv] = {rank:rank(it.lv,it.blocks),
+                lv:it.lv,
+                blocks:it.blocks,
+                best:best(it.lv)};
+            }
+            if(lvs[it.lv].rank === 1)crown++; //统计皇冠数量
+          }
+        }
+      }
+      let platform = req.body.platform;
+      
+      reCrown(req,crown);
+      //记录动作
+      sqlAction(uid,'login '+platform);
+      res.json({
+        result:'ok',
+        lv,
+        olv,
+        config,
+        user:stripTailSpace(UserName),
+        uid,
+        cookie,
+        clsid:cls,
+        cls:clss,
+        lvs,
+        crown
+      });        
+    }).catch((err)=>{
+      res.json({result:err});
+    });
+  }
+  if(cls==='0' || cls==0){//如果cls=0就不要查找了因为这表示所有没有班级的人
+    done([]);
+  }else{
+    sql(`select uid,UserName,lv,lastcommit from UserInfo where cls=${cls}`).then((result)=>{
+      done(result.recordset);
+    }).catch((err)=>{
+      reqError(req,err);
+    });  
+  }
 }
 /**
  * 系统登入一个新的用户
@@ -266,7 +331,7 @@ function login(req,res){
                     cookie,
                     lv:0,
                     olv:0,
-                    cls:0
+                    cls:zone_id
                   };
                   responeseLogin(req,res);
                 }).catch((err)=>{
@@ -278,7 +343,7 @@ function login(req,res){
             });          
         }
       }).catch((err)=>{
-        res.json({result:err});
+        reqError(req,err);
       });      
     }else{
       res.json({result:'请从乐教乐学大厅进入(没有cookie参数)'});
@@ -302,7 +367,7 @@ function tops(req,res){
         tops:data.recordset,
         cls:[]});
     }).catch((err)=>{
-      res.json({result:err});
+      reqError(req,err);
     });
   }else{
     //正常排名
@@ -312,7 +377,7 @@ function tops(req,res){
       tops:data.recordset,
       cls:cls.recordset});
     }).catch((err)=>{
-      res.json({result:err});
+      reqError(req,err);
     });
   }
 }
@@ -366,6 +431,7 @@ router.post('/commit',function(req,res){
       let maxblocks = -1;
       let hasblock = false;
       let datacount = 0;
+      let rank = 1; //计算本次提交的排名
       for(let i = 0;i<data.length;i++){
         if(data[i].blocks > maxblocks)
           maxblocks = data[i].blocks;
@@ -373,6 +439,11 @@ router.post('/commit',function(req,res){
           hasblock = true; //你提交的块数已经在排行榜中了
           datacount = data[i].count;
         }
+        if(data[i].blocks<blocks)rank++;
+      }
+      if(rank===1){
+        //新提交的成绩是第一名，需要更新,这样同班同学马上就能看到
+        reCrown(req,req.UserInfo.crown+1);
       }
       if(data.length<5 && !hasblock){//插入新的
         return sql(`insert into Tops (lname,lv,blocks,count) values ('${lname}',${lv},${blocks},1)`);
@@ -386,7 +457,7 @@ router.post('/commit',function(req,res){
     }).then((result)=>{
       tops(req,res);
     }).catch((err)=>{
-      res.json({result:err});
+      reqError(req,err);
     });
   }else{
     res.json({result:'没有按顺序完成关卡'});
@@ -411,11 +482,11 @@ router.post('/levelmethod',function(req,res){
         }
         res.json({result:'ok',method});
       }).catch((err)=>{
-        res.json({result:err});});
+        reqError(req,err);});
     }else
       res.json({result:'ok',method});
   }).catch((err)=>{
-    res.json({result:err});
+    reqError(req,err);
   });
 });
 
@@ -434,7 +505,7 @@ router.post('/config',function(req,res){
   then((result)=>{
     res.json({result:'ok'});
   }).catch((err)=>{
-    res.json({result:err});
+    reqError(req,err);
   });
 });
 
@@ -448,7 +519,7 @@ router.post('/unlock',function(req,res){
   then((result)=>{
     res.json({result:'ok'});
   }).catch((err)=>{
-    res.json({result:err});
+    reqError(req,err);
   });
 });
 /**

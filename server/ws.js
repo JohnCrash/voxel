@@ -37,7 +37,8 @@ function reciveMsg(event){
 /**
  * 加入一个在线用户
  */
-function add(uid,cls,lv,name,ws){
+function add(t,ws){
+    let {uid,cls,lv,name} = t;
     if(cls==='0' || cls===0){
         //忽略cls为0的无班级用户
         ws.close();
@@ -55,7 +56,8 @@ function add(uid,cls,lv,name,ws){
 /**
  * 在线用户uid的关卡前进了
  */
-function pass(uid,cls,lv,name,ws){
+function pass(t,ws){
+    let {uid,cls,lv,name,rank,blocks} = t;
     let clss = liveUsers[cls];
     if(clss){
         for(let c of clss){
@@ -63,7 +65,7 @@ function pass(uid,cls,lv,name,ws){
                 c.lv = lv; //更新自己
                 c.ws = ws;
             }else{//通知同班同学
-                sendMsg(c.ws,{event:'pass',uid,lv,cls,name})
+                sendMsg(c.ws,{event:'pass',uid,lv,cls,name,rank,blocks})
             }
         }
     }
@@ -111,10 +113,10 @@ function upgrade(request, socket, body){
                     if(t){
                         switch(t.event){
                             case 'login':
-                                add(t.uid,t.cls,t.lv,t.name,ws);
+                                add(t,ws);
                                 break;
                             case 'pass':
-                                pass(t.uid,t.cls,t.lv,t.name,ws);
+                                pass(t,ws);
                                 break;
                         }
                     }
