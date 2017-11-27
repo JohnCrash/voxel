@@ -18,9 +18,12 @@ import MarkdownElement from './ui/MarkdownElement';
 import {postJson,fetchJson} from './vox/fetch';
 import LevelDebug from './leveldebug';
 import PropTypes from 'prop-types';
+import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 
 const ToggleStyle = {marginBottom: 16,marginLeft:16,width:"85%"};
-
+const SpanStyle = {marginTop: 16,marginLeft:16,marginRight:8};
+const RadioStyle = {marginBottom: 16,marginLeft:32,marginRight:8};
+const BlodStyle = {fontWeight:'bold'};
 class MainDrawer extends Component{
     constructor(props){
         super(props);
@@ -40,6 +43,10 @@ class MainDrawer extends Component{
     }
     onReturnMain(){
         console.log('exit..');
+        //保存当前操作为草稿
+        let level = Global.getCurrentLevelComponent();
+        if(level)level.saveTrash();
+
         Global.popName('level');
         Global.pop();
         if(this.motifyConfig){
@@ -144,6 +151,10 @@ class MainDrawer extends Component{
         this.setState({openMenu:false});
         Global.openLevelTips();
     }
+    SkinChange = (event,value)=>{
+        this.motifyConfig = true;
+        Global.setBlocklySkin(value);
+    }
    render(){
         let {music,sound,lang,uistyle,openMenu,landscape,blocklytoolbox,openDebug} = this.state;
         let {loc} = this.props;
@@ -171,7 +182,7 @@ class MainDrawer extends Component{
             open={openMenu} 
             disableSwipeToOpen={true}
             onRequestChange={this.handleClose.bind(this)}>
-            <MenuItem primaryText={loc==="game"?"返回选择关卡":"退出游戏"} style={{marginBottom:32}} leftIcon={<IconHome /> } onClick={
+            <MenuItem primaryText={loc==="game"?"返回选择关卡":"退出游戏"} style={{marginBottom:32,fontWeight:'bold'}} leftIcon={<IconHome /> } onClick={
                     (event)=>{
                         if(loc==="game")
                             this.onReturnMain();
@@ -191,7 +202,7 @@ class MainDrawer extends Component{
                 this.motifyConfig = true;
                 Global.muteSound(b);
             }} />
-            <Toggle label={'使用英语'} style={ToggleStyle} defaultToggled={lang} onToggle={(e,b)=>{
+            <Toggle label={'英语编程'} style={ToggleStyle} defaultToggled={lang} onToggle={(e,b)=>{
                 this.setState({lang:b});
                 this.motifyConfig = true;
                 Global.setCurrentLang(b?"en":"zh");
@@ -200,10 +211,26 @@ class MainDrawer extends Component{
                 this.setState({uistyle:b});
                 this.motifyConfig = true;
                 Global.setUIStyle(b?"simple":"features");
-            }} />       
-            {this.props.loc==="game"?<MenuItem primaryText="任务提示..." leftIcon={<IconTips />} onClick={this.onTip}/>:undefined}
-            <MenuItem primaryText="操作帮助..." leftIcon={<HelpIcon />} onClick={this.onHelp}/> 
-            <MenuItem primaryText="关于..." leftIcon={<IconAbout />} onClick={this.onAbout}/> 
+            }} />
+            <span style={SpanStyle}><b>编程块样式</b></span>
+            <RadioButtonGroup style={RadioStyle}
+                name="BlockSkin" defaultSelected={Global.getBlocklySkin()} labelPosition="left" onChange={this.SkinChange}>
+                <RadioButton
+                    value="Scratch"
+                    label="默认"
+                />
+                <RadioButton
+                    value="MakeBlock"
+                    label="绚丽"
+                />
+                <RadioButton
+                    value="Black"
+                    label="黑色"
+                />                                            
+            </RadioButtonGroup>
+            {this.props.loc==="game"?<MenuItem primaryText="任务提示..." leftIcon={<IconTips />} style={BlodStyle} onClick={this.onTip}/>:undefined}
+            <MenuItem primaryText="操作帮助..." leftIcon={<HelpIcon />} style={BlodStyle} onClick={this.onHelp}/> 
+            <MenuItem primaryText="关于..." leftIcon={<IconAbout />} style={BlodStyle} onClick={this.onAbout}/> 
             {openDebug?<MenuItem primaryText="DEBUG..." leftIcon={<IconDebug />} onClick={(event)=>{
                 window.location = `http://192.168.2.83:3001/#/login/${Global.getUID()}/${Global.getUserName()}/${Global.getCookie()}`
             }}/>:undefined}

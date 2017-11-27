@@ -77,7 +77,7 @@ function initItemBlockly(_this){
 	Blockly.Blocks['when_start'] = {
     init: function () {
         Blockly.BlockSvg.START_HAT = true;
-        this.setColour(52);
+        this.setColour(1);
         this.appendDummyInput()
             .setAlign(Blockly.ALIGN_CENTRE)
             .appendField(Blockly.Msg.WHEN_START);
@@ -93,7 +93,7 @@ function initItemBlockly(_this){
 	//前进
 	Blockly.Blocks['forward'] = {
     init: function () {
-        this.setColour(205);
+        this.setColour(2);
         appendCharacterDropdown(this.appendValueInput("STEP")
             .setCheck("Number"))
             .appendField(Blockly.Msg.FORWARD);
@@ -188,7 +188,7 @@ function initItemBlockly(_this){
 	//左转
 	Blockly.Blocks['turn_left'] = {
 	  init: function() {
-		this.setColour(160);
+		this.setColour(4);
 		appendCharacterDropdown(this.appendDummyInput())
 			.appendField(Blockly.Msg.TURN_LEFT)
 		this.setPreviousStatement(true, "null");
@@ -220,7 +220,7 @@ function initItemBlockly(_this){
 	//右转
 	Blockly.Blocks['turn_right'] = {
 	  init: function() {
-		this.setColour(160);
+		this.setColour(5);
 		appendCharacterDropdown(this.appendDummyInput())
 			.appendField(Blockly.Msg.TURN_RIGHT)
 		this.setPreviousStatement(true, "null");
@@ -256,7 +256,7 @@ function initItemBlockly(_this){
 			.appendField(Blockly.Msg.JUMP);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
-		this.setColour(335);
+		this.setColour(3);
 	 this.setTooltip("");
 	 this.setHelpUrl("");
 	  }
@@ -377,7 +377,7 @@ function initItemBlockly(_this){
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
-		this.setColour(300);
+		this.setColour(10);
 	 this.setTooltip("");
 	 this.setHelpUrl("");
 	  }
@@ -428,7 +428,7 @@ function initItemBlockly(_this){
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
-		this.setColour(54);
+		this.setColour(11);
 	 this.setTooltip("");
 	 this.setHelpUrl("");
 	  }
@@ -494,7 +494,7 @@ function initItemBlockly(_this){
 		this.setInputsInline(true);
 		this.setPreviousStatement(true, null);
 		this.setNextStatement(true, null);
-		this.setColour(230);
+		this.setColour(12);
 	 this.setTooltip("");
 	 this.setHelpUrl("");
 	  }
@@ -577,7 +577,7 @@ function initItemBlockly(_this){
 			[Blockly.Msg.CLIFF,"cliff"],
 			[Blockly.Msg.WALL,"wall"],]), "IT");
 		this.setOutput(true, "Boolean");
-		this.setColour(0);
+		this.setColour(16);
 	 this.setTooltip("");
 	 this.setHelpUrl("");
 	  }

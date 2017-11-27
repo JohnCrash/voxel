@@ -64,7 +64,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 				progressBar(d);
 				setTimeout(function(){
 					if(s>9){s = 0;loadJs(jss[i++],cb);
-					}else{s++;cb();}},10);
+					}else{s++;cb();}},0);
 			}else{
 				console.log('js library loading is complete.');
 				progress = null;bar = null;

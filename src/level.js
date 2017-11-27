@@ -209,7 +209,7 @@ class Level extends Component{
         event.stopPropagation();
         if(this._ready!==READY)return;
 
-        if(this.needReset){
+        if(this.needReset || this.blockview.needReset){
             this.Reset();
             this.needReset = false;
         }
@@ -228,28 +228,30 @@ class Level extends Component{
             this.blockview.step();
         });
     }
+    saveTrash(prop){
+        let props = prop?prop:this.props;
+        let info = Global.appGetLevelInfo(props.level);
+        if(info && info.next-1 === Global.getMaxPassLevel() && this.blockview){
+            if(this.blockview.getBlockCount() !== this.blockview.getBeginBlockCount())
+                Global.setTrash(info.next-1,this.blockview.toXML());
+        }
+    }
     onGameStart(props){
         if(!this.voxview)return;
+        //加载voxview的时候uiColor必须为白色
+        this.setState({uiColor:'#FFFFFF'});
 
         Global.push(()=>{
             MessageBox.show("okcancel","游戏退出","你确定要返回主界面吗？",(result)=>{
                 if(result==='ok'){
+                    //保存当前操作为草稿
+                    this.saveTrash(props);
+
                     Global.popName('level');
                     location.href='#/main'; //eslint-disable-line
                 }
             });
         },'level');
-
-        /**
-         * 取得关卡段
-         */
-        if(window.innerWidth<window.innerHeight){
-            //portrait
-            let info = Global.appGetLevelInfo(props.level);
-            if(info ){
-                this.setState({uiColor:info.uicolor?info.uicolor:'#000000'});
-            }else this.setState({uiColor:'#FFFF00'});
-        }
 
         this._ready = LOADING;
 //        MessageBox.showLoading('正在加载请稍后...');
@@ -263,8 +265,21 @@ class Level extends Component{
             this.voxview.readyPromise.then(()=>{
                 TextManager.load(`scene/${props.level}.md`,(iserr,text)=>{
                     //如果voxview ready
+                    if(this.voxview)
                     this.voxview.readyPromise.then(()=>{
                         this._ready = READY;
+
+                        /**
+                         * 取得关卡段,加载完成使用关卡指定的颜色
+                         */
+                        if(window.innerWidth<window.innerHeight){
+                            //portrait
+                            let info = Global.appGetLevelInfo(props.level);
+                            if(info ){
+                                this.setState({uiColor:info.uicolor?info.uicolor:'#000000'});
+                            }else this.setState({uiColor:'#FFFF00'});
+                        }
+
     //                    MessageBox.closeLoading();
                         setTimeout(()=>{
                             //MessageBox.show('ok',undefined,<MarkdownElement text={text}/>,(result)=>{
@@ -287,6 +302,7 @@ class Level extends Component{
     }
     //如果是一个已经通关的关卡，这里加载以前自己提交的最好玩法
     loadLastCommitMethod(name){
+        let info = Global.appGetLevelInfo(name);
         if(this.isPlayAgin()){
             //加载本关方法
             let json = {
@@ -311,6 +327,16 @@ class Level extends Component{
                     console.error(json.result);
                 }
             });
+        }else if(info && info.next-1===Global.getMaxPassLevel()){
+            let method = Global.getTrash(Global.getMaxPassLevel());
+            if(method && this.voxview.readyPromise){
+                this.voxview.readyPromise.then(()=>{
+                    if(this.blockview)
+                        this.blockview.loadXML(method);
+                }).catch((e)=>{
+                    console.error(e);
+                });
+            }
         }
     }
     loadTest(name){
@@ -415,11 +441,11 @@ class Level extends Component{
                 },'tips');                   
             });
         }else{
-            /**
-             * 其他关卡如果没玩过就提示，如果已经玩过加载最好成绩并且显示你和最少块数的差距
-             */
             let name = this.props.level;
             let info = Global.appGetLevelInfo(name);
+            /**
+             * 其他关卡如果没玩过就提示，如果已经玩过加载最好成绩并且显示你和最少块数的差距
+             */                
             if(this.isPlayAgin()){
                 //已经玩过的，你可以优化代码了
                 let lvs = Global.getLoginJson().lvs;
@@ -435,11 +461,14 @@ class Level extends Component{
                     console.error(`lvs error ? ${info.next-1}`);
                     console.log(lvs);
                 }
+            }else if(info && info.next-1===Global.getMaxPassLevel() && Global.hasTrash(Global.getMaxPassLevel())){
+                //已经玩过但是没有通过，这里不显示提示了
+                console.log('net need tips');
             }else{
                 MessageBox.show('ok',undefined,[<MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
                     console.log(result);
                 }); 
-            }          
+            } 
         }
     }
     //如果再一次成功完成任务
@@ -591,6 +620,7 @@ class Level extends Component{
         let {level} = this.props;
         //ios关闭滚动
         let divStyle = Global.getPlatfrom()==='ios'?{position:"fixed",left:'0px',right:'0px',top:'0px',bottom:'0px'}:undefined;
+
         return <div style={divStyle}>
             <div style={{position:"absolute",left:"0px",top:"0px",right:"0px",bottom:switchSize?"40%":"50%"}}
                 /* onClick={(event)=>{this.switchSize(this);} 

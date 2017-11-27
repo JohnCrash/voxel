@@ -17,6 +17,7 @@ class _Global_ extends EventEmitter{
         this._muteMusic = true;
         this._muteSound = true;
         this._userName = 'None';
+        this._blocklyskin = "Scratch";
         this._ui = [];
 
         //windows,android,ios
@@ -161,6 +162,7 @@ class _Global_ extends EventEmitter{
                 this.setUIStyle(config.uisyle);
                 this.setLayout(config.layout);
                 this.setCharacter(config.character);
+                this.setBlocklySkin(config.skin);
                 if(this._uid===144970||this._uid===25911300||this._uid===24321614)
                     this.setDebugMode(true);
                 return;
@@ -171,6 +173,7 @@ class _Global_ extends EventEmitter{
         this.muteSound(true);
         this.setLayout('landscape');
         this.setCharacter('none');
+        this.setBlocklySkin('Scratch');
     }
     //上传
     pushConfig(){
@@ -182,6 +185,7 @@ class _Global_ extends EventEmitter{
             sound : this._muteSound,
             layout : this._layout,
             uisyle : this._uiStyle,
+            skin : this._blocklyskin,
             character : this._character})
         },
         (json)=>{
@@ -535,6 +539,9 @@ class _Global_ extends EventEmitter{
     setCurrentLevelComponent(t){
         this._currentLevelComponent = t;
     }
+    getCurrentLevelComponent(){
+        return this._currentLevelComponent;
+    }
     setUIStyle(s){
         if(s==='simple' || s==='features'){
             this._uiStyle = s;
@@ -574,7 +581,26 @@ class _Global_ extends EventEmitter{
     }
     //设置临时代码块
     setTrash(lv,method){
-
+        if(this._loginJson){
+            this._loginJson.trashlv = lv;
+            this._loginJson.trash = method;
+        }
+        postJson('/users/trash',{
+            lv,method
+        },(json)=>{
+            console.log(json);
+        });
+    }
+    setBlocklySkin(name){
+        if(this._blocklyskin != name){
+            this._blocklyskin = name;
+            if(this._blocklyView ){
+                this._blocklyView.useSkin(name);
+            }
+        }
+    }
+    getBlocklySkin(){
+        return this._blocklyskin?this._blocklyskin:'Scratch';
     }
 };
 

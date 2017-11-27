@@ -150,6 +150,9 @@ class VoxView extends Component{
             });
         });
     }
+    isLoading(){
+        return this.state.loading;
+    }
     reset(){
         BlocklyInterface.reset();
         this.sceneManager.resetItem();
@@ -167,7 +170,7 @@ class VoxView extends Component{
                     display:this.state.loading?"flex":"none",
                     flexDirection:"column",alignItems:"center"}}>
                     <CircularProgress/>
-                    <div>LOADING...</div>
+                    <div style={{color:"#FFFFFF"}}>LOADING...</div>
                 </div>
             </div>;
     }

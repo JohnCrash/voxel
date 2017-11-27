@@ -1,0 +1,78 @@
+{
+	"Scratch": 
+	{
+		"when_start": "#FFBF00",
+		"forward": "#22C0FA",
+		"jump": "#FD7C70",
+		"turn_left": "#62D668",
+		"turn_right": "#62D668",
+		"controls_repeat_ext": "#FBB13B",
+		"controls_whileUntil": "#FBB13B",
+		"controls_if": "#FBB13B",
+		"remove_obstacle_fence": "#AA77E3",
+		"open_box": "#DB70C7",
+		"lift_up": "#FD7C70",
+		"put_down": "#13CEB8",
+		"math_arithmetic": "#5BA3FB",
+		"variables_set": "#DB70C7",
+		"variables_get": "#DB70C7",
+		"what_is_it": "#FD7C70"
+	},
+	"MakeBlock": 
+	{
+		"when_start": "#FFBF00",
+		"forward": "#4C97FF",
+		"jump": "#0FBD8C",
+		"turn_left": "#4C97FF",
+		"turn_right": "#4C97FF",
+		"controls_repeat_ext": "#FFAB19",
+		"controls_whileUntil": "#FFAB19",
+		"controls_if": "#FFAB19",
+		"remove_obstacle_fence": "#9966FF",
+		"open_box": "#CF63CF",
+		"lift_up": "#9966FF",
+		"put_down": "#5CB1D6",
+		"math_arithmetic": "#59C059",
+		"variables_set": "#FF8C1A",
+		"variables_get": "#FF8C1A",
+		"what_is_it": "#CF63CF"
+	},
+	"Black": 
+	{
+		"when_start": "#000000",
+		"forward": "#000000",
+		"jump": "#000000",
+		"turn_left": "#000000",
+		"turn_right": "#000000",
+		"controls_repeat_ext": "#000000",
+		"controls_whileUntil": "#000000",
+		"controls_if": "#000000",
+		"remove_obstacle_fence": "#000000",
+		"open_box": "#000000",
+		"lift_up": "#000000",
+		"put_down": "#000000",
+		"math_arithmetic": "#000000",
+		"variables_set": "#000000",
+		"variables_get": "#000000",
+		"what_is_it": "#000000"
+	},
+	"maptable": 
+	[
+		"when_start": 1,
+		"forward": 2,
+		"jump": 3,
+		"turn_left": 4,
+		"turn_right": 5,
+		"controls_repeat_ext": 6,
+		"controls_whileUntil": 7,
+		"controls_if": 8,
+		"remove_obstacle_fence": 9,
+		"open_box": 10,
+		"lift_up": 11,
+		"put_down": 12,
+		"math_arithmetic": 13,
+		"variables_set": 14,
+		"variables_get": 15,
+		"what_is_it": 16
+	]
+}

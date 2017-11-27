@@ -6,17 +6,13 @@ class _ljshell{
             cb(true);
         }else{
             console.log('call document.addEventListener');
-            log('call document.addEventListener');
             document.addEventListener('deviceready', ()=>{
                 this.lj = window.ljAppObject;
                 let n = 0;
                 console.log('document.addEventListener return');
-                log('document.addEventListener return');
                 this.lj.userinfo((msg,status)=>{
                     console.log('userinfo return :'+msg);
-                    log('userinfo return :'+msg);
                     console.log('status :'+status);
-                    log('userinfo return :'+msg);
                     if(status){
                         try{
                             this._userInfo = JSON.parse(msg);

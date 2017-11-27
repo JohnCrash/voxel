@@ -102,8 +102,8 @@ function sql(query){
   });
 }
 
-function reqError(req,err){
-  req.json({result:err.toString()});
+function resError(res,err){
+  res.json({result:err.toString()});
 }
 
 function sqlAction(uid,action){
@@ -147,7 +147,7 @@ router.use(function(req,res,next){
         next();
       }
     }).catch((err)=>{
-      reqError(req,err);
+      resError(res,err);
     });
   }else{
     if(req.url!=='/login')
@@ -355,7 +355,7 @@ function responeseLogin(req,res){
     sql(`select uid,UserName,lv,lastcommit from UserInfo where cls=${cls}`).then((result)=>{
       done(result.recordset);
     }).catch((err)=>{
-      reqError(req,err);
+      resError(res,err);
     });  
   }
 }
@@ -423,7 +423,7 @@ function login(req,res){
             });          
         }
       }).catch((err)=>{
-        reqError(req,err);
+        resError(res,err);
       });      
     }else{
       res.json({result:'请从乐教乐学大厅进入(没有cookie参数)'});
@@ -447,7 +447,7 @@ function tops(req,res){
         tops:data.recordset,
         cls:[]});
     }).catch((err)=>{
-      reqError(req,err);
+      resError(res,err);
     });
   }else{
     //正常排名
@@ -457,7 +457,7 @@ function tops(req,res){
       tops:data.recordset,
       cls:cls.recordset});
     }).catch((err)=>{
-      reqError(req,err);
+      resError(res,err);
     });
   }
 }
@@ -537,7 +537,7 @@ router.post('/commit',function(req,res){
     }).then((result)=>{
       tops(req,res);
     }).catch((err)=>{
-      reqError(req,err);
+      resError(res,err);
     });
   }else{
     res.json({result:'没有按顺序完成关卡'});
@@ -562,11 +562,11 @@ router.post('/levelmethod',function(req,res){
         }
         res.json({result:'ok',method});
       }).catch((err)=>{
-        reqError(req,err);});
+        resError(res,err);});
     }else
       res.json({result:'ok',method});
   }).catch((err)=>{
-    reqError(req,err);
+    resError(res,err);
   });
 });
 
@@ -585,7 +585,7 @@ router.post('/config',function(req,res){
   then((result)=>{
     res.json({result:'ok'});
   }).catch((err)=>{
-    reqError(req,err);
+    resError(res,err);
   });
 });
 
@@ -615,7 +615,7 @@ router.post('/unlock',function(req,res){
             sqlAction(uid,`unlock(${olv})`);
             res.json({result:'ok',olv,unlock});
           }).catch((err)=>{
-            reqError(req,err);
+            resError(res,err);
           });
         }else{
           res.json({result: msg});
@@ -627,6 +627,21 @@ router.post('/unlock',function(req,res){
   res.json({result:'没有新的关卡需要解锁.'});
 });
 
+/**
+ * 保存临时操作草稿
+ */
+router.post('/trash',function(req,res){
+  let {lv,method} = req.body;
+  if(lv && method){
+    sql(`update UserInfo set trashlv=${lv},trash=N'${method}' where uid=${req.UserInfo.uid}`).then((result)=>{
+      res.json({result:'ok'});
+    }).catch((err)=>{
+      resError(res,err);
+    });
+  }else{
+    res.json({result:"arguments invalid"});
+  }
+});
 /**
  * 登出
  */

@@ -70,9 +70,117 @@ Blockly.Gesture.prototype.handleRightClick = function(e){
 /**
  * 自定义颜色
  */
+const BlockSkin = {
+    "Scratch": 
+    {
+      "when_start": "#FFBF00",
+      "forward": "#22C0FA",
+      "jump": "#FD7C70",
+      "turn_left": "#62D668",
+      "turn_right": "#62D668",
+      "controls_repeat_ext": "#FBB13B",
+      "controls_whileUntil": "#FBB13B",
+      "controls_if": "#FBB13B",
+      "remove_obstacle_fence": "#AA77E3",
+      "open_box": "#DB70C7",
+      "lift_up": "#FD7C70",
+      "put_down": "#13CEB8",
+      "math_arithmetic": "#5BA3FB",
+      "variables_set": "#DB70C7",
+      "variables_get": "#DB70C7",
+    "what_is_it": "#FD7C70",
+    "repeat_while_until" :"#FBB13B",
+    "if" : "#FBB13B",
+    "remove_obstacle" : "#AA77E3",
+    "var_set_get" : "#DB70C7",
+    },
+    "MakeBlock": 
+    {
+      "when_start": "#FFBF00",
+      "forward": "#4C97FF",
+      "jump": "#0FBD8C",
+      "turn_left": "#4C97FF",
+      "turn_right": "#4C97FF",
+      "controls_repeat_ext": "#FFAB19",
+      "controls_whileUntil": "#FFAB19",
+      "controls_if": "#FFAB19",
+      "remove_obstacle_fence": "#9966FF",
+      "open_box": "#CF63CF",
+      "lift_up": "#9966FF",
+      "put_down": "#5CB1D6",
+      "math_arithmetic": "#59C059",
+      "variables_set": "#FF8C1A",
+      "variables_get": "#FF8C1A",
+      "what_is_it": "#CF63CF",
+      "repeat_while_until" :"#FFAB19",
+    "if" : "#FFAB19",
+    "remove_obstacle" : "#9966FF",
+    "var_set_get" : "#FF8C1A",
+    },
+    "Black": 
+    {
+      "when_start": "#000000",
+      "forward": "#000000",
+      "jump": "#000000",
+      "turn_left": "#000000",
+      "turn_right": "#000000",
+      "controls_repeat_ext": "#000000",
+      "controls_whileUntil": "#000000",
+      "controls_if": "#000000",
+      "remove_obstacle_fence": "#000000",
+      "open_box": "#000000",
+      "lift_up": "#000000",
+      "put_down": "#000000",
+      "math_arithmetic": "#000000",
+      "variables_set": "#000000",
+      "variables_get": "#000000",
+      "what_is_it": "#000000",
+      "repeat_while_until" : "#000000",
+    "if" : "#000000",
+    "remove_obstacle" : "#000000",
+    "var_set_get" : "#000000",
+    },
+    "maptable": 
+    {
+      1 : "when_start",
+      2 : "forward",
+      3 : "jump",
+      4 : "turn_left",
+      5 : "turn_right",
+      6 : "controls_repeat_ext",
+      7 : "controls_whileUntil",
+      8 : "controls_if",
+      9 : "remove_obstacle_fence",
+      10 : "open_box",
+      11 : "lift_up",
+      12 : "put_down",
+      230 : "math_arithmetic",
+      14 : "variables_set",
+      15 : "variables_get",
+    16 : "what_is_it",
+      120 : "repeat_while_until",
+    210 : "if",
+    266 : "remove_obstacle",
+    330 : "var_set_get",
+    }
+  };
 const hueToRgb = Blockly.hueToRgb;
+let block_skin = 'Scratch';
 Blockly.hueToRgb = function(hue){
-    return hueToRgb(hue);
+    if(block_skin==='default')
+        return hueToRgb(hue);
+    else{
+        let skin = BlockSkin[block_skin];
+        let maptable = BlockSkin.maptable;
+        if(skin && maptable[hue]){
+            return skin[maptable[hue]];
+        }else{
+            console.log('-------');
+            console.log(hue);
+            console.log('-------');
+            return '#FF0000'; //error color
+        }
+    }
 }
 
 const GUID_ENABLE = 7;
@@ -132,6 +240,10 @@ class BlockView extends Component{
         TextManager.load(level_top,(iserr,text)=>{
         });
     }
+    useSkin(name){
+        block_skin = name;
+        this.ResetWorkspace();
+    }
     //重新加载界面
     ResetWorkspace(){
         let d = this.toXML();
@@ -181,6 +293,9 @@ class BlockView extends Component{
             case 'zh':zh();break;
             default: en();
         }
+        this.needReset = false;
+        Blockly.Scrollbar.scrollbarThickness=10;
+        block_skin = Global.getBlocklySkin();
         if(this.workspace)
             this.workspace.dispose();
         try{
@@ -243,8 +358,10 @@ class BlockView extends Component{
             }
             if(this.props.onBlockCount)
                 this.props.onBlockCount(this.getBlockCount());
-            if(!(event instanceof Blockly.Events.Ui))//不是选择就认为改变了代码，需要重新开始
+            if(!(event instanceof Blockly.Events.Ui)){//不是选择就认为改变了代码，需要重新开始
                 this.reset();
+                this.needReset = true;
+            }
             if(this.runComplateCB)this.runComplateCB();
             this.runComplateCB = undefined;                        
         });
@@ -252,6 +369,8 @@ class BlockView extends Component{
             let dom = Blockly.Xml.textToDom(this.defaultXML);
             Blockly.Xml.domToWorkspace(dom,this.workspace);
         }
+        this._beginBlockCount = this.getBlockCount();
+
         let _this = this;
         Blockly.WorkspaceDragger.prototype.startDrag = function(){
             BlocklyInterface.pause();
@@ -339,6 +458,9 @@ class BlockView extends Component{
                 _this.setState({openNumInput: true,num:Number(this.getValue())});
             }
         }
+    }
+    getBeginBlockCount(){
+        return this._beginBlockCount;
     }
     openGuid(s,cb){ //打开指南
         if(this.props.guid){
@@ -506,6 +628,7 @@ class BlockView extends Component{
             }catch(e){
                 console.log('Program error');
                 this.reset();
+                this.needReset = true;
                 if(cb)cb('error');
                 if(this.runComplateCB)this.runComplateCB('error');
                 this.runComplateCB = undefined;
@@ -531,6 +654,7 @@ class BlockView extends Component{
                 if (!hasMoreCode) {
                     console.log('Program complete');
                     this.reset();
+                    this.needReset = true;
                     if(cb)cb('end');
                     if(this.runComplateCB){
                         this.runComplateCB('end');
@@ -561,6 +685,7 @@ class BlockView extends Component{
      * 重置执行环境
      */ 
     reset(){
+        this.needReset = false;
         this.workspace.highlightBlock(null);
         this.myInterpreter = null;
         this.pauseRun = false;
