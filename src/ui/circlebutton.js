@@ -96,7 +96,7 @@ function cc(state){
 class CircleButton extends Component{
     constructor(props){
         super(props);
-        this.state = {hovered:false};
+        this.state = {hovered:false,forceState:''};
     }
     handleMouseLeave(){
         this.setState({hovered:false});
@@ -143,9 +143,14 @@ class CircleButton extends Component{
         };        
         return bgstyle;
     }
+    changeState(os,s){
+        if(this.props.state===os){
+            this.setState({forceState:s});
+        }
+    }
     render(){
         let {link,state,pos,disable,rank,bob} = this.props;
-        let c = cc(state);
+        let c = cc(this.state.forceState?this.state.forceState:state);
         let hover = disable?c.normal : (this.state.hovered)?c.hover:c.normal;
         const style = this.getStyles();
         const bgstyle = this.getBgStyles();

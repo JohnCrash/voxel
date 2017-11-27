@@ -75,6 +75,7 @@ class LevelSel extends PureComponent{
             return others[lv];
         }
         let curSeg;
+        this.buttons = [];
         this.level = json.level.map((item)=>{
             let bl = [];
             let m = item.rang.match(/(\d+)-(\d+)/);
@@ -133,11 +134,22 @@ class LevelSel extends PureComponent{
                         need_unlock:islock && i===current, //需要解锁
                     };
                     if(i===seg_begin)
-                        bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} rank={lvs[i]?lvs[i].rank:0} onClick={this.onSelectLevel.bind(this,link,p)} pos='first' state={s} />);
+                        bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} rank={lvs[i]?lvs[i].rank:0} 
+                        ref={(r)=>{this.buttons[i]=r}}
+                        onClick={this.onSelectLevel.bind(this,link,p)} 
+                        pos='first' 
+                        state={s} />);
                     else if(i===seg_end)
-                        bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} rank={lvs[i]?lvs[i].rank:0} onClick={this.onSelectLevel.bind(this,link,p)} pos='last' state={s} />);
+                        bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} rank={lvs[i]?lvs[i].rank:0}
+                        ref={(r)=>{this.buttons[i]=r}}
+                        onClick={this.onSelectLevel.bind(this,link,p)} 
+                        pos='last' 
+                        state={s} />);
                     else
-                        bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} rank={lvs[i]?lvs[i].rank:0} onClick={this.onSelectLevel.bind(this,link,p)} state={s} />);
+                        bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} rank={lvs[i]?lvs[i].rank:0} 
+                        ref={(r)=>{this.buttons[i]=r}}
+                        onClick={this.onSelectLevel.bind(this,link,p)} 
+                        state={s} />);
                 }
             }
             return <Card key={item.name} onLoad={curSeg?(event)=>{
@@ -191,6 +203,12 @@ class LevelSel extends PureComponent{
             circleRadius : r
         }
     }
+    /**
+     * 改变按钮的状态为s ,用来产生一个解锁动画
+     */
+    changeButtonState(i,os,s){
+        if(this.buttons && this.buttons[i])this.buttons[i].changeState(os,s);
+    }
     render(){
         let circleRadius = this.getChildContext().circleRadius;
         let maxWidth = (circleRadius+12)*10+32+'px';
@@ -208,7 +226,7 @@ class LevelSel extends PureComponent{
                 </Paper>
             </div>
             <SelectChar open={this.state.openCharacterSelectDialog} link={this.selectAfterLink}/>
-            <Unlock ref={ref=>this.unlock=ref} />
+            <Unlock ref={ref=>this.unlock=ref} changeButtonState={this.changeButtonState.bind(this)}/>
         </div>;
     }
     componentWillUpdate(nextProps, nextState){

@@ -602,23 +602,25 @@ const UnlockTable = [
 router.post('/unlock',function(req,res){
   //记录动作
   let {lv,olv,uid} = req.UserInfo;
+  let unlock;
   olv = olv?olv:0;
   for(let i=0;i<UnlockTable.length;i++){
     if(olv<=UnlockTable[i].lv){
+      unlock = UnlockTable[i].lv;
+      olv = UnlockTable[i].lv+UnlockTable[i].rang;
       payGold(uid,UnlockTable[i].gold,(b,msg)=>{
         if(b){
-          olv = UnlockTable[i].lv+UnlockTable[i].lv;
           sql(`update UserInfo set olv=${olv} where uid='${uid}'`).
           then((result)=>{
             sqlAction(uid,`unlock(${olv})`);
-            res.json({result:'ok',olv});
+            res.json({result:'ok',olv,unlock});
           }).catch((err)=>{
             reqError(req,err);
           });
         }else{
           res.json({result: msg});
         }
-      },"乐学编程解锁");
+      },"乐学编程关卡解锁");
       return;
     }
   }

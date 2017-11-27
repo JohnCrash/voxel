@@ -10,6 +10,7 @@ import {TextManager} from './ui/TextManager';
 import {Global} from './global';
 import {postJson} from './vox/fetch';
 import {ljshell} from './ljshell';
+import { setTimeout } from 'timers';
 
 const UNLOCK = 1;
 const UNLOCKING = 2;
@@ -65,9 +66,22 @@ class Unlock extends Component{
             //处理解锁操作...
             this.setState({step:UNLOCKING}); //加载界面
             postJson('users/unlock',{},(json)=>{
-                //提交结果 FIXME:存在安全风险
                 if(json.result==='ok'){
-                    this.setState({step:LOCKED}); //确定界面
+                    //这里做一个动画
+                    if(this.props.changeButtonState){
+                        let i = 0;
+                        let to = ()=>{
+                            if(i++ < 10){
+                                this.props.changeButtonState(json.unlock+i-1,'locked','unfinished');
+                                setTimeout(to,100);
+                            }else{
+                                this.setState({open:true,step:LOCKED}); //确定界面
+                            }
+                        };
+                        this.setState({open:false});
+                        to();
+                    }else
+                        this.setState({step:LOCKED}); //确定界面
                 }else{
                     this.setState({step:LOCKERROR,errmsg:(json&&json.result)?json.result:"解锁失败.."}); //解锁失败        
                 }
@@ -111,6 +125,7 @@ class Unlock extends Component{
                 break;
             case LOCKED: //解锁完成确定界面
                 dict.unlock_result = true;
+                dict.errmsg = '';
                 actions = [<FlatButton
                     label="确定"
                     primary={true}
