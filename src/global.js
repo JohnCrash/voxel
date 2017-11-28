@@ -559,9 +559,9 @@ class _Global_ extends EventEmitter{
         if(this._uiStyle)return this._uiStyle;
         return 'simple';
     }
-    openLevelTips(){
+    openLevelTips(from){
         if(this._currentLevelComponent){
-            this._currentLevelComponent.Help();
+            this._currentLevelComponent.Help(from,null);
         }
     }
     isPad(){

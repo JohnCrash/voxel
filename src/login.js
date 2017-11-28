@@ -61,9 +61,9 @@ class Login extends Component{
              * clsid 班级id
              * cls  当前班级其他人的完成情况
              *      [
-             *          {uid,UserName,lv,lastcommit},
+             *          {uid,UserName,lv,lastcommit,crown},
              *      ]
-             * lvs  自己对已完成关卡的完成情况
+             * lvs  自己已完成关卡的情况
              *      [
              *          {rank,lv,blocks,best}, 
              *          rank    排名数1是第一名,0没有排名

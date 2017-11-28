@@ -8,6 +8,8 @@ import {
     Redirect
   } from 'react-router-dom';
 import MainDrawer from './drawer';
+import FloatButton from './ui/floatbutton';
+import CrownTops from './crowntops';
 
 class Main extends Component{
     constructor(props){
@@ -31,6 +33,10 @@ class Main extends Component{
         event.preventDefault();
         this.drawer.open(true);
     }
+    onTops=(event)=>{
+        console.log(event);
+        this.crowntops.show();
+    }
     render(){
         if(Global.getMaxPassLevel()===null){
             return <Redirect to='/login' />;
@@ -46,6 +52,8 @@ class Main extends Component{
             other={Global.getLoginJson()? Global.getLoginJson().cls:null} 
             lvs={Global.getLoginJson()? Global.getLoginJson().lvs:null} 
             unlock={Global.getMaxUnlockLevel()}/>
+        <FloatButton src={'scene/image/tops.png'} onClick={this.onTops} style={{width:'36px'}}/>
+        <CrownTops ref={r=>this.crowntops = r}/>
         </div>;
     }
 };

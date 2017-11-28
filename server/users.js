@@ -106,8 +106,8 @@ function resError(res,err){
   res.json({result:err.toString()});
 }
 
-function sqlAction(uid,action){
-  sql(`insert into UserStream (uid,action,date) values (${uid},N'${action}',getdate())`).then(
+function sqlAction(uid,cls,action){
+  sql(`insert into UserStream (uid,action,date,cls) values (${uid},N'${action}',getdate(),${cls})`).then(
       ()=>{}
   ).catch((e)=>{
     console.log(e);
@@ -329,7 +329,7 @@ function responeseLogin(req,res){
       
       reCrown(req,crown);
       //记录动作
-      sqlAction(uid,'login '+platform);
+      sqlAction(uid,cls,'login '+platform);
       res.json({
         result:'ok',
         lv,
@@ -352,7 +352,7 @@ function responeseLogin(req,res){
   if(cls==='0' || cls==0){//如果cls=0就不要查找了因为这表示所有没有班级的人
     done([]);
   }else{
-    sql(`select uid,UserName,lv,lastcommit from UserInfo where cls=${cls}`).then((result)=>{
+    sql(`select uid,UserName,lv,lastcommit,crown from UserInfo where cls=${cls}`).then((result)=>{
       done(result.recordset);
     }).catch((err)=>{
       resError(res,err);
@@ -504,7 +504,7 @@ router.post('/commit',function(req,res){
       }
     });
     //记录动作
-    sqlAction(req.UserInfo.uid,`L${lv}-${blocks}`);
+    sqlAction(req.UserInfo.uid,req.UserInfo.cls,`L${lv}-${blocks}`);
     //Tops是总排行，方法排行，取保留前5
     sql(`select count,blocks from Tops where lname='${lname}'`).then((result)=>{
       let data = result.recordset;
@@ -601,7 +601,7 @@ const UnlockTable = [
  */
 router.post('/unlock',function(req,res){
   //记录动作
-  let {lv,olv,uid} = req.UserInfo;
+  let {lv,olv,uid,cls} = req.UserInfo;
   let unlock;
   olv = olv?olv:0;
   for(let i=0;i<UnlockTable.length;i++){
@@ -612,7 +612,7 @@ router.post('/unlock',function(req,res){
         if(b){
           sql(`update UserInfo set olv=${olv} where uid='${uid}'`).
           then((result)=>{
-            sqlAction(uid,`unlock(${olv})`);
+            sqlAction(uid,cls,`unlock(${olv})`);
             res.json({result:'ok',olv,unlock});
           }).catch((err)=>{
             resError(res,err);
@@ -642,6 +642,23 @@ router.post('/trash',function(req,res){
     res.json({result:"arguments invalid"});
   }
 });
+
+/**
+ * 皇冠排行榜
+ */
+router.post('/crowns',function(req,res){
+  let {uid,cls} = req.UserInfo;
+  if(cls !== 0 && cls !== '0'){
+    sql(`select * from Crown`).then((result)=>{
+      res.json({result:'ok',crowns:result.recordset});
+    }).catch((err)=>{
+      resError(res,err);
+    });
+  }else{
+    res.json({result:"ok"});
+  }
+});
+
 /**
  * 登出
  */
@@ -656,7 +673,7 @@ router.post('/logout',function(req,res){
 router.post('/report',function(req,res){
   let {errmsg,platform} = req.body;
   if(errmsg==='NotSupportWebGL'){
-    sqlAction(req.UserInfo.uid,'NotGL '+platform);
+    sqlAction(req.UserInfo.uid,req.UserInfo.cls,'NotGL '+platform);
   }
   res.json({result:'ok'});
 });

@@ -415,7 +415,7 @@ class Level extends Component{
         if(this.blockcount)
             this.blockcount.innerText = `${count}×`;
     }
-    Help(event){
+    Help(from,event){
         if(event)event.stopPropagation();
         /**
          * 如果是第一个就是一个指南关卡
@@ -463,6 +463,12 @@ class Level extends Component{
                 }
             }else if(info && info.next-1===Global.getMaxPassLevel() && Global.hasTrash(Global.getMaxPassLevel())){
                 //已经玩过但是没有通过，这里不显示提示了
+                //但是从Drawer类的提示还是要显示
+                if(from){
+                    MessageBox.show('ok',undefined,[<MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
+                        console.log(result);
+                    }); 
+                }
                 console.log('net need tips');
             }else{
                 MessageBox.show('ok',undefined,[<MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
@@ -534,6 +540,14 @@ class Level extends Component{
         </SelectField>]:[];
         let b = Global.getPlatfrom()==='windows';
         let styles = {color:uiColor};
+        /*
+            <IconButton touch={true} iconStyle = {styles} onClick={this.RotationLeft.bind(this)} tooltip={b?"向左转动视角":undefined} tooltipPosition="top-center">
+                <IconRotateLeft />
+            </IconButton>  
+            <IconButton touch={true} iconStyle = {styles} onClick={this.RotationRight.bind(this)} tooltip={b?"向右转动视角":undefined} tooltipPosition="top-center">
+                <IconRotateRight />
+            </IconButton>  
+        */
         return <Toolbar style={portrait?{width:"100%",
                 background:"rgba(0,0,0,0)",
                 bottom:"0px",
@@ -545,15 +559,9 @@ class Level extends Component{
                     </ToolbarGroup>}
                     <ToolbarGroup lastChild={true}>
                         {debugTool}
-                        <IconButton touch={true} iconStyle = {styles} onClick={this.Help.bind(this)} tooltip={b?"打开帮助":undefined} tooltipPosition="top-center">
+                        <IconButton touch={true} iconStyle = {styles} onClick={this.Help.bind(this,'toolbar')} tooltip={b?"打开帮助":undefined} tooltipPosition="top-center">
                             <IconHelp />
-                        </IconButton>                        
-                        <IconButton touch={true} iconStyle = {styles} onClick={this.RotationLeft.bind(this)} tooltip={b?"向左转动视角":undefined} tooltipPosition="top-center">
-                            <IconRotateLeft />
-                        </IconButton>  
-                        <IconButton touch={true} iconStyle = {styles} onClick={this.RotationRight.bind(this)} tooltip={b?"向右转动视角":undefined} tooltipPosition="top-center">
-                            <IconRotateRight />
-                        </IconButton>                                                  
+                        </IconButton>                                                                        
                         <IconButton touch={true} iconStyle = {styles} onClick={this.Reset.bind(this)} tooltip={b?"重新开始":undefined} tooltipPosition="top-center">
                             <IconReplay />
                         </IconButton>                                                

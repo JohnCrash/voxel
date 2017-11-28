@@ -149,7 +149,7 @@ class MainDrawer extends Component{
     }
     onTip = (event)=>{
         this.setState({openMenu:false});
-        Global.openLevelTips();
+        Global.openLevelTips('drawer');
     }
     SkinChange = (event,value)=>{
         this.motifyConfig = true;

@@ -8,8 +8,8 @@ function sql(query){
     });
 }
 
-function sqlAction(uid,action){
-    sql(`insert into UserStream (uid,action,date) values (${uid},N'${action}',getdate())`).then(
+function sqlAction(uid,cls,action){
+    sql(`insert into UserStream (uid,action,date,cls) values (${uid},N'${action}',getdate(),${cls})`).then(
         ()=>{}
     ).catch((e)=>{
         console.log(e);
@@ -84,7 +84,7 @@ function remove(ws){
                 if(clss[i] && clss[i].ws===ws){
                     o = clss[i];
                     clss.splice(i,1);
-                    sqlAction(o.uid,'exit');
+                    sqlAction(o.uid,o.cls,'exit');
                     break;
                 }
             }
