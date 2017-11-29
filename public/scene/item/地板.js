@@ -1,6 +1,6 @@
 (function(){
 	
-var SPEED = 4;
+var SPEED = 32;
 var STEP = 17-2; 
 
 regItemEvent('地板',

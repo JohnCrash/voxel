@@ -585,7 +585,7 @@ class BlockView extends Component{
         this.runComplateCB = cb;
         this.runID = setInterval(()=>{
             this.step();
-        },t||100);
+        },t||300);
     }
     get freeze(){
         return this._freeze;

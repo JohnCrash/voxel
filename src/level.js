@@ -186,7 +186,7 @@ class Level extends Component{
         }
         if(this.state.playPause){
             this.voxview.readyPromise.then(()=>{
-                this.blockview.run(0,(state)=>{//执行完成
+                this.blockview.run(300,(state)=>{//执行完成
                     if(state === 'end'||state === 'error'||state==='nolink'){
                         if(state === 'error'){
                             MessageBox.show('ok',undefined,<MarkdownElement file={'scene/ui/program_error.md'}/>,(result)=>{});
@@ -229,11 +229,15 @@ class Level extends Component{
         });
     }
     saveTrash(prop){
-        let props = prop?prop:this.props;
-        let info = Global.appGetLevelInfo(props.level);
-        if(info && info.next-1 === Global.getMaxPassLevel() && this.blockview){
-            if(this.blockview.getBlockCount() !== this.blockview.getBeginBlockCount())
-                Global.setTrash(info.next-1,this.blockview.toXML());
+        try{
+            let props = prop?prop:this.props;
+            let info = Global.appGetLevelInfo(props.level);
+            if(info && info.next-1 === Global.getMaxPassLevel() && this.blockview){
+                if(this.blockview.getBlockCount() !== this.blockview.getBeginBlockCount())
+                    Global.setTrash(info.next-1,this.blockview.toXML());
+            }
+        }catch(e){
+            console.log(e);
         }
     }
     onGameStart(props){

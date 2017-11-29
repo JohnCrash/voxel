@@ -1,6 +1,6 @@
 (function(){
 	
-var SPEED = 1/5;
+var SPEED = 1/2;
 var DOWN = 0.9;
 
 regItemEvent('地板开关',

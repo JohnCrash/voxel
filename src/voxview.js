@@ -155,7 +155,17 @@ class VoxView extends Component{
     }
     reset(){
         BlocklyInterface.reset();
-        this.sceneManager.resetItem();
+        /**
+         * resetItem需要等待item都装载就绪
+         */
+        this.readyPromise = new Promise((resolve,reject)=>{
+            this.sceneManager.resetItem((iserr)=>{
+                if(!iserr)
+                    resolve("ready");
+                else
+                    reject("voxview reset error");
+            });
+        });
     }
     RotationLeft(){
         this.sceneManager.rotateLeft();

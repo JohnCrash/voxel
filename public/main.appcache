@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#9
+#2
 app_compress.js
 libs/three.min.js
 libs/stats.min.js
@@ -28,6 +28,9 @@ scene/image/5.png
 scene/image/6.png
 scene/image/lock.png
 scene/image/level_build.png
+scene/image/tops_title.png
+scene/image/tops.png
+scene/image/crown.png
 blockly/media/click.mp3
 blockly/media/delete.mp3
 blockly/media/disconnect.wav
