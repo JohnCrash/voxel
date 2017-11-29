@@ -86,11 +86,16 @@ class CrownTops extends Component{
                 }
             }
         }
+        let icon = [
+            'rank_frist',
+            'rank_second',
+            'rank_third'
+        ];
         let tops = ranks.map((item,i)=>{
             return <TableRow selectable={false} key={i} style={item.ismy?HighLightStyle:{}}>
                 <TableRowColumn  style={FixedWidthStyle}>
                     <b>{i+1}</b>
-                    {i===0?<img src="scene/image/tops.png" style={{height:"32px",verticalAlign:"middle"}} />:undefined}
+                    {i<3?<img src={`scene/image/${icon[i]}.png`} style={{height:"32px",verticalAlign:"middle"}} />:undefined}
                 </TableRowColumn>
                 <TableRowColumn  style={FixedWidthStyle}>
                     <span style={{verticalAlign:"middle"}}>{item.count}×</span>

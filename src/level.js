@@ -421,12 +421,6 @@ class Level extends Component{
     }
     Help(from,event){
         if(event)event.stopPropagation();
-        if(1){
-            MessageBox.show('ok',undefined,[<MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
-                console.log(result);
-            }); 
-            return ;
-        }
         /**
          * 如果是第一个就是一个指南关卡
          */
@@ -468,8 +462,9 @@ class Level extends Component{
                         },'tips');
                     });
                 }else{
-                    console.error(`lvs error ? ${info.next-1}`);
-                    console.log(lvs);
+                    MessageBox.show('ok',undefined,[<MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
+                        console.log(result);
+                    }); 
                 }
             }else if(info && info.next-1===Global.getMaxPassLevel() && Global.hasTrash(Global.getMaxPassLevel())){
                 //已经玩过但是没有通过，这里不显示提示了
@@ -549,7 +544,7 @@ class Level extends Component{
             {tests}
         </SelectField>]:[];
         let b = Global.getPlatfrom()==='windows';
-        let styles = {color:uiColor};
+        let styles = {color:b?'#0000000':uiColor};
         /*
             <IconButton touch={true} iconStyle = {styles} onClick={this.RotationLeft.bind(this)} tooltip={b?"向左转动视角":undefined} tooltipPosition="top-center">
                 <IconRotateLeft />

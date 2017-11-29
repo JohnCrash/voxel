@@ -434,10 +434,12 @@ class _Global_ extends EventEmitter{
         }
         return false;
     }
-    updateLevelRank(lv,rank){
+    updateLevelRank(lv,rank,blocks){
         if(this._loginJson && this._loginJson.lvs){
-            if(this._loginJson.lvs[lv])
+            if(this._loginJson.lvs[lv]){
                 this._loginJson.lvs[lv].rank = rank;
+                this._loginJson.lvs[lv].blocks = blocks;
+            }
         }
     }
     getLoginJson(){

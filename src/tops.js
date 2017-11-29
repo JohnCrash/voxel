@@ -146,8 +146,9 @@ class Tops extends Component{
             console.log('================================');
             if(json.tops){
                 this.tops = json.tops.sort((a,b)=>{
-                    return a.blocks > b.blocks;
+                    return a.blocks - b.blocks;
                 });
+                console.log(this.tops);
                 Global.passLevel(info.next,this.getRank(),blocks);
             }else{
                 this.tops = [];
@@ -262,7 +263,7 @@ class Tops extends Component{
             open={open}
             autoScrollBodyContent={true}
             contentStyle={Global.getPlatfrom()!=="windows"?{width:"95%"}:undefined}>
-            <div style={{position:'absolute',top:'-1px',right:'16px'}}>
+            <div style={{float:'right',top:'-1px',right:'16px'}}>
                 <img style={{width:'96px'}} src='scene/image/topcup.png'/>
             </div>
             <MarkdownElement text={md(this.title,dict)}/>
