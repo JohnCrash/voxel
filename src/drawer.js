@@ -207,7 +207,7 @@ class MainDrawer extends Component{
                 this.motifyConfig = true;
                 Global.setCurrentLang(b?"en":"zh");
             }} />
-            <Toggle label={'精简界面'} style={ToggleStyle} defaultToggled={uistyle} onToggle={(e,b)=>{
+            <Toggle label={'精简界面'} style={ToggleStyle} defaultToggled={uistyle!=='features'} onToggle={(e,b)=>{
                 this.setState({uistyle:b});
                 this.motifyConfig = true;
                 Global.setUIStyle(b?"simple":"features");

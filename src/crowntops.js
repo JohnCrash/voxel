@@ -41,8 +41,12 @@ class CrownTops extends Component{
     }
     handleOk = (event)=>{
         this.setState({open:false});
+        Global.pop();
+        if(this.props.onClose)
+            this.props.onClose(event);
     }
     show(){
+        Global.push(this.handleOk);
         //MessageBox.showLoading('LOADING...');
         postJson('/users/crowns',{},(json)=>{
             //MessageBox.closeLoading();
@@ -103,7 +107,7 @@ class CrownTops extends Component{
                 </TableRowColumn>
             </TableRow>;
         });
-        let topNode = <div onClick={this.handleOk}>
+        let topNode = <div>
             <img style={{width:'100%'}} src={'scene/image/tops_title.png'}/>
             <Table bodyStyle={{overflowX:"initial",overflowY:"initial"}}>
                 <TableHeader style={{height:"24px"}} displaySelectAll={false} adjustForCheckbox={false}>
@@ -122,14 +126,21 @@ class CrownTops extends Component{
     }
     render(){
         let {open,body} = this.state;
-        return open?<Dialog
+        return <Dialog
+                actions={<FlatButton
+                    label="确定"
+                    primary={true}
+                    onClick={this.handleOk}
+                    />}
+                repositionOnUpdate={true}
                 open={open}
-                modal={false}
+                modal={true}
                 autoScrollBodyContent={true}
                 onRequestClose={this.handleOk}
+                bodyStyle={{height:"100%"}}
                 contentStyle={Global.getPlatfrom()!=="windows"?{width:"95%"}:undefined}>
                 {body}
-            </Dialog>:null;
+            </Dialog>;
     }
 }
 

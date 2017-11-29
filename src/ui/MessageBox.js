@@ -149,6 +149,7 @@ class MessageBox extends Component{
                 open={this.state.open}
                 autoScrollBodyContent={true}
                 contentStyle={this.state.style}
+                repositionOnUpdate={true}
                 onRequestClose={this.handleClose.bind(this,'close')}
                 >
                 {this.state.content}

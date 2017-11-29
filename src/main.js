@@ -17,7 +17,7 @@ class Main extends Component{
         this.state = {
             title : '',
             anchorEl : null,
-            isdebug : false,
+            isdebug : false
         }
         Global.regAppTitle((t)=>{
             this.appTitle(t);
@@ -34,8 +34,13 @@ class Main extends Component{
         this.drawer.open(true);
     }
     onTops=(event)=>{
-        console.log(event);
         this.crowntops.show();
+        if(Global.getPlatfrom()==='ios')
+            this.levelSel.enableScroll(false); //关闭
+    }
+    handleCloseTops=(event)=>{
+        if(Global.getPlatfrom()==='ios')
+            this.levelSel.enableScroll(true); //打开
     }
     render(){
         if(Global.getMaxPassLevel()===null){
@@ -51,10 +56,15 @@ class Main extends Component{
         <LevelSel key='levelselect' index='main' current={Global.getMaxPassLevel()} 
             other={Global.getLoginJson()? Global.getLoginJson().cls:null} 
             lvs={Global.getLoginJson()? Global.getLoginJson().lvs:null} 
-            unlock={Global.getMaxUnlockLevel()}/>
+            unlock={Global.getMaxUnlockLevel()}
+            ref={r=>{this.levelSel=r}}/>
         <FloatButton src={'scene/image/tops.png'} onClick={this.onTops} style={{width:'36px'}}/>
-        <CrownTops ref={r=>this.crowntops = r}/>
+        <CrownTops ref={r=>this.crowntops = r} onClose={this.handleCloseTops}/>
         </div>;
+        /**
+         * FixBug : iOS有一个触摸事件穿透问题，上面打开对话CrownTops滑动手指，会滚动LevelSel
+         * 这里针对iOS做特殊处理
+         */
     }
 };
 

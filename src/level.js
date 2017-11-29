@@ -417,6 +417,12 @@ class Level extends Component{
     }
     Help(from,event){
         if(event)event.stopPropagation();
+        if(1){
+            MessageBox.show('ok',undefined,[<MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
+                console.log(result);
+            }); 
+            return ;
+        }
         /**
          * 如果是第一个就是一个指南关卡
          */

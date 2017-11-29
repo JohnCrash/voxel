@@ -23,6 +23,7 @@ class LevelSel extends PureComponent{
             current:0,
             openCharacterSelectDialog:false,
             n:-1,
+            scroll:true,
         };
     }
     onSelectLevel(link,p){
@@ -209,17 +210,43 @@ class LevelSel extends PureComponent{
     changeButtonState(i,os,s){
         if(this.buttons && this.buttons[i])this.buttons[i].changeState(os,s);
     }
+    /**
+     * 打开和关闭滚动
+     */
+    enableScroll(b){
+        /*
+        if(!this.disableScrollFunc)
+            this.disableScrollFunc = function(event){
+                event.preventDefault();
+            };
+
+        if(this.scrollNode){
+            if(b){
+                console.log('ENABLE');
+                this.scrollNode.removeEventListener('touchstart',this.disableScrollFunc);
+            }else{
+                console.log('DISABLE');
+                this.scrollNode.addEventListener('touchstart',this.disableScrollFunc,true);
+            }
+        }
+        */
+        this.setState({scroll:b});
+    }
     render(){
         let circleRadius = this.getChildContext().circleRadius;
         let maxWidth = (circleRadius+12)*10+32+'px';
+        //                overflowY:'auto',
+        let {scroll} = this.state;
         return <div>  
-            <div style={{
-                overflowY:'auto',
-                position:'absolute',
+            <div              
+            ref={(r)=>{this.scrollNode = r;}}
+            style={{
+                overflowY:scroll?'auto':'hidden',
+                position:scroll?'absolute':'fixed',
                 left :'0px',
                 right :'0px',
                 bottom :'0px',
-                top :'64px'
+                top :'64px',
             }}>
                 <Paper style={{width:"90%",margin:'auto',marginTop:'20px',marginBottom:'20px',maxWidth}}>
                 {this.renderLevel}
@@ -251,7 +278,7 @@ LevelSel.propTypes = {
     index : PropTypes.string,
     current : PropTypes.number,
     other : PropTypes.array,
-    unlock : PropTypes.number
+    unlock : PropTypes.number,
 };
 
 LevelSel.childContextTypes = {
