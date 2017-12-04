@@ -30,7 +30,7 @@ class _ljshell{
                 setTimeout(()=>{
                     if(!this.lj){
                         this._userInfo = null;
-                        cb(false,`没有从乐教乐学大厅进入. (${window.ljAppObject}),(${window.cordova})`);    
+                        cb(false,`没有从乐教乐学大厅进入.`);    
                     }
                 },1);
             }

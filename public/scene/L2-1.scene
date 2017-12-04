@@ -1,5 +1,5 @@
 {
-	"music": "scene\\audio\\background\\背景音乐_节奏感强.mp3",
+	"music": "scene\\audio\\background\\背景音乐_柔和轻快.mp3",
 	"loop": true,
 	"bgcolor": 5504221,
 	"camera": {

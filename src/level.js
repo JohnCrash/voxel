@@ -110,6 +110,8 @@ class Level extends Component{
         this.drawer.open(true);
     }
     Reset(event){
+        if(this._ready === LOADING)
+            return;
         if(event)event.stopPropagation();
         if(Global.isDebug()){
             //重新加载全部资源

@@ -134,19 +134,17 @@ class MainDrawer extends Component{
         })
     }
     onHelp = (event)=>{
-        let f = "scene/ui/help.md";
         this.setState({openMenu:false});
-        TextManager.load(f,()=>{
-            MessageBox.show('ok',undefined,<MarkdownElement file={f}/>,(result)=>{
+        TextManager.load("scene/ui/help.md",(iserr,text)=>{
+            MessageBox.show('ok',undefined,<MarkdownElement text={text}/>,(result)=>{
                 console.log(result);
             });
         });
     }
     onAbout = (event)=>{
-        let f = "scene/ui/about.md";
         this.setState({openMenu:false});
-        TextManager.load(f,()=>{
-            MessageBox.show('ok',undefined,<MarkdownElement file={f}/>,(result)=>{
+        TextManager.load("scene/ui/about.md",(iserr,text)=>{
+            MessageBox.show('ok',undefined,<MarkdownElement text={text}/>,(result)=>{
                 console.log(result);
             });
         });        
@@ -227,7 +225,7 @@ class MainDrawer extends Component{
                 Global.setCurrentLang(b?"en":"zh");
             }} />
             <Toggle label={'精简界面'} style={ToggleStyle} defaultToggled={!uistyle} onToggle={(e,b)=>{
-                this.setState({uistyle:b});
+                this.setState({uistyle:!b});
                 this.motifyConfig = true;
                 Global.setUIStyle(b?"simple":"features");
             }} />
@@ -249,7 +247,7 @@ class MainDrawer extends Component{
                     value="Black"
                     label="黑色"
                     style={RadioStyle2}
-                />                                            
+                />
             </RadioButtonGroup>
             <GrayBlock />
             {this.props.loc==="game"?<MenuItem primaryText="任务提示..." leftIcon={<IconTips />} style={BlodStyle} onClick={this.onTip}/>:undefined}
