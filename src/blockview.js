@@ -68,6 +68,18 @@ Blockly.Gesture.prototype.handleRightClick = function(e){
 }
 
 /**
+ * FIXBUG : Blockly 的块有操作菜单，当点击对话或者drawer的时候菜单不关闭
+ */
+const FieldDropdown_showEditor_ = Blockly.FieldDropdown.prototype.showEditor_;
+Blockly.FieldDropdown.prototype.showEditor_ = function(){
+    if(this.name !== 'VAR'){
+        Global.closeBlocklyMenu = ()=>{
+            Blockly.WidgetDiv.hideIfOwner(this);
+        }
+        FieldDropdown_showEditor_.call(this);
+    }
+}
+/**
  * 自定义颜色
  */
 const BlockSkin = {
@@ -213,6 +225,15 @@ class BlockView extends Component{
         this.toolboxMode = this.props.toolbox;
         if(this.props.file){
             this.load(this.props.file);
+        }
+    }
+    componentWillUnmount(){
+        if(this.isRunning()){
+            this.pause();
+            if(this.runID){
+                clearInterval(this.runID);
+                this.runID = null;
+            }
         }
     }
     componentWillReceiveProps(nextProps){
@@ -400,7 +421,9 @@ class BlockView extends Component{
             
             Blockly.BlockDragger.prototype.endBlockDrag = function(e,xy){
                 BlocklyInterface.resume();
-                endBlockDrag.call(this,e,xy);
+                try{
+                    endBlockDrag.call(this,e,xy);
+                }catch(e){console.log(e);}
                 trashcan.svgGroup_.style.opacity=0;
                 setTimeout(()=>{ //有个合上垃圾桶的过程
                     trashcan.svgGroup_.style.opacity=0;

@@ -167,8 +167,10 @@ class Level extends Component{
                 break;
         }
         this.btpms = now;
-        MessageBox.show('ok',undefined,<MarkdownElement file={md}/>,(result)=>{
-            this.Reset();
+        TextManager.load(md,(iserr,text)=>{
+            MessageBox.show('ok',undefined,<MarkdownElement text={text}/>,(result)=>{
+                this.Reset();
+            });    
         });
     }
     isPlayAgin(){
@@ -186,7 +188,7 @@ class Level extends Component{
         }
         if(this.state.playPause){
             this.voxview.readyPromise.then(()=>{
-                this.blockview.run(300,(state)=>{//执行完成
+                this.blockview.run(500,(state)=>{//执行完成
                     if(state === 'end'||state === 'error'||state==='nolink'){
                         if(state === 'error'){
                             MessageBox.show('ok',undefined,<MarkdownElement file={'scene/ui/program_error.md'}/>,(result)=>{});
@@ -459,6 +461,7 @@ class Level extends Component{
                     let dict={name,lv:info.next-1,blocks,best};
                     TextManager.load(`scene/ui/play_again.md`,(iserr,text)=>{
                         if(!iserr)MessageBox.show('',undefined,<MarkdownElement text={md(text,dict)} />,(result)=>{
+
                         },'tips');
                     });
                 }else{
@@ -509,10 +512,15 @@ class Level extends Component{
             }else{
                 //没有成功
                 this.btpms = now;
-                Global.playSound(lj.failSound);
+                Global.playSound(lj.successSound);
                 TextManager.load(`scene/ui/fail_again.md`,(iserr,text)=>{
                     if(!iserr)MessageBox.show('',undefined,<MarkdownElement text={md(text,dict)} />,(result)=>{
-                    },'tips');                    
+                        if(result==='again'){
+                            this.Reset();
+                        }else if(result==='next'){
+                            location.href=`#/level/${info.nextName}`;//eslint-disable-line
+                        }
+                    },'tips_again');                    
                 });                
             }
         }else{

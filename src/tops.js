@@ -273,7 +273,7 @@ class Tops extends Component{
                     <TableRow style={{height:"24px"}}>
                         <TableHeaderColumn style={FixedHeaderStyle}>排名</TableHeaderColumn>
                         <TableHeaderColumn style={FixedHeaderStyle}>块数</TableHeaderColumn>
-                        <TableHeaderColumn style={FixedHeaderStyle}>人数</TableHeaderColumn>
+                        <TableHeaderColumn style={FixedHeaderStyle}>次数</TableHeaderColumn>
                         <TableHeaderColumn style={FixedHeaderStyle2}>并列</TableHeaderColumn>
                     </TableRow>
                 </TableHeader>

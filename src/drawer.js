@@ -1,3 +1,4 @@
+/*global Blockly,Interpreter*/
 import React, {Component} from 'react';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
@@ -20,10 +21,16 @@ import LevelDebug from './leveldebug';
 import PropTypes from 'prop-types';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 
-const ToggleStyle = {marginBottom: 16,marginLeft:16,width:"85%"};
+const ToggleStyle = {marginTop: 16,marginBottom: 16,marginLeft:16,width:"85%"};
 const SpanStyle = {marginTop: 16,marginLeft:16,marginRight:8};
 const RadioStyle = {marginBottom: 16,marginLeft:32,marginRight:8};
 const BlodStyle = {fontWeight:'bold'};
+const RadioStyle2 = {marginTop:'6px',marginBottom:'6px'};
+
+function GrayBlock(){
+    return <div style={{width:'100%',height:'24px',backgroundColor:'gainsboro'}}>
+    </div>;
+}
 class MainDrawer extends Component{
     constructor(props){
         super(props);
@@ -70,6 +77,13 @@ class MainDrawer extends Component{
         }
     }
     open(b){
+        //可能有blockly菜单
+        if(Global.closeBlocklyMenu){
+            try{
+                Global.closeBlocklyMenu();
+            }catch(e){console.error(e);}
+        }
+
         Global.push(()=>{
             this.handleClose(false);
         });
@@ -182,16 +196,21 @@ class MainDrawer extends Component{
             open={openMenu} 
             disableSwipeToOpen={true}
             onRequestChange={this.handleClose.bind(this)}>
-            <MenuItem primaryText={loc==="game"?"返回选择关卡":"退出游戏"} style={{marginBottom:32,fontWeight:'bold'}} leftIcon={<IconHome /> } onClick={
+            <MenuItem primaryText={loc==="game"?"返回选择关卡":"退出游戏"} style={{marginBottom:0,fontWeight:'bold'}} leftIcon={<IconHome /> } onClick={
                     (event)=>{
                         if(loc==="game")
                             this.onReturnMain();
                         else{
+                            if(this.motifyConfig){
+                                this.motifyConfig = false;
+                                Global.pushConfig();
+                            }                            
                             if(window.ljAppObject)
                                 window.ljAppObject.back();
                         }
                     }
                 } />
+            <GrayBlock />
             <Toggle label={'背景音乐'} style={ToggleStyle} defaultToggled={music} onToggle={(e,b)=>{
                 this.setState({music:b});
                 this.motifyConfig = true;
@@ -207,27 +226,32 @@ class MainDrawer extends Component{
                 this.motifyConfig = true;
                 Global.setCurrentLang(b?"en":"zh");
             }} />
-            <Toggle label={'精简界面'} style={ToggleStyle} defaultToggled={uistyle!=='features'} onToggle={(e,b)=>{
+            <Toggle label={'精简界面'} style={ToggleStyle} defaultToggled={!uistyle} onToggle={(e,b)=>{
                 this.setState({uistyle:b});
                 this.motifyConfig = true;
                 Global.setUIStyle(b?"simple":"features");
             }} />
-            <span style={SpanStyle}><b>编程块样式</b></span>
+            <GrayBlock />
+            <div style={{marginTop:'16px'}}><span style={SpanStyle}><b>编程块样式</b></span></div>
             <RadioButtonGroup style={RadioStyle}
                 name="BlockSkin" defaultSelected={Global.getBlocklySkin()} labelPosition="left" onChange={this.SkinChange}>
                 <RadioButton
                     value="Scratch"
-                    label="默认"
+                    label="多彩"
+                    style={RadioStyle2}
                 />
                 <RadioButton
                     value="MakeBlock"
                     label="绚丽"
+                    style={RadioStyle2}
                 />
                 <RadioButton
                     value="Black"
                     label="黑色"
+                    style={RadioStyle2}
                 />                                            
             </RadioButtonGroup>
+            <GrayBlock />
             {this.props.loc==="game"?<MenuItem primaryText="任务提示..." leftIcon={<IconTips />} style={BlodStyle} onClick={this.onTip}/>:undefined}
             <MenuItem primaryText="操作帮助..." leftIcon={<HelpIcon />} style={BlodStyle} onClick={this.onHelp}/> 
             <MenuItem primaryText="关于..." leftIcon={<IconAbout />} style={BlodStyle} onClick={this.onAbout}/> 

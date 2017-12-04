@@ -20,7 +20,8 @@ const HighLightStyle = {
     backgroundColor : "#b0e0e6"
 };
 const FixedWidthStyle = {
-    width : "16px"
+    width : "16px",
+    textOverflow:'unset'
 };
 const FixedHeaderStyle = {
     fontSize : "normal",
@@ -67,6 +68,10 @@ class CrownTops extends Component{
         //计算排名
         let mycrown = Global.getLoginJson().crown;
         let ranks = [];
+        if(!crowns){
+            this.setState({open:true,body:'用户没有排行数据'});
+            return;
+        }
         for(let i=0;i<crowns.length;i++){
             let a = crowns[crowns.length-i-1];
             if(a.people>0){
@@ -94,19 +99,27 @@ class CrownTops extends Component{
         let tops = ranks.map((item,i)=>{
             return <TableRow selectable={false} key={i} style={item.ismy?HighLightStyle:{}}>
                 <TableRowColumn  style={FixedWidthStyle}>
-                    <b>{i+1}</b>
+                    {i>2?<b style={{marginLeft:'12px'}}>{i+1}</b>:undefined}
                     {i<3?<img src={`scene/image/${icon[i]}.png`} style={{height:"32px",verticalAlign:"middle"}} />:undefined}
                 </TableRowColumn>
                 <TableRowColumn  style={FixedWidthStyle}>
-                    <span style={{verticalAlign:"middle"}}>{item.count}×</span>
                     <img src="scene/image/crown.png" style={{height:"24px",verticalAlign:"middle"}} />
+                    <span style={{verticalAlign:"middle"}}>×{item.count}</span>
                 </TableRowColumn>
                 <TableRowColumn  style={FixedWidthStyle}>
                     {item.people}
                 </TableRowColumn>
                 <TableRowColumn  style={FixedWidthStyle}>
                     {item.cls?item.cls.map((it,i)=>{
-                        return <Avatar src={`http://image-static.lejiaolexue.com/userlogo/${it.uid}_99.jpg`} />
+                        /**
+                         * ios cache bug ,ios 浏览器会缓存图片
+                         * Global.getRandom() 确保每次启动的随机数相同，避免重复加载
+                         */          
+                        let userlogo = `http://image-static.lejiaolexue.com/userlogo/${it?it.uid:0}_99.jpg`;
+                        if(Global.getPlatfrom()==='ios'){
+                            userlogo = `http://image-static.lejiaolexue.com/userlogo/${it?it.uid:0}_99.jpg?p=${Global.getRandom()}`;
+                        }                                      
+                        return <Avatar src={userlogo} />
                                 {it.UserName};
                     }):undefined}
                 </TableRowColumn>

@@ -1,10 +1,10 @@
-var Sql = require('mssql');
-var express = require('express');
-var multiparty = require('multiparty');
-var crypto = require('crypto');
-var config = require('./config');
-var router = express.Router();
-var fetch = require('node-fetch');
+const Sql = require('mssql');
+const express = require('express');
+const multiparty = require('multiparty');
+const crypto = require('crypto');
+const config = require('./config');
+const router = express.Router();
+const fetch = require('node-fetch');
 const ljlx = require('lxnodemodules').LXGrid;
 const Ice = require('ice').Ice;
 const {
@@ -96,21 +96,32 @@ function stripTailSpace(s){
   return s;
 }
 
+const SQL = Sql.connect(config.sqlserver);
 function sql(query){
-  return new Sql.ConnectionPool(config.sqlserver).connect().then(pool=>{
-    return pool.request().query(query);
-  });
+  /*
+    //老的连接池方式
+    return new Sql.ConnectionPool(config.sqlserver).connect().then(pool=>{
+      return pool.request().query(query);
+    });
+  */
+  return SQL.then((pool)=>{return pool.request().query(query)});
 }
 
 function resError(res,err){
-  res.json({result:err.toString()});
+  if(err && err.message)
+    res.json({result:err.message});
+  else if(err)
+    res.json({result:err});
+  else
+    res.json({result:'服务器：数据查询错误'});
+  console.error(err);
 }
 
 function sqlAction(uid,cls,action){
   sql(`insert into UserStream (uid,action,date,cls) values (${uid},N'${action}',getdate(),${cls})`).then(
       ()=>{}
   ).catch((e)=>{
-    console.log(e);
+    console.error(e);
   });
 }
 
@@ -195,6 +206,8 @@ function pullUserInfo(req,cb){
 }
 /**
  * 重新计算皇冠数量crown
+ * crown 是新的皇冠数，老的皇冠数量放在req.UserInfo.crown中
+ * 
  */
 function reCrown(req,crown){
   let oldcrown = req.UserInfo.crown;
@@ -202,13 +215,23 @@ function reCrown(req,crown){
   if(oldcrown===crown)return;
 
   if(crown > 200 || crown < 0)return; //Crown数不可能超过该200
-  //操作用户数据crown，并且对Crown中的统计进行增减。
-  sql(`update UserInfo set crown=${crown} where uid=${req.UserInfo.uid}`);
+
+  //重新统计所有皇冠数量为crown的人数
+  sql(`select count(*) from UserInfo where crown=${crown}`).then((result)=>{
+    let data = result.recordset;
+    if(data && data[0]){
+      sql(`update Crown set people=${data[0]['']} where count=${crown}`);
+      sql(`update UserInfo set crown=${crown} where uid=${req.UserInfo.uid}`);
+    }
+  }).catch((err)=>{
+    console.log(err);
+  });
+/*
+  //下面算法有BUG
   sql(`select * from Crown where count=${oldcrown} or count=${crown}`).then((result)=>{
     let data = result.recordset;
     if(!data || (data&&data.length===0)){
       //没有初始化Crown
-      
       let a = [];
       for(let i=0;i<201;i++)a.push(i);
       let s = `insert into Crown (count) values (${a.join('),(')})`;
@@ -230,6 +253,8 @@ function reCrown(req,crown){
       //更新统计表，老的人数-1，新的人数+1
       Promise.all([sql(`update Crown set people=${oldPeople-1} where count=${oldcrown}`),
       sql(`update Crown set people=${People+1} where count=${crown}`)]).then(()=>{
+          //操作用户数据crown，并且对Crown中的统计进行增减。
+          sql(`update UserInfo set crown=${crown} where uid=${req.UserInfo.uid}`);
       }).catch((err)=>{
         console.error(err);  
       });
@@ -240,6 +265,7 @@ function reCrown(req,crown){
   }).catch((err)=>{
     console.error(err);
   });
+  */
 }
 /**
  * 回复login

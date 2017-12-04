@@ -42,11 +42,13 @@ class MessageBox extends Component{
             if(Global.getPlatfrom()!=='windows')
                 style = {width:"95%"};
         }else{
-            if(style==='tips'){
+            if(style==='tips'||style==='tips_again'){
+                if(style==='tips_again')type = 'again';
                 style = {width:"100%",maxWidth:"100%",top:"0px",position:"fixed",transform:""};
                 //点击内容也可以退出
                 content = <div onClick={(event)=>{
-                    MessageBox.globalNode.setState({open: false,type:'',title:'',content:''});
+                    //MessageBox.globalNode.setState({open: false,type:'',title:'',content:''});
+                    this.handleClose('cancel');
                 }}>{content}</div>;
             }
         }
@@ -102,7 +104,7 @@ class MessageBox extends Component{
             case 'okcancel':
                 actions = [<FlatButton
                         label="取消"
-                        secondary={true}
+                        primary={true}
                         onClick={this.handleClose.bind(this,'cancel')}/>,
                     <FlatButton
                         label="确定"
@@ -112,7 +114,7 @@ class MessageBox extends Component{
             case 'yesno':
                 actions = [<FlatButton
                                 label="否"
-                                secondary={true}
+                                primary={true}
                                 onClick={this.handleClose.bind(this,'no')}/>,
                             <FlatButton
                                 label="是"
@@ -123,7 +125,7 @@ class MessageBox extends Component{
                 if(this.state.switchContent===1){
                     actions = [<FlatButton
                         label={"界面说明"}
-                        secondary={true}
+                        primary={true}
                         onClick={this.handleSwitch.bind(this)}/>]; 
                 }else{
                     actions = [<FlatButton
@@ -131,6 +133,16 @@ class MessageBox extends Component{
                         primary={true}
                         onClick={this.handleClose.bind(this,'ok')}/>]; 
                 }           
+                break;
+            case 'again':
+                actions = [<FlatButton
+                    label="再玩一次"
+                    primary={true}
+                    onClick={this.handleClose.bind(this,'again')}/>,
+                <FlatButton
+                    label="下一关"
+                    primary={true}
+                    onClick={this.handleClose.bind(this,'next')}/>];
                 break;
             case 'ok':
                 actions = [<FlatButton

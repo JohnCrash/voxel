@@ -7,7 +7,9 @@ const { spawn } = require('child_process');
 var app = require('./app');
 var debug = require('debug')('voxel-server:server');
 var http = require('http');
+var https = require('https');
 var config = require('./config');
+var fs = require('fs');
 var wsupgrade = require('./ws');
 /**
  * Get port from environment and store in Express.
@@ -23,6 +25,20 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
+/**
+ * Create HTTPS server
+ */
+/*
+var options = {
+  key: fs.readFileSync('./test/key.pem'),
+  cert: fs.readFileSync('./test/cert.pem'),
+};
+var httpsserver = https.createServer(options,app);
+httpsserver.listen(443);
+httpsserver.on('error', onError);
+httpsserver.on('listening', onListening);
+httpsserver.on('upgrade',wsupgrade);
+*/
 /**
  * Listen on provided port, on all network interfaces.
  */

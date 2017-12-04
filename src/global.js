@@ -103,7 +103,10 @@ class _Global_ extends EventEmitter{
     }
     pop(){
         let a = this._ui.pop();
-        console.log('pop '+a.gname);
+        let msg = '';
+        if(a && a.gname)
+            msg = a.gname;
+        console.log('pop '+msg);
     }
     popName(gname){
         console.log('popName '+gname);
@@ -603,6 +606,16 @@ class _Global_ extends EventEmitter{
     }
     getBlocklySkin(){
         return this._blocklyskin?this._blocklyskin:'Scratch';
+    }
+    /**
+     * FIXBUG : blockly
+     * closeBlocklyMenu
+     */
+
+    getRandom(){
+        if(!this._curRandom)
+            this._curRandom = Math.random();
+        return this._curRandom;
     }
 };
 

@@ -48,6 +48,12 @@ class Main extends Component{
         }
         //ios关闭滚动
         let appbarStyle = Global.getPlatfrom()==='ios'?{position:"fixed"}:undefined;
+        let cls;
+        try{
+            cls = Number(Global.getLoginJson().clsid);
+        }catch(e){
+            cls = 0;
+        }
         return <div><AppBar 
             title={this.state.title}
             style={appbarStyle}
@@ -58,7 +64,7 @@ class Main extends Component{
             lvs={Global.getLoginJson()? Global.getLoginJson().lvs:null} 
             unlock={Global.getMaxUnlockLevel()}
             ref={r=>{this.levelSel=r}}/>
-        <FloatButton src={'scene/image/tops.png'} onClick={this.onTops} style={{width:'36px'}}/>
+        {cls!==0?<FloatButton src={'scene/image/tops.png'} onClick={this.onTops} style={{width:'36px',zIndex:'1500'}}/>:undefined}
         <CrownTops ref={r=>this.crowntops = r} onClose={this.handleCloseTops}/>
         </div>;
         /**

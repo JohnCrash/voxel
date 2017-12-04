@@ -1,35 +1,23 @@
-## 制作团队
+## <font color=#4169E1 size=5>制作团队</font>
 
 ------
 
 ### 程序
 
-![这里写图片描述](scene/image/team/lgh.jpg)
-
- - CRASH
+<img src="./scene/image/team/CRASH.png" width = "100" alt="" align=center /> 
 
 ### 主创
 
-![这里写图片描述](scene/image/team/jxx.jpg)
+<img src="./scene/image/team/小金.png" width = "100" alt="" align=center />
+ 
+### 故事
 
- - 小金
+<img src="./scene/image/team/张良.png" width = "100" alt="" align=center />
  
 ### 美术
 
-![这里写图片描述](scene/image/team/whj.jpg)
+<img src="./scene/image/team/小金.png" width = "100" alt="" align=center />        <img src="./scene/image/team/糖饼.png" width = "100" alt="" align=center />
 
- - 小乌
-
-![这里写图片描述](scene/image/team/jxx.jpg)
-
- - 小金
- 
 ### 顾问
 
-![这里写图片描述](scene/image/team/kkk.jpg)
-
- - 闫峰
-
-![这里写图片描述](scene/image/team/kkk.jpg)
-
- - 张雨
+<img src="./scene/image/team/老闫.png" width = "100" alt="" align=center />        <img src="./scene/image/team/宫保鸡丁.png" width = "100" alt="" align=center />
