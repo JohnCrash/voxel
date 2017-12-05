@@ -204,7 +204,6 @@ class SceneManager extends EventEmitter{
                     if(this._exit){
                         this.destroy();
                     }
-                    console.log('loadItem error');
                     if(cb)cb(true);
                     return;
                 }
@@ -214,14 +213,12 @@ class SceneManager extends EventEmitter{
                 this.destroy();
             }else{
                 for(let item of this.items){
-                    console.log(item);
                     if(item.live)item.live('init');
                 }
             }
             this._doReset = false;
             this._doloadstate = false;
             this.game.scene.visible = true;
-            console.log('loadItem success');
             if(cb)cb(false);
         },20);
         return true;
