@@ -33,6 +33,9 @@ class Unlock extends Component{
     }
 
     initText(){
+        TextManager.load('scene/ui/unlock2.md',(iserr,text)=>{
+            this.unlock_content2 = !iserr ? text : "";
+        });        
         TextManager.load('scene/ui/unlock.md',(iserr,text)=>{
             this.unlock_content = !iserr ? text : "";
         });
@@ -117,7 +120,10 @@ class Unlock extends Component{
                     label="解锁"
                     primary={true}
                     onClick={this.handleAction.bind(this,'unlock')}/>];
-                ContentElement = <MarkdownElement text={md(this.unlock_content,dict)}/>;
+                if(Global.getMaxPassLevel()-1 === Global.getLoginJson().crown)
+                    ContentElement = <MarkdownElement text={this.unlock_content2}/>;
+                else
+                    ContentElement = <MarkdownElement text={md(this.unlock_content,dict)}/>;
                 break;
             case UNLOCKING: //解锁中
                 actions = [];

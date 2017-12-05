@@ -37,7 +37,6 @@ function(event,dt){
 			}			
 			break;
 		case 'init':		
-			console.log('? 登场 ?');
 			this._t = 0;
 			this._oldz = this.position.z;
 			this.currentAction = '';

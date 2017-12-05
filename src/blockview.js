@@ -380,7 +380,7 @@ class BlockView extends Component{
             if(this.props.onBlockCount)
                 this.props.onBlockCount(this.getBlockCount());
             if(!(event instanceof Blockly.Events.Ui)){//不是选择就认为改变了代码，需要重新开始
-                //this.reset();
+                this.reset();
                 this.needReset = true;
             }
             if(this.runComplateCB)this.runComplateCB();

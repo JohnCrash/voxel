@@ -7,6 +7,7 @@ link_error.md 代码没有正常连接提示
 program_error.md 代码有错误提示
 select_top.md 角色选择
 
+unlock2.md 满皇冠解锁
 unlock.md 解锁界面
 unlocking.md 正在解锁
 unlock_failed.md 解锁失败

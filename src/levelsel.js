@@ -102,7 +102,7 @@ class LevelSel extends PureComponent{
                         islock = true;
                     }
                 }else{ //已经有解锁
-                    if(olv<seg_begin && unlock_gold)
+                    if(olv<=seg_begin && unlock_gold)
                         islock = true;
                 }
                 isbuild = seg_begin>=json.closed;//建造中的关卡

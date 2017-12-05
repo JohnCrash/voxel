@@ -36,9 +36,9 @@ class MainDrawer extends Component{
         super(props);
         this.state = {
             openMenu:false,
-            music:false,
-            sound:false,
-            lang:false,
+            music:Global.isMusic(),
+            sound:Global.isSound(),
+            lang:Global.getCurrentLang()!=="zh",
             landscape:Global.getLayout()==="landscape",
             blocklytoolbox:Global.getPlatfrom()==='windows'?Global.getBlocklyToolbar():"close",
             isdebug : Global.isDebug(),
@@ -93,6 +93,7 @@ class MainDrawer extends Component{
             sound:Global.isSound(),
             lang:Global.getCurrentLang()!=="zh",
             landscape:Global.getLayout()==="landscape",
+            uistyle : Global.getUIStyle(),
             isdebug : Global.isDebug()});        
     }
     onDownload(s){
@@ -224,8 +225,8 @@ class MainDrawer extends Component{
                 this.motifyConfig = true;
                 Global.setCurrentLang(b?"en":"zh");
             }} />
-            <Toggle label={'精简界面'} style={ToggleStyle} defaultToggled={!uistyle} onToggle={(e,b)=>{
-                this.setState({uistyle:!b});
+            <Toggle label={'精简界面'} style={ToggleStyle} defaultToggled={uistyle==='simple'} onToggle={(e,b)=>{
+                this.setState({uistyle:b?"simple":"features"});
                 this.motifyConfig = true;
                 Global.setUIStyle(b?"simple":"features");
             }} />

@@ -21,7 +21,8 @@ const HighLightStyle = {
 };
 const FixedWidthStyle = {
     width : "16px",
-    textOverflow:'unset'
+    textOverflow:'unset',
+    overflow:'initial'
 };
 const FixedHeaderStyle = {
     fontSize : "normal",

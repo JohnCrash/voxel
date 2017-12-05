@@ -165,6 +165,7 @@ class _Global_ extends EventEmitter{
                 this.muteMusic(config.music);
                 this.muteSound(config.sound);
                 this.setUIStyle(config.uisyle);
+                this.setCurrentLang(config.lang);
                 this.setLayout(config.layout);
                 this.setCharacter(config.character);
                 this.setBlocklySkin(config.skin);
@@ -188,6 +189,7 @@ class _Global_ extends EventEmitter{
             config : JSON.stringify({
             music : this._muteMusic,
             sound : this._muteSound,
+            lang : this._lang,
             layout : this._layout,
             uisyle : this._uiStyle,
             skin : this._blocklyskin,

@@ -633,10 +633,10 @@ router.post('/config',function(req,res){
 });
 
 const UnlockTable = [
-  {lv:31,rang:10,gold:100},
-  {lv:41,rang:10,gold:100},
-  {lv:51,rang:10,gold:100},
-  {lv:61,rang:10,gold:100},
+  {lv:31,rang:10,gold:1000},
+  {lv:41,rang:10,gold:1000},
+  {lv:51,rang:10,gold:1000},
+  {lv:61,rang:10,gold:1000},
 ];
 
 /**
@@ -644,8 +644,27 @@ const UnlockTable = [
  */
 router.post('/unlock',function(req,res){
   //记录动作
-  let {lv,olv,uid,cls} = req.UserInfo;
+  let {lv,olv,uid,cls,crown} = req.UserInfo;
   let unlock;
+
+  if(lv-1 === crown){
+    //全皇冠解锁
+    olv = olv ? olv : 31;
+    if(olv in [31,41,51]){
+      unlock = olv;
+      olv = olv + 10;
+      sql(`update UserInfo set olv=${olv} where uid='${uid}'`).
+      then((result)=>{
+        sqlAction(uid,cls,`unlock(${olv})`);
+        res.json({result:'ok',olv,unlock});
+      }).catch((err)=>{
+        resError(res,err);
+      });      
+    }else{
+      res.json({result:'你没有达到解锁条件.'});
+    }
+    return;
+  }
   olv = olv?olv:0;
   for(let i=0;i<UnlockTable.length;i++){
     if(olv<=UnlockTable[i].lv){
