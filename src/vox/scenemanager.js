@@ -191,7 +191,6 @@ class SceneManager extends EventEmitter{
         for(let i=0;i<items.length;i++){
             this.items.push(new Item(this,items[i]));
         }
-
         let id = setInterval(()=>{
             for(let item of this.items){
                 if(item.state==='loading')
@@ -205,6 +204,7 @@ class SceneManager extends EventEmitter{
                     if(this._exit){
                         this.destroy();
                     }
+                    console.log('loadItem error');
                     if(cb)cb(true);
                     return;
                 }
@@ -214,12 +214,14 @@ class SceneManager extends EventEmitter{
                 this.destroy();
             }else{
                 for(let item of this.items){
+                    console.log(item);
                     if(item.live)item.live('init');
                 }
             }
             this._doReset = false;
             this._doloadstate = false;
             this.game.scene.visible = true;
+            console.log('loadItem success');
             if(cb)cb(false);
         },20);
         return true;

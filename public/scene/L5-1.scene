@@ -1,8 +1,8 @@
 {
-	"music": "scene\\audio\\background\\背景音乐_灵动欢快.mp3",
+	"music": "scene\\audio\\background\\背景音乐_欢快跳跃.mp3",
 	"loop": true,
 	"bgcolor": 56575,
-	"camera": {
+	"camera": { 
 		"position": {
 			"x": 193.29893935715037,
 			"y": -169.88403978321242,

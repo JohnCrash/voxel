@@ -33,6 +33,12 @@ class LevelSel extends PureComponent{
                 this.selectAfterLink = link;
                 this.setState({openCharacterSelectDialog:true});
             }else{
+                /**
+                 * FIXBUG : iOS 不允许自动播放声音
+                 */
+                if(Global.getPlatfrom()==='ios'){
+                    Global.playMusic('scene/audio/aaa.mp3');
+                }
                 //判断关卡是否解锁，已经解锁的关卡可以直接进入
                 if(p.need_unlock){
                     this.unlock.open(p,(b)=>{

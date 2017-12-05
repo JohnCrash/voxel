@@ -3,7 +3,9 @@ import log from './vox/log';
 import EventEmitter from 'events';
 import {MessageBox} from './ui/MessageBox';
 import React, {Component} from 'react';
+import {AudioManager} from './vox/audiomanager';
 /*global closeLoadingUI,loadingProgressBar*/
+/*global THREE*/
 //if(window.closeLoadingUI)root.style.display="none";
 class _Global_ extends EventEmitter{
     constructor(){
@@ -349,6 +351,33 @@ class _Global_ extends EventEmitter{
             this._sceneManager.muteSound(!this._muteSound);
         }        
     }
+    //主要为了解决ios，不能自动播放的问题
+    playMusic(file){
+        if(!this.music){
+            this.audioListener = new THREE.AudioListener();
+            this.music = new THREE.Audio(this.audioListener);    
+        }
+
+        this.currentMusicFile = file;
+        console.log('GLOBAL PLAY MUSIC:'+file);
+        this.stopMusic();
+        AudioManager.load(file,(b,buffer)=>{
+            if(!b){
+                this.music.setBuffer(buffer);
+                //this.music.setLoop(!!this.musicLoop);
+                this.music.setVolume(0.2);
+                this.music.play();
+            }
+        });        
+    }
+    stopMusic(){
+        if(this.music){
+            try{
+                this.music.stop();
+            }catch(e){
+            }
+        }
+    }    
     playSound(file){
         if(this._sceneManager && file){
             this._sceneManager.playSound(file);

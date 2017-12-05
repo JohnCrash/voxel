@@ -205,6 +205,23 @@ function pullUserInfo(req,cb){
   }
 }
 /**
+ * 初始化Crown表格
+ */
+function initCrown(){
+  //没有初始化Crown
+  sql(`select count(*) from Crown`).then((result)=>{
+    if(!(data && data[0])){
+      let a = [];
+      for(let i=0;i<201;i++)a.push(i);
+      let s = `insert into Crown (count) values (${a.join('),(')})`;
+      sql(s).then(()=>{
+      }).catch((err)=>{
+      });    
+    }
+  }).catch((err)=>{
+  });
+}
+/**
  * 重新计算皇冠数量crown
  * crown 是新的皇冠数，老的皇冠数量放在req.UserInfo.crown中
  * 

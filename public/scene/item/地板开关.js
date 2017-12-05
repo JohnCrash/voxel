@@ -36,7 +36,8 @@ function(event,dt){
 				ui.add(itemUI,'颜色',['green','yellow','red','purple','blue','brown']);
 			}			
 			break;
-		case 'init':			
+		case 'init':		
+			console.log('? 登场 ?');
 			this._t = 0;
 			this._oldz = this.position.z;
 			this.currentAction = '';

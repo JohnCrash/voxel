@@ -380,7 +380,7 @@ class BlockView extends Component{
             if(this.props.onBlockCount)
                 this.props.onBlockCount(this.getBlockCount());
             if(!(event instanceof Blockly.Events.Ui)){//不是选择就认为改变了代码，需要重新开始
-                this.reset();
+                //this.reset();
                 this.needReset = true;
             }
             if(this.runComplateCB)this.runComplateCB();
@@ -636,7 +636,10 @@ class BlockView extends Component{
      */
     step(cb){
         if(!this.checkLink()){
-            if(cb)cb('nolink');
+            if(cb)
+                cb('nolink');
+            if(this.runComplateCB)
+                this.runComplateCB('nolink');
             return;
         }        
         if(!this.myInterpreter){

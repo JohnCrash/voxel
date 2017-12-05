@@ -183,12 +183,12 @@ class Level extends Component{
     PlayPause(event){
         event.stopPropagation();
         if(this._ready!==READY)return;
-
-        if(this.needReset){
-            this.Reset();
-            this.needReset = false;
-        }
+        
         if(this.state.playPause){
+            if(this.needReset){
+                this.Reset();
+                this.needReset = false;
+            }            
             this.voxview.readyPromise.then(()=>{
                 this.blockview.run(500,(state)=>{//执行完成
                     if(state === 'end'||state === 'error'||state==='nolink'){

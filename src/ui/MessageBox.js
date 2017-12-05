@@ -48,7 +48,7 @@ class MessageBox extends Component{
                 //点击内容也可以退出
                 content = <div onClick={(event)=>{
                     //MessageBox.globalNode.setState({open: false,type:'',title:'',content:''});
-                    this.handleClose('cancel');
+                    MessageBox.globalNode.handleClose('cancel');
                 }}>{content}</div>;
             }
         }
