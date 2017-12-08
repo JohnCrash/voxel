@@ -95,6 +95,19 @@ class VoxView extends Component{
         event.stopPropagation();
         return false;
     }
+    rotateAnimation(){
+        if(this._animation)return;
+        this._roateAngle = 0;
+        this.sceneManager.rotateCamera((-10)*Math.PI/180);
+        let delta = 0.15;
+        this._animation = setInterval((dt)=>{
+            this.sceneManager.rotateCamera((delta)*Math.PI/180);
+            this._roateAngle = this._roateAngle + delta;
+            if(this._roateAngle>=10){
+                clearInterval(this._animation);
+            }
+        },1);
+    }
     initCharacter(json){
         //替换角色
         if(Global.getCharacter()!=='boy'&&json&&json.content){
@@ -110,6 +123,7 @@ class VoxView extends Component{
         }
     }
     load(file){
+        this._animation = null;
         this.setState({loading:true});
         this.readyPromise = new Promise((resolve,reject)=>{
             console.log('load '+file);

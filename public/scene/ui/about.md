@@ -4,7 +4,7 @@
 
 ### 程序
 
-<img src="./scene/image/team/CRASH.png" width = "100" alt="" align=center /> 
+<img src="./scene/image/team/CRASH.png" width = "100" alt="" align=center id="me"/> 
 
 ### 主创
 

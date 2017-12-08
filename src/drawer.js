@@ -1,4 +1,4 @@
-/*global Blockly,Interpreter*/
+/*global Blockly,Interpreter,VConsole*/
 import React, {Component} from 'react';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
@@ -20,6 +20,7 @@ import {postJson,fetchJson} from './vox/fetch';
 import LevelDebug from './leveldebug';
 import PropTypes from 'prop-types';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
+import { setTimeout } from 'timers';
 
 const ToggleStyle = {marginTop: 16,marginBottom: 16,marginLeft:16,width:"85%"};
 const SpanStyle = {marginTop: 16,marginLeft:16,marginRight:8};
@@ -148,13 +149,33 @@ class MainDrawer extends Component{
             MessageBox.show('ok',undefined,<MarkdownElement text={text}/>,(result)=>{
                 console.log(result);
             });
+            setTimeout(()=>{
+                let img = document.getElementById('me');
+                if(img){
+                    img.onclick = this.handleOpenDebug.bind(this);
+                }
+            },1000);
         });        
     }
     handleOpenDebug=(event)=>{
         if(this.debugClick===0){
             setTimeout(()=>{
-                if(this.debugClick>3)
+                if(this.debugClick>3){
+                    if(localStorage.isdebug!=='true'){
+                        localStorage.isdebug = true;
+                        if(!window.vConsole){
+                            window.vConsole = new VConsole();
+                        }
+                        window.vConsole.show();
+                    }else{
+                        localStorage.isdebug = false;
+                        if(window.vConsole){
+                            window.vConsole.destroy();
+                            window.vConsole = null;
+                        }
+                    }
                     this.setState({openDebug:!this.state.openDebug});
+                }
                 this.debugClick = 0;
             },600);
         }
@@ -190,7 +211,7 @@ class MainDrawer extends Component{
                 <MenuItem key='drawerlogout' primaryText={`登出(${Global.getUserName()})`} onClick={this.onLogout.bind(this)}/> 
             ]:[];
 
-        return <div onClick={this.handleOpenDebug}><Drawer 
+        return <div><Drawer 
             docked={false} 
             open={openMenu} 
             disableSwipeToOpen={true}

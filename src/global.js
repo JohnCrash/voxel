@@ -52,12 +52,14 @@ class _Global_ extends EventEmitter{
            // 
            // if(this._muteMusic && this._sceneManager){
            //     this._sceneManager.stopMusic();
-           // }                        
+           // }      
+           console.log('pause');
         }, false);  
         //到前台     
         document.addEventListener("resume", (event)=>{
            // if(this._muteMusic && this._sceneManager)
            //     this._sceneManager.muteMusic(false);        
+           console.log('resume');
         }, false);
         /*
         if(window.native && native.quit){
@@ -73,7 +75,17 @@ class _Global_ extends EventEmitter{
                     }
                 });
             },'game');
-        }*/    
+        }*/
+        /*
+        try{
+            console.log('=====INFO=====')
+            console.log(cordova);
+            console.log(device); 
+            console.log(navigator.compass);   
+            console.log(navigator.connection);
+        }catch(e){
+            console.log(e);
+        }*/
     }
     /**
      * 当有加载界面时,加载界面提供这几个函数
@@ -333,12 +345,12 @@ class _Global_ extends EventEmitter{
     /**
      * 通了本关
      */
-    passLevel(lv,rank,blocks){
+    passLevel(lv,rank,blocks,best){
         if(lv > this.maxpasslv){
             this.maxpasslv = lv;
         }
         this.updateCls(this._uid,lv-1);
-        this.updateLevelRank(lv-1,rank,blocks);
+        this.updateLevelRank(lv-1,rank,blocks,best);
         this.wsPassLevel(lv-1,rank,blocks);
     }
     setCurrentSceneManager(sceneManager){
@@ -468,12 +480,14 @@ class _Global_ extends EventEmitter{
         }
         return false;
     }
-    updateLevelRank(lv,rank,blocks){
+    updateLevelRank(lv,rank,blocks,best){
         if(this._loginJson && this._loginJson.lvs){
-            if(this._loginJson.lvs[lv]){
-                this._loginJson.lvs[lv].rank = rank;
-                this._loginJson.lvs[lv].blocks = blocks;
-            }
+            if(!this._loginJson.lvs[lv])
+                this._loginJson.lvs[lv] = {};
+            this._loginJson.lvs[lv].rank = rank;
+            this._loginJson.lvs[lv].blocks = blocks;
+            if(best)
+                this._loginJson.lvs[lv].best = best;
         }
     }
     getLoginJson(){

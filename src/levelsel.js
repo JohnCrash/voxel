@@ -71,10 +71,14 @@ class LevelSel extends PureComponent{
          */
         let lvs = this.props.lvs?this.props.lvs:[];
         let others = {};
+        let myuid = Global.getUID();
         if(this.props && this.props.other){
             for(let o of this.props.other){
                 //这里最近的
-                if(!others[o.lv] || (others[o.lv] && others[o.lv].lvdate > o.lvdate))
+                if(!others[o.lv] || (others[o.lv] && others[o.lv].lvdate > o.lvdate && others[o.lv].uid!=myuid)){
+                    others[o.lv] = o;
+                }
+                if(o.uid===myuid)
                     others[o.lv] = o;
             }
         }

@@ -1,2 +1,2 @@
 "<img src=\"./scene/image/failed.png\" width = \"80\" alt=\"\" align=center /><br/>"+
-"### "+"解锁失败\n\n"+(errmsg); 
+"<font color=#DC143C size=5>解锁失败</font><br/><br/>"+(errmsg); 

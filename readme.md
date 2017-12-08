@@ -4,3 +4,6 @@
 npm start
 或者
 如果你使用vs.code可以使用Debug server来调试服务器
+
+DEBUG
+weinre --boundHost 192.168.2.83

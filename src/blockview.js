@@ -79,6 +79,13 @@ Blockly.FieldDropdown.prototype.showEditor_ = function(){
         FieldDropdown_showEditor_.call(this);
     }
 }
+
+/**
+ * FIXBUG : Blockly 在PC上可以使用delete ctrl+c ctrl+v来改变边栏中的工具
+ */
+const Blockly_onKeyDown_ = Blockly.onKeyDown_;
+Blockly.onKeyDown_ = function(e){
+}
 /**
  * 自定义颜色
  */
@@ -380,6 +387,13 @@ class BlockView extends Component{
             if(this.props.onBlockCount)
                 this.props.onBlockCount(this.getBlockCount());
             if(!(event instanceof Blockly.Events.Ui)){//不是选择就认为改变了代码，需要重新开始
+                if(this.isRunning()){ //正在运行改变代码
+                    let level = Global.getCurrentLevelComponent();
+                    if(level && level._isrunning){
+                        level.Reset();
+                        MessageBox.show('ok',undefined,<MarkdownElement file={'scene/ui/link_error.md'}/>,(result)=>{});
+                    }
+                }
                 this.reset();
                 this.needReset = true;
             }

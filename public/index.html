@@ -27,11 +27,20 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 	<script type="text/javascript" src="blockly/javascript_compressed.js"></script>
     <script type="text/javascript" src="blockly/acorn.js"></script>
     <script type="text/javascript" src="blockly/interpreter.js"></script>
+	<!--
+	<link rel="stylesheet" href="libs/style/mobile-console.min.css">
+	<script src="libs/mobile-console.min.js"></script>	
 	<script src="http://192.168.2.83:8080/target/target-script-min.js#anonymous"></script>
+	<script src="libs/vconsole.min.js"></script>
+	-->
+	
   </head>
   <body>
     <div id="root"></div>
 	<script>
+		//if(localStorage.isdebug==='true'){
+		//	window.vConsole = new VConsole();
+		//}
 		window.platfrom = 'windows';
 		window.LOCALHOST = true;
 	</script>

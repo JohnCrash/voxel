@@ -1,2 +1,3 @@
-"<img src=\"./scene/image/loading.png\" width = \"80\" alt=\"\" align=center /><br/>"+
-"### 正在解锁请稍后..."
+"<img src=\"./scene/image/loading.png\" width = \"60\" alt=\"\" align=center /><br/>"+
+
+"正在解锁，请稍后..."

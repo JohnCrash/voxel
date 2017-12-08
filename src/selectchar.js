@@ -38,11 +38,18 @@ class SelectChar extends Component{
         Global.pushConfig();
         location.href=this.props.link;//eslint-disable-line
     }
+    handleCancel(){
+        this.setState({open:false});        
+    }
     onSelect(c){
         this.setState({select:c});
     }
     render(){
         let actions = [<FlatButton
+            label="取消"
+            primary={true}
+            onClick={this.handleCancel.bind(this)}/>,
+            <FlatButton
             label="确定"
             primary={true}
             onClick={this.handleOk.bind(this)}/>];

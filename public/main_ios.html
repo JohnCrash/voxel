@@ -16,6 +16,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 		-webkit-user-select: none;		
       }
     </style> 
+	<script src="libs/vconsole.min.js"></script>
   </head>
   <body>
 	<div id="loading" style="position:absolute;left:0;right:0;top:0;bottom:0;align-items:center;display:flex;flex-direction:column;justify-content:center" >
@@ -30,6 +31,9 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 	<div id="root"></div>
 	<script>
 		window.platfrom = 'ios';
+		if(localStorage.isdebug==='true'){
+			try{window.vConsole = new VConsole();}catch(e){console.log(e);}
+		}		
 		var progress = document.getElementById('progress');
 		var bar = document.getElementById('bar');
 		function progressBar(d){

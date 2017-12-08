@@ -149,10 +149,11 @@ class Tops extends Component{
                     return a.blocks - b.blocks;
                 });
                 console.log(this.tops);
-                Global.passLevel(info.next,this.getRank(),blocks);
+
+                Global.passLevel(info.next,this.getRank(),blocks,this.tops[0]?this.tops[0].blocks:blocks);
             }else{
                 this.tops = [];
-                Global.passLevel(info.next,0,blocks); //没有排名
+                Global.passLevel(info.next,0,blocks,blocks); //没有排名
             }
             this.cls = json.cls||[];
             //console.log(json);

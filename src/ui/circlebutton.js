@@ -161,13 +161,10 @@ class CircleButton extends Component{
          * ios cache bug ,ios 浏览器会缓存图片
          * Global.getRandom() 确保每次启动的随机数相同，避免重复加载
          */
-        let userlogo = `http://image-static.lejiaolexue.com/userlogo/${bob?bob.uid:0}_99.jpg`;
-        if(Global.getPlatfrom()==='ios'){
-            userlogo = `http://image-static.lejiaolexue.com/userlogo/${bob?bob.uid:0}_99.jpg?p=${Global.getRandom()}`;
-        }
+        let userlogo = `http://image-static.lejiaolexue.com/userlogo/${bob?bob.uid:0}_99.jpg?p=${Global.getRandom()}`;
         return <div style={m({display: 'inline-block',position: 'relative'},bob?{marginTop:this.context.circleRadius*5/4+12}:{marginTop:"10px"})}>
             <div style={m(bgstyle,pos==='first'&&{left:bhelf},pos==='last'&&{right:bhelf})}></div>
-            {bob?<Bob icon={userlogo} text={bob.UserName} />:undefined}
+            {bob?<Bob icon={userlogo} text={bob.UserName} color={bob.uid===Global.getUID()?'#E57373':'#00BCD4'} />:undefined}
             {rank==1?<div style={{position:"absolute",top:kingoffset+"px",left:"6px"}}>
                 <KingIcon style={{width:this.context.circleRadius+"px",height:"100%",color:rank==1?"#ffe800":"silver"}}/>
             </div>:undefined}

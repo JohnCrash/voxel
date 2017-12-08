@@ -67,6 +67,7 @@ class Level extends Component{
         }else{
             toolboxMode = 'expand'; //工具条精简模式
         }
+        this._isrunning = false;
         this.state={
             playPause:true,
             levelDesc:'',
@@ -119,6 +120,7 @@ class Level extends Component{
             TextManager.reset();
             ScriptManager.reset();
         }
+        this._isrunning = false;
         this.voxview.reset();
         this.blockview.reset();
         this.setState({playPause:true});
@@ -142,11 +144,13 @@ class Level extends Component{
             case 'OutOfBounds':
             case 'Dead':
                 md = 'scene/ui/gameover.md';
+                this._isrunning = false;
                 Global.playSound(lj.failSound);
                 break;
             case 'MissionCompleted':
                 //如果有指南这里需要先处理指南
                 //指南提示
+                this._isrunning = false;
                 if(this.isPlayAgin()){
                     this.commitAgin();
                 }else{
@@ -161,10 +165,12 @@ class Level extends Component{
                 return;
             case 'WrongAction':
                 md = 'scene/ui/wrongaction.md';
+                this._isrunning = false;
                 Global.playSound(lj.wrongSound);
                 break;
             case 'FallDead':
                 md = 'scene/ui/falldead.md';
+                this._isrunning = false;
                 Global.playSound(lj.fallDeadSound);
                 break;
         }
@@ -188,27 +194,34 @@ class Level extends Component{
             this.Reset();
             this.needReset = false;
         }
-
-        if(this.state.playPause){        
-            this.voxview.readyPromise.then(()=>{
-                this.blockview.run(500,(state)=>{//执行完成
-                    if(state === 'end'||state === 'error'||state==='nolink'){
-                        if(state === 'error'){
-                            MessageBox.show('ok',undefined,<MarkdownElement file={'scene/ui/program_error.md'}/>,(result)=>{});
-                        }else if(state === 'nolink'){
-                            MessageBox.show('ok',undefined,<MarkdownElement file={'scene/ui/link_error.md'}/>,(result)=>{});
-                        }else if(state==='end'){
-                            Global.playSound(Global.levelJson().failSound);
+        if(this.state.playPause){
+            if(!this._isrunning){
+                this.voxview.readyPromise.then(()=>{
+                    this._isrunning = true;
+                    this.blockview.run(500,(state)=>{//执行完成
+                        if(state === 'end'||state === 'error'||state==='nolink'){
+                            this._isrunning = false;
+                            if(state === 'error'){
+                                MessageBox.show('ok',undefined,<MarkdownElement file={'scene/ui/program_error.md'}/>,(result)=>{});
+                            }else if(state === 'nolink'){
+                                MessageBox.show('ok',undefined,<MarkdownElement file={'scene/ui/link_error.md'}/>,(result)=>{});
+                            }else if(state==='end'){
+                                Global.playSound(Global.levelJson().failSound);
+                            }
+                            this.setState({playPause:true});
+                            this.needReset = true;
                         }
-                        this.setState({playPause:true});
-                        this.needReset = true;
-                    }
+                    });
                 });
-            });
+                this.setState({playPause:!this.state.playPause});
+            }
         }else{
-            this.Reset();
+            if(this._isrunning){
+                this._isrunning = false;
+                this.Reset();    
+                this.setState({playPause:!this.state.playPause});
+            }
         }
-        this.setState({playPause:!this.state.playPause});
     }
     Step(event){
         event.stopPropagation();
@@ -247,6 +260,7 @@ class Level extends Component{
     }
     onGameStart(props){
         if(!this.voxview)return;
+        this._isrunning = false;
         //加载voxview的时候uiColor必须为白色
         this.setState({uiColor:'#FFFFFF'});
 
@@ -464,12 +478,13 @@ class Level extends Component{
                     let dict={name,lv:info.next-1,blocks,best};
                     TextManager.load(`scene/ui/play_again.md`,(iserr,text)=>{
                         if(!iserr)MessageBox.show('',undefined,<MarkdownElement text={md(text,dict)} />,(result)=>{
-
+                            if(this.voxview)this.voxview.rotateAnimation();    
                         },'tips');
                     });
                 }else{
                     MessageBox.show('ok',undefined,[<MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
                         console.log(result);
+                        if(this.voxview)this.voxview.rotateAnimation();    
                     }); 
                 }
             }else if(info && info.next-1===Global.getMaxPassLevel() && Global.hasTrash(Global.getMaxPassLevel())){
@@ -478,12 +493,14 @@ class Level extends Component{
                 if(from){
                     MessageBox.show('ok',undefined,[<MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
                         console.log(result);
+                        if(this.voxview)this.voxview.rotateAnimation();    
                     }); 
                 }
                 console.log('net need tips');
             }else{
                 MessageBox.show('ok',undefined,[<MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
                     console.log(result);
+                    if(this.voxview)this.voxview.rotateAnimation();
                 }); 
             } 
         }
@@ -527,6 +544,9 @@ class Level extends Component{
                 });                
             }
         }else{
+            MessageBox.show('ok',undefined,`因为你是再次玩第${info.next-1}关，但是系统没有你本关的过往成绩。`,(result)=>{
+
+            });
             console.error(`commit lvs error ? ${info.next-1}`);
             console.log(lvs);
             this.btpms = now;

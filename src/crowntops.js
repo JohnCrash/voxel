@@ -52,6 +52,7 @@ class CrownTops extends Component{
         //MessageBox.showLoading('LOADING...');
         postJson('/users/crowns',{},(json)=>{
             //MessageBox.closeLoading();
+            console.log(json);
             if(json.result==='ok'){
                 this.calcTops(json.crowns);
             }else{
@@ -116,12 +117,8 @@ class CrownTops extends Component{
                          * ios cache bug ,ios 浏览器会缓存图片
                          * Global.getRandom() 确保每次启动的随机数相同，避免重复加载
                          */          
-                        let userlogo = `http://image-static.lejiaolexue.com/userlogo/${it?it.uid:0}_99.jpg`;
-                        if(Global.getPlatfrom()==='ios'){
-                            userlogo = `http://image-static.lejiaolexue.com/userlogo/${it?it.uid:0}_99.jpg?p=${Global.getRandom()}`;
-                        }                                      
-                        return <Avatar src={userlogo} />
-                                {it.UserName};
+                        let userlogo = `http://image-static.lejiaolexue.com/userlogo/${it?it.uid:0}_99.jpg?p=${Global.getRandom()}`;
+                        return <div><Avatar src={userlogo}/></div>;
                     }):undefined}
                 </TableRowColumn>
             </TableRow>;

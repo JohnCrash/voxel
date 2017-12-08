@@ -26,12 +26,12 @@ class Bob extends Component{
         };
         return style;
     }
-    getSvgStyles(){
+    getSvgStyles(color){
         let width = this.context.circleRadius+12+12;
         const svgStyle = {
             width:width+px,
             height:width+px,
-            color:'#00BCD4'
+            color
         };
         return svgStyle;
     }
@@ -50,9 +50,9 @@ class Bob extends Component{
         return iconStyle;
     }
     render(){
-        let {icon,text} = this.props;
+        let {icon,text,color} = this.props;
         let style = this.getStyles();
-        let svgStyle = this.getSvgStyles();
+        let svgStyle = this.getSvgStyles(color);
         let iconStyle = this.getIconStyles();
         return <div style={style}>
                 <CircleArrowIcon style={svgStyle}/>

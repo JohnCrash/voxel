@@ -64,13 +64,13 @@ function payGold(uid,num,cb,s){
         if (LXReturnHelper.IsLXSucceed(r)) {
           cb(true);
         }else{
-          if (r.error == Asset.LXEnumAssetChangeCode.LXEnumAssetChangeCode_MoneyNotEnough) {
+          if (r.error == Asset.LXEnumAssetChangeCode.LXEnumAssetChangeCode_MoneyNotEnough._value) {
             // 余额不足
             cb(false,'余额不足');
-          }else if(r.error == Asset.LXEnumAssetChangeCode.LXEnumAssetChangeCode_DbError){
+          }else if(r.error == Asset.LXEnumAssetChangeCode.LXEnumAssetChangeCode_DbError._value){
             cb(false,'支付系统: Db 操作失败');
           }else{
-            cb(false,'支付系统: 未知错误');
+            cb(false,`支付系统: 未知错误 (${r.error})`);
           }          
         }
       },(err)=>{
@@ -647,10 +647,10 @@ router.post('/unlock',function(req,res){
   let {lv,olv,uid,cls,crown} = req.UserInfo;
   let unlock;
 
-  if(lv-1 === crown){
+  if(lv === crown){
     //全皇冠解锁
     olv = olv ? olv : 31;
-    if(olv in [31,41,51]){
+    if(olv===31||olv===41||olv===51){
       unlock = olv;
       olv = olv + 10;
       sql(`update UserInfo set olv=${olv} where uid='${uid}'`).
