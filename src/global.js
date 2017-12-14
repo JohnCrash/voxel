@@ -16,6 +16,7 @@ class _Global_ extends EventEmitter{
         this._layout = 'landscape';
         this._btb = 'expand';
         this._character = 'none';
+        this._lang = 'zh';
         this._muteMusic = true;
         this._muteSound = true;
         this._userName = 'None';
@@ -48,18 +49,22 @@ class _Global_ extends EventEmitter{
             });
         },'game');
         //到后台
-        document.addEventListener("pause", (event)=>{
-           // 
-           // if(this._muteMusic && this._sceneManager){
-           //     this._sceneManager.stopMusic();
-           // }      
+        document.addEventListener("pause", (event)=>{ 
+            if(this._muteMusic && this._sceneManager){
+                console.log('stop music');
+                this._sceneManager.stopMusic();
+            }
            console.log('pause');
+           console.info(new Date().toTimeString());
         }, false);  
         //到前台     
         document.addEventListener("resume", (event)=>{
-           // if(this._muteMusic && this._sceneManager)
-           //     this._sceneManager.muteMusic(false);        
+           if(this._muteMusic && this._sceneManager){
+                console.log('open music');
+                this._sceneManager.muteMusic(false); 
+           }
            console.log('resume');
+           console.info(new Date().toTimeString());
         }, false);
         /*
         if(window.native && native.quit){
@@ -308,7 +313,7 @@ class _Global_ extends EventEmitter{
                         next_end = Number(nm[2]);
                         next_unlock_gold = nextItem.unlock?Number(nextItem.unlock):0;
                     }
-                    let next_need_unlock = next_unlock_gold>0?(this.maxunlocklv<next):false;
+                    let next_need_unlock = next_unlock_gold>0?(this.maxunlocklv<=next):false;
                     return Object.assign({current:e,
                         begin,
                         end,

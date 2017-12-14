@@ -106,7 +106,8 @@ class SceneManager extends EventEmitter{
      */
     loadFromJson(json,cb){
         if(this._exit || this._doloadstate)return;
-
+        console.info('===============loadFromJson=================');
+        console.info(json);
         this.json = json;
         this._doloadstate = true;
         this.game.scene.visible = false;
@@ -142,6 +143,16 @@ class SceneManager extends EventEmitter{
             this._spe.dispose();
         }
         if(t){
+            console.info('===========loadSPE===========');
+            console.info(t);
+            /**
+             * FIXBUG : 
+             * window.devicePixelRatio 的值会影响粒子尺寸
+             */            
+            if(t && t.emitter && t.emitter.size && t.emitter.size.value){
+                console.log('window.devicePixelRatio : '+window.devicePixelRatio);
+                t.emitter.size.value *= window.devicePixelRatio;
+            }
             this._spe = new Spe(t);
             this.game.scene.add(this._spe.node());
         }
@@ -191,6 +202,8 @@ class SceneManager extends EventEmitter{
         for(let i=0;i<items.length;i++){
             this.items.push(new Item(this,items[i]));
         }
+        console.info('===============loadItem===============');
+        console.info(items);
         let id = setInterval(()=>{
             for(let item of this.items){
                 if(item.state==='loading')
@@ -208,6 +221,7 @@ class SceneManager extends EventEmitter{
                     return;
                 }
             }
+            console.info('all items loaded.');
             clearInterval(id);
             if(this._exit){
                 this.destroy();
@@ -219,6 +233,7 @@ class SceneManager extends EventEmitter{
             this._doReset = false;
             this._doloadstate = false;
             this.game.scene.visible = true;
+            console.info('loadItem callback.');
             if(cb)cb(false);
         },20);
         return true;

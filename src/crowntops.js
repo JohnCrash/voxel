@@ -70,10 +70,23 @@ class CrownTops extends Component{
         //计算排名
         let mycrown = Global.getLoginJson().crown;
         let ranks = [];
+
         if(!crowns){
             this.setState({open:true,body:'用户没有排行数据'});
             return;
         }
+        /**
+         * FIXBUG : 自己的皇冠数量不在排行榜中,这种情况往往是people=0导致的
+         * 如论如何有自己的排名
+         */
+        for(let i=0;i<crowns.length;i++){
+            let a = crowns[i];
+            if(a.count === mycrown && a.people <= 0){
+                a.people = 1;
+                break;
+            }
+        }
+        //=====================================
         for(let i=0;i<crowns.length;i++){
             let a = crowns[crowns.length-i-1];
             if(a.people>0){

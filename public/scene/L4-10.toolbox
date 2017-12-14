@@ -7,7 +7,7 @@
 	<block type="open_box" limit="1"></block>
 	<block type="lift_up" limit="1"></block>
 	<block type="put_down" limit="1"></block>
-	<block type="math_arithmetic"</block>
+	<block type="math_arithmetic"></block>
 	<block type="variables_set" limit="3">
 		<field name="VAR" variabletype=""> x </field>
 		<value name="VALUE">

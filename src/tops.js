@@ -105,6 +105,7 @@ class Tops extends Component{
                 break;
         }
     }
+    //重复 level.gonext
     gonext(info){
         //info.next < info.closed 全部做完
         if(info && info.nextName && info.next < info.closed && info.next < info.total){
@@ -158,6 +159,11 @@ class Tops extends Component{
             this.cls = json.cls||[];
             //console.log(json);
             this.setState({loading:false});
+            //FIXBUG: 重复登录的问题.
+            if(json.result!=='ok'){
+                this.setState({open: false});
+                MessageBox.show('ok',undefined,json.result,()=>{});
+            }
         });
     }
     //取得我的排名

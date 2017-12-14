@@ -136,6 +136,7 @@ class VoxView extends Component{
 
                     BlocklyInterface.pause();
                     this.initCharacter(json);
+                    console.info('==============voxview load================');
                     this.sceneManager.loadFromJson(json.content,(iserr)=>{
                         if(!iserr){
                             Global.initAudio();
@@ -145,9 +146,11 @@ class VoxView extends Component{
                             this.sceneManager.pause(false);
                             BlocklyInterface.resume();
                             this.setState({loading:false});
+                            console.info('voxview ready');
                             resolve("ready");
                         }else{
                             let err = `'${file}' load error.`;
+                            console.warn(err);
                             log(err);
                             this.setState({loading:false});
                             reject(err);
@@ -159,7 +162,9 @@ class VoxView extends Component{
                     reject(json.result);
                 }else{
                     this.setState({loading:false});
-                    reject(`fetchJson /load?file=scene/${file}.scene error`);
+                    let errs = `fetchJson /load?file=scene/${file}.scene error`;
+                    console.warn(errs);
+                    reject(errs);
                 }
             });
         });

@@ -30,8 +30,8 @@ var server = http.createServer(app);
  */
 /*
 var options = {
-  key: fs.readFileSync('./test/key.pem'),
-  cert: fs.readFileSync('./test/cert.pem'),
+  key: fs.readFileSync('./server/ljlx/ljlx.key'),
+  cert: fs.readFileSync('./server/ljlx/ljlx.crt'),
 };
 var httpsserver = https.createServer(options,app);
 httpsserver.listen(443);

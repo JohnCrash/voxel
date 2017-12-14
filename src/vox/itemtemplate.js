@@ -14,7 +14,7 @@ class ItemTemplate_{
     searchLiveByScript(script){
         for(let k in this.itemTemplates){
             let t = this.itemTemplates[k];
-            if(t.json.script===script)
+            if(t && t.json && t.json.script===script)
                 return t.json.live;
         }
         return null;

@@ -153,8 +153,11 @@ router.use(function(req,res,next){
       if(req.UserInfo){
         next();
       }else{
+        /**
+         * FIXBUG : 如果二次登录cookie会发生改变，被踢掉的用户将不能继续提交
+         */
         if(req.url!=='/login')
-          throw '没有找到用户';
+          throw '你的帐号在其他设备上登录，请重新登录游戏。';
         next();
       }
     }).catch((err)=>{
@@ -633,10 +636,11 @@ router.post('/config',function(req,res){
 });
 
 const UnlockTable = [
-  {lv:31,rang:10,gold:1000},
-  {lv:41,rang:10,gold:1000},
-  {lv:51,rang:10,gold:1000},
-  {lv:61,rang:10,gold:1000},
+  {lv:21,rang:10,gold:10000},
+  {lv:31,rang:10,gold:10000},
+  {lv:41,rang:10,gold:10000},
+  {lv:51,rang:10,gold:10000},
+  {lv:61,rang:10,gold:10000},
 ];
 
 /**
@@ -649,8 +653,8 @@ router.post('/unlock',function(req,res){
 
   if(lv === crown){
     //全皇冠解锁
-    olv = olv ? olv : 31;
-    if(olv===31||olv===41||olv===51){
+    olv = olv ? olv : 21;
+    if(olv===21||olv===31||olv===41||olv===51){
       unlock = olv;
       olv = olv + 10;
       sql(`update UserInfo set olv=${olv} where uid='${uid}'`).

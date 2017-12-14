@@ -150,8 +150,12 @@ class MainDrawer extends Component{
                 console.log(result);
             });
             setTimeout(()=>{
+                window.dispatchEvent(new Event('resize'));
+            },100);
+            setTimeout(()=>{
                 let img = document.getElementById('me');
                 if(img){
+                    window.dispatchEvent(new Event('resize'));
                     img.onclick = this.handleOpenDebug.bind(this);
                 }
             },1000);
@@ -272,9 +276,9 @@ class MainDrawer extends Component{
                 />
             </RadioButtonGroup>
             <GrayBlock />
-            {this.props.loc==="game"?<MenuItem primaryText="任务提示..." leftIcon={<IconTips />} style={BlodStyle} onClick={this.onTip}/>:undefined}
-            <MenuItem primaryText="操作帮助..." leftIcon={<HelpIcon />} style={BlodStyle} onClick={this.onHelp}/> 
-            <MenuItem primaryText="关于..." leftIcon={<IconAbout />} style={BlodStyle} onClick={this.onAbout}/> 
+            {this.props.loc==="game"?<MenuItem primaryText="任务提示" leftIcon={<IconTips />} style={BlodStyle} onClick={this.onTip}/>:undefined}
+            <MenuItem primaryText="操作帮助" leftIcon={<HelpIcon />} style={BlodStyle} onClick={this.onHelp}/> 
+            <MenuItem primaryText="制作团队" leftIcon={<IconAbout />} style={BlodStyle} onClick={this.onAbout}/> 
             {openDebug?<MenuItem primaryText="DEBUG..." leftIcon={<IconDebug />} onClick={(event)=>{
                 window.location = `http://192.168.2.83:3001/#/login/${Global.getUID()}/${Global.getUserName()}/${Global.getCookie()}`
             }}/>:undefined}

@@ -27,11 +27,18 @@ class LevelSel extends PureComponent{
         };
     }
     onSelectLevel(link,p){
+        console.info('============levelsel============');
+        console.info(link);
+        console.info(p);
         if(link){
+            console.info('Global.getCharacter() = '+Global.getCharacter());
             if(Global.getCharacter()==='none'){
                 //打开角色选择
+                console.info('Select Character');
                 this.selectAfterLink = link;
-                this.setState({openCharacterSelectDialog:true});
+                this.setState({openCharacterSelectDialog:false},()=>{
+                    this.setState({openCharacterSelectDialog:true});
+                });
             }else{
                 /**
                  * FIXBUG : iOS 不允许自动播放声音

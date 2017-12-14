@@ -11,6 +11,7 @@ import {Global} from './global';
 import {postJson} from './vox/fetch';
 import {ljshell} from './ljshell';
 import { setTimeout } from 'timers';
+import { MessageBox } from './ui/MessageBox';
 
 const UNLOCK = 1;
 const UNLOCKING = 2;
@@ -47,7 +48,10 @@ class Unlock extends Component{
         });  
         TextManager.load('scene/ui/unlock_failed.md',(iserr,text)=>{
             this.unlockFailed_content = !iserr ? text : "";
-        });                 
+        });
+        TextManager.load('scene/ui/pay.md',(iserr,text)=>{
+            this.unlock_pay = !iserr ? text : "";
+        });                      
     }
     //cb(true)成功结束，cb(false)解锁失败
     open(p,cb){
@@ -103,6 +107,20 @@ class Unlock extends Component{
             this._cb(false);
             this._cb = null;
             this.setState({open:false});
+        }else if(result==='pay'){
+            if(Global.getPlatfrom()!=='windows' && ljshell && ljshell.pay){
+                console.log('====> paygold');
+                ljshell.pay({action:'paygold',
+                count:20,
+                appid:1126,
+                userid:Global.getUID()},(b)=>{
+                });
+            }else{
+                MessageBox.show('ok',undefined,<MarkdownElement text={this.unlock_pay}/>,(result)=>{});
+            }
+            this._cb(false);
+            this._cb = null;
+            this.setState({open:false});
         }
     }
     render(){
@@ -115,7 +133,7 @@ class Unlock extends Component{
                 actions = [<FlatButton
                     label="取消"
                     primary={true}
-                    onClick={this.handleAction.bind(this,'cancel')}/>,            
+                    onClick={this.handleAction.bind(this,'cancel')}/>,                
                     <FlatButton
                     label="解锁"
                     primary={true}

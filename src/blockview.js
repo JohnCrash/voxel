@@ -37,11 +37,16 @@ function xmlHead(s){
 
 //将dom中的id和x,y值给删除掉
 function filterDom(dom){
-    dom.removeAttribute('id');
-    dom.removeAttribute('x');
-    dom.removeAttribute('y');
-    for(let node of dom.children){
-        filterDom(node);
+    try{
+        dom.removeAttribute('id');
+        dom.removeAttribute('x');
+        dom.removeAttribute('y');
+        for(let node of dom.children){
+            filterDom(node);
+        }    
+    }catch(e){
+        console.log('filterDom');
+        console.error(e);
     }
 }
 
@@ -316,10 +321,12 @@ class BlockView extends Component{
      */
     initWorkspace(){
         let lang = Global.getCurrentLang();
+        console.info('blockview.initWorkspace');
+        console.info(lang);
         switch(lang){
             case 'en':en();break;
             case 'zh':zh();break;
-            default: en();
+            default: zh();
         }
         this.needReset = false;
         Blockly.Scrollbar.scrollbarThickness=10;

@@ -32,6 +32,7 @@ import MainDrawer from "./drawer";
 import PropTypes from 'prop-types';
 import { setTimeout } from 'timers';
 import md from './mdtemplate';
+import Unlock from './unlock';
 
 /*global Blockly*/
 const redIcon = {color:"#F44336"};
@@ -121,6 +122,7 @@ class Level extends Component{
             ScriptManager.reset();
         }
         this._isrunning = false;
+        this._isgameover = false;
         this.voxview.reset();
         this.blockview.reset();
         this.setState({playPause:true});
@@ -140,17 +142,22 @@ class Level extends Component{
         let md;
         let now = Date.now();
         let lj = Global.levelJson();
+        this._isgameover = true;
         switch(event){
             case 'OutOfBounds':
             case 'Dead':
                 md = 'scene/ui/gameover.md';
                 this._isrunning = false;
+                this.needReset = true;
+                this.setState({playPause:true});
                 Global.playSound(lj.failSound);
                 break;
             case 'MissionCompleted':
                 //如果有指南这里需要先处理指南
                 //指南提示
                 this._isrunning = false;
+                this.needReset = true;
+                this.setState({playPause:true});
                 if(this.isPlayAgin()){
                     this.commitAgin();
                 }else{
@@ -166,11 +173,15 @@ class Level extends Component{
             case 'WrongAction':
                 md = 'scene/ui/wrongaction.md';
                 this._isrunning = false;
+                this.needReset = true;
+                this.setState({playPause:true});
                 Global.playSound(lj.wrongSound);
                 break;
             case 'FallDead':
                 md = 'scene/ui/falldead.md';
                 this._isrunning = false;
+                this.needReset = true;
+                this.setState({playPause:true});
                 Global.playSound(lj.fallDeadSound);
                 break;
         }
@@ -198,6 +209,7 @@ class Level extends Component{
             if(!this._isrunning){
                 this.voxview.readyPromise.then(()=>{
                     this._isrunning = true;
+                    this._isgameover = false;
                     this.blockview.run(500,(state)=>{//执行完成
                         if(state === 'end'||state === 'error'||state==='nolink'){
                             this._isrunning = false;
@@ -206,7 +218,12 @@ class Level extends Component{
                             }else if(state === 'nolink'){
                                 MessageBox.show('ok',undefined,<MarkdownElement file={'scene/ui/link_error.md'}/>,(result)=>{});
                             }else if(state==='end'){
-                                Global.playSound(Global.levelJson().failSound);
+                                //FIXBUG : 程序已经结束(需要结束声音)，但是宝箱还未打开。
+                                //简单的解决方案，等一秒钟如果还没成功就播放
+                                setTimeout(()=>{
+                                    if(!this._isgameover)
+                                        Global.playSound(Global.levelJson().failSound);
+                                },1000);
                             }
                             this.setState({playPause:true});
                             this.needReset = true;
@@ -261,6 +278,7 @@ class Level extends Component{
     onGameStart(props){
         if(!this.voxview)return;
         this._isrunning = false;
+        this._isgameover = false;
         //加载voxview的时候uiColor必须为白色
         this.setState({uiColor:'#FFFFFF'});
 
@@ -284,6 +302,25 @@ class Level extends Component{
 
         this.btms = Date.now();
         this.btpms = this.btms;
+
+        console.info("==============onGameStart================");
+        setTimeout(()=>{ //10秒后如果缓慢加载出来，就重新加载.
+            console.info("onGameStart timeout");
+            try{
+                if(this._ready !== READY){
+                    console.info("==>RE onGameStart...");
+                    if(this.voxview && this.blockview){
+                        this.voxview.load(props.level);
+                        this.blockview.load(`scene/${props.level}.toolbox`);
+                        this.onGameStart(props);
+                    }else{
+                        console.error('==> voxview blockview = null');
+                    }
+                }    
+            }catch(e){
+                console.error(e);   
+            }
+        },10*1000);
         if(this.voxview.readyPromise){
             this.voxview.readyPromise.then(()=>{
                 TextManager.load(`scene/${props.level}.md`,(iserr,text)=>{
@@ -538,7 +575,28 @@ class Level extends Component{
                         if(result==='again'){
                             this.Reset();
                         }else if(result==='next'){
-                            location.href=`#/level/${info.nextName}`;//eslint-disable-line
+                            //FIXBUG: 这里有可能需要解锁 ,见:tops.js
+                            let p = {
+                                unlock_gold:info.next_unlock_gold,
+                                seg_begin:info.next_begin,
+                                seg_end:info.next_end,
+                                need_unlock:info.next_need_unlock
+                            };
+                            console.log('============next===========');
+                            console.log(info);
+                            console.log(p);
+                            console.log('===========================');
+                            if(p.need_unlock && info.nextName && info.next < info.closed && info.next < info.total){
+                                this.unlock.open(p,(b)=>{
+                                    if(b){
+                                        this.gonext(info);
+                                    }else{
+                                        location.href='#/main';//eslint-disable-line
+                                    }
+                                });
+                            }else{
+                                this.gonext(info);
+                            }
                         }
                     },'tips_again');                    
                 });                
@@ -551,6 +609,23 @@ class Level extends Component{
             console.log(lvs);
             this.btpms = now;
         }
+    }
+    //重复 tops.gonext
+    gonext(info){
+         //info.next < info.closed 全部做完
+         if(info && info.nextName && info.next < info.closed && info.next < info.total){
+            location.href=`#/level/${info.nextName}`;//eslint-disable-line
+        }else{//打通了全部
+            //提示通关了
+            TextManager.load('scene/ui/completed.md',(iserr,text)=>{
+                if(iserr)
+                    MessageBox.show("ok",undefined,<MarkdownElement text={text}/>,(result)=>{
+                        location.href='#/main';//eslint-disable-line
+                    });
+                else location.href='#/main';//eslint-disable-line
+            });            
+            
+        }       
     }
     toolbarEle(portrait){
         let {uiColor,playPause,curSelectTest,isDebug} = this.state;   
@@ -639,6 +714,7 @@ class Level extends Component{
             </div>
             <MainDrawer ref={ref=>this.drawer=ref}/>
             <Tops ref={ref=>this.Tops=ref} level={level}/>
+            <Unlock ref={ref=>this.unlock=ref} />
         </div>;
     }
     switchSize(){
@@ -702,6 +778,7 @@ class Level extends Component{
             </div>
             <MainDrawer ref={ref=>this.drawer=ref}/>
             <Tops ref={ref=>this.Tops=ref} level={level}/>
+            <Unlock ref={ref=>this.unlock=ref} />
         </div>;
     }
     render(){
