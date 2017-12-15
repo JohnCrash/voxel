@@ -1,4 +1,6 @@
 var express = require('express');
+var serveStatic = require('serve-static');
+var compression = require('compression');
 var path = require('path');
 var os = require('os');
 var favicon = require('serve-favicon');
@@ -19,6 +21,17 @@ app.set('view engine', 'jade');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
+
+function shouldCompress (req, res) {
+  if (req.headers['x-no-compression']) {
+    // don't compress responses with this request header
+    return false;
+  }
+  // fallback to standard filter function
+  return true;//compression.filter(req, res);
+}
+app.use(compression({filter: shouldCompress}));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -30,7 +43,8 @@ app.use(function(req,res,next){
   next();
 });
 */
-app.use(express.static(config.public));
+//app.use(express.static(config.public));
+app.use(serveStatic(config.public));
 
 app.use('/', index);
 app.use('/users', users);

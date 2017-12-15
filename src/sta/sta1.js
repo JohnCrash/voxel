@@ -4,15 +4,19 @@ import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import { LineChart } from 'react-d3';
 
+/**
+ * 
+ */
 class Sta1 extends Component{
     constructor(props){
         super(props);
     }
+    
     render(){
         var lineData = [
             {
               name: "登录次数",
-              values: [ { x: 0, y: 20 }, { x: 24, y: 10 } ],
+              values: [ { x: 0, y: 20 }, { x: 24, y: 30 } ],
               strokeWidth: 3,
               strokeColor:'#FF0000',
               strokeDashArray: "5,5",
