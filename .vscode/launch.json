@@ -5,7 +5,7 @@
             "type": "node",
             "request": "launch",
             "name": "Debug server sta",
-            "program": "${workspaceRoot}/src/sta/staserver.js"
+            "program": "${workspaceRoot}/server/sta/staserver.js"
         },
         {
             "type": "node",

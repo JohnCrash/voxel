@@ -22,13 +22,13 @@ function shouldCompress (req, res) {
 app.use(compression({filter: shouldCompress}));
 
 var lastDay = 0;
-/*
+
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(config.public));
-*/
+
 const SQL = Sql.connect(config.sqlserver);
 function sql(query){
   /*
@@ -45,10 +45,13 @@ function sql(query){
  */
 function doStaLv(){
     //做检查看看是不是今天的数据已经在里面了，如果在就不做了
+    console.log('doStaLV');
+    console.log(new Date().toLocaleString());
     sql(`select COUNT(*) from StaLv where DATEDIFF(DD,date,GETDATE())=0`).then((result)=>{
         let data = result.recordset;
-        if(!(data && data[0])){
+        if(!(data && (data[0]===0||data[0]==='0'))){
             //已经有了数据了
+            console.log('do...');
             for(let i=0;i<201;i++){
                 setTimeout(()=>{
                     sql(`select count(*) from UserInfo where lv=${i}`).then((result)=>{
@@ -68,6 +71,7 @@ function doStaLv(){
     });
 }
 
+doStaLv();
 /**
  * 启动一个周期进程用来从分析数据
  * 一分钟比较轮询一次，到晚上23:59开始统计

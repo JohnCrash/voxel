@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import { LineChart } from 'react-d3';
-
+require("whatwg-fetch");
 /**
  * 
  */
@@ -12,6 +12,27 @@ class Sta1 extends Component{
         super(props);
     }
     
+    componentDidMount(){
+      /**
+       * fetch sta weak
+       *       mode: 'no-cors',
+       */
+      fetch('stalv',{
+      credentials: 'same-origin',
+      headers: {'Content-Type': 'application/json'}})
+      .then((response)=>{
+        console.log(response);
+        return response.json();
+      })
+      .then((json)=>{
+        console.log(json);
+      }).catch(err=>{
+          console.log(err);
+      });  
+    }
+    componentWillUnmount(){
+
+    }
     render(){
         var lineData = [
             {
