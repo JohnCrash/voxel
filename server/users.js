@@ -135,6 +135,21 @@ function setCookie(res,cookie){
   if(key && value)
     res.cookie(key,value);
 }
+
+/**
+ * 提取统计数据
+ */
+router.post('/stalv',function(req,res){
+  /**
+   * 最近一个星期(7天)的数据
+   */
+  sql(`select * from StaLv where DateDiff(DD,date,getdate())<=7`).then((result)=>{
+      res.json({result:'ok',stalv:result.recordset});
+  }).catch((err)=>{
+      res.json({result:err});
+  });
+});
+
 /**
  * cookie => UserInfo
  */

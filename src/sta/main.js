@@ -46,8 +46,8 @@ class Main extends Component{
             onRequestClose={this.handleRequestClose.bind(this)}
             >
             <Menu>
-                <MenuItem primaryText="用户活跃" checked={this.state.sta===1} onClick={this.onChange.bind(this,1)}/>
-                <MenuItem primaryText="关卡完成" checked={this.state.sta!==1} onClick={this.onChange.bind(this,2)}/>
+                <MenuItem primaryText="关卡人数分布图" checked={this.state.sta===1} onClick={this.onChange.bind(this,1)}/>
+                <MenuItem primaryText="用户平台图" checked={this.state.sta!==1} onClick={this.onChange.bind(this,2)}/>
             </Menu>
         </Popover>
         {this.state.sta===1?<Sta1/>:<Sta2/>}

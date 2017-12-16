@@ -50,7 +50,10 @@ if(process.argv[2] && process.argv[2]==='editor'){
     //G:/tmp/voxel/
     //修改main.appcache #version + 1
     let c = spawn('git',['-jar','node_modules/google-closure-compiler/compiler.jar','--js',`${des}z`,'--js_output_file',des]);
-  });  
+  });
+}else if(process.argv[2] && process.argv[2]==='sta'){
+  console.log('Compile stapp...');
+  build('src/sta/stapp.js','public/stapp_compress.js');      
 }else{
   console.log('Compile app...');
   build('src/index.js','public/app_compress.js');

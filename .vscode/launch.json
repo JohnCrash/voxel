@@ -2,10 +2,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "type": "node",
+            "type": "chrome",
             "request": "launch",
-            "name": "Debug server sta",
-            "program": "${workspaceRoot}/server/sta/staserver.js"
+            "name": "Debug client sta",
+            "url": "http://localhost:3000/sta.html",
+            "webRoot": "${workspaceRoot}"
         },
         {
             "type": "node",
@@ -17,7 +18,7 @@
             "type": "node",
             "request": "launch",
             "name": "Debug watch",
-            "program": "${workspaceRoot}/server/gitauto.js"
+            "program": "${workspaceRoot}/server/sta/staapp.js"
         },        
         {
             "type": "chrome",
