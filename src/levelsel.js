@@ -58,6 +58,10 @@ class LevelSel extends PureComponent{
             }
         }
     }
+    onSelectMovie(link){
+        console.info('============moviesel============');
+        console.info(link);
+    }
     loadJson(json,cur){
         let stage = 0;
         let olv = Global.getMaxUnlockLevel();
@@ -94,6 +98,9 @@ class LevelSel extends PureComponent{
         }
         let curSeg;
         this.buttons = [];
+        function getMoive(i){
+            if(json && json.movie)return json.movie[i];
+        }
         this.level = json.level.map((item)=>{
             let bl = [];
             let m = item.rang.match(/(\d+)-(\d+)/);
@@ -151,23 +158,46 @@ class LevelSel extends PureComponent{
                         seg_end,
                         need_unlock:islock && i===current, //需要解锁
                     };
-                    if(i===seg_begin)
+                    let movie = getMoive(i);
+                    if(i===seg_begin){
+                        let poss = 'first';
+                        if(movie){
+                            poss = undefined;
+                            bl.push(<CircleButton key={'m'+i}
+                                pos='first'
+                                state={s}
+                                ismovie={true} 
+                                onClick={this.onSelectMovie.bind(this,movie)} />);
+                        }
                         bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} rank={lvs[i]?lvs[i].rank:0} 
                         ref={(r)=>{this.buttons[i]=r}}
                         onClick={this.onSelectLevel.bind(this,link,p)} 
-                        pos='first' 
+                        pos={poss} 
                         state={s} />);
-                    else if(i===seg_end)
+                    }else if(i===seg_end){
+                        if(movie){
+                            bl.push(<CircleButton key={'m'+i}
+                                state={s}
+                                ismovie={true} 
+                                onClick={this.onSelectMovie.bind(this,movie)} />);
+                        }                        
                         bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} rank={lvs[i]?lvs[i].rank:0}
                         ref={(r)=>{this.buttons[i]=r}}
                         onClick={this.onSelectLevel.bind(this,link,p)} 
-                        pos='last' 
+                        pos='last'
                         state={s} />);
-                    else
+                    }else{
+                        if(movie){
+                            bl.push(<CircleButton key={'m'+i}
+                                state={s}
+                                ismovie={true} 
+                                onClick={this.onSelectMovie.bind(this,movie)} />);
+                        }                         
                         bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} rank={lvs[i]?lvs[i].rank:0} 
                         ref={(r)=>{this.buttons[i]=r}}
                         onClick={this.onSelectLevel.bind(this,link,p)} 
                         state={s} />);
+                    }
                 }
             }
             return <Card key={item.name} onLoad={curSeg?(event)=>{

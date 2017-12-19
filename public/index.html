@@ -17,6 +17,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 		-webkit-user-select: none;	
       }
     </style>
+	<script src="libs/vconsole.min.js"></script>
 	<script type="text/javascript" src="libs/three.min.js"></script>
 	<script type="text/javascript" src="libs/stats.min.js"></script>
 	<script type="text/javascript" src="libs/SPE.min.js"></script>
@@ -39,7 +40,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <div id="root"></div>
 	<script>
 		//if(localStorage.isdebug==='true'){
-		//	window.vConsole = new VConsole();
+			window.vConsole = new VConsole();
 		//}
 		window.platfrom = 'windows';
 		window.LOCALHOST = true;

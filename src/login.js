@@ -8,6 +8,7 @@ import {Global} from './global';
 import MarkdownElement from './ui/MarkdownElement';
 import {ljshell} from './ljshell';
 
+console.info('Import Login...');
 class Login extends Component{
     constructor(props){
         super(props);

@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import Bob from './bob';
 import PropTypes from 'prop-types';
-import {KingIcon} from './myicon';
+import {KingIcon,MovieIcon} from './myicon';
 import { Global } from '../global';
+//import MovieIcon from 'material-ui/svg-icons/av/play-arrow';
 
 /**
  * opened   已经完成
@@ -150,19 +151,20 @@ class CircleButton extends Component{
         }
     }
     render(){
-        let {link,state,pos,disable,rank,bob} = this.props;
+        let {link,state,pos,disable,rank,bob,ismovie} = this.props;
         let c = cc(this.state.forceState?this.state.forceState:state);
         let hover = disable?c.normal : (this.state.hovered)?c.hover:c.normal;
         const style = this.getStyles();
         const bgstyle = this.getBgStyles();
         let bhelf = -10+this.context.circleRadius
         let kingoffset = -(this.context.circleRadius/2);
+        let w = this.context.circleRadius*5/6;
         /**
          * ios cache bug ,ios 浏览器会缓存图片
          * Global.getRandom() 确保每次启动的随机数相同，避免重复加载
          */
         let userlogo = `http://image-static.lejiaolexue.com/userlogo/${bob?bob.uid:0}_99.jpg?p=${Global.getRandom()}`;
-        return <div style={m({display: 'inline-block',position: 'relative'},bob?{marginTop:this.context.circleRadius*5/4+12}:{marginTop:"10px"})}>
+        return <div style={m({display: 'inline-block',position: 'relative',verticalAlign:"bottom"},bob?{marginTop:this.context.circleRadius*5/4+12}:{marginTop:"10px"})}>
             <div style={m(bgstyle,pos==='first'&&{left:bhelf},pos==='last'&&{right:bhelf})}></div>
             {bob?<Bob icon={userlogo} text={bob.UserName} color={bob.uid===Global.getUID()?'#E57373':'#00BCD4'} />:undefined}
             {rank==1?<div style={{position:"absolute",top:kingoffset+"px",left:"6px"}}>
@@ -173,7 +175,8 @@ class CircleButton extends Component{
                     onMouseLeave = {this.handleMouseLeave.bind(this)}
                     onMouseEnter = {this.handleMouseEnter.bind(this)}
                 >
-                    <span>{this.props.label}</span>
+                    {ismovie?<MovieIcon style={{width:w+"px",height:w+"px",color:state=="current"||state=="opened"?"#FFFFFF":(state=="locked"?"rgb(91, 103, 112)":"rgb(91, 103, 112)")}}/>:
+                    <span>{this.props.label}</span>}
                 </div>
             </a>
         </div>;

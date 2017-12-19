@@ -7,6 +7,8 @@ import Menu from 'material-ui/Menu';
 import MenuItem from 'material-ui/MenuItem';
 import Sta1 from './sta1';
 import Sta2 from './sta2';
+import Sta3 from './sta3';
+import Sta4 from './sta4';
 
 class Main extends Component{
     constructor(props){
@@ -36,6 +38,13 @@ class Main extends Component{
           });        
     }
     render(){
+        let Sta;
+        switch(this.state.sta){
+            case 1:Sta = <Sta1 />;break;
+            case 2:Sta = <Sta2 />;break;
+            case 3:Sta = <Sta3 />;break;
+            case 4:Sta = <Sta4 />;break;
+        }
         return <div><AppBar title="乐学编程用户统计"
             onLeftIconButtonTouchTap={this.onMenu.bind(this)}></AppBar>
             <Popover
@@ -46,11 +55,13 @@ class Main extends Component{
             onRequestClose={this.handleRequestClose.bind(this)}
             >
             <Menu>
-                <MenuItem primaryText="关卡人数分布图" checked={this.state.sta===1} onClick={this.onChange.bind(this,1)}/>
-                <MenuItem primaryText="用户平台图" checked={this.state.sta!==1} onClick={this.onChange.bind(this,2)}/>
+                <MenuItem primaryText="关卡人数分布图-0" checked={this.state.sta===1} onClick={this.onChange.bind(this,1)}/>
+                <MenuItem primaryText="关卡人数分布图" checked={this.state.sta!==1} onClick={this.onChange.bind(this,2)}/>
+                <MenuItem primaryText="关卡用时分布图" checked={this.state.sta!==1} onClick={this.onChange.bind(this,3)}/>
+                <MenuItem primaryText="关卡总用时分布图" checked={this.state.sta!==1} onClick={this.onChange.bind(this,4)}/>
             </Menu>
         </Popover>
-        {this.state.sta===1?<Sta1/>:<Sta2/>}
+        {Sta}
         </div>;
     }
 };

@@ -272,7 +272,17 @@ function initItemBlockly(_this){
 		var item = getItemByName(name);
 		if(!item)return;
 		if((item._isobstruct||item.resultAction==='break') && !eqAngle(item.rotation.z-Math.PI,item.forwardAngle)){
-			item.velocity.z = JUMP_SPEED;
+			//角色的脚下是不是有地面,如果没有地面就不跳跃
+			var pt = {
+				x:item.position.x,
+				y:item.position.y,
+				z:item.position.z-1.0
+			};
+			var ar = item.sceneManager.ptItem(pt);
+			if(ar && ar.length>0)
+				item.velocity.z = JUMP_SPEED;
+			else
+				item.velocity.z = JUMP_SPEED/5; //确保流程不变
 			ItemAction(item,'jump');
 			if(item.currentAction === 'jumpwall')
 				item.currentAction = 'jumpwall';				
@@ -301,9 +311,22 @@ function initItemBlockly(_this){
 			};
 		}
 		item.forwardT = 0;
-		item.velocity.z = JUMP_SPEED;
 		//var g = item.sceneManager.gravity;
-		item.speed = SPEED/JUMP_STEP;//Math.abs(d*g)/(2*JUMP_SPEED);
+		//角色的脚下是不是有地面,如果没有地面就不跳跃
+		var pt = {
+			x:item.position.x,
+			y:item.position.y,
+			z:item.position.z-1.0
+		};
+		var ar = item.sceneManager.ptItem(pt);
+		if(ar && ar.length>0){
+			item.velocity.z = JUMP_SPEED;
+			item.speed = SPEED/JUMP_STEP;//Math.abs(d*g)/(2*JUMP_SPEED);
+		}
+		else{
+			item.velocity.z = JUMP_SPEED/5;	//确保流程不变
+			item.speed = SPEED/JUMP_STEP/2;//Math.abs(d*g)/(2*JUMP_SPEED);
+		}
 		ItemAction(item,'jump');
 	});
 

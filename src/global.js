@@ -7,6 +7,7 @@ import {AudioManager} from './vox/audiomanager';
 /*global closeLoadingUI,loadingProgressBar*/
 /*global THREE*/
 //if(window.closeLoadingUI)root.style.display="none";
+console.info('Import Global...');
 class _Global_ extends EventEmitter{
     constructor(){
         super();
@@ -37,18 +38,25 @@ class _Global_ extends EventEmitter{
         }catch(e){
             this._platform = 'unknow';
         }
+        console.log('Global document.addEventListener backbutton');
         document.addEventListener("backbutton", ()=>{
             this.callTop();
         }, false);
-        this.push(()=>{
-            MessageBox.show("okcancel","游戏退出","你确定要退出游戏吗？",(result)=>{
-                if(result==='ok'){
-                    if(window.ljAppObject)
-                        window.ljAppObject.back();
-                }
-            });
-        },'game');
+        console.log('Global push game quit');
+        try{
+            this.push(()=>{
+                MessageBox.show("okcancel","游戏退出","你确定要退出游戏吗？",(result)=>{
+                    if(result==='ok'){
+                        if(window.ljAppObject)
+                            window.ljAppObject.back();
+                    }
+                });
+            },'game');    
+        }catch(e){
+            console.error(e);
+        }
         //到后台
+        console.log('Global document.addEventListener pause');
         document.addEventListener("pause", (event)=>{ 
             if(this._muteMusic && this._sceneManager){
                 console.log('stop music');
@@ -57,7 +65,8 @@ class _Global_ extends EventEmitter{
            console.log('pause');
            console.info(new Date().toTimeString());
         }, false);  
-        //到前台     
+        //到前台  
+        console.log('Global document.addEventListener resume');   
         document.addEventListener("resume", (event)=>{
            if(this._muteMusic && this._sceneManager){
                 console.log('open music');
@@ -112,8 +121,11 @@ class _Global_ extends EventEmitter{
     }
     //gname代表全局名称，如果堆中已经有gname将忽略此次压入操作
     push(cb,gname){
+        console.log('push');
         if(gname!==undefined){
-            for(let item of this._ui){
+            console.log(this._ui);
+            for(let i=0;i<this._ui.length;i++){
+                let item = this._ui[i];
                 if(item.ganem === gname)return;
             }
         }

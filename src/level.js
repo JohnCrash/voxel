@@ -33,7 +33,9 @@ import PropTypes from 'prop-types';
 import { setTimeout } from 'timers';
 import md from './mdtemplate';
 import Unlock from './unlock';
+import LevelVideo from './levelvideo';
 
+console.info('Import Level...');
 /*global Blockly*/
 const redIcon = {color:"#F44336"};
 
@@ -80,6 +82,9 @@ class Level extends Component{
             switchSize:false,
             uiStyle:Global.getUIStyle(),
             uiColor:'#000000',
+            openVideo:false,
+            videoSrc:'',
+            videoPoster:''
         }
     }
     componentDidMount(){
@@ -277,6 +282,21 @@ class Level extends Component{
     }
     onGameStart(props){
         if(!this.voxview)return;
+        /**
+         * 关卡前的视频
+         */
+        try{
+            let info = Global.appGetLevelInfo(props.level);
+            let levelJson = Global.levelJson();
+            if(info && levelJson && levelJson.movie[info.next-1]){
+                let video = levelJson.movie[info.next-1];
+                let poster = video.substring(0,video.length-4)+".png";
+                this.openVideo(video,poster);
+            }    
+        }catch(e){
+            console.log(e);
+        }
+
         this._isrunning = false;
         this._isgameover = false;
         //加载voxview的时候uiColor必须为白色
@@ -494,7 +514,8 @@ class Level extends Component{
                     setTimeout(()=>{
                         TextManager.load('scene/ui/guid2.md',(iserr,text)=>{
                             MessageBox.show('',undefined,[<MarkdownElement text={text}/>],(result)=>{
-                                this.blockview.openGuid();
+                                if(this.blockview && this.blockview.openGuid)
+                                    this.blockview.openGuid();
                             },'tips');
                         });                        
                     },200);
@@ -627,6 +648,20 @@ class Level extends Component{
             
         }       
     }
+    //块数提示
+    blockTips = (event)=>{
+        TextManager.load('scene/ui/blockcount.md',(iserr,text)=>{
+            if(!iserr)
+                MessageBox.show('',undefined,[<MarkdownElement text={text}/>],(result)=>{
+                },'tips');
+        });
+    }
+    onVideoEnded = (b)=>{
+        this.setState({openVideo:false});
+    }
+    openVideo(src,poster){
+        this.setState({openVideo:true,videoSrc:src,videoPoster:poster});
+    }
     toolbarEle(portrait){
         let {uiColor,playPause,curSelectTest,isDebug} = this.state;   
         let tests = [];
@@ -688,7 +723,8 @@ class Level extends Component{
     }
     //横屏
     landscape(){
-        let {levelDesc,curSelectTest,openTops,blocklytoolbox} = this.state;
+        let {uiColor,uiStyle,playPause,levelDesc,curSelectTest,
+            openTops,blocklytoolbox,switchSize,openVideo,videoSrc,videoPoster} = this.state;
         let {level} = this.props;
         let divStyle = Global.getPlatfrom()==='ios'?{position:"fixed",left:'0px',right:'0px',top:'0px',bottom:'0px'}:undefined;
         return <div>
@@ -704,7 +740,7 @@ class Level extends Component{
                     guid={level==='L1-1'}
                     toolbox={blocklytoolbox} />
                 </div>
-                <div style={{position:"absolute",right:"12px",top:"12px"}}>
+                <div style={{position:"absolute",right:"12px",top:"12px"}} onClick={this.blockTips}>
                     <span ref={ref=>this.blockcount=ref} style={{fontSize:"24px",fontWeight:"bold",verticalAlign:"middle"}}>0×</span>
                     <img src="media/title-beta.png" style={{height:"24px",verticalAlign:"middle"}} />
                 </div>
@@ -715,6 +751,7 @@ class Level extends Component{
             <MainDrawer ref={ref=>this.drawer=ref}/>
             <Tops ref={ref=>this.Tops=ref} level={level}/>
             <Unlock ref={ref=>this.unlock=ref} />
+            <LevelVideo open={openVideo} src={videoSrc} poster={videoPoster} onEnded={this.onVideoEnded.bind(this)} />
         </div>;
     }
     switchSize(){
@@ -736,7 +773,8 @@ class Level extends Component{
     }
     //竖屏
     portrait(){
-        let {uiColor,uiStyle,playPause,levelDesc,curSelectTest,openTops,blocklytoolbox,switchSize} = this.state;
+        let {uiColor,uiStyle,playPause,levelDesc,curSelectTest,
+            openTops,blocklytoolbox,switchSize,openVideo,videoSrc,videoPoster} = this.state;
         let {level} = this.props;
         //ios关闭滚动
         let divStyle = Global.getPlatfrom()==='ios'?{position:"fixed",left:'0px',right:'0px',top:'0px',bottom:'0px'}:undefined;
@@ -767,7 +805,7 @@ class Level extends Component{
                     toolbox={blocklytoolbox} />
                 </div>
             </div>
-            <div style={{position:"absolute",right:"12px",top:"12px"}}>
+            <div style={{position:"absolute",right:"12px",top:"12px"}} onClick={this.blockTips} >
                     <span ref={ref=>this.blockcount=ref} style={{fontSize:"24px",fontWeight:"bold",verticalAlign:"middle",color:uiColor}}>0×</span>
                     <img src="media/title-beta.png" style={{height:"24px",verticalAlign:"middle"}} />
             </div>
@@ -779,6 +817,7 @@ class Level extends Component{
             <MainDrawer ref={ref=>this.drawer=ref}/>
             <Tops ref={ref=>this.Tops=ref} level={level}/>
             <Unlock ref={ref=>this.unlock=ref} />
+            <LevelVideo open={openVideo} src={videoSrc} poster={videoPoster} onEnded={this.onVideoEnded.bind(this)}/>
         </div>;
     }
     render(){

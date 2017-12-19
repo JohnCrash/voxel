@@ -150,6 +150,17 @@ router.post('/stalv',function(req,res){
   });
 });
 
+router.post('/stalvt',function(req,res){
+  /**
+   * 最近一个星期(7天)的数据
+   */
+  sql(`select * from StaLvt where DateDiff(DD,date,getdate())<=7`).then((result)=>{
+      res.json({result:'ok',stalv:result.recordset});
+  }).catch((err)=>{
+      res.json({result:err});
+  });
+});
+
 /**
  * cookie => UserInfo
  */

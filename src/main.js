@@ -11,6 +11,7 @@ import MainDrawer from './drawer';
 import FloatButton from './ui/floatbutton';
 import CrownTops from './crowntops';
 
+console.info('Import Main...');
 class Main extends Component{
     constructor(props){
         super(props);

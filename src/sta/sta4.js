@@ -39,7 +39,7 @@ class Sta1 extends Component{
        *  count : 99}
        * ]
        */
-      fetch('/users/stalv',{method:'POST',
+      fetch('/users/stalvt',{method:'POST',
       credentials: 'same-origin',
       headers: {'Content-Type': 'application/json'},
       body :''})
@@ -66,9 +66,8 @@ class Sta1 extends Component{
           if(e){
             let key = e[2]+'-'+e[3];
             m[key] = m[key] || [];
-            if(o.lv===+o.lv && o.lv <= 60){
-              if(o.lv === 0 )o.count = 0;
-              m[key].push({x:o.lv,y:o.count});
+            if(o.lv===+o.lv && o.lv <= 60 && o.tms){
+              m[key].push({x:o.lv,y:o.tms/1000});
             }  
           }
         }

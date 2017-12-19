@@ -6,6 +6,7 @@ import {Global} from '../global';
 import BlocklyInterface from '../vox/blocklyinterface';
 import CircularProgress from 'material-ui/CircularProgress';
 
+console.info('Import MessageBox...');
 /**
  * type
  * YESNO,OK,OKCANCEL

@@ -46,17 +46,56 @@ function doStaLv(){
 }
 
 /**
+ * 统计关卡用时
+ */
+function doStaLvt(){
+    console.log('doStaLVT');
+    console.log(new Date().toLocaleString());
+    sql(`select COUNT(*) from StaLvt where DATEDIFF(DD,date,GETDATE())=0`).then((result)=>{
+        let data = result.recordset;
+        if(!(data && String(data[0][""])!=='0')){
+            //已经有了数据了
+            console.log('do stlvt...');
+            for(let i=0;i<201;i++){
+                setTimeout(()=>{
+                    sql(`select AVG(avgms) as avg1,AVG(tms) as avg2 from Level where lv=${i}`).then((result)=>{
+                        let data = result.recordset;
+                        let avg1 = 0;
+                        let avg2 = 0;
+                        if(data && data[0]){
+                            avg1 = data[0].avg1;
+                            avg2 = data[0].avg2;
+                        }
+                        sql(`insert into StaLvt (date,lv,avg,tms) values (getdate(),${i},${avg1},${avg2})`);
+                    }).catch((err)=>{
+                        sql(`insert into StaLvt (date,lv,avg,tms) values (getdate(),${i},0,0)`);
+                        console.error(err);
+                    });    
+                },i*200);
+            }                    
+        }
+    }).catch((err)=>{
+        console.error(err);
+    });    
+}
+
+doStaLvt();
+/**
  * 启动一个周期进程用来从分析数据
- * 一分钟比较轮询一次，到晚上23:59开始统计
+ * 一分钟比较轮询一次，到晚上23:58开始统计
  */
 setInterval(function(){
     let t = new Date();
     if(t.getHours()===23){
         console.log(t);
+        console.log(t.getHours());
+        console.log(t.getMinutes());
+        console.log(t.getDay());
         console.log(lastDay);    
     }
-    if(t.getHours()===23 && t.getMinutes()===59 && t.getDay() !== lastDay){
+    if(t.getHours()===23 && t.getMinutes()===58 && t.getDay() !== lastDay){
         doStaLv();
+        doStaLvt();
         lastDay = t.getDay();
     }
 },50*1000);

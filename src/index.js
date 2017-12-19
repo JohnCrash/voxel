@@ -1,3 +1,4 @@
+import "babel-polyfill";
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -16,6 +17,7 @@ import Level from './level';
 import reducer from './reducer';
 import {MessageBox} from './ui/MessageBox';
 
+console.log('Game Start...');
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();

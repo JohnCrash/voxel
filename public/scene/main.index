@@ -6,6 +6,9 @@
 	"successSound" : "scene/audio/effect/通关成功.mp3",
 	"wrongSound" : "scene/audio/effect/通关失败.mp3",
 	"fallDeadSound" : "scene/audio/effect/通关失败.mp3",
+	"movie" : {
+		"1" : "media/test.mp4"
+	},
 	"level" : [
 		{
 			"name" : "一、序列",
