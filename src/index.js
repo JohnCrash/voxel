@@ -29,7 +29,6 @@ document.onselectstart = ()=>{return false};
 console.log('Platfrom : '+Global.getPlatfrom());
 Global.setLayout(window.innerWidth>window.innerHeight?"landscape":"portrait");
 Global.closeLoading();
-
 const store = createStore(reducer);
 function App(){
     return <Provider  store={store}>
@@ -38,8 +37,6 @@ function App(){
                 <Router>
                     <Switch>
                         <Route path='/main' component={Main}/>
-                        <Route path='/login' 
-                            component={Login}/>
                         <Route path='/login' component={Login} />
                         <Route path='/level/:lv' component={props=><Level level={props.match.params.lv} />}/> 
                     </Switch>

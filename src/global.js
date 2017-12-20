@@ -40,6 +40,7 @@ class _Global_ extends EventEmitter{
         }
         console.log('Global document.addEventListener backbutton');
         document.addEventListener("backbutton", ()=>{
+            console.log('===>backbutton');
             this.callTop();
         }, false);
         console.log('Global push game quit');
@@ -234,6 +235,8 @@ class _Global_ extends EventEmitter{
      * 加载当前关卡层次
      */
     loadLevelJson(name,cb){
+        console.log('load main.index....');
+        console.log(this.LevelJson);
         if(this.LevelJson){
             if(cb){
                 cb(this.LevelJson);
@@ -241,10 +244,22 @@ class _Global_ extends EventEmitter{
             return;
         }
         fetchJson(`scene/${name}.index`,(json)=>{
+            //将视频的关卡配置从login接口返回
+            //这里将视频配置信息转移过来
+            let loginJson = this.getLoginJson();
+            if(loginJson && loginJson.levelvideo){
+                json.movie = {};
+                for(let a of loginJson.levelvideo){
+                    json.movie[a.lv] = a;
+                }
+            }
+            console.log('=========loadLevelJson==========');
+            console.info(`scene/${name}.index`);
+            console.log(json);
+            this.LevelJson = json;
             if(cb){
                 cb(json);
-            }
-            this.LevelJson = json;
+            }            
         });        
     }
     /**

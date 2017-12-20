@@ -9,6 +9,7 @@ import {Global} from './global';
 import SelectChar from './selectchar';
 import Unlock from './unlock';
 import PropTypes from 'prop-types';
+import LevelVideo from './levelvideo';
 
 const titleStyle = {
     fontSize : '18px',
@@ -24,12 +25,40 @@ class LevelSel extends PureComponent{
             openCharacterSelectDialog:false,
             n:-1,
             scroll:true,
+            openVideo:false,
+            videoSrc:'',
+            videoPoster:''
         };
-    }
+    }   
     onSelectLevel(link,p){
         console.info('============levelsel============');
         console.info(link);
         console.info(p);
+        /**
+         * 选择关卡前面有可能有一段视频,视频在该关卡第一次被点击的时候播放，其他时候不播放
+         */
+        if(this._videoEndtoSelectLevelLink){
+            console.log('this._videoEndtoSelectLevelLink : '+this._videoEndtoSelectLevelLink);
+            //从onVideoEnded过来的调用
+            this._videoEndtoSelectLevelLink = null;
+            this._videoEndtoSelectLevelP = null;
+        }else{
+            console.log('do open level video...');
+            let info = Global.appGetLevelInfo(link);
+            let levelJson = Global.levelJson();
+            if(info && levelJson){
+                let db = levelJson.movie[info.next-1];
+                //确保视频只放一次
+                if(db && db.video && !localStorage['lvv'+(info.next-1)]){
+                    localStorage['lvv'+(info.next-1)] = true;
+                    this.openVideo(db);
+                    this._videoEndtoSelectLevelLink = link;
+                    this._videoEndtoSelectLevelP = p;
+                    return;    
+                }
+            }            
+        }
+
         if(link){
             console.info('Global.getCharacter() = '+Global.getCharacter());
             if(Global.getCharacter()==='none'){
@@ -58,9 +87,53 @@ class LevelSel extends PureComponent{
             }
         }
     }
-    onSelectMovie(link){
+    onVideoEnded = (b)=>{
+        console.log('onVideoEnded pop');
+        Global.pop();
+        this.setState({openVideo:false});
+        if(this._videoEndtoSelectLevelLink){
+            this.onSelectLevel(this._videoEndtoSelectLevelLink,this._videoEndtoSelectLevelP);
+        }
+    }
+    openVideo(db){
+        console.log('openVideo:'+db);
+        Global.push(()=>{
+            console.log('release video');
+            this.onVideoEnded();
+        });
+        if(window.innerWidth<window.innerHeight){
+            console.log('===> video portrait');
+            this.setState({openVideo:true,videoSrc:db.video,videoPoster:db.poster});
+        }            
+        else{
+            console.log('===> video landscape');
+            this.setState({openVideo:true,videoSrc:db.video2,videoPoster:db.poster2});
+        }            
+    }    
+    /**
+     * db , 是{lv,video,poster}
+     */
+    onSelectMovie(db,link,p,s){
         console.info('============moviesel============');
-        console.info(link);
+        console.info(db);
+        try{
+            if(s==='opened' || s==='current'){
+                //视频播放完了如果是第一次可以开始关卡
+                console.log('onSelectMovie : '+link);
+                let info = Global.appGetLevelInfo(link);
+                if(info){
+                    //确保视频只放一次
+                    if(!localStorage['lvv'+(info.next-1)]){
+                        localStorage['lvv'+(info.next-1)] = true;
+                        this._videoEndtoSelectLevelLink = link;
+                        this._videoEndtoSelectLevelP = p;
+                    }
+                }
+                this.openVideo(db);
+            }
+        }catch(e){
+            console.log(e);
+        }        
     }
     loadJson(json,cur){
         let stage = 0;
@@ -101,6 +174,9 @@ class LevelSel extends PureComponent{
         function getMoive(i){
             if(json && json.movie)return json.movie[i];
         }
+        //一个便捷表视频和link,p的映射
+        this._lvMapLinkP = {};
+
         this.level = json.level.map((item)=>{
             let bl = [];
             let m = item.rang.match(/(\d+)-(\d+)/);
@@ -145,7 +221,6 @@ class LevelSel extends PureComponent{
                         link = `#/level/L${stage}-${i-seg_begin+1}`;
                     }else if(i>current)
                         s = 'unfinished';
-
                     if(islock && i!==current)
                         s = 'locked';
                     if(isbuild){
@@ -158,16 +233,17 @@ class LevelSel extends PureComponent{
                         seg_end,
                         need_unlock:islock && i===current, //需要解锁
                     };
-                    let movie = getMoive(i);
+                    let db = getMoive(i);
                     if(i===seg_begin){
                         let poss = 'first';
-                        if(movie){
+                        if(db && db.video){
                             poss = undefined;
+                            this._lvMapLinkP[i] = {link,p};
                             bl.push(<CircleButton key={'m'+i}
                                 pos='first'
                                 state={s}
                                 ismovie={true} 
-                                onClick={this.onSelectMovie.bind(this,movie)} />);
+                                onClick={this.onSelectMovie.bind(this,db,link,p,s)} />);
                         }
                         bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} rank={lvs[i]?lvs[i].rank:0} 
                         ref={(r)=>{this.buttons[i]=r}}
@@ -175,11 +251,12 @@ class LevelSel extends PureComponent{
                         pos={poss} 
                         state={s} />);
                     }else if(i===seg_end){
-                        if(movie){
+                        if(db && db.video){
+                            this._lvMapLinkP[i] = {link,p};
                             bl.push(<CircleButton key={'m'+i}
                                 state={s}
                                 ismovie={true} 
-                                onClick={this.onSelectMovie.bind(this,movie)} />);
+                                onClick={this.onSelectMovie.bind(this,db,link,p,s)} />);
                         }                        
                         bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} rank={lvs[i]?lvs[i].rank:0}
                         ref={(r)=>{this.buttons[i]=r}}
@@ -187,11 +264,12 @@ class LevelSel extends PureComponent{
                         pos='last'
                         state={s} />);
                     }else{
-                        if(movie){
+                        if(db && db.video){
+                            this._lvMapLinkP[i] = {link,p};
                             bl.push(<CircleButton key={'m'+i}
                                 state={s}
                                 ismovie={true} 
-                                onClick={this.onSelectMovie.bind(this,movie)} />);
+                                onClick={this.onSelectMovie.bind(this,db,link,p,s)} />);
                         }                         
                         bl.push(<CircleButton key={i} label={i} bob={lvtoid(i-1)} rank={lvs[i]?lvs[i].rank:0} 
                         ref={(r)=>{this.buttons[i]=r}}
@@ -240,6 +318,21 @@ class LevelSel extends PureComponent{
         if(nextProps.index!=index || nextProps.current!=current || nextProps.unlock!=unlock){
             this.load(index,nextProps.current);
         }
+        if(nextProps.lvideo !== this._lvideo && nextProps.lvideo){
+            //先播放视频在进行关卡,lvideo表示要播放的视频的关卡。
+            this._lvideo = nextProps.lvideo;
+            let levelJson = Global.levelJson();
+            if(levelJson && levelJson.movie && this._lvMapLinkP){
+                let db = levelJson.movie[nextProps.lvideo];
+                let m = this._lvMapLinkP[nextProps.lvideo];
+                if(db && m){
+                    //必须导入到下一关
+                    this._videoEndtoSelectLevelLink = m.link;
+                    this._videoEndtoSelectLevelP = m.p;
+                    this.onSelectMovie(db,m.link,m.p,'opened');
+                }
+            }
+        }
     }
     /**
      * 使用context传递style信息
@@ -283,7 +376,7 @@ class LevelSel extends PureComponent{
         let circleRadius = this.getChildContext().circleRadius;
         let maxWidth = (circleRadius+12)*10+32+'px';
         //                overflowY:'auto',
-        let {scroll} = this.state;
+        let {scroll,openVideo,videoSrc,videoPoster} = this.state;
         return <div>  
             <div              
             ref={(r)=>{this.scrollNode = r;}}
@@ -301,6 +394,7 @@ class LevelSel extends PureComponent{
             </div>
             <SelectChar open={this.state.openCharacterSelectDialog} link={this.selectAfterLink}/>
             <Unlock ref={ref=>this.unlock=ref} changeButtonState={this.changeButtonState.bind(this)}/>
+            <LevelVideo open={openVideo} src={videoSrc} poster={videoPoster} onEnded={this.onVideoEnded.bind(this)}/>
         </div>;
     }
     componentWillUpdate(nextProps, nextState){

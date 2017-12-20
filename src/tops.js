@@ -109,6 +109,17 @@ class Tops extends Component{
     gonext(info){
         //info.next < info.closed 全部做完
         if(info && info.nextName && info.next < info.closed && info.next < info.total){
+            //如果关卡开始有视频，返回levelsel并播放视频
+            //确保视频只在没有播放过的时候才播放一次
+            let json = Global.levelJson();
+            if(json && json.movie && json.movie[info.next]){
+                if(!localStorage['lvv'+(info.next)]){
+                    localStorage['lvv'+(info.next)] = true;
+                    //这里需要播放视频然后在进入下一关
+                    location.href=`#/main/${info.next}`;//eslint-disable-line
+                }
+                return;
+            }
             location.href=`#/level/${info.nextName}`;//eslint-disable-line
         }else{//打通了全部
             //提示通关了
@@ -118,8 +129,7 @@ class Tops extends Component{
                         location.href='#/main';//eslint-disable-line
                     });
                 else location.href='#/main';//eslint-disable-line
-            });            
-            
+            });
         }
     }
     open(blocks,method,total,each,cb){

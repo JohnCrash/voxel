@@ -55,6 +55,13 @@ class Main extends Component{
         }catch(e){
             cls = 0;
         }
+        let lvideo;
+        if(this.props.location && this.props.location.pathname){
+            let m = this.props.location.pathname.match(/\/main\/(\d*)/);
+            if(m && m[1]){
+                lvideo = m[1];
+            }
+        }
         return <div><AppBar 
             title={this.state.title}
             style={appbarStyle}
@@ -63,6 +70,7 @@ class Main extends Component{
         <LevelSel key='levelselect' index='main' current={Global.getMaxPassLevel()} 
             other={Global.getLoginJson()? Global.getLoginJson().cls:null} 
             lvs={Global.getLoginJson()? Global.getLoginJson().lvs:null} 
+            lvideo={lvideo}
             unlock={Global.getMaxUnlockLevel()}
             ref={r=>{this.levelSel=r}}/>
         {cls!==0?<FloatButton src={'scene/image/tops.png'} onClick={this.onTops} style={{width:'36px',zIndex:'1500'}}/>:undefined}

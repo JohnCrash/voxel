@@ -33,7 +33,6 @@ import PropTypes from 'prop-types';
 import { setTimeout } from 'timers';
 import md from './mdtemplate';
 import Unlock from './unlock';
-import LevelVideo from './levelvideo';
 
 console.info('Import Level...');
 /*global Blockly*/
@@ -81,10 +80,7 @@ class Level extends Component{
             blocklytoolbox:toolboxMode, //展开blockly工具条
             switchSize:false,
             uiStyle:Global.getUIStyle(),
-            uiColor:'#000000',
-            openVideo:false,
-            videoSrc:'',
-            videoPoster:''
+            uiColor:'#000000'
         }
     }
     componentDidMount(){
@@ -282,21 +278,6 @@ class Level extends Component{
     }
     onGameStart(props){
         if(!this.voxview)return;
-        /**
-         * 关卡前的视频
-         */
-        try{
-            let info = Global.appGetLevelInfo(props.level);
-            let levelJson = Global.levelJson();
-            if(info && levelJson && levelJson.movie[info.next-1]){
-                let video = levelJson.movie[info.next-1];
-                let poster = video.substring(0,video.length-4)+".png";
-                this.openVideo(video,poster);
-            }    
-        }catch(e){
-            console.log(e);
-        }
-
         this._isrunning = false;
         this._isgameover = false;
         //加载voxview的时候uiColor必须为白色
@@ -656,12 +637,7 @@ class Level extends Component{
                 },'tips');
         });
     }
-    onVideoEnded = (b)=>{
-        this.setState({openVideo:false});
-    }
-    openVideo(src,poster){
-        this.setState({openVideo:true,videoSrc:src,videoPoster:poster});
-    }
+
     toolbarEle(portrait){
         let {uiColor,playPause,curSelectTest,isDebug} = this.state;   
         let tests = [];
@@ -724,7 +700,7 @@ class Level extends Component{
     //横屏
     landscape(){
         let {uiColor,uiStyle,playPause,levelDesc,curSelectTest,
-            openTops,blocklytoolbox,switchSize,openVideo,videoSrc,videoPoster} = this.state;
+            openTops,blocklytoolbox,switchSize} = this.state;
         let {level} = this.props;
         let divStyle = Global.getPlatfrom()==='ios'?{position:"fixed",left:'0px',right:'0px',top:'0px',bottom:'0px'}:undefined;
         return <div>
@@ -751,7 +727,6 @@ class Level extends Component{
             <MainDrawer ref={ref=>this.drawer=ref}/>
             <Tops ref={ref=>this.Tops=ref} level={level}/>
             <Unlock ref={ref=>this.unlock=ref} />
-            <LevelVideo open={openVideo} src={videoSrc} poster={videoPoster} onEnded={this.onVideoEnded.bind(this)} />
         </div>;
     }
     switchSize(){
@@ -774,7 +749,7 @@ class Level extends Component{
     //竖屏
     portrait(){
         let {uiColor,uiStyle,playPause,levelDesc,curSelectTest,
-            openTops,blocklytoolbox,switchSize,openVideo,videoSrc,videoPoster} = this.state;
+            openTops,blocklytoolbox,switchSize} = this.state;
         let {level} = this.props;
         //ios关闭滚动
         let divStyle = Global.getPlatfrom()==='ios'?{position:"fixed",left:'0px',right:'0px',top:'0px',bottom:'0px'}:undefined;
@@ -817,7 +792,6 @@ class Level extends Component{
             <MainDrawer ref={ref=>this.drawer=ref}/>
             <Tops ref={ref=>this.Tops=ref} level={level}/>
             <Unlock ref={ref=>this.unlock=ref} />
-            <LevelVideo open={openVideo} src={videoSrc} poster={videoPoster} onEnded={this.onVideoEnded.bind(this)}/>
         </div>;
     }
     render(){

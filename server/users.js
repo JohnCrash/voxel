@@ -402,21 +402,29 @@ function responeseLogin(req,res){
       reCrown(req,crown);
       //记录动作
       sqlAction(uid,cls,'login '+platform);
-      res.json({
-        result:'ok',
-        lv,
-        olv,
-        config,
-        user:stripTailSpace(UserName),
-        uid,
-        cookie,
-        clsid:cls,
-        cls:clss,
-        lvs,
-        crown,
-        trashlv,
-        trash
-      });        
+      //将关卡的视频配置插入到这里
+      sql('select * from LevelVideo').then((R)=>{
+        let levelvideo;
+        if(R)levelvideo = R.recordset;
+        res.json({
+          result:'ok',
+          lv,
+          olv,
+          config,
+          user:stripTailSpace(UserName),
+          uid,
+          cookie,
+          clsid:cls,
+          cls:clss,
+          lvs,
+          crown,
+          trashlv,
+          trash,
+          levelvideo
+        });
+      }).catch((err)=>{
+        res.json({result:''});
+      });
     }).catch((err)=>{
       res.json({result:err});
     });
