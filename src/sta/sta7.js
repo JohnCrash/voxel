@@ -20,7 +20,7 @@ require("whatwg-fetch");
             }
           ];  
  */
-class Sta1 extends Component{
+class Sta7 extends Component{
     constructor(props){
         super(props);
         this.state = {
@@ -66,8 +66,8 @@ class Sta1 extends Component{
           if(e){
             let key = e[2]+'-'+e[3];
             m[key] = m[key] || [];
-            if(o.lv===+o.lv && o.lv <= 60 && o.tms){
-              m[key].push({x:o.lv,y:o.tms/1000});
+            if(o.lv===+o.lv && o.lv <= 60 && o.avg){
+              m[key].push({x:o.lv,y:o.avg/1000});
             }  
           }
         }
@@ -102,12 +102,12 @@ class Sta1 extends Component{
           width: 1024,
           height: 768
         }}
-        title="关卡总用时分布"
-        yAxisLabel="总用时(s)"
-        xAxisLabel="关卡"
+        title="日活跃"
+        yAxisLabel="人数"
+        xAxisLabel="日期"
         gridHorizontal={true}
       />;
     }
 };
 
-export default Sta1;
+export default Sta7;

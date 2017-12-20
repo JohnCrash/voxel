@@ -76,6 +76,7 @@ class Sta1 extends Component{
       let data = [];
       for(let k in m){
         if(m[k] && m[k].length>0){
+          m[k].sort(function(a,b){return a.x-b.x});
           data.push({
             name : k,
             values : m[k]
@@ -101,8 +102,8 @@ class Sta1 extends Component{
           width: 1024,
           height: 768
         }}
-        title="人数分布"
-        yAxisLabel="人数"
+        title="关卡平均用时分布"
+        yAxisLabel="平均用时(s)"
         xAxisLabel="关卡"
         gridHorizontal={true}
       />;

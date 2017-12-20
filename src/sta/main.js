@@ -9,6 +9,9 @@ import Sta1 from './sta1';
 import Sta2 from './sta2';
 import Sta3 from './sta3';
 import Sta4 from './sta4';
+import Sta5 from './sta5';
+import Sta6 from './sta6';
+import Sta7 from './sta7';
 
 class Main extends Component{
     constructor(props){
@@ -44,6 +47,9 @@ class Main extends Component{
             case 2:Sta = <Sta2 />;break;
             case 3:Sta = <Sta3 />;break;
             case 4:Sta = <Sta4 />;break;
+            case 5:Sta = <Sta5 />;break;
+            case 6:Sta = <Sta6 />;break;
+            case 7:Sta = <Sta7 />;break;            
         }
         return <div><AppBar title="乐学编程用户统计"
             onLeftIconButtonTouchTap={this.onMenu.bind(this)}></AppBar>
@@ -56,9 +62,12 @@ class Main extends Component{
             >
             <Menu>
                 <MenuItem primaryText="关卡人数分布图-0" checked={this.state.sta===1} onClick={this.onChange.bind(this,1)}/>
-                <MenuItem primaryText="关卡人数分布图" checked={this.state.sta!==1} onClick={this.onChange.bind(this,2)}/>
-                <MenuItem primaryText="关卡用时分布图" checked={this.state.sta!==1} onClick={this.onChange.bind(this,3)}/>
-                <MenuItem primaryText="关卡总用时分布图" checked={this.state.sta!==1} onClick={this.onChange.bind(this,4)}/>
+                <MenuItem primaryText="关卡人数分布图" checked={this.state.sta!==2} onClick={this.onChange.bind(this,2)}/>
+                <MenuItem primaryText="关卡用时分布图" checked={this.state.sta!==3} onClick={this.onChange.bind(this,3)}/>
+                <MenuItem primaryText="关卡总用时分布图" checked={this.state.sta!==4} onClick={this.onChange.bind(this,4)}/>
+                <MenuItem primaryText="登录活跃" checked={this.state.sta!==5} onClick={this.onChange.bind(this,5)}/>
+                <MenuItem primaryText="通关活跃" checked={this.state.sta!==6} onClick={this.onChange.bind(this,6)}/>
+                <MenuItem primaryText="日活" checked={this.state.sta!==7} onClick={this.onChange.bind(this,7)}/>
             </Menu>
         </Popover>
         {Sta}

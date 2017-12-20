@@ -1,7 +1,7 @@
 var config = require('../config');
 const Sql = require('mssql');
 
-var lastDay = 0;
+var lastDay = -1;
 
 const SQL = Sql.connect(config.sqlserver);
 function sql(query){
@@ -79,7 +79,6 @@ function doStaLvt(){
     });    
 }
 
-doStaLvt();
 /**
  * 启动一个周期进程用来从分析数据
  * 一分钟比较轮询一次，到晚上23:58开始统计

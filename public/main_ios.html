@@ -16,7 +16,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 		-webkit-user-select: none;		
       }
     </style> 
-	<script src="libs/vconsole.min.js"></script>
+	<script src="http://fileoss.lejiaolexue.com/upgrade/luaapp/voxel/libs/vconsole.min.js"></script>
 	<script>
 		var _enconcount = 0;
 		function enableConsole(){
@@ -35,7 +35,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   </head>
   <body>
 	<div id="loading" style="position:absolute;left:0;right:0;top:0;bottom:0;align-items:center;display:flex;flex-direction:column;justify-content:center" >
-	<img src="scene/game_launch.png" style="width:90%;max-width:768px"  onclick="enableConsole();" />		   
+	<img src="http://fileoss.lejiaolexue.com/upgrade/luaapp/voxel/game_launch.png" style="width:90%;max-width:768px"  onclick="enableConsole();" />		   
 		<div font-size="large">正在加载</div>
 <svg width="300" height="16" viewBox="0 0 300 16">
 <rect x="0" y="0" width="300" height="16" stroke="black" fill="gray" fill-opacity="0.2" stroke-width="4" stroke-opacity="0.6" rx="2" ry="2"/>
@@ -60,7 +60,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 			var head = document.getElementsByTagName('head')[0];
 			var script = document.createElement('script');
             script.type = 'text/javascript';
-            script.src = js;
+            script.src = "http://fileoss.lejiaolexue.com/upgrade/luaapp/voxel/"+js;
 			script.onload=function(){cb();}
 			script.onreadystatechange=function(){
 				if(this.readyState==='complete')cb();
@@ -68,7 +68,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 			head.appendChild(script);
 			console.log('load '+js);
 		}
-		var jss = ['libs/three.min.js','libs/SPE.min.js','libs/stats.min.js','libs/dat.gui.min.js','libs/libunrar.js','blockly/blockly_compressed.js','blockly/blocks_compressed.js','blockly/javascript_compressed.js','blockly/msg/js/zh-hans.js','blockly/acorn.js','blockly/interpreter.js','app_compress.js',];
+		var jss = ['libs/three.min.js','libs/SPE.min.js','libs/stats.min.js','libs/dat.gui.min.js','libs/libunrar.js','blockly/blockly_compressed.js','blockly/blocks_compressed.js','blockly/javascript_compressed.js','blockly/msg/js/zh-hans.js','blockly/acorn.js','blockly/interpreter.js','libs/app_compress000.js',];
 		var i = 0;var s = 0;
 		window.closeLoadingUI = function(){
 			console.log('close loading ui.');

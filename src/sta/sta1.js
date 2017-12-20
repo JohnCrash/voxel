@@ -77,6 +77,7 @@ class Sta1 extends Component{
       let data = [];
       for(let k in m){
         if(m[k] && m[k].length>0){
+          m[k].sort(function(a,b){return a.x-b.x});
           data.push({
             name : k,
             values : m[k]
