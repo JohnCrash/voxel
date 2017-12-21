@@ -2,6 +2,8 @@ import {postJson,fetchJson} from './vox/fetch';
 import log from './vox/log';
 import EventEmitter from 'events';
 import {MessageBox} from './ui/MessageBox';
+import MarkdownElement from './ui/MarkdownElement';
+import {TextManager} from './ui/TextManager';
 import React, {Component} from 'react';
 import {AudioManager} from './vox/audiomanager';
 /*global closeLoadingUI,loadingProgressBar*/
@@ -601,15 +603,18 @@ class _Global_ extends EventEmitter{
     }
     notSupportWebGL(){    
         if(!this._reportDone){
-            postJson('/users/report',{errmsg:'NotSupportWebGL',platform:this._platform},(json)=>{
+            postJson('/users/report',{errmsg:'NotSupportWebGL',uid:this.getUID(),platform:this._platform},(json)=>{
                 if(json.result==='ok'){
                     this._reportDone = true;
                 }
             });
         }
-        MessageBox.show('ok','错误',<span>抱歉系统的版本过低，<b>乐学编程</b>无法运行.</span>,(result)=>{
-            if(window.ljAppObject)window.ljAppObject.back();
-        });      
+        TextManager.load('scene/ui/notgl.md',(iserr,text)=>{
+            if(!iserr)
+                MessageBox.show('ok',undefined,<MarkdownElement text={text}/>,(result)=>{
+                    if(window.ljAppObject)window.ljAppObject.back();
+                }); 
+        });
     }
     regAppTitle(cb){
         this._appTitle = cb;
@@ -668,7 +673,7 @@ class _Global_ extends EventEmitter{
             this._loginJson.trash = method;
         }
         postJson('/users/trash',{
-            lv,method
+            lv,method,uid:this.getUID()
         },(json)=>{
             console.log(json);
         });

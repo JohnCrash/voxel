@@ -11,6 +11,17 @@ const styles = {
   },
 };
 
+/**
+ * 将字符串s中的<img src=""/>中的src加上cdndomain
+ */
+function filter(s){
+  if(window.cdndomain && s){
+    return s.replace(/<img src="(.*?)"/g,($0,$1)=>{
+      return '<img src="'+window.cdndomain+$1+'"';
+    });
+  }else return s;
+}
+
 class MarkdownElement extends Component {
 
   static propTypes = {
@@ -71,7 +82,7 @@ class MarkdownElement extends Component {
       <div
         style={Object.assign({}, styles.root, style)}
         className="markdown-body"
-        dangerouslySetInnerHTML={{__html: marked(this.state.text)}}
+        dangerouslySetInnerHTML={{__html: filter(marked(this.state.text))}}
       />
     );
     /* eslint-enable */

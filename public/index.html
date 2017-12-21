@@ -43,7 +43,18 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 			window.vConsole = new VConsole();
 		//}
 		window.platfrom = 'windows';
+		window.cdndomain = 'http://fileoss.lejiaolexue.com/upgrade/luaapp/voxel/';
 		window.LOCALHOST = true;
+		function firstrequest(){
+			var h = new XMLHttpRequest();
+			if(h){
+				window.entryrandom = Math.floor(Math.random() * 100000000000);
+				h.open('GET','/users/entry?q='+window.entryrandom,true);
+				h.setRequestHeader("body",window.entryrandom);
+				h.send();
+			}
+		}
+		firstrequest();
 	</script>
   </body>
 </html>

@@ -50,7 +50,7 @@ class CrownTops extends Component{
     show(){
         Global.push(this.handleOk);
         //MessageBox.showLoading('LOADING...');
-        postJson('/users/crowns',{},(json)=>{
+        postJson('/users/crowns',{uid:Global.getUID()},(json)=>{
             //MessageBox.closeLoading();
             console.log(json);
             if(json.result==='ok'){

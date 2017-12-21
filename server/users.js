@@ -162,6 +162,17 @@ router.post('/stalvt',function(req,res){
 });
 
 /**
+ * 启动程序，在login之前
+ */
+router.get('/entry',function(req,res){
+  let randstr = req.query['q'];
+  if(randstr){
+    sqlAction(-1,-1,randstr);
+  }
+  res.send('ok');
+});
+
+/**
  * cookie => UserInfo
  */
 router.use(function(req,res,next){
@@ -173,7 +184,24 @@ router.use(function(req,res,next){
   }else{
     cookie = "sc1="+req.cookies.sc1;
   }
-  if(cookie){
+  let uid = req.body.uid;
+  if(uid){ //uid 是一个整数查询更快捷
+    sql(`select * from UserInfo where uid='${uid}'`).then((result)=>{
+      req.UserInfo = result.recordset[0];
+      if(req.UserInfo){
+        next();
+      }else{
+        /**
+         * FIXBUG : 如果二次登录cookie会发生改变，被踢掉的用户将不能继续提交
+         */
+        if(req.url!=='/login')
+          throw '你的帐号在其他设备上登录，请重新登录游戏。';
+        next();
+      }
+    }).catch((err)=>{
+      resError(res,err);
+    });
+  }else if(cookie){
     sql(`select * from UserInfo where cookie='${cookie}'`).then((result)=>{
       req.UserInfo = result.recordset[0];
       if(req.UserInfo){
@@ -253,7 +281,6 @@ function initCrown(){
 /**
  * 重新计算皇冠数量crown
  * crown 是新的皇冠数，老的皇冠数量放在req.UserInfo.crown中
- * 
  */
 function reCrown(req,crown){
   let oldcrown = req.UserInfo.crown;
@@ -398,9 +425,10 @@ function responeseLogin(req,res){
         }
       }
       let platform = req.body.platform;
-      
+      let entryrandom = req.body.entryrandom;
       reCrown(req,crown);
       //记录动作
+      if(entryrandom)sqlAction(uid,cls,'e'+entryrandom); //将进入和登录结合起来，侦测点击到登录的人数差
       sqlAction(uid,cls,'login '+platform);
       //将关卡的视频配置插入到这里
       sql('select * from LevelVideo').then((R)=>{

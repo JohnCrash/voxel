@@ -38,7 +38,8 @@ class Login extends Component{
             Global.setUserInfo(uid,uname,cookie);
         }
         let data={uid,uname,cookie,
-            platform:Global.getPlatfrom()};
+            platform:Global.getPlatfrom(),
+            entryrandom:window.entryrandom};
         fetch('/users/login',{method:'POST',
         credentials: 'same-origin',
         headers: {'Content-Type': 'application/json'},
