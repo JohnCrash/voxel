@@ -185,6 +185,17 @@ router.get('/entry',function(req,res){
 });
 
 /**
+ * User gps position
+ */
+router.get('/postpos',function(req,res){
+  let {uid,latitude,longitude,timestamp} = req.body;
+  if(uid){
+    sql(`insert into UserPos (uid,latitude,longitude,timestamp) values (${uid},${latitude},${longitude},${timestamp})`);
+  }
+  res.send('ok');
+});
+
+/**
  * cookie => UserInfo
  */
 router.use(function(req,res,next){

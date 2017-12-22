@@ -75,6 +75,9 @@ class Sta5 extends Component{
       let data = [];
       console.log("===========au=============");
       console.log(au);
+      for(let i of au){
+        data.push({x});
+      }
       this.setState({lineData:[]});
     }
     render(){
