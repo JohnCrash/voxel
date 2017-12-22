@@ -664,11 +664,20 @@ function initItemBlockly(_this){
 							return true;
 						}
 					}
-				//	pt.z = item.position.z+7.9;
-				//	ar = item.sceneManager.ptItem(pt);
-				//	for(i=0;i<ar.length;i++){
-				//		if(ar[i].ground){return true;}
-				//	}
+					pt.z = item.position.z-1;
+					ar = item.sceneManager.ptItem(pt);
+					for(i=0;i<ar.length;i++){ //确保有落差
+						if(ar[i].ground){
+							return false;
+						}
+					}
+					for(z = 2;z < 15;z++){ //确保落差小于15
+						pt.z = item.position.z-z;
+						ar = item.sceneManager.ptItem(pt);
+						for(i=0;i<ar.length;i++){
+							if(ar[i].ground)return true;
+						}
+					}
 				}
 				break;
 			case 'cliff':

@@ -20,7 +20,7 @@ export default function zh(){
     Blockly.Msg["DIAMOND"] = "钻石";    
     Blockly.Msg["BOX"] = "宝箱";
     Blockly.Msg["STON"] = "石头";
-    Blockly.Msg["LADDER"] = "楼梯";
+    Blockly.Msg["LADDER"] = "台阶";
     Blockly.Msg["CLIFF"] = "悬崖";
     Blockly.Msg["WALL"] = "墙壁";
     Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_UNTIL"] = "Until";

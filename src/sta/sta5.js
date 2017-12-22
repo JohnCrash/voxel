@@ -39,10 +39,11 @@ class Sta5 extends Component{
        *  count : 99}
        * ]
        */
-      fetch('/users/stalvt',{method:'POST',
+      let b = {dd:7};
+      fetch('/users/stalau',{method:'POST',
       credentials: 'same-origin',
       headers: {'Content-Type': 'application/json'},
-      body :''})
+      body :JSON.stringify(b)})
       .then((response)=>{
         return response.json();
       })
@@ -57,36 +58,24 @@ class Sta5 extends Component{
     componentWillUnmount(){
 
     }
-    initData(stalv){
+    /**
+     * au
+     * {
+     *  date    : 日期
+     *  login   : 登录
+     *  submit  : 提交
+     *  click   : 点击数量
+     *  slogin  : 不重复登录
+     *  ssubmit : 不重复提交
+     *  type    : 0小时，1天
+     * }
+     */
+    initData(au){
       let m = {};
-      console.log(stalv);
-      for(let o of stalv){
-        if(typeof o.date === 'string'){
-          let e = o.date.match(/(\d+)-(\d+)-(\d+).*/);
-          if(e){
-            let key = e[2]+'-'+e[3];
-            m[key] = m[key] || [];
-            if(o.lv===+o.lv && o.lv <= 60 && o.avg){
-              m[key].push({x:o.lv,y:o.avg/1000});
-            }  
-          }
-        }
-      }
-      console.log(m);
       let data = [];
-      for(let k in m){
-        if(m[k] && m[k].length>0){
-          m[k].sort(function(a,b){return a.x-b.x});
-          data.push({
-            name : k,
-            values : m[k]
-          });  
-        }
-      }
-      console.log(data);
-      data.reverse();
-      console.log(data);
-      this.setState({lineData:data});
+      console.log("===========au=============");
+      console.log(au);
+      this.setState({lineData:[]});
     }
     render(){
         let {lineData} = this.state;
