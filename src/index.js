@@ -22,14 +22,6 @@ console.log('Game Start...');
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
 
-console.log(navigator);
-if(navigator.geolocation){
-    console.log(navigator.geolocation.getCurrentPosition((pos)=>{
-        console.log('YOUR POSITION:');
-        console.log(pos);
-    }));
-}
-
 let root = document.getElementById('root');
 //禁止浏览器选择
 document.onselectstart = ()=>{return false};

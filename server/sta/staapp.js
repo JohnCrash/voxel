@@ -1,8 +1,11 @@
-var config = require('../config');
+var config = require('../config2');
 const Sql = require('mssql');
 
 var lastDay = -1;
-var lastMin = -1;
+var lastHours = -1;
+
+//较大的查询需要更长的时间传输
+config.sqlserver.connectionTimeout = 150000;
 
 const SQL = Sql.connect(config.sqlserver);
 function sql(query){
@@ -80,6 +83,10 @@ function doStaLvt(){
     });    
 }
 
+//返回一个sql日期 '2017-12-09 00:00:00'
+function sqlDateString(d){
+    return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
+}
 /**
  * 活跃统计
  */
@@ -138,14 +145,14 @@ function doStaAU(){
                     //成功完成全部任务,更新时间起点
                     sql(`select * from StaStreamProgress`).then((result)=>{
                         if(result && result.recordset && result.recordset.length===1){
-                            sql(`update StaStreamProgress set pos='${enddate.toLocaleString()}' where id=${result.recordset[0].id}`).then(()=>{
+                            sql(`update StaStreamProgress set pos='${sqlDateString(enddate)}' where id=${result.recordset[0].id}`).then(()=>{
                                 console.info('update to : ',enddate.toLocaleString());
                                 console.info('doStaAU update SUCCESS');
                             }).catch((err)=>{
                                 console.error(err);
                             });
                         }else{
-                            sql(`insert into StaStreamProgress (pos) values ('${enddate.toLocaleString()}')`).then(()=>{
+                            sql(`insert into StaStreamProgress (pos) values ('${sqlDateString(enddate)}')`).then(()=>{
                                 console.info('first update to : ',enddate.toLocaleString());
                                 console.info('doStaAU first update SUCCESS');
                             }).catch((err)=>{
@@ -157,6 +164,14 @@ function doStaAU(){
                     });
                 }else{
                     //任务失败,删除本次操作的数据
+                    console.log('doStaAU FAILED!');
+                    let qstr = `delete from StaAU where date<'${sqlDateString(enddate)}' and date>'${sqlDateString(begindate)}'`;
+                    console.log(qstr);
+                    sql(qstr).then(()=>{
+                        console.log('delete success');
+                    }).catch((err)=>{
+                        console.log(err);
+                    });
                 }
             }
             function doseg(date,seg){ //处理小时片断流,seg是一个数组
@@ -197,9 +212,11 @@ function doStaAU(){
             }
             for(let c = begindate;c<=enddate;c.setHours(c.getHours()+1)){
                 total++;
-
-                let qstr = `select * from UserStream where datediff(hh,date,'${c.toLocaleString()}')=0`;
-                let dateStr = c.toLocaleString();
+                /**
+                 * 数据可能很多，使用分钟进行分割
+                 */
+                let qstr = `select * from UserStream where datediff(hh,date,'${sqlDateString(c)}')=0`;
+                let dateStr = sqlDateString(c);
                 sql(qstr).then((seg)=>{
                     doone++;
                     doseg(dateStr,seg.recordset);
@@ -238,8 +255,8 @@ setInterval(function(){
         lastDay = t.getDay();
     }
     //每小时执行一次
-    if(t.getMinutes()===1 && t.getMinutes() !== lastMin){
+    if(t.getMinutes()===1 && t.getHours() !== lastHours){
         doStaAU();
-        lastMin = t.getMinutes();
+        lastHours = t.getHours();
     }
 },50*1000);

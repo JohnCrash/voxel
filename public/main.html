@@ -13,7 +13,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
         overflow: hidden;
       }
     </style>
-	<script src="http://fileoss.lejiaolexue.com/upgrade/luaapp/voxel/libs/vconsole.min.js"></script>
+	<script src="http://fileoss.ljlx.com/upgrade/luaapp/voxel/libs/vconsole.min.js"></script>
 	<script>
 		var _enconcount = 0;
 		function enableConsole(){
@@ -32,7 +32,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   </head>
   <body>
 	<div id="loading" style="position:absolute;left:0;right:0;top:0;bottom:0;align-items:center;display:flex;flex-direction:column;justify-content:center" >
-		<img src="http://fileoss.lejiaolexue.com/upgrade/luaapp/voxel/game_launch.png" style="width:90%;max-width:768px"  onclick="enableConsole();" />		   
+		<img src="http://fileoss.ljlx.com/upgrade/luaapp/voxel/game_launch.png" style="width:90%;max-width:768px"  onclick="enableConsole();" />		   
 		<div font-size="large">正在加载</div>
 <svg width="300" height="16" viewBox="0 0 300 16">
 <rect x="0" y="0" width="300" height="16" stroke="black" fill="gray" fill-opacity="0.2" stroke-width="4" stroke-opacity="0.6" rx="2" ry="2"/>
@@ -43,7 +43,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 	<div id="root"></div>
 	<script>
 		window.platfrom = 'windows';
-		window.cdndomain = 'http://fileoss.lejiaolexue.com/upgrade/luaapp/voxel/';
+		window.cdndomain = 'http://fileoss.ljlx.com/upgrade/luaapp/voxel/';
 		if(localStorage.isdebug==='true'){
 			try{window.vConsole = new VConsole();}catch(e){console.log(e);}
 		}		
@@ -66,7 +66,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 			head.appendChild(script);
 			console.log('load '+js);
 		}
-		var jss = ['libs/three.min.js','libs/SPE.min.js','libs/stats.min.js','libs/dat.gui.min.js','libs/libunrar.js','blockly/blockly_compressed.js','blockly/blocks_compressed.js','blockly/javascript_compressed.js','blockly/msg/js/zh-hans.js','blockly/acorn.js','blockly/interpreter.js','libs/app_compress001.js',];
+		var jss = ['libs/three.min.js','libs/SPE.min.js','libs/stats.min.js','libs/dat.gui.min.js','libs/libunrar.js','blockly/blockly_compressed.js','blockly/blocks_compressed.js','blockly/javascript_compressed.js','blockly/msg/js/zh-hans.js','blockly/acorn.js','blockly/interpreter.js','libs/app_compress.js',];
 		var i = 0;var s = 0;
 		window.closeLoadingUI = function(){
 			console.log('close loading ui.');
@@ -92,7 +92,10 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 		  window.applicationCache.addEventListener('updateready', function(e) {
 			if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
 				window.isupdated = 'done';
-				window.location.reload();
+				if(window.onnewversion)
+					window.onnewversion();
+				else
+					window.location.reload();
 			}
 		  }, false);
 		}, false);

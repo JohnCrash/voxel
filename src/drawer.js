@@ -279,6 +279,7 @@ class MainDrawer extends Component{
             {this.props.loc==="game"?<MenuItem primaryText="任务提示" leftIcon={<IconTips />} style={BlodStyle} onClick={this.onTip}/>:undefined}
             <MenuItem primaryText="操作帮助" leftIcon={<HelpIcon />} style={BlodStyle} onClick={this.onHelp}/> 
             <MenuItem primaryText="制作团队" leftIcon={<IconAbout />} style={BlodStyle} onClick={this.onAbout}/> 
+            <div style={{margin:16}}>版本:{Global.version}</div> 
             {openDebug?<MenuItem primaryText="DEBUG..." leftIcon={<IconDebug />} onClick={(event)=>{
                 window.location = `http://192.168.2.83:3001/#/login/${Global.getUID()}/${Global.getUserName()}/${Global.getCookie()}`
             }}/>:undefined}

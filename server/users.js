@@ -187,12 +187,16 @@ router.get('/entry',function(req,res){
 /**
  * User gps position
  */
-router.get('/postpos',function(req,res){
+router.post('/postpos',function(req,res){
   let {uid,latitude,longitude,timestamp} = req.body;
   if(uid){
-    sql(`insert into UserPos (uid,latitude,longitude,timestamp) values (${uid},${latitude},${longitude},${timestamp})`);
+    let q = `insert into UserPos (uid,latitude,longitude,date) values (${uid},${latitude},${longitude},getdate())`;
+    sql(q).then(()=>{
+    }).catch((err)=>{
+      console.error(err);
+    });
   }
-  res.send('ok');
+  res.json({result:'ok'});
 });
 
 /**
@@ -595,6 +599,31 @@ function tops(req,res){
 /**
  * 提交成绩，返回排名情况
  */
+const best={
+  '1':3,
+  '2':3,
+  '3':6,
+  '4':9,
+  '5':9,
+  '6':5,
+  '7':8,
+  '8':5,
+  '9':14,
+  '10':9,
+  '11':9,
+  '12':6,
+  '13':5,
+  '14':9,
+  '15':9,
+  '16':7,
+  '17':12,
+  '18':14,
+  '19':8,
+  '20':13,
+  '21':5,
+  '22':9,
+  '23':10
+};
 router.post('/commit',function(req,res){
   let lv = req.body.lv;
   let method = req.body.method;
@@ -655,6 +684,10 @@ router.post('/commit',function(req,res){
       if(rank===1){
         //新提交的成绩是第一名，需要更新,这样同班同学马上就能看到
         reCrown(req,req.UserInfo.crown+1);
+      }
+      if(best[lv] && best[lv]>blocks){
+        //这里是卡BUG出来的结果，不操作Tops表
+        return sql(`select * from Tops where lv=${lv}`);
       }
       if(data.length<5 && !hasblock){//插入新的
         return sql(`insert into Tops (lname,lv,blocks,count) values ('${lname}',${lv},${blocks},1)`);

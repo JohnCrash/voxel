@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "用来载入.vox并渲染的库",
   "main": "index.js",
+  "HOST": "code.app.ljlx.com",
   "proxy": {
     "/": {
       "target": "http://localhost:3000"

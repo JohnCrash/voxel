@@ -65,9 +65,9 @@ class Main extends Component{
                 <MenuItem primaryText="关卡人数分布图" checked={this.state.sta===2} onClick={this.onChange.bind(this,2)}/>
                 <MenuItem primaryText="关卡用时分布图" checked={this.state.sta===3} onClick={this.onChange.bind(this,3)}/>
                 <MenuItem primaryText="关卡总用时分布图" checked={this.state.sta===4} onClick={this.onChange.bind(this,4)}/>
-                <MenuItem primaryText="登录活跃" checked={this.state.sta===5} onClick={this.onChange.bind(this,5)}/>
-                <MenuItem primaryText="通关活跃" checked={this.state.sta===6} onClick={this.onChange.bind(this,6)}/>
-                <MenuItem primaryText="日活" checked={this.state.sta===7} onClick={this.onChange.bind(this,7)}/>
+                <MenuItem primaryText="活跃" checked={this.state.sta===5} onClick={this.onChange.bind(this,5)}/>
+                <MenuItem primaryText="日活" checked={this.state.sta===6} onClick={this.onChange.bind(this,6)}/>
+                <MenuItem primaryText="留存" checked={this.state.sta===7} onClick={this.onChange.bind(this,7)}/>
             </Menu>
         </Popover>
         {Sta}

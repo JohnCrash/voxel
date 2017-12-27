@@ -17,7 +17,7 @@ export default function zh(){
     Blockly.Msg["FORWARD_IS"] = "前面是";
     Blockly.Msg["BARRIER"] = "障碍";
     Blockly.Msg["FLAG"] = "旗子";
-    Blockly.Msg["DIAMOND"] = "钻石";    
+    Blockly.Msg["DIAMOND"] = "宝石";    
     Blockly.Msg["BOX"] = "宝箱";
     Blockly.Msg["STON"] = "石头";
     Blockly.Msg["LADDER"] = "台阶";

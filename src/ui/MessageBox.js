@@ -40,12 +40,16 @@ class MessageBox extends Component{
         Global.push(MessageBox.globalNode.handleClose.bind(MessageBox.globalNode));
         BlocklyInterface.pause();
         if(!style){
-            if(Global.getPlatfrom()!=='windows')
+            let r = 9/16;
+            try{
+                r = window.innerWidth / window.innerHeight;
+            }catch(e){}
+            if(r<3/4)
                 style = {width:"95%"};
         }else{
             if(style==='tips'||style==='tips_again'){
                 if(style==='tips_again')type = 'again';
-                style = {width:"100%",maxWidth:"100%",top:"0px",position:"fixed",transform:""};
+                style = {width:"100%",maxWidth:"100%",maxHeight:"100%",bottom:"0px",top:"0px",position:"fixed",transform:""};
                 //点击内容也可以退出
                 content = <div onClick={(event)=>{
                     //MessageBox.globalNode.setState({open: false,type:'',title:'',content:''});
@@ -71,6 +75,10 @@ class MessageBox extends Component{
         setTimeout(function() {
             MessageBox.globalNode.setState({openLoading: false});
         },1);
+    }
+    static close(){
+        if(MessageBox.globalNode)
+            MessageBox.globalNode.handleClose();
     }
     handleClose(result){
         Global.pop();
@@ -144,6 +152,16 @@ class MessageBox extends Component{
                     label="下一关"
                     primary={true}
                     onClick={this.handleClose.bind(this,'next')}/>];
+                break;
+            case 'check':
+                actions = [<FlatButton
+                    label="以后不再显示"
+                    secondary={true}
+                    onClick={this.handleClose.bind(this,'noagain')}/>,
+                <FlatButton
+                    label="确定"
+                    primary={true}
+                    onClick={this.handleClose.bind(this,'ok')}/>];
                 break;
             case 'ok':
                 actions = [<FlatButton

@@ -10,6 +10,9 @@ import {
 import MainDrawer from './drawer';
 import FloatButton from './ui/floatbutton';
 import CrownTops from './crowntops';
+import MarkdownElement from './ui/MarkdownElement';
+import {MessageBox} from './ui/MessageBox';
+import {TextManager} from './ui/TextManager';
 
 console.info('Import Main...');
 class Main extends Component{
@@ -29,6 +32,15 @@ class Main extends Component{
     }
     componentDidMount(){
         document.title = "乐学编程";
+        //出一个介绍对话栏
+        if(!localStorage.guid0)
+        TextManager.load("scene/ui/guid0.md",(iserr,text)=>{
+            if(!iserr)
+                MessageBox.show('check',undefined,<MarkdownElement text={text}/>,
+                (result)=>{
+                    if(result==='noagain')localStorage.guid0 = true;
+                });
+        });    
     }
     onMenu(event){
         event.preventDefault();

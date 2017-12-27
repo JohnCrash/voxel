@@ -3,6 +3,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import {MessageBox} from './ui/MessageBox';
+import {postJson} from './vox/fetch';
 import 'whatwg-fetch';
 import {Global} from './global';
 import MarkdownElement from './ui/MarkdownElement';
@@ -101,6 +102,28 @@ class Login extends Component{
         }.bind(this)).catch(function(e){
             this.setState({exitButton:true,msg:e.toString()});
         }.bind(this));
+        /**
+         * GPS
+         */
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition((pos)=>{
+                console.log('YOUR POSITION:');
+                console.log(pos);
+                if(pos){
+                    let {latitude,longitude} = pos.coords;
+                    let gps = {uid,latitude,longitude};
+                    console.log(gps);
+                    postJson('/users/postpos',gps,(json)=>{
+                        if(json && json.result==='ok')
+                            console.log('GPS OK.');
+                        else
+                            console.log('GPS Failed.');
+                    });    
+                }
+            });
+        }else{
+            console.log("NOT GPS");
+        }        
     }
     ljinit(){
         ljshell.init((b,e)=>{

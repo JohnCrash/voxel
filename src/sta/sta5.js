@@ -72,13 +72,31 @@ class Sta5 extends Component{
      */
     initData(au){
       let m = {};
-      let data = [];
+      let login = [];
+      let submit = [];
+      let click = [];
       console.log("===========au=============");
       console.log(au);
       for(let i of au){
-        data.push({x});
+        login.push({x:new Date(i.date),y:i.login});
       }
-      this.setState({lineData:[]});
+      for(let i of au){
+        submit.push({x:new Date(i.date),y:i.submit});
+      }
+      for(let i of au){
+        click.push({x:new Date(i.date),y:i.click});
+      }            
+      this.setState({lineData:[
+          {name:'登录',values:login},
+          {name:'提交',values:submit},
+          {name:'点击',values:click}]});
+    }
+    colors(d){
+      switch(d){
+        case 0:return '#FF0000';
+        case 1:return '#00FF00';
+        case 2:return '#0000FF';
+      }
     }
     render(){
         let {lineData} = this.state;
@@ -88,13 +106,14 @@ class Sta5 extends Component{
         data={lineData}
         width='100%'
         height={768}
+        colors={this.colors.bind(this)}
         viewBoxObject={
          { x: 0,
           y: 0,
           width: 1024,
           height: 768
         }}
-        title="登录活跃"
+        title="7日活跃"
         yAxisLabel="人数"
         xAxisLabel="时间"
         gridHorizontal={true}

@@ -13,6 +13,7 @@ console.info('Import Global...');
 class _Global_ extends EventEmitter{
     constructor(){
         super();
+        this.version = '1.0.4';
         this.LevelJson = null;
         this.maxpasslv = null;
         this._debug = false;
@@ -103,6 +104,15 @@ class _Global_ extends EventEmitter{
         }catch(e){
             console.log(e);
         }*/
+        /**
+         * 新的版本提示
+         */
+        window.onnewversion = ()=>{
+            MessageBox.show('okcancel',undefined,<MarkdownElement text='发现一个新的版本，马上体验。'/>,(result)=>{
+                if(result==='ok')
+                    window.location.reload();
+            }); 
+        }
     }
     /**
      * 当有加载界面时,加载界面提供这几个函数

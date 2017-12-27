@@ -75,6 +75,7 @@ class MarkdownElement extends Component {
     const {
       style,
       text,
+      nocors
     } = this.props;
 
     /* eslint-disable react/no-danger */
@@ -82,7 +83,7 @@ class MarkdownElement extends Component {
       <div
         style={Object.assign({}, styles.root, style)}
         className="markdown-body"
-        dangerouslySetInnerHTML={{__html: filter(marked(this.state.text))}}
+        dangerouslySetInnerHTML={{__html: nocors?marked(this.state.text):filter(marked(this.state.text))}}
       />
     );
     /* eslint-enable */
