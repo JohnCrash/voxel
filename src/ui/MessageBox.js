@@ -49,7 +49,7 @@ class MessageBox extends Component{
         }else{
             if(style==='tips'||style==='tips_again'){
                 if(style==='tips_again')type = 'again';
-                style = {width:"100%",maxWidth:"100%",maxHeight:"100%",bottom:"0px",top:"0px",position:"fixed",transform:""};
+                style = {width:"100%",maxWidth:"100%",top:"0px",position:"fixed",transform:""};
                 //点击内容也可以退出
                 content = <div onClick={(event)=>{
                     //MessageBox.globalNode.setState({open: false,type:'',title:'',content:''});

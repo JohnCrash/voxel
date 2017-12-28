@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import { LineChart } from 'react-d3';
+import { setInterval } from 'timers';
 require("whatwg-fetch");
 /**
  *         var lineData = [
@@ -39,24 +40,34 @@ class Sta5 extends Component{
        *  count : 99}
        * ]
        */
-      let b = {dd:7};
-      fetch('/users/stalau',{method:'POST',
-      credentials: 'same-origin',
-      headers: {'Content-Type': 'application/json'},
-      body :JSON.stringify(b)})
-      .then((response)=>{
-        return response.json();
-      })
-      .then((json)=>{
-        if(json && json.result==='ok'){
-          this.initData(json.stalv);
+      let update = ()=>{
+        let b = {dd:7};
+        fetch('/users/stalau',{method:'POST',
+        credentials: 'same-origin',
+        headers: {'Content-Type': 'application/json'},
+        body :JSON.stringify(b)})
+        .then((response)=>{
+          return response.json();
+        })
+        .then((json)=>{
+          if(json && json.result==='ok'){
+            this.initData(json.stalv);
+          }
+        }).catch(err=>{
+            console.log(err);
+        });    
+      }
+      update();
+      this._id = setInterval(()=>{
+        let c = new Date();
+        if(c.getMinutes()===3){
+          update();
         }
-      }).catch(err=>{
-          console.log(err);
-      });  
+      },30000);
     }
-    componentWillUnmount(){
 
+    componentWillUnmount(){
+      if(this._id)clearInterval(this._id);
     }
     /**
      * au

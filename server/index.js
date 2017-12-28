@@ -8,6 +8,9 @@ var watchify = require("watchify");
 var router = express.Router();
 var config = require('./config');
 
+if(config.debug){
+
+  
 /**
  * 使用动态编译javascript
  */
@@ -88,5 +91,8 @@ router.get('/load',function(req,res){
     }
   });
 });
+
+
+}
 
 module.exports = router;

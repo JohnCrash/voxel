@@ -538,7 +538,7 @@ function login(req,res){
             function(zone,errmsg){
               if(zone){
                 let {zone_id,school_id,role} = zone;
-                sql(`insert into UserInfo (uid,cookie,lv,UserName,lastlogin,cls,school,role) values (${uid},'${cookie}',0,N'${uname}',getdate(),${zone_id},${school_id},${role})`).then((result)=>{
+                sql(`insert into UserInfo (uid,cookie,lv,UserName,lastlogin,cls,school,role,createdate) values (${uid},'${cookie}',0,N'${uname}',getdate(),${zone_id},${school_id},${role},getdate())`).then((result)=>{
                   //新产生的对象还没有数据
                   req.UserInfo = {
                     UserName:uname,
@@ -862,6 +862,15 @@ router.post('/logout',function(req,res){
     res.clearCookie('cc');
     res.clearCookie('sc1');
     res.json({result:'ok'});
+});
+/**
+ * 报告错误
+ */
+router.post('/levelplaytime',function(req,res){
+  let {action,lv} = req.body;
+  if(action)
+    sqlAction(req.UserInfo.uid,req.UserInfo.cls,`${action} ${lv}`);
+  res.json({result:'ok'});
 });
 /**
  * 报告错误

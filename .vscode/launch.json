@@ -19,7 +19,13 @@
             "request": "launch",
             "name": "Debug 日志提取",
             "program": "${workspaceRoot}/server/sta/staapp.js"
-        },        
+        },       
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug p1",
+            "program": "${workspaceRoot}/server/sta/p1.js"
+        },  
         {
             "type": "chrome",
             "request": "launch",
@@ -37,8 +43,8 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Debug client webpack",
-            "url": "http://code.app.ljlx.com:3001/#/login",
+            "name": "Debug 热编译",
+            "url": "http://localhost:3001/#/login",
             "webRoot": "${workspaceRoot}"
         },        
         {

@@ -82,6 +82,10 @@ class Sta2 extends Component{
       }
       this.setState({lineData:data});
     }
+    colors(d){
+      let mc = ['#0D47A1','#1565C0','#1976D2','#1E88E5','#2196F3','#42A5F5','#64B5F6','#90CAF9','#BBDEFB'];
+      return mc[d] || '#FF5252';
+    } 
     render(){
         let {lineData} = this.state;
 
@@ -90,6 +94,7 @@ class Sta2 extends Component{
         data={lineData}
         width='100%'
         height={768}
+        colors={this.colors.bind(this)}
         viewBoxObject={
          { x: 0,
           y: 0,

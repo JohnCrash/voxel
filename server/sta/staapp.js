@@ -1,3 +1,5 @@
+require('timers');
+
 var config = require('../config2');
 const Sql = require('mssql');
 
@@ -87,6 +89,11 @@ function doStaLvt(){
 function sqlDateString(d){
     return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()} ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()}`;
 }
+
+function sqlDateToJsDate(d){
+    return d.toISOString().replace('T',' ').slice(0,-2);
+}
+
 /**
  * 活跃统计
  */
@@ -107,11 +114,14 @@ function doStaAU(){
                 return sql(`select min(date) from UserStream`); //查找UserStream的最早时间
             }).then((result)=>{
                 if(result.recordset && result.recordset.length>0){
-                    begindate = new Date(result.recordset[0]['']);
+                    console.log('first date: ',result.recordset[0]['']);
+                    console.log('canvert to:',sqlDateToJsDate(result.recordset[0]['']));
+                    begindate = new Date(sqlDateToJsDate(result.recordset[0]['']));
+                    //begindate = result.recordset[0][''];
                     begindate.setMinutes(0);
                     begindate.setSeconds(0);
                     begindate.setMilliseconds(0);
-                    console.info('ALL');
+                    console.log('ALL');
                     doit(begindate,enddate);
                 }else{
                     console.error(`select min(date) as start from UserStream`);
@@ -123,11 +133,14 @@ function doStaAU(){
         }else{
             //接着搜索
             if(data && data[0] && data[0].pos){
-                begindate = new Date(data[0].pos);
+                console.log('begin : ',data[0].pos);
+                console.log('canvert to:',sqlDateToJsDate(data[0].pos));
+                begindate = new Date(sqlDateToJsDate(data[0].pos));
+                //begindate = data[0].pos;
                 begindate.setMinutes(0);
                 begindate.setSeconds(0);
                 begindate.setMilliseconds(0);
-                console.info('PART');
+                console.log('PART');
                 doit(begindate,enddate);                
             }
         }
@@ -143,18 +156,21 @@ function doStaAU(){
             function done(b){ //正确做完全部任务b=true,中间有错误b=false
                 if(b){
                     //成功完成全部任务,更新时间起点
+                    console.log('update StaStreamProgress');
                     sql(`select * from StaStreamProgress`).then((result)=>{
                         if(result && result.recordset && result.recordset.length===1){
+                            console.log(`update StaStreamProgress set pos='${sqlDateString(enddate)}' where id=${result.recordset[0].id}`);
                             sql(`update StaStreamProgress set pos='${sqlDateString(enddate)}' where id=${result.recordset[0].id}`).then(()=>{
-                                console.info('update to : ',enddate.toLocaleString());
-                                console.info('doStaAU update SUCCESS');
+                                console.log('update to : ',enddate.toLocaleString());
+                                console.log('doStaAU update SUCCESS');
                             }).catch((err)=>{
                                 console.error(err);
                             });
                         }else{
+                            console.log(`insert into StaStreamProgress (pos) values ('${sqlDateString(enddate)}')`);
                             sql(`insert into StaStreamProgress (pos) values ('${sqlDateString(enddate)}')`).then(()=>{
-                                console.info('first update to : ',enddate.toLocaleString());
-                                console.info('doStaAU first update SUCCESS');
+                                console.log('first update to : ',enddate.toLocaleString());
+                                console.log('doStaAU first update SUCCESS');
                             }).catch((err)=>{
                                 console.error(err);
                             });                            
@@ -175,7 +191,7 @@ function doStaAU(){
                 }
             }
             function doseg(date,seg){ //处理小时片断流,seg是一个数组
-                console.info(date);
+                console.log(date);
                 let login = 0;
                 let submit = 0;
                 let click = 0;
@@ -210,12 +226,14 @@ function doStaAU(){
                     console.error(err);
                 });
             }
-            for(let c = begindate;c<=enddate;c.setHours(c.getHours()+1)){
+            console.log(sqlDateString(begindate),"===>",sqlDateString(enddate));
+            for(let c = begindate;c<enddate;c.setHours(c.getHours()+1)){
                 total++;
                 /**
                  * 数据可能很多，使用分钟进行分割
                  */
                 let qstr = `select * from UserStream where datediff(hh,date,'${sqlDateString(c)}')=0`;
+                console.log(qstr);
                 let dateStr = sqlDateString(c);
                 sql(qstr).then((seg)=>{
                     doone++;
@@ -234,7 +252,6 @@ function doStaAU(){
         console.error(err);
     });
 }
-
 /**
  * 启动一个周期进程用来从分析数据
  * 一分钟比较轮询一次，到晚上23:58开始统计

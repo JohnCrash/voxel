@@ -54,6 +54,7 @@
   },
   "dependencies": {
     "aabb-3d": "^0.1.0",
+    "async": "^2.6.0",
     "babel-polyfill": "^6.26.0",
     "body-parser": "^1.17.2",
     "clone-deep": "^1.0.0",

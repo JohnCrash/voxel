@@ -276,7 +276,7 @@ function initItemBlockly(_this){
 			var pt = {
 				x:item.position.x,
 				y:item.position.y,
-				z:item.position.z-1.0
+				z:item.position.z-0.5
 			};
 			var ar = item.sceneManager.ptItem(pt);
 			if(ar && ar.length>0)
@@ -316,7 +316,7 @@ function initItemBlockly(_this){
 		var pt = {
 			x:item.position.x,
 			y:item.position.y,
-			z:item.position.z-1.0
+			z:item.position.z-0.5
 		};
 		var ar = item.sceneManager.ptItem(pt);
 		if(ar && ar.length>0){

@@ -283,12 +283,18 @@ class Level extends Component{
         //加载voxview的时候uiColor必须为白色
         this.setState({uiColor:'#FFFFFF'});
 
+        /**
+         * 统计第一关的平均用时
+         */
+        let info = Global.appGetLevelInfo(props.level);
+        postJson('/users/levelplaytime',{uid:Global.getUID(),lv:info.next-1,action:'enter'},(result)=>{});
+
         Global.push(()=>{
             MessageBox.show("okcancel","游戏退出","你确定要返回主界面吗？",(result)=>{
                 if(result==='ok'){
                     //保存当前操作为草稿
                     this.saveTrash(props);
-
+                    postJson('/users/levelplaytime',{uid:Global.getUID(),lv:info.next-1,action:'exit'},(result)=>{});
                     Global.popName('level');
                     location.href='#/main'; //eslint-disable-line
                 }

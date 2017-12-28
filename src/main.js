@@ -33,12 +33,13 @@ class Main extends Component{
     componentDidMount(){
         document.title = "乐学编程";
         //出一个介绍对话栏
-        if(!localStorage.guid0)
+        if(!localStorage.guid0 && !Main.isshow)
         TextManager.load("scene/ui/guid0.md",(iserr,text)=>{
             if(!iserr)
                 MessageBox.show('check',undefined,<MarkdownElement text={text}/>,
                 (result)=>{
                     if(result==='noagain')localStorage.guid0 = true;
+                    Main.isshow = true;
                 });
         });    
     }

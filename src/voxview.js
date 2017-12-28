@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {fetchJson,postJson} from './vox/fetch';
+import {fetchText,postJson} from './vox/fetch';
 import SceneManager from './vox/scenemanager';
 import log from './vox/log';
 import {MessageBox} from './ui/MessageBox';
@@ -128,7 +128,16 @@ class VoxView extends Component{
         this.readyPromise = new Promise((resolve,reject)=>{
             console.log('load '+file);
             BlocklyInterface.blocklyEvent('SceneReset');
-            fetchJson(`/load?file=scene/${file}.scene`,(json)=>{
+            //`/load?file=scene/${file}.scene`
+            let scenefile = `/scene/${file}.scene`;
+            fetchText(scenefile,(text)=>{
+                let json = {};
+                try{
+                    json.content = JSON.parse(text);
+                    json.result = 'ok';    
+                }catch(e){
+                    json.result = `fetch error : ${scenefile}`;
+                }
                 if(json.result==='ok'){
                     //这里主动设置下背景颜色,因为在BlocklyInterface.pause后界面停止更新
                     this.sceneManager.setBackgroundColor(json.bgcolor);
@@ -162,7 +171,7 @@ class VoxView extends Component{
                     reject(json.result);
                 }else{
                     this.setState({loading:false});
-                    let errs = `fetchJson /load?file=scene/${file}.scene error`;
+                    let errs = `fetchJson ${scenefile} error`;
                     console.warn(errs);
                     reject(errs);
                 }
