@@ -13,7 +13,7 @@ console.info('Import Global...');
 class _Global_ extends EventEmitter{
     constructor(){
         super();
-        this.version = '1.0.6';
+        this.version = '1.0.7';
         this.LevelJson = null;
         this.maxpasslv = null;
         this._debug = false;

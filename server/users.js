@@ -173,6 +173,18 @@ router.post('/stalau',function(req,res){
   });
 });
 
+router.post('/staex',function(req,res){
+  /**
+   * 最近一个星期(dd天)的数据
+   */
+  let dd = Math.min(req.body.dd || 1,30);
+  sql(`select * from StaEx where DateDiff(DD,date,getdate())<=${dd} order by date`).then((result)=>{
+      res.json({result:'ok',stalv:result.recordset});
+  }).catch((err)=>{
+      res.json({result:err});
+  });
+});
+
 /**
  * 启动程序，在login之前
  */

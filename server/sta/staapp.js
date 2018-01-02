@@ -1,5 +1,5 @@
 require('timers');
-
+var async = require("async");
 var config = require('../config2');
 const Sql = require('mssql');
 
@@ -252,10 +252,104 @@ function doStaAU(){
         console.error(err);
     });
 }
+
+/**
+ * 留存
+ * date是一个日期字符串 2017-12-29
+ */
+function staExDay3(date,done){
+    //calc first
+    let days = [];
+    let rate = [];
+    let task3 = [];
+    let d = new Date(date);
+    console.log('date : ',date);
+    for(let i=0;i<3;i++){
+        d.setDate(d.getDate()-1);
+        days[i] = sqlDateString(d).slice(0,11)+'00:00:00';
+        console.log('date',i,':',days[i]);
+    }
+
+    for(let i=0;i<3;i++){
+        task3.push((callback)=>{
+            let qs = `select uid from UserInfo where datediff(dd,createdate,'${days[i]}')=0`;
+            console.log(qs);
+            sql(qs).then((result)=>{
+                if(result.recordset.length>0){
+                    console.log(result.recordset.length,qs);
+                    let task = [];
+                    let total = result.recordset.length;
+                    let c = 0;
+                    for(let user of result.recordset){
+                        task.push((cb)=>{
+                            sql(`select top 1 * from UserStream where uid=${user.uid} and datediff(dd,date,'${date}')=0`).then((R)=>{
+                                if(R.recordset && R.recordset.length > 0){
+                                    c++;
+                                }
+                                cb(false);
+                            }).catch((err)=>{
+                                console.error(err);
+                                cb(true);
+                            });
+                        });
+                    }
+                    async.series(task,(err,results)=>{
+                        if(!err){
+                            rate[i] = c/total;
+                            callback(false);                            
+                        }else{
+                            callback(true);
+                        }
+                    });
+                }else{
+                    callback(false);
+                }
+            }).catch((err)=>{
+                console.error(err);
+                callback(true);
+            });
+        });
+    }
+    async.series(task3,(err,results)=>{
+        if(!err){
+            //将数据更新到StaEx中去
+            sql(`insert into StaEx (firstday,secondday,thirdday,date) values (${rate[0]?rate[0]:0},${rate[1]?rate[1]:0},${rate[2]?rate[2]:0},'${date}')`);
+            console.log('date');
+            console.log(rate[0]);
+            console.log(rate[1]);
+            console.log(rate[2]);
+            if(done)done(false,date);
+        }else{
+            console.error('failed');
+            if(done)done(true,date);
+        }
+    }); 
+}
+function doStaEx(){
+    //'2017-12-13'
+/*
+    let task = [];
+    for(let i=1;i<=1;i++){
+        task.push((cb)=>{
+            staExDay3(`2018-1-${i}`,cb);
+        });
+    }
+    async.series(task,(err,results)=>{
+        if(!err){
+            console.log('DONE!');
+        }else{
+            console.log('FAILED!');
+        }
+    });
+*/
+    staExDay3(sqlDateString(new Date()).split(' ')[0]);
+}
+doStaEx();
 /**
  * 启动一个周期进程用来从分析数据
  * 一分钟比较轮询一次，到晚上23:58开始统计
  */
+/*
 setInterval(function(){
     let t = new Date();
     if(t.getHours()===23){
@@ -269,6 +363,7 @@ setInterval(function(){
     if(t.getHours()===23 && t.getMinutes()===58 && t.getDay() !== lastDay){
         doStaLv();
         doStaLvt();
+        doStaEx();
         lastDay = t.getDay();
     }
     //每小时执行一次
@@ -277,3 +372,4 @@ setInterval(function(){
         lastHours = t.getHours();
     }
 },50*1000);
+*/

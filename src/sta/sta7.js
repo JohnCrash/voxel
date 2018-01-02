@@ -39,10 +39,11 @@ class Sta7 extends Component{
        *  count : 99}
        * ]
        */
-      fetch('/users/stalvt',{method:'POST',
+      let b = {dd:30};
+      fetch('/users/staex',{method:'POST',
       credentials: 'same-origin',
       headers: {'Content-Type': 'application/json'},
-      body :''})
+      body :JSON.stringify(b)})
       .then((response)=>{
         return response.json();
       })
@@ -57,37 +58,30 @@ class Sta7 extends Component{
     componentWillUnmount(){
 
     }
-    initData(stalv){
-      let m = {};
-      console.log(stalv);
-      for(let o of stalv){
-        if(typeof o.date === 'string'){
-          let e = o.date.match(/(\d+)-(\d+)-(\d+).*/);
-          if(e){
-            let key = e[2]+'-'+e[3];
-            m[key] = m[key] || [];
-            if(o.lv===+o.lv && o.lv <= 60 && o.avg){
-              m[key].push({x:o.lv,y:o.avg/1000});
-            }  
-          }
-        }
+    initData(staex){
+      console.log("===========staex=============");
+      console.log(staex);
+      let first = [];
+      let second = [];
+      let third = [];
+      for(let i of staex){
+        let c = new Date(i.date);
+        first.push({x:c,y:i.firstday*100/0.6});
+        second.push({x:c,y:i.secondday*100/0.6});
+        third.push({x:c,y:i.thirdday*100/0.6});
       }
-      console.log(m);
-      let data = [];
-      for(let k in m){
-        if(m[k] && m[k].length>0){
-          m[k].sort(function(a,b){return a.x-b.x});
-          data.push({
-            name : k,
-            values : m[k]
-          });  
-        }
-      }
-      console.log(data);
-      data.reverse();
-      console.log(data);
-      this.setState({lineData:data});
+      this.setState({lineData:[
+          {name:'次日',values:first},
+          {name:'2日',values:second},
+          {name:'3日',values:third}]});
     }
+    colors(d){
+      switch(d){
+        case 0:return '#FF0000';
+        case 1:return '#00FF00';
+        case 2:return '#0000FF';
+      }
+    }    
     render(){
         let {lineData} = this.state;
 
@@ -96,14 +90,15 @@ class Sta7 extends Component{
         data={lineData}
         width='100%'
         height={768}
+        colors={this.colors.bind(this)}
         viewBoxObject={
          { x: 0,
           y: 0,
           width: 1024,
           height: 768
         }}
-        title="日活跃"
-        yAxisLabel="人数"
+        title="留存"
+        yAxisLabel="百分率"
         xAxisLabel="日期"
         gridHorizontal={true}
       />;

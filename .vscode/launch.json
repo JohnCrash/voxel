@@ -23,8 +23,8 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Debug p1",
-            "program": "${workspaceRoot}/server/sta/p1.js"
+            "name": "Debug p2",
+            "program": "${workspaceRoot}/server/sta/p2.js"
         },  
         {
             "type": "chrome",
