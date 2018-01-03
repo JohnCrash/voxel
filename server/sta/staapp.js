@@ -344,12 +344,11 @@ function doStaEx(){
 */
     staExDay3(sqlDateString(new Date()).split(' ')[0]);
 }
-doStaEx();
+//doStaEx();
 /**
  * 启动一个周期进程用来从分析数据
  * 一分钟比较轮询一次，到晚上23:58开始统计
  */
-/*
 setInterval(function(){
     let t = new Date();
     if(t.getHours()===23){
@@ -372,4 +371,3 @@ setInterval(function(){
         lastHours = t.getHours();
     }
 },50*1000);
-*/
