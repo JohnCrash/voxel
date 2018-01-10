@@ -15,7 +15,10 @@ class _AudioManager{
             s.cbs.push(cb);
         }else{
             s = this.audios[file] = {state:'loading',cbs:[cb]};
-            this.loader.load(file,(buffer)=>{
+            let url = window.cdndomain?window.cdndomain+file:file;
+            url = url.replace(/\\/g,'/');
+            console.log('AudioManager load : ',url);
+            this.loader.load(url,(buffer)=>{
                 s.buffer = buffer;
                 s.state = 'ready';
                 for(let cbc of s.cbs){
@@ -24,11 +27,22 @@ class _AudioManager{
                 s.cbs = undefined;
             },(xhr)=>{ //progress
             },(xhr)=>{
-                s.state = 'error';
-                for(let cbc of s.cbs){
-                    cbc(true);
-                }
-                s.cbs = undefined;
+                //使用原路径再试一次
+                this.loader.load(file,(buffer)=>{
+                    s.buffer = buffer;
+                    s.state = 'ready';
+                    for(let cbc of s.cbs){
+                        cbc(false,buffer);
+                    }
+                    s.cbs = undefined;
+                },(xhr)=>{ //progress
+                },(xhr)=>{
+                    s.state = 'error';
+                    for(let cbc of s.cbs){
+                        cbc(true);
+                    }
+                    s.cbs = undefined;
+                });
             });
         }        
     }

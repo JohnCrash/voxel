@@ -211,7 +211,7 @@ class Level extends Component{
                 this.voxview.readyPromise.then(()=>{
                     this._isrunning = true;
                     this._isgameover = false;
-                    this.blockview.run(500,(state)=>{//执行完成
+                    this.blockview.run(10,(state)=>{//执行完成
                         if(state === 'end'||state === 'error'||state==='nolink'){
                             this._isrunning = false;
                             if(state === 'error'){
@@ -726,7 +726,7 @@ class Level extends Component{
                 </div>
                 <div style={{position:"absolute",right:"12px",top:"12px"}} onClick={this.blockTips}>
                     <span ref={ref=>this.blockcount=ref} style={{fontSize:"24px",fontWeight:"bold",verticalAlign:"middle"}}>0×</span>
-                    <img src="media/title-beta.png" style={{height:"24px",verticalAlign:"middle"}} />
+                    <img src={window.cdndomain?window.cdndomain+"media/title-beta.png":"media/title-beta.png"} style={{height:"24px",verticalAlign:"middle"}} />
                 </div>
             </div>
             <div style={{position:"absolute",display:"flex",flexDirection:"column",left:"0px",right:"50%",bottom:"0px"}}>
@@ -790,7 +790,7 @@ class Level extends Component{
             </div>
             <div style={{position:"absolute",right:"12px",top:"12px"}} onClick={this.blockTips} >
                     <span ref={ref=>this.blockcount=ref} style={{fontSize:"24px",fontWeight:"bold",verticalAlign:"middle",color:uiColor}}>0×</span>
-                    <img src="media/title-beta.png" style={{height:"24px",verticalAlign:"middle"}} />
+                    <img src={window.cdndomain?window.cdndomain+"media/title-beta.png":"media/title-beta.png"} style={{height:"24px",verticalAlign:"middle"}} />
             </div>
             <div>
                 <IconButton touch={true} iconStyle={{color:uiColor}} onClick={this.Menu.bind(this)} tooltipPosition="top-center">

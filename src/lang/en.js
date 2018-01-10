@@ -7,8 +7,10 @@ export default function en(){
     Blockly.Msg["WHEN_START"] = "when run";
     Blockly.Msg["STEP"] = "step";
     Blockly.Msg["FORWARD"] = "move forward";
-    Blockly.Msg["TURN_LEFT"] = "turn left 90°";
-    Blockly.Msg["TURN_RIGHT"] = "turn right 90°";
+    Blockly.Msg["TURN_LEFT"] = "turn left";
+    Blockly.Msg["TURN_RIGHT"] = "turn right";
+    Blockly.Msg["PUSH"] = "push";
+    Blockly.Msg["POP"] = "pop";    
     Blockly.Msg["JUMP"] = "jump forward";
     Blockly.Msg["CLEAR_OBSTACLE"] = " remove obstacle ";
     Blockly.Msg["OPEN_BOX"] = " open box ";
@@ -23,6 +25,8 @@ export default function en(){
     Blockly.Msg["LADDER"] = "stairs";
     Blockly.Msg["CLIFF"] = "cliff";
     Blockly.Msg["WALL"] = "wall";
+    Blockly.Msg["DOWN_UP"] = "down up";
+    Blockly.Msg["PUT_BLOCK"] = "put block";
     //================================
     Blockly.Msg["ADD_COMMENT"] = "Add Comment";
     Blockly.Msg["CANNOT_DELETE_VARIABLE_PROCEDURE"] = "Can't delete the variable '%1' because it's part of the definition of the function '%2'";

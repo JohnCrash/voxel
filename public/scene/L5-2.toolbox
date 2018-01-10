@@ -3,7 +3,7 @@
 		<field name="MODE">WHILE</field>
         <value name="BOOL">
           <shadow  type="logic_boolean">
-            <field name="BOOL">FALSE</field>
+            <field name="BOOL">TRUE</field>
           </shadow>
         </value>
 	</block>

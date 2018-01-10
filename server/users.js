@@ -701,6 +701,10 @@ router.post('/commit',function(req,res){
         //这里是卡BUG出来的结果，不操作Tops表
         return sql(`select * from Tops where lv=${lv}`);
       }
+      if(lv>=20 && blocks < 5 ){
+        //这里是卡BUG出来的结果，不操作Tops表
+        return sql(`select * from Tops where lv=${lv}`);
+      }
       if(data.length<5 && !hasblock){//插入新的
         return sql(`insert into Tops (lname,lv,blocks,count) values ('${lname}',${lv},${blocks},1)`);
       }else{

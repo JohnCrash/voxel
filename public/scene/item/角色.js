@@ -584,7 +584,28 @@ function initItemBlockly(_this){
 				item.blocklyContinue('put down 2');
 			},300);
 		}
-	});		
+	});
+	
+	// 旋转任意角度
+	Blockly.Blocks['rotate_angle'] = {
+		init: function() {
+		this.appendDummyInput()
+			.appendField("旋转角度")
+			.appendField(new Blockly.FieldAngle(90), "angle_degree");
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(true, null);
+		this.setColour(230);
+		this.setTooltip("");
+		this.setHelpUrl("");
+		}
+	};
+	
+	Blockly.JavaScript['rotate_angle'] = function(block) {
+		var angle_angle_degree = block.getFieldValue('angle_degree');
+		// TODO: Assemble JavaScript into code variable.
+		var code = '...;\n';
+		return code;
+	};
 	
 	// 判断什么障碍物
 	Blockly.Blocks['what_is_it'] = {

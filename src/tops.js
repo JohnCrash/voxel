@@ -260,7 +260,7 @@ class Tops extends Component{
                 //当前选择 selected={this.tops[i].blocks===this.blocks}
                 tops.push(<TableRow selectable={false} key={"top"+i} style={this.tops[i].blocks===this.blocks?HighLightStyle:{}} >
                     <TableRowColumn  style={FixedWidthStyle}>{i+1}</TableRowColumn>
-                    <TableRowColumn  style={FixedWidthStyle}><span style={{verticalAlign:"middle"}}>{this.tops[i].blocks}×</span><img src="media/title-beta.png" style={{height:"24px",verticalAlign:"middle"}} /></TableRowColumn>
+                    <TableRowColumn  style={FixedWidthStyle}><span style={{verticalAlign:"middle"}}>{this.tops[i].blocks}×</span><img src={window.cdndomain?window.cdndomain+"media/title-beta.png":"media/title-beta.png"} style={{height:"24px",verticalAlign:"middle"}} /></TableRowColumn>
                     <TableRowColumn  style={FixedWidthStyle}>{this.tops[i].count}</TableRowColumn>
                     <TableRowColumn style={{width:"320px"}}><div>{clsblockMap(this.tops[i].blocks)}</div></TableRowColumn>
                 </TableRow>);

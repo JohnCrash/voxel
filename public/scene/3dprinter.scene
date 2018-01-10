@@ -1,0 +1,144 @@
+{
+	"music": "",
+	"loop": true,
+	"bgcolor": 9225456,
+	"camera": {
+		"position": {
+			"x": -84.37888462660946,
+			"y": -160.67251327145513,
+			"z": 124.7478644013577
+		},
+		"rotation": {
+			"x": 1.034980246432633,
+			"y": 0,
+			"z": -0.4927646254797244
+		}
+	},
+	"material": {
+		"item": {
+			"metadata": {
+				"version": 4.5,
+				"type": "Material",
+				"generator": "Material.toJSON"
+			},
+			"uuid": "BDA306DC-CF77-47BC-A907-101656488C07",
+			"type": "MeshPhongMaterial",
+			"color": 16777215,
+			"emissive": 2236962,
+			"specular": 0,
+			"shininess": 32.43150094778563,
+			"shading": 1,
+			"vertexColors": 2,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"skinning": false,
+			"morphTargets": false,
+			"dithering": false
+		},
+		"ground": {
+			"metadata": {
+				"version": 4.5,
+				"type": "Material",
+				"generator": "Material.toJSON"
+			},
+			"uuid": "8CBEA633-C2BA-47F9-AF07-2AC7BB62F5EB",
+			"type": "MeshPhongMaterial",
+			"color": 16777215,
+			"emissive": 2236962,
+			"specular": 0,
+			"shininess": 32,
+			"shading": 1,
+			"vertexColors": 2,
+			"opacity": 0.7000000000000001,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"skinning": false,
+			"morphTargets": false,
+			"dithering": false
+		},
+		"water": {
+			"metadata": {
+				"version": 4.5,
+				"type": "Material",
+				"generator": "Material.toJSON"
+			},
+			"uuid": "F869F2F2-E3CC-4CEC-BAEA-83824E7A6E3A",
+			"type": "MeshPhongMaterial",
+			"color": 16777215,
+			"emissive": 0,
+			"specular": 1118481,
+			"shininess": 0,
+			"shading": 1,
+			"vertexColors": 2,
+			"opacity": 0.5,
+			"transparent": true,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"skinning": false,
+			"morphTargets": false,
+			"dithering": false
+		}
+	},
+	"light": [
+		{
+			"type": "ambient",
+			"name": "环境灯3",
+			"color": {
+				"r": 0.4117647058823529,
+				"g": 0.4117647058823529,
+				"b": 0.4117647058823529
+			}
+		},
+		{
+			"type": "direct",
+			"name": "方向灯4",
+			"color": {
+				"r": 0.47843137254901963,
+				"g": 0.47843137254901963,
+				"b": 0.47843137254901963
+			},
+			"position": {
+				"x": 133.89626055488543,
+				"y": -439.60020678959154,
+				"z": 1000
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"castShadow": true,
+			"bias": 0,
+			"shadowRound": 163.6892177589852,
+			"shadowMapWidth": 1024,
+			"shadowMapHeight": 1024
+		}
+	],
+	"item": [
+		{
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": -1
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "3dprinter",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": false,
+			"receiveShadow": true,
+			"template": "scene/item/3dprinter.item"
+		}
+	]
+}

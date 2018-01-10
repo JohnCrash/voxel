@@ -7,8 +7,10 @@ export default function zh(){
     Blockly.Msg["WHEN_START"] = "开始运行程序";
     Blockly.Msg["STEP"] = "步";
     Blockly.Msg["FORWARD"] = "向前移动";
-    Blockly.Msg["TURN_LEFT"] = "左转 90°";
-    Blockly.Msg["TURN_RIGHT"] = "右转 90°";
+    Blockly.Msg["TURN_LEFT"] = "左转";
+    Blockly.Msg["TURN_RIGHT"] = "右转";
+    Blockly.Msg["PUSH"] = "保存位置";
+    Blockly.Msg["POP"] = "恢复位置";
     Blockly.Msg["JUMP"] = "向前跳跃";
     Blockly.Msg["CLEAR_OBSTACLE"] = " 移除障碍 ";
     Blockly.Msg["OPEN_BOX"] = " 打开宝箱 ";
@@ -23,6 +25,8 @@ export default function zh(){
     Blockly.Msg["LADDER"] = "台阶";
     Blockly.Msg["CLIFF"] = "悬崖";
     Blockly.Msg["WALL"] = "墙壁";
+    Blockly.Msg["DOWN_UP"] = "上下移动";
+    Blockly.Msg["PUT_BLOCK"] = "放置块";
     Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_UNTIL"] = "Until";
     Blockly.Msg["CONTROLS_WHILEUNTIL_OPERATOR_WHILE"] = "While";
     //============================    

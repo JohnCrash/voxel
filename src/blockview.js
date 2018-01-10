@@ -190,7 +190,7 @@ const BlockSkin = {
   };
 const hueToRgb = Blockly.hueToRgb;
 let block_skin = 'Scratch';
-Blockly.hueToRgb = function(hue){
+const customHueToRgb = function(hue){
     if(block_skin==='default')
         return hueToRgb(hue);
     else{
@@ -206,6 +206,7 @@ Blockly.hueToRgb = function(hue){
         }
     }
 }
+Blockly.hueToRgb = customHueToRgb;
 
 const GUID_ENABLE = 7;
 const GUID_DISABLE = 0;
@@ -231,6 +232,41 @@ class BlockView extends Component{
             num:1,
             guid:this.props.guid?GUID_ENABLE:GUID_DISABLE,
         };
+        this.config = {
+            checklink : true,
+            disableHotkey : true,
+            disableRightClick : true,
+            customcolor : true,
+        };
+    }
+    /**
+     * 配置Blockly的一些行为
+     */
+    setConfig(c){
+        if(c){
+            for(let key of Object.keys(c)){
+                this.config[key] = c[key];
+            }
+            let {disableHotkey,disableRightClick,customcolor} = this.config;
+            if(disableHotkey){
+                Blockly.onKeyDown_ = function(e){
+                }
+            }else{
+                Blockly.onKeyDown_ = Blockly_onKeyDown_;
+            }
+            if(disableRightClick){
+                Blockly.Gesture.prototype.handleRightClick = function(e){
+                }
+            }else{
+                Blockly.Gesture.prototype.handleRightClick = handleRightClick;
+            }
+            if(customcolor){
+                Blockly.hueToRgb = customHueToRgb;
+            }else{
+                Blockly.hueToRgb = hueToRgb;
+            }
+            this.initWorkspace();
+        }
     }
     componentDidMount(){
         this.setState({toolboxMode:this.props.toolbox});
@@ -349,9 +385,10 @@ class BlockView extends Component{
             console.log(e);
         }
         try{
+            let media = window.cdndomain?window.cdndomain+'blockly/media/':'blockly/media/';
             this.workspace = Blockly.inject(this.blockDiv,
                 {toolbox: this.toolboxXML,
-                    media: 'blockly/media/',
+                    media,
                     trashcan: true,
                     scrollbars: true,
                     zoom: {
@@ -608,14 +645,19 @@ class BlockView extends Component{
             Blockly.Xml.domToWorkspace(dom,this.workspace);
         }
     }
+    /**
+     * 检查代码是否完整的连接
+     */
     checkLink(){
-        let blocks = this.workspace.getAllBlocks();
-        for(let i =0;i<blocks.length;i++){
-            if( !blocks[i].getParent() && blocks[i].type!=="when_start" ){
-                return false;
+        if(this.config.checklink){
+            let blocks = this.workspace.getAllBlocks();
+            for(let i =0;i<blocks.length;i++){
+                if( !blocks[i].getParent() && blocks[i].type!=="when_start" ){
+                    return false;
+                }
             }
-        }
-        return true;
+            return true;    
+        }else return true;
     }
     /**
      * t  执行速度ms

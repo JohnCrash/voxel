@@ -1,5 +1,12 @@
 <xml id="toolbox">
-	<block type="controls_whileUntil"></block>
+	<block type="controls_whileUntil">
+		<field name="MODE">WHILE</field>
+        <value name="BOOL">
+          <shadow  type="logic_boolean">
+            <field name="BOOL">TRUE</field>
+          </shadow>
+        </value>
+	</block>
 	<block type="what_is_it"></block>
 	<block type="forward"></block>
 	<block type="turn_left" limit="2"></block>

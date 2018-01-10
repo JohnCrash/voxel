@@ -1,0 +1,28 @@
+{
+	"position":{
+		"x":0,
+		"y":0,
+		"z":0
+	},
+	"rotation":{
+		"x":0,
+		"y":0,
+		"z":0
+	},
+	"name":"3dprinter",
+	"visible":true,
+	"castShadow":false,
+	"receiveShadow":true,
+	"file":"scene/vox/3dprinter.vox",
+	"actions":[
+		{
+			"name":"idle",
+			"sequece":[
+				0
+			],
+			"delay":0,
+			"loop":false
+		}
+	],
+	"script":"scene/item/3dprinter.js"
+}

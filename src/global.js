@@ -13,7 +13,7 @@ console.info('Import Global...');
 class _Global_ extends EventEmitter{
     constructor(){
         super();
-        this.version = '1.0.7';
+        this.version = '1.0.9';
         this.LevelJson = null;
         this.maxpasslv = null;
         this._debug = false;
@@ -113,6 +113,7 @@ class _Global_ extends EventEmitter{
                     window.location.reload();
             }); 
         }
+        window.GLOBAL = this; 
     }
     /**
      * 当有加载界面时,加载界面提供这几个函数
