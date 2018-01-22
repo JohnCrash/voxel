@@ -13,6 +13,10 @@ import CrownTops from './crowntops';
 import MarkdownElement from './ui/MarkdownElement';
 import {MessageBox} from './ui/MessageBox';
 import {TextManager} from './ui/TextManager';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import {DotIcon} from "./ui/myicon";
+import {postJson,fetchJson} from './vox/fetch';
 
 console.info('Import Main...');
 class Main extends Component{
@@ -21,11 +25,21 @@ class Main extends Component{
         this.state = {
             title : '',
             anchorEl : null,
-            isdebug : false
+            isdebug : false,
+            msgcount : 0,
+            readmsg :[]
         }
         Global.regAppTitle((t)=>{
             this.appTitle(t);
         });
+    }
+    initLogin(){
+        let json = Global.getLoginJson();
+        if(json){
+            let readmsg = json.readmsg || [];
+            let message = json.message || [];
+            this.setState({msgcount:message.length-readmsg.length,readmsg});    
+        }
     }
     appTitle(t){
         this.setState({title:t});
@@ -33,6 +47,7 @@ class Main extends Component{
     componentDidMount(){
         document.title = "乐学编程";
         //出一个介绍对话栏
+        /*
         if(!localStorage.guid0 && !Main.isshow)
         TextManager.load("scene/ui/guid0.md",(iserr,text)=>{
             if(!iserr)
@@ -41,7 +56,22 @@ class Main extends Component{
                     if(result==='noagain')localStorage.guid0 = true;
                     Main.isshow = true;
                 });
-        });    
+        }); */
+        //打开一个通知消息栏
+        if(Global.getLoginJson()){
+            let notice = Global.getLoginJson().notice;
+            let text;
+            try{
+                notice = JSON.parse(notice);
+                text = notice.msg.join('</br>');
+                console.log(text);
+            }catch(e){}
+            if(text)
+                MessageBox.show('ok-center',undefined,<MarkdownElement text={text}/>,
+                (result)=>{});
+        }
+
+        this.initLogin();  
     }
     onMenu(event){
         event.preventDefault();
@@ -75,6 +105,25 @@ class Main extends Component{
                 lvideo = m[1];
             }
         }
+        let {readmsg,msgcount} = this.state;
+        let message = Global.getLoginJson().message || [];
+        let menuitems = message.map((item)=>{
+            let isreaded = readmsg.includes(item.id);
+            return <MenuItem rightIcon={isreaded?undefined:<DotIcon />}
+                style={{color:isreaded?'gray':'dodgerblue',fontWeight:'bold'}} 
+                primaryText={item.title}
+                onClick={()=>{
+                    if(!isreaded){
+                        readmsg.push(item.id);
+                        postJson('/users/readmsg',{readed:item.id,uid:Global.getUID()},(json)=>{});
+                        this.setState({readmsg,msgcount:msgcount-1})
+                    }
+                    TextManager.load(item.msgmd,(iserr,text)=>{
+                        if(!iserr)
+                            MessageBox.show('ok',undefined,<MarkdownElement text={text}/>,(result)=>{});
+                    });                    
+                }}/>;
+        });
         return <div><AppBar 
             title={this.state.title}
             style={appbarStyle}
@@ -86,7 +135,20 @@ class Main extends Component{
             lvideo={lvideo}
             unlock={Global.getMaxUnlockLevel()}
             ref={r=>{this.levelSel=r}}/>
-        {cls!==0?<FloatButton src={'scene/image/tops.png'} onClick={this.onTops} style={{width:'36px',zIndex:'1500'}}/>:undefined}
+        <div style={{position:'fixed',display:'flex',alignItems:'center',
+            top:'16px',right:'16px',zIndex:1100,fontSize:'x-large',color:'white'}}>
+            <span onClick={this.onTops}>{Global.getCrowns()}×</span>
+            <FloatButton src={'scene/image/crown.png'} onClick={this.onTops} style={{width:'36px'}}/>
+            {message.length>0?<IconMenu
+                ref={(ref)=>{this.msgbox = ref;}}
+                iconButtonElement={<FloatButton src={'scene/image/message.png'} style={{width:'36px',marginLeft:'16px',marginRight:'8px'}}/>}
+                anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+                targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                >
+                {menuitems}
+            </IconMenu>:undefined}
+            {message.length>0&&msgcount>0?<div style={{pointerEvents:'none',position:'absolute',top:'-6px',right:'-6px',width:'24px',height:'24px',borderRadius:'12px',background:'red',fontSize:'18px',fontWeight:'bold',textAlign:'center'}}>{this.state.msgcount}</div>:undefined}
+        </div>
         <CrownTops ref={r=>this.crowntops = r} onClose={this.handleCloseTops}/>
         </div>;
         /**

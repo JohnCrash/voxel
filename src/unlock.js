@@ -12,6 +12,7 @@ import {postJson} from './vox/fetch';
 import {ljshell} from './ljshell';
 import { setTimeout } from 'timers';
 import { MessageBox } from './ui/MessageBox';
+import mix from './ui/mix';
 
 const UNLOCK = 1;
 const UNLOCKING = 2;
@@ -58,21 +59,21 @@ class Unlock extends Component{
         if(this._cb)return;
         this._p = p;
         this._cb = cb;
-        //Global.
         let userinfo = ljshell.getUserInfo();
         this.dict = {
-            gold:userinfo?userinfo.gold:-1, //金币数
+            gold:userinfo?userinfo.gold:0, //金币数
             unlock_gold:this._p?this._p.unlock_gold:-1, //解锁需要的金币数
-            unlock_num:this._p?this._p.seg_end-this._p.seg_begin+1:-1
+            unlock_num:this._p?this._p.seg_end-this._p.seg_begin+1:-1,
+            unlock_crown:this._p?this._p.unlock_crown:-1//解锁需要的皇冠条件
         };
 
         this.setState({open:true,step:UNLOCK});
     }
-    handleAction(result){
+    handleAction(result,param){
         if(result==='unlock'){
             //处理解锁操作...
             this.setState({step:UNLOCKING}); //加载界面
-            postJson('users/unlock',{},(json)=>{
+            postJson('users/unlock',{param},(json)=>{
                 if(json.result==='ok'){
                     //这里做一个动画
                     if(this.props.changeButtonState){
@@ -94,17 +95,17 @@ class Unlock extends Component{
                 }
             });
         }else if(result==='cancel'){
-            this._cb(false);
+            if(this._cb)this._cb(false);
             this._cb = null;            
             this.setState({open:false});
         }else if(result==='complete'){
             //成功解锁
             Global.setMaxUnlockLevel(this._p.seg_end);
-            this._cb(true);            
+            if(this._cb)this._cb(true);            
             this._cb = null;
             this.setState({open:false}); //完成关闭对话
         }else if(result==='failed'){
-            this._cb(false);
+            if(this._cb)this._cb(false);
             this._cb = null;
             this.setState({open:false});
         }else if(result==='pay'){
@@ -118,7 +119,7 @@ class Unlock extends Component{
             }else{
                 MessageBox.show('ok',undefined,<MarkdownElement text={this.unlock_pay}/>,(result)=>{});
             }
-            this._cb(false);
+            if(this._cb)this._cb(false);
             this._cb = null;
             this.setState({open:false});
         }
@@ -133,15 +134,41 @@ class Unlock extends Component{
                 actions = [<FlatButton
                     label="取消"
                     primary={true}
-                    onClick={this.handleAction.bind(this,'cancel')}/>,                
-                    <FlatButton
-                    label="解锁"
-                    primary={true}
-                    onClick={this.handleAction.bind(this,'unlock')}/>];
-                if(Global.getMaxPassLevel()-1 === Global.getLoginJson().crown)
-                    ContentElement = <MarkdownElement text={this.unlock_content2}/>;
-                else
-                    ContentElement = <MarkdownElement text={md(this.unlock_content,dict)}/>;
+                    onClick={this.handleAction.bind(this,'cancel')}/>];
+            //        ,                
+            //        <FlatButton
+            //        label="解锁"
+            //        primary={true}
+            //        onClick={this.handleAction.bind(this,'unlock')}/>
+
+            //    if(Global.getMaxPassLevel()-1 === Global.getLoginJson().crown)
+            //        ContentElement = <MarkdownElement text={md(this.unlock_content2,dict)}/>;
+            //    else
+            //        ContentElement = <MarkdownElement text={md(this.unlock_content,dict)}/>;
+                if(dict){
+                    let bgstyle = {border:'3px dashed black',borderRadius:'8px',padding:'20px',textAlign:'center',margin:'16px'};
+                    dict.crown = Global.getCrowns(); //当前的皇冠数量
+                    ContentElement = <div><b style={{fontSize:'xx-large'}}>解锁后续{dict.unlock_num}个关卡</b>
+                        <div style={{display:'flex',flexDirection:'column',marginTop:'32px'}}>
+                            <div style={bgstyle} 
+                                onClick={dict.crown>=dict.unlock_crown?this.handleAction.bind(this,'unlock','crown'):()=>{
+                                    this.crown_cond.style.display = 'block';
+                                }}><b style={mix({fontSize:'xx-large'},dict.crown>=dict.unlock_crown?{color:'#3cb371'}:{})}><img style={{width:'48px',verticalAlign:'bottom'}} src={window.cdndomain+'scene/image/crown.png'}/>免费解锁</b>
+                                <div style={{color:'#1e90ff'}}>需要{dict.unlock_crown}皇冠</div>
+                                <div>当前你有{dict.crown}皇冠</div>
+                                <div ref={ref=>{this.crown_cond=ref;}} style={{color:'red',display:'none'}}>未达到解锁条件</div>
+                            </div>
+                            <div style={bgstyle} 
+                                onClick={dict.gold>=dict.unlock_gold?this.handleAction.bind(this,'unlock','gold'):()=>{
+                                    this.gold_cond.style.display = 'block';
+                                }}><b style={mix({fontSize:'xx-large'},dict.gold>=dict.unlock_gold?{color:'#3cb371'}:{})}>金币解锁</b>
+                                <div style={{color:'#1e90ff'}}>需要{dict.unlock_gold}金币</div>
+                                <div>当前你有{dict.gold}金币</div>
+                                <div ref={ref=>{this.gold_cond=ref;}} style={{color:'red',display:'none'}}>未达到解锁条件</div>
+                            </div>
+                        </div>
+                    </div>;
+                }
                 break;
             case UNLOCKING: //解锁中
                 actions = [];

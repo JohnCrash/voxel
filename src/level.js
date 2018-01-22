@@ -520,9 +520,22 @@ class Level extends Component{
                 //已经玩过的，你可以优化代码了
                 let lvs = Global.getLoginJson().lvs;
                 if(lvs && lvs[info.next-1]){
+                    let lv = Global.getLoginJson().lv;
+                    let unlock_crown;
+                    if(lv<=20)
+                        unlock_crown = 15;
+                    else if(lv<=30)
+                        unlock_crown = 25;
+                    else if(lv<=40)
+                        unlock_crown = 35;
+                    else if(lv<=50)
+                        unlock_crown = 45;
+                    else
+                        unlock_crown = 55;
                     let blocks = lvs[info.next-1].blocks;
                     let best = lvs[info.next-1].best;
-                    let dict={name,lv:info.next-1,blocks,best};
+                    let dict={name,lv:info.next-1,blocks,best,
+                        unlock_crown,current_crown:Global.getCrowns()};
                     TextManager.load(`scene/ui/play_again.md`,(iserr,text)=>{
                         if(!iserr)MessageBox.show('',undefined,<MarkdownElement text={md(text,dict)} />,(result)=>{
                             if(this.voxview)this.voxview.rotateAnimation();    
@@ -588,6 +601,7 @@ class Level extends Component{
                             //FIXBUG: 这里有可能需要解锁 ,见:tops.js
                             let p = {
                                 unlock_gold:info.next_unlock_gold,
+                                unlock_crown:info.next_unlock_crown,
                                 seg_begin:info.next_begin,
                                 seg_end:info.next_end,
                                 need_unlock:info.next_need_unlock

@@ -3,6 +3,7 @@ import Bob from './bob';
 import PropTypes from 'prop-types';
 import {KingIcon,MovieIcon} from './myicon';
 import { Global } from '../global';
+import m from './mix';
 //import MovieIcon from 'material-ui/svg-icons/av/play-arrow';
 
 /**
@@ -74,16 +75,6 @@ const locked = {
         color:'rgb(91, 103, 112)',
         backgroundColor:'rgb(198, 202, 205)'        
     }
-}
-
-function m() {
-    var res = {};
-    for (var i = 0; i < arguments.length; ++i) {
-      if (arguments[i]) {
-        Object.assign(res, arguments[i]);
-      };
-    }; 
-    return res;
 }
 
 function cc(state){

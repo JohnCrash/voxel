@@ -13,10 +13,10 @@ console.info('Import Global...');
 class _Global_ extends EventEmitter{
     constructor(){
         super();
-        this.version = '1.0.9';
+        this.version = '1.0.18';
         this.LevelJson = null;
         this.maxpasslv = null;
-        this._debug = false;
+        this._debug = window.LOCALHOST;
         this._layout = 'landscape';
         this._btb = 'expand';
         this._character = 'none';
@@ -281,6 +281,20 @@ class _Global_ extends EventEmitter{
     levelJson(){
         return this.LevelJson;
     }
+    /**
+     * 取得当前的crown数量
+     */
+    getCrowns(){
+        let c = 0;
+        if(this._loginJson && this._loginJson.lvs){
+            for(let lvs of this._loginJson.lvs){
+                if(lvs && lvs.rank===1){
+                    c++;
+                }
+            }
+        }
+        return c;
+    }
     //将关卡映射为关卡名称
     levelToLeveName(level){
         if(this.LevelJson && this.LevelJson.level){
@@ -341,6 +355,7 @@ class _Global_ extends EventEmitter{
                     let nextName;
                     let next = begin + e + 1;
                     let next_unlock_gold = item.unlock?Number(item.unlock):0;
+                    let next_unlock_crown = item.unlock_crown?Number(item.unlock_crown):0;
                     let next_begin = begin;
                     let next_end = end;
                     if(e<end-begin){
@@ -352,6 +367,7 @@ class _Global_ extends EventEmitter{
                         next_begin = Number(nm[1]);
                         next_end = Number(nm[2]);
                         next_unlock_gold = nextItem.unlock?Number(nextItem.unlock):0;
+                        next_unlock_crown = nextItem.unlock_crown?Number(nextItem.unlock_crown):0;
                     }
                     let next_need_unlock = next_unlock_gold>0?(this.maxunlocklv<=next):false;
                     return Object.assign({current:e,
@@ -362,6 +378,7 @@ class _Global_ extends EventEmitter{
                         next_end,
                         next,
                         next_unlock_gold,
+                        next_unlock_crown,
                         next_need_unlock,
                         closed:this.LevelJson.closed,
                         total:this.LevelJson.total},this.LevelJson.level[b]);
@@ -511,6 +528,27 @@ class _Global_ extends EventEmitter{
                 o.lvdate = new Date(o.lastcommit);
             }
         }
+        //将readmsg转换为数组,它可以是"1,2" = [1,2]
+        if(json.readmsg && json.message){
+            json.readmsg = json.readmsg.split(',').map((item)=>{
+                try{
+                    return Number(item);
+                }catch(e){
+                    return 0;
+                }
+            });
+            let ids = [];
+            for(let msg of json.message){
+                ids.push(msg.id);
+            }
+            //将不在message中的已读标记去掉
+            json.readmsg = json.readmsg.filter((value)=>{
+                return ids.includes(value);
+            });
+        }else{
+            json.readmsg = json.readmsg || [];
+            json.message = json.message || [];
+        }
     }
     //更新cls表中自己的关卡进度
     updateCls(uid,lv){
@@ -553,6 +591,9 @@ class _Global_ extends EventEmitter{
     }
     //初始化websocket
     wsLogin(){
+        if(window.LOCALHOST)
+            return ;
+        /*
         let addr = `ws://${location.host}/clslv`//eslint-disable-line
         if(window.LOCALHOST){ //eslint-disable-line
             addr = `ws://192.168.2.83:3000/clslv`;
@@ -611,6 +652,7 @@ class _Global_ extends EventEmitter{
             this._wsClsLv = null;
             ws = null;
         }
+        */
     }
     notSupportWebGL(){    
         if(!this._reportDone){

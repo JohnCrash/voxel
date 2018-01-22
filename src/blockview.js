@@ -265,7 +265,7 @@ class BlockView extends Component{
             }else{
                 Blockly.hueToRgb = hueToRgb;
             }
-            this.initWorkspace();
+            //this.initWorkspace();
         }
     }
     componentDidMount(){

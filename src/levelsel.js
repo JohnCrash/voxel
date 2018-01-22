@@ -181,6 +181,7 @@ class LevelSel extends PureComponent{
             let bl = [];
             let m = item.rang.match(/(\d+)-(\d+)/);
             let unlock_gold = item.unlock?Number(item.unlock):0;
+            let unlock_crown = item.unlock_crown?Number(item.unlock_crown):0;
             let icon;
             let titleColor;
             let curSeg = false;
@@ -229,6 +230,7 @@ class LevelSel extends PureComponent{
                     }
                     let p = {
                         unlock_gold, //要解锁的金币数量
+                        unlock_crown,
                         seg_begin,   //本段开始关卡
                         seg_end,
                         need_unlock:islock && i===current, //需要解锁

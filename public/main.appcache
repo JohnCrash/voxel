@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#1
+#9
 libs/libunrar.js.mem
 http://fileoss.ljlx.com/upgrade/luaapp/voxel/libs/vconsole.min.js
 http://fileoss.ljlx.com/upgrade/luaapp/voxel/libs/app_compress.js
@@ -18,7 +18,7 @@ http://fileoss.ljlx.com/upgrade/luaapp/voxel/blockly/msg/messages.js
 http://fileoss.ljlx.com/upgrade/luaapp/voxel/blockly/acorn.js
 http://fileoss.ljlx.com/upgrade/luaapp/voxel/blockly/interpreter.js
 http://fileoss.ljlx.com/upgrade/luaapp/voxel/libs/SPE.min.js
-http://fileoss.ljlx.com/upgrade/luaapp/voxel/game_launch.png
+http://fileoss.ljlx.com/upgrade/luaapp/voxel/scene/image/1080.jpg
 
 http://fileoss.ljlx.com/upgrade/luaapp/voxel/scene/main.index
 

@@ -109,6 +109,7 @@ class MessageBox extends Component{
     }
     render(){
         let actions;
+        let bodyStyle,actionsContainerStyle;
         switch(this.state.type){
             case 'okcancel':
                 actions = [<FlatButton
@@ -163,6 +164,14 @@ class MessageBox extends Component{
                     primary={true}
                     onClick={this.handleClose.bind(this,'ok')}/>];
                 break;
+            case 'ok-center':
+                bodyStyle={textAlign:'center',padding:'0px'};
+                actionsContainerStyle = bodyStyle;
+                actions = [<FlatButton
+                    label="确定"
+                    primary={true}
+                    onClick={this.handleClose.bind(this,'ok')}/>];               
+                break;
             case 'ok':
                 actions = [<FlatButton
                     label="确定"
@@ -180,6 +189,8 @@ class MessageBox extends Component{
                 open={this.state.open}
                 autoScrollBodyContent={true}
                 contentStyle={this.state.style}
+                bodyStyle={bodyStyle}
+                actionsContainerStyle={actionsContainerStyle}
                 repositionOnUpdate={true}
                 onRequestClose={this.handleClose.bind(this,'close')}
                 >

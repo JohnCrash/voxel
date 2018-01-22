@@ -4,14 +4,14 @@
 	"bgcolor": 5504221,
 	"camera": {
 		"position": {
-			"x": 176.894776384694,
-			"y": -104.94995130285149,
-			"z": 137.08695369811213
+			"x": 193.41433639494429,
+			"y": -185.71031051483158,
+			"z": 163.34881368914716
 		},
 		"rotation": {
-			"x": 1.0855947947404745,
+			"x": 1.1321369081269854,
 			"y": 0,
-			"z": 1.0064732019834044
+			"z": 0.8156505370986903
 		}
 	},
 	"material": {
@@ -87,18 +87,18 @@
 			"type": "ambient",
 			"name": "环境灯3",
 			"color": {
-				"r": 0.4666666666666667,
-				"g": 0.3411764705882353,
-				"b": 0.3411764705882353
+				"r": 0.47843137254901963,
+				"g": 0.47843137254901963,
+				"b": 0.47843137254901963
 			}
 		},
 		{
 			"type": "direct",
 			"name": "方向灯4",
 			"color": {
-				"r": 1,
-				"g": 1,
-				"b": 1
+				"r": 0.47843137254901963,
+				"g": 0.47843137254901963,
+				"b": 0.47843137254901963
 			},
 			"position": {
 				"x": 133.89626055488543,
@@ -147,7 +147,7 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 0,
+					"acc": 33,
 					"curIndex": 0
 				}
 			],
@@ -365,7 +365,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 1616.1734910833563
+				"z": 1827.4518802225596
 			},
 			"name": "钥匙",
 			"visible": true,
@@ -431,7 +431,7 @@
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 3930.6727635776547
+				"z": 4141.951152716891
 			},
 			"name": "金币",
 			"visible": true,
@@ -509,6 +509,40 @@
 			"castShadow": true,
 			"receiveShadow": true,
 			"template": "scene/item/宝石.item"
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "物品1",
+			"visible": true,
+			"ground": false,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"file": "scene/vox/Level3-11.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true,
+					"acc": 33,
+					"curIndex": 0
+				}
+			]
 		}
 	],
 	"zfog": {

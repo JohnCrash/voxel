@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>level</title>
+    <meta charset="utf-8">
+	<style type="text/css">
+		.box {
+			border-style: solid;
+			border-width: 1px;
+			display: block;
+			width: 100px;
+			height: 100px;
+			background-color: #0000FF;
+			-webkit-transition:width 2s, height 2s, 
+				background-color 2s, -webkit-transform 2s;
+			transition:width 1s, height 1s, background-color 1s, transform 1s;
+		}
+		.box2 {
+			border-style: solid;
+			border-width: 1px;
+			display: block;
+			width: 100px;
+			height: 100px;
+			background-color: #0000FF;
+			transition:width 1s, height 1s, background-color 1s, transform 1s;
+		}		
+		.box:hover {
+			background-color: #FFCCCC;
+			width:200px;
+			height:200px;
+			-webkit-transform:rotate(180deg);
+			transform:rotate(180deg);
+		}
+	</style>
+  </head>
+  <body>
+    <p>盒子的多个属性一起动画: width, height, background-color, transform. 将光标悬停在盒子上查看动画。</p>
+    <div class="box">static</div>
+	<div id="my" style="border-style:solid;border-width:1px;display:block;width:100px;height:100px;background-color:#0000FF;font-size:12px;" >dynamic</div>
+	<script>
+		var my = document.getElementById("my");
+		my.onmouseenter = function(event){
+		my.style['transition'] = 'width 1s, height 1s, background-color 1s, transform 1s , font-size 1s';
+			my.style['background-color'] = '#FFCCCC';
+			my.style['width'] = '200px';
+			my.style['height'] = '200px';
+			my.style['font-size'] = '32px';
+			my.style['transform'] = 'rotate(180deg)';
+			
+			//"border-width:1px;display:block;background-color:#FFCCCC;width:200px;height:200px;transform:rotate(180deg);transition:width 1s, height 1s, background-color 1s, transform 1s;";
+		};
+		my.addEventListener("mouseleave",function(event){
+			my.style['transition'] = 'width 1s, height 1s, background-color 1s, transform 1s';		
+			my.style['background-color'] = '#0000FF';
+			my.style['width'] = '100px';
+			my.style['height'] = '100px';
+			my.style['transform'] = 'rotate(0deg)';
+			
+			//my.style="border-width:1px;display:block;background-color: #0000FF;width:100px;height:100px;transform:rotate(0deg);transition:width 1s, height 1s, background-color 1s, transform 1s;";
+		},true);
+		my.addEventListener("transitionend", function(event){
+			console.log('transition end');
+		}, true);
+	</script>
+  </body>
+</html>

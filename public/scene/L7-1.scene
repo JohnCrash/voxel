@@ -1,0 +1,253 @@
+{
+	"music": "",
+	"loop": true,
+	"bgcolor": 5504221,
+	"camera": {
+		"position": {
+			"x": 204.08289370256185,
+			"y": 219.85483630045462,
+			"z": 136.14516405008396
+		},
+		"rotation": {
+			"x": 1.251401073679932,
+			"y": 0,
+			"z": 2.4091361441695094
+		}
+	},
+	"material": {
+		"item": {
+			"metadata": {
+				"version": 4.5,
+				"type": "Material",
+				"generator": "Material.toJSON"
+			},
+			"uuid": "BDA306DC-CF77-47BC-A907-101656488C07",
+			"type": "MeshPhongMaterial",
+			"color": 16777215,
+			"emissive": 2236962,
+			"specular": 0,
+			"shininess": 32.43150094778563,
+			"shading": 1,
+			"vertexColors": 2,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"skinning": false,
+			"morphTargets": false,
+			"dithering": false
+		},
+		"ground": {
+			"metadata": {
+				"version": 4.5,
+				"type": "Material",
+				"generator": "Material.toJSON"
+			},
+			"uuid": "8CBEA633-C2BA-47F9-AF07-2AC7BB62F5EB",
+			"type": "MeshPhongMaterial",
+			"color": 16777215,
+			"emissive": 2236962,
+			"specular": 0,
+			"shininess": 32,
+			"shading": 1,
+			"vertexColors": 2,
+			"opacity": 0.7000000000000001,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"skinning": false,
+			"morphTargets": false,
+			"dithering": false
+		},
+		"water": {
+			"metadata": {
+				"version": 4.5,
+				"type": "Material",
+				"generator": "Material.toJSON"
+			},
+			"uuid": "F869F2F2-E3CC-4CEC-BAEA-83824E7A6E3A",
+			"type": "MeshPhongMaterial",
+			"color": 16777215,
+			"emissive": 0,
+			"specular": 1118481,
+			"shininess": 0,
+			"shading": 1,
+			"vertexColors": 2,
+			"opacity": 0.5,
+			"transparent": true,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"skinning": false,
+			"morphTargets": false,
+			"dithering": false
+		}
+	},
+	"light": [
+		{
+			"type": "ambient",
+			"name": "环境灯3",
+			"color": {
+				"r": 0.47843137254901963,
+				"g": 0.47843137254901963,
+				"b": 0.47843137254901963
+			}
+		},
+		{
+			"type": "direct",
+			"name": "方向灯4",
+			"color": {
+				"r": 0.47843137254901963,
+				"g": 0.47843137254901963,
+				"b": 0.47843137254901963
+			},
+			"position": {
+				"x": 133.89626055488543,
+				"y": -439.60020678959154,
+				"z": 1000
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"castShadow": true,
+			"bias": 0,
+			"shadowRound": 163.6892177589852,
+			"shadowMapWidth": 1024,
+			"shadowMapHeight": 1024
+		}
+	],
+	"item": [
+		{
+			"position": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "地面",
+			"visible": true,
+			"ground": true,
+			"collision": false,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": true,
+			"file": "scene/vox/Level7-1.vox",
+			"actions": [
+				{
+					"name": "idle",
+					"sequece": [
+						0
+					],
+					"delay": 0,
+					"loop": true,
+					"acc": 0,
+					"curIndex": 0
+				}
+			]
+		},
+		{
+			"position": {
+				"x": 0,
+				"y": 55,
+				"z": 43.99999943193623
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 1.5707963267948966
+			},
+			"name": "男孩",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/男孩.item"
+		},
+		{
+			"position": {
+				"x": 18,
+				"y": 55,
+				"z": 43.99999942900002
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "栅栏",
+			"visible": true,
+			"ground": true,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/栅栏.item"
+		},
+		{
+			"position": {
+				"x": 18,
+				"y": 55,
+				"z": 65
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "栅栏1",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/栅栏.item"
+		},
+		{
+			"position": {
+				"x": 18,
+				"y": 55,
+				"z": 85
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "栅栏2",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": false,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/栅栏.item"
+		}
+	],
+	"zfog": {
+		"color": {
+			"r": 0.3254901960784314,
+			"g": 0.9882352941176471,
+			"b": 0.8666666666666667
+		},
+		"high": 40,
+		"low": 0
+	}
+}

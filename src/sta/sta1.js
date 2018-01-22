@@ -24,6 +24,8 @@ class Sta1 extends Component{
     constructor(props){
         super(props);
         this.state = {
+           total : 0,
+           haslv : 0,
            lineData : []
         };
     }
@@ -48,7 +50,10 @@ class Sta1 extends Component{
       })
       .then((json)=>{
         if(json && json.result==='ok'){
-          this.initData(json.stalv);
+          console.log('=============');
+          console.log(json);
+          console.log('=============');
+          this.initData(json.stalv,json.haslv[0].hasLV,json.total[0].allUser);
         }
       }).catch(err=>{
           console.log(err);
@@ -57,7 +62,7 @@ class Sta1 extends Component{
     componentWillUnmount(){
 
     }
-    initData(stalv){
+    initData(stalv,haslv,total){
       let m = {};
       console.log(stalv);
       for(let o of stalv){
@@ -87,14 +92,14 @@ class Sta1 extends Component{
       console.log(data);
       data.reverse();
       console.log(data);
-      this.setState({lineData:data});
+      this.setState({lineData:data,haslv,total});
     }
     colors(d){
       let mc = ['#0D47A1','#1565C0','#1976D2','#1E88E5','#2196F3','#42A5F5','#64B5F6','#90CAF9','#BBDEFB'];
       return mc[d] || '#FF5252';
     }    
     render(){
-        let {lineData} = this.state;
+        let {lineData,haslv,total} = this.state;
 
         return <LineChart
         legend={true}
@@ -108,7 +113,7 @@ class Sta1 extends Component{
           width: 1024,
           height: 768
         }}
-        title="人数分布"
+        title={`人数分布 (有关卡/总人数) = ${haslv}/${total}`}
         yAxisLabel="人数"
         xAxisLabel="关卡"
         gridHorizontal={true}

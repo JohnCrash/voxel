@@ -9,6 +9,9 @@ const ljlx = require('lxnodemodules').LXGrid;
 const Ice = require('ice').Ice;
 const {
   LXSliceInvokerAsset,
+  LXSliceInvokerLottery,
+  LXSliceInvokerUser,
+  LXSliceInvokerPush,
   LXReturnHelper
 } = ljlx;
 const { Asset } = ljlx.Main;
@@ -84,6 +87,58 @@ function payGold(uid,num,cb,s){
   }
 }
 
+function UserNotify(uid,msg,cb){
+  // 1. 用户推送
+  let invoker = new LXSliceInvokerPush(config.ljlxconfig);
+  let users = new Array();
+  users.push(uid);
+  invoker.PushUserMessage(
+      1126,	// 应用ID
+      users,	// 用户ids
+      msg,	// 消息
+      '')		// 不用填
+      .then((r) => {
+          if (LXReturnHelper.IsLXSucceed(r)) {
+              cb(true);
+              console.log('succeed');
+          }
+      },
+      (e) => {
+          cb(false,e);
+          console.log('exception:', e);
+      });
+}
+
+function AreaNotify(id,msg,cb){
+  // 2. 地区推送
+  // appid, areaid, roles, grades, message, context, member
+  let invoker = new LXSliceInvokerPush(config.ljlxconfig);
+  let roles = new Array();
+  roles.push(1,2,3); // 学生、老师、家长
+
+  let grades = new Array();
+  grades.push(1,2,3,4,5,6,7,8,9,10,11,12); // 1-6年级
+
+  invoker.PushAreaMessage(
+      1126,		// 应用ID
+      id,		// 香港地区 0:全国推送
+      roles,      // 身份
+      grades,     // 年级
+      msg,	// 消息
+      '',         // 不用填
+      1126)		// APP1133的会员用户
+      .then((r) => {
+          if (LXReturnHelper.IsLXSucceed(r)) {
+              cb(true);
+              console.log('succeed');
+          }
+      },
+      (e) => {
+          cb(false,e);
+          console.log('exception:', e);
+      });    
+}
+
 function stripTailSpace(s){
   if(s){
     let result = s;
@@ -144,7 +199,15 @@ router.post('/stalv',function(req,res){
    * 最近一个星期(7天)的数据
    */
   sql(`select * from StaLv where DateDiff(DD,date,getdate())<=7`).then((result)=>{
-      res.json({result:'ok',stalv:result.recordset});
+    Promise.all([sql(`select COUNT(*) as hasLV from UserInfo where lv>0`),
+      sql(`select COUNT(*) as allUser from UserInfo`)]).then(([R,M])=>{
+        if(R && M)
+          res.json({result:'ok',total:M.recordset,haslv:R.recordset,stalv:result.recordset});
+        else
+          res.json({result:'ok',stalv:result.recordset});
+    }).catch((err)=>{
+      res.json({result:err});
+    });
   }).catch((err)=>{
       res.json({result:err});
   });
@@ -195,6 +258,70 @@ router.get('/entry',function(req,res){
   }
   res.send('ok');
 });
+
+/**
+ * 通知同班同学自己做出了超越
+ * t 是下面的一个值
+ * 1.进度超越同班同学   p = 我的关卡
+ * 2.我解锁，通知没有解锁的 p = 解锁关卡 例如20
+ * 3.皇冠数量超越同班同学  p = 我的皇冠数量
+ * name 是超越者的名称
+ * uids 是超越的uid数组
+ */
+function notifyClass(t,name,uid,cls,p){
+  if(cls && cls!==0 && cls!=='0'){
+    let sqlStr;
+    name = name.trimRight();
+    switch(t){
+      case 1:sqlStr = `select uid,notice from UserInfo where lv=${p-1} and cls=${cls} and uid<>${uid}`;break;
+      case 2:sqlStr = `select uid,notice from UserInfo where olv<${p+10} and cls=${cls} and uid<>${uid}`;break;
+      case 3:sqlStr = `select uid,notice from UserInfo where crown=${p-1} and cls=${cls} and uid<>${uid}`;break;
+      default:return;
+    }
+    sql(sqlStr).then((result)=>{
+      let users = result.recordset;
+      let msg;
+      switch(t){
+        case 1:msg = `**${name}**超越了你的关卡进度`;break;
+        case 2:msg = `**${name}**解锁了${p+1}-${p+10}的全部关卡`;break;
+        case 3:msg = `**${name}**超越了你的皇冠排名`;break;
+      }
+      if(msg){
+        for(let user of users){
+          UserNotify(user.uid,'【乐学编程】 '+msg,(b,err)=>{});
+          /**
+           * {
+           *  msg:[];
+           * }
+           */
+          if(user.notice){
+            try{
+              let s = JSON.parse(user.notice);
+              if(s && s.msg){//保留5条
+                s.msg.push(msg);
+                if(s.msg.length>5){
+                  s.msg.splice(0,s.msg.length-5);
+                }
+              }
+              user.notice = JSON.stringify(s);  
+            }catch(e){
+              user.notice = `{"msg":["${msg}"]}`;
+            }
+          }else{
+            user.notice = `{"msg":["${msg}"]}`;
+          }
+          //更新同学的通知数据，当同学下回登录将看到这些通知，同时这些通知会被清空
+          sql(`update UserInfo set notice=N'${user.notice}' where uid=${user.uid}`).then((result)=>{
+          }).catch((err)=>{
+            console.error(err);
+          });
+        }
+      }
+    }).catch((err)=>{
+      console.error(err);
+    });
+  }
+}
 
 /**
  * User gps position
@@ -333,7 +460,6 @@ function reCrown(req,crown){
     let data = result.recordset;
     if(data && data[0]){
       sql(`update Crown set people=${data[0]['']} where count=${crown}`);
-      sql(`update UserInfo set crown=${crown} where uid=${req.UserInfo.uid}`);
     }
   }).catch((err)=>{
     console.log(err);
@@ -385,13 +511,12 @@ function reCrown(req,crown){
  * uid | uname | lv | lastcommit
  */
 function responeseLogin(req,res){
-  let {UserName,uid,cookie,lv,olv,config,cls,trashlv,trash} = req.UserInfo;
+  let {UserName,uid,cookie,lv,olv,config,cls,trashlv,trash,readmsg,notice} = req.UserInfo;
   
   //一个简单复用函数
   function done(clss){
-    sql(`update UserInfo set lastlogin=getdate() where uid=${uid}`);
     for(let c of clss){
-      c.UserName = stripTailSpace(c.UserName);
+      c.UserName = c.UserName.trimRight();
     }
     /**
      * 这里处理用户每一关的排名情况
@@ -459,26 +584,32 @@ function responeseLogin(req,res){
                 blocks:it.blocks,
                 best:best(it.lv)};
             }
-            if(lvs[it.lv].rank === 1)crown++; //统计皇冠数量
+            if(lvs[it.lv] && lvs[it.lv].rank === 1)crown++; //统计皇冠数量
           }
         }
       }
       let platform = req.body.platform;
       let entryrandom = req.body.entryrandom;
       reCrown(req,crown);
+      /**
+       * 将crown,lastlogin设置好，清除notice通知在看到后就删除
+       */
+      sql(`update UserInfo set crown=${crown},lastlogin=getdate(),notice=NULL where uid=${uid}`);
       //记录动作
       if(entryrandom)sqlAction(uid,cls,'e'+entryrandom); //将进入和登录结合起来，侦测点击到登录的人数差
       sqlAction(uid,cls,'login '+platform);
-      //将关卡的视频配置插入到这里
-      sql('select * from LevelVideo').then((R)=>{
+      //将关卡的视频配置和通知消息插入到这里
+      Promise.all([sql('select * from LevelVideo'),sql('select * from Message order by id desc')]).then(([R,M])=>{
         let levelvideo;
+        let message;
         if(R)levelvideo = R.recordset;
+        if(M)message = M.recordset;
         res.json({
           result:'ok',
           lv,
           olv,
           config,
-          user:stripTailSpace(UserName),
+          user:UserName.trimRight(),
           uid,
           cookie,
           clsid:cls,
@@ -487,7 +618,10 @@ function responeseLogin(req,res){
           crown,
           trashlv,
           trash,
-          levelvideo
+          readmsg,
+          message,
+          levelvideo,
+          notice
         });
       }).catch((err)=>{
         res.json({result:''});
@@ -612,29 +746,66 @@ function tops(req,res){
  * 提交成绩，返回排名情况
  */
 const best={
-  '1':3,
-  '2':3,
-  '3':6,
-  '4':9,
-  '5':9,
-  '6':5,
-  '7':8,
-  '8':5,
-  '9':14,
-  '10':9,
-  '11':9,
-  '12':6,
-  '13':5,
-  '14':9,
-  '15':9,
-  '16':7,
-  '17':12,
-  '18':14,
-  '19':8,
-  '20':13,
-  '21':5,
-  '22':9,
-  '23':10
+  '1':[3,0],
+  '2':[3,0],
+  '3':[6,0],
+  '4':[9,0],
+  '5':[9,0],
+  '6':[5,0],
+  '7':[8,0],
+  '8':[5,0],
+  '9':[14,0],
+  '10':[9,0],
+  '11':[9,0],
+  '12':[6,0],
+  '13':[5,0],
+  '14':[9,0],
+  '15':[9,0],
+  '16':[7,0],
+  '17':[12,0],
+  '18':[14,0],
+  '19':[8,0],
+  '20':[13,0],
+  '21':[5,0],
+  '22':[9,0],
+  '23':[10,0],
+  '24':[10,-2],
+  '25':[14,-4],
+  '26':[11,-2],
+  '27':[21,-5],
+  '28':[15,0],
+  '29':[15,-2],
+  '30':[23,-8],
+  '31':[5,0],
+  '32':[8,0],
+  '33':[13,-3],
+  '34':[13,-3],
+  '35':[14,-5],
+  '36':[15,-5],
+  '37':[16,-6],
+  '38':[11,-1],
+  '39':[19,-5],
+  '40':[21,-6],
+  '41':[5,0],
+  '42':[5,0],
+  '43':[7,0],
+  '44':[11,-3],
+  '45':[13,-2],
+  '46':[8,0],  
+  '47':[11,-2],
+  '48':[15,-5],
+  '49':[22,-5],
+  '50':[16,-5],
+  '51':[7,0],
+  '52':[7,0],
+  '53':[9,0],
+  '54':[8,0],
+  '55':[9,0],
+  '56':[8,0],
+  '57':[12,-2],
+  '58':[8,0],
+  '59':[10,-2],
+  '60':[17,-5]  
 };
 router.post('/commit',function(req,res){
   let lv = req.body.lv;
@@ -696,12 +867,10 @@ router.post('/commit',function(req,res){
       if(rank===1){
         //新提交的成绩是第一名，需要更新,这样同班同学马上就能看到
         reCrown(req,req.UserInfo.crown+1);
+        notifyClass(3,req.UserInfo.UserName,req.UserInfo.uid,req.UserInfo.cls,req.UserInfo.crown+1); //尝试查询被超越的同学
       }
-      if(best[lv] && best[lv]>blocks){
-        //这里是卡BUG出来的结果，不操作Tops表
-        return sql(`select * from Tops where lv=${lv}`);
-      }
-      if(lv>=20 && blocks < 5 ){
+      notifyClass(1,req.UserInfo.UserName,req.UserInfo.uid,req.UserInfo.cls,lv); //尝试查询被超越的同学
+      if(best[lv] && best[lv][0]+best[lv][1]>blocks){
         //这里是卡BUG出来的结果，不操作Tops表
         return sql(`select * from Tops where lv=${lv}`);
       }
@@ -770,49 +939,54 @@ router.post('/config',function(req,res){
 });
 
 const UnlockTable = [
-  {lv:21,rang:10,gold:10000},
-  {lv:31,rang:10,gold:10000},
-  {lv:41,rang:10,gold:10000},
-  {lv:51,rang:10,gold:10000},
-  {lv:61,rang:10,gold:10000},
+  {lv:21,rang:10,gold:3000,crown:15},
+  {lv:31,rang:10,gold:5000,crown:25},
+  {lv:41,rang:10,gold:8000,crown:35},
+  {lv:51,rang:10,gold:10000,crown:45},
+  {lv:61,rang:10,gold:10000,crown:55},
 ];
 
+function getUnlockTable(lv){
+  for(let ut of UnlockTable){
+    if(ut.lv===lv+1)return ut;
+  }
+}
 /**
  * 解锁关卡
  */
 router.post('/unlock',function(req,res){
   //记录动作
-  let {lv,olv,uid,cls,crown} = req.UserInfo;
+  let {lv,UserName,olv,uid,cls,crown} = req.UserInfo;
   let unlock;
+  let {param} = req.body;
 
-  if(lv === crown){
-    //全皇冠解锁
-    olv = olv ? olv : 21;
-    if(olv===21||olv===31||olv===41||olv===51){
-      unlock = olv;
-      olv = olv + 10;
+  olv = olv ? olv : 21;  
+  unlock = olv;
+  let unlocktable = getUnlockTable(lv);
+  if(param==='crown'){ //皇冠解锁
+    if(unlocktable && unlocktable.crown<=crown){
+      olv = olv + unlocktable.rang;    
       sql(`update UserInfo set olv=${olv} where uid='${uid}'`).
       then((result)=>{
-        sqlAction(uid,cls,`unlock(${olv})`);
+        sqlAction(uid,cls,`unlock1(${olv})`);
+        notifyClass(2,UserName,uid,cls,olv); //通知同班同学，我解锁了
         res.json({result:'ok',olv,unlock});
       }).catch((err)=>{
         resError(res,err);
-      });      
+      });         
     }else{
-      res.json({result:'你没有达到解锁条件.'});
+      res.json({result:'你的皇冠数没有达到要求的条件.'});
     }
     return;
-  }
-  olv = olv?olv:0;
-  for(let i=0;i<UnlockTable.length;i++){
-    if(olv<=UnlockTable[i].lv){
-      unlock = UnlockTable[i].lv;
-      olv = UnlockTable[i].lv+UnlockTable[i].rang;
-      payGold(uid,UnlockTable[i].gold,(b,msg)=>{
+  }else if(param==='gold'){ //金币解锁
+    if(unlocktable){
+      olv = olv + unlocktable.rang;
+      payGold(uid,unlocktable.gold,(b,msg)=>{
         if(b){
           sql(`update UserInfo set olv=${olv} where uid='${uid}'`).
           then((result)=>{
-            sqlAction(uid,cls,`unlock(${olv})`);
+            sqlAction(uid,cls,`unlock2(${olv})`);
+            notifyClass(2,UserName,uid,cls,olv); //通知同班同学，我解锁了
             res.json({result:'ok',olv,unlock});
           }).catch((err)=>{
             resError(res,err);
@@ -824,7 +998,8 @@ router.post('/unlock',function(req,res){
       return;
     }
   }
-  res.json({result:'没有新的关卡需要解锁.'});
+
+  res.json({result:'解锁失败.'});
 });
 
 /**
@@ -902,5 +1077,31 @@ router.post('/report',function(req,res){
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
-
+/**
+ * 用户读了消息
+ */
+router.post('/readmsg',function(req,res){
+  let {readed} = req.body;
+  let {uid,readmsg} = req.UserInfo;
+  if(typeof readed !== 'number'){
+    res.json({result:'参数错误'});
+    return;
+  }
+  if(readmsg){
+    //看看已读的索引是不是已经在列表中了，如果是直接返回
+    let readm = readmsg.split(',');
+    if(readm.includes(String(readed))){
+      res.json({result:'ok'});
+      return;
+    }
+    readmsg += (","+readed);
+  }else{
+    readmsg = String(readed);
+  }
+  sql(`update UserInfo set readmsg='${readmsg}' where uid=${uid}`).then((result)=>{
+    res.json({result:'ok'});
+  }).catch((err)=>{
+    resError(res,err);
+  });
+});
 module.exports = router;

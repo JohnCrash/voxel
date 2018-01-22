@@ -7,8 +7,8 @@ export default function en(){
     Blockly.Msg["WHEN_START"] = "when run";
     Blockly.Msg["STEP"] = "step";
     Blockly.Msg["FORWARD"] = "move forward";
-    Blockly.Msg["TURN_LEFT"] = "turn left";
-    Blockly.Msg["TURN_RIGHT"] = "turn right";
+    Blockly.Msg["TURN_LEFT"] = "turn left 90°";
+    Blockly.Msg["TURN_RIGHT"] = "turn right 90°";
     Blockly.Msg["PUSH"] = "push";
     Blockly.Msg["POP"] = "pop";    
     Blockly.Msg["JUMP"] = "jump forward";

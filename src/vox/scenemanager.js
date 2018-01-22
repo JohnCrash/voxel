@@ -267,6 +267,18 @@ class SceneManager extends EventEmitter{
         }
         this._groundCollisions = null;
         this.items = [];
+        //清除场景中的除灯外的可见物
+        /*
+        let s = [];
+        for(let child of this.game.scene.children){
+            if(!child.isLight){
+                s.push(child);
+            }
+        }
+        for(let child of s){
+            this.game.scene.remove(child);
+        }
+        */
     }
 
     addSpotLight(t){
@@ -747,6 +759,28 @@ class SceneManager extends EventEmitter{
     //创建一个粒子引擎
     createSpe(json){
         return new Spe(json);
+    }
+    /**
+     * 向场景中放置一个几何体
+     * type : box,circle,cylinder...
+     * position : 位置
+     * rotation : euler
+     * color    : 颜色
+     * geometry : 几何体描述
+     */
+    addGeometry(g){
+        let geometry = new THREE.BoxBufferGeometry( ...g.geometry );
+        //let material = new THREE.MeshBasicMaterial( {color: g.color} );
+        let material = new THREE.MeshPhongMaterial( {color: g.color,shading: THREE.FlatShading, 
+            shininess: 0} );
+        let cube = new THREE.Mesh( geometry, material );
+        this.game.scene.add( cube );
+        if(g.position)cube.position.set(...g.position);
+        if(g.rotation)cube.rotation.set(...g.rotation);
+        return cube;
+    }
+    removeGeometry(geo){
+        this.game.scene.remove(geo);
     }
 };
 

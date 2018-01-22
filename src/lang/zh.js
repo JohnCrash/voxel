@@ -7,8 +7,8 @@ export default function zh(){
     Blockly.Msg["WHEN_START"] = "开始运行程序";
     Blockly.Msg["STEP"] = "步";
     Blockly.Msg["FORWARD"] = "向前移动";
-    Blockly.Msg["TURN_LEFT"] = "左转";
-    Blockly.Msg["TURN_RIGHT"] = "右转";
+    Blockly.Msg["TURN_LEFT"] = "左转90°";
+    Blockly.Msg["TURN_RIGHT"] = "右转90°";
     Blockly.Msg["PUSH"] = "保存位置";
     Blockly.Msg["POP"] = "恢复位置";
     Blockly.Msg["JUMP"] = "向前跳跃";

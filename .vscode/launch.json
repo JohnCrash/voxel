@@ -46,7 +46,14 @@
             "name": "Debug 热编译",
             "url": "http://localhost:3001/#/login",
             "webRoot": "${workspaceRoot}"
-        },        
+        },    
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Debug https热编译",
+            "url": "https://robot.ljlx.com/#/login",
+            "webRoot": "${workspaceRoot}"
+        },              
         {
             "type": "chrome",
             "request": "attach",

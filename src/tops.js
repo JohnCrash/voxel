@@ -76,6 +76,7 @@ class Tops extends Component{
         }
         let p = {
             unlock_gold:info.next_unlock_gold,
+            unlock_crown:info.next_unlock_crown,
             seg_begin:info.next_begin,
             seg_end:info.next_end,
             need_unlock:info.next_need_unlock

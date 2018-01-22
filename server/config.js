@@ -9,7 +9,9 @@ const config = {
     port:3000,
     public: 'public',
     upload: 'public/',
-    ljlxconfig: __dirname+'/lxc-LXGridMain.txt'
+    ljlxconfig: __dirname+'/lxc-LXGridMain.txt',
+    ljlxkey: __dirname+'/ljlx/_.ljlx.com.key',
+    ljlxcert: __dirname+'/ljlx/_.ljlx.com.crt'
 };
 
 module.exports = config;

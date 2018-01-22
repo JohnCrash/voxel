@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 
 const FixStyle = {
-    position : 'fixed',
-    right : '12px',
-    top : '16px',
-    zIndex : 1100,
+//    position : 'fixed',
+//    right : '12px',
+//    top : '16px',
+//    zIndex : 1100,
+    verticalAlign:'bottom'
 };
 
 class FloatButton extends Component{

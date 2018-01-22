@@ -1,5 +1,5 @@
 {
-	"title" : "像搭积木一样学编程",
+	"title" : "乐学编程",
 	"total" : 200,
 	"closed" : 61,
 	"failSound" : "scene/audio/effect/通关失败.mp3",
@@ -24,21 +24,24 @@
 			"preview" : "scene/image/3.png",
 			"desc" : "Objects",
 			"rang" : "21-30",
-			"unlock" : "10000"
+			"unlock_crown" : "15",
+			"unlock" : "3000"
 		},
 		{
 			"name" : "四、变量",
 			"desc" : "Variable",
 			"preview" : "scene/image/4.png",
 			"rang" : "31-40",
-			"unlock" : "10000"
+			"unlock_crown" : "25",
+			"unlock" : "5000"
 		},
 		{
 			"name" : "五、条件循环",
 			"desc" : "While / Until",
 			"preview" : "scene/image/5.png",
 			"rang" : "41-50",
-			"unlock" : "10000"
+			"unlock_crown" : "35",
+			"unlock" : "8000"
 		},
 		{
 			"name" : "六、如果条件",
@@ -46,18 +49,19 @@
 			"preview" : "scene/image/6.png",
 			"rang" : "51-60",
 			"uicolor" : "#FFFFFF",
+			"unlock_crown" : "45",
 			"unlock" : "10000"
 		},	
 		{
-			"name" : "七、逻辑（与或非）",
-			"desc" : "Logic",
+			"name" : "七、计数循环",
+			"desc" : "For Loop",
 			"preview" : "scene/image/comming_soon.png",
 			"rang" : "61-70",
 			"unlock" : "10000"
 		},
 		{
-			"name" : "八、计数循环",
-			"desc" : "For Loop",
+			"name" : "八、逻辑（与或非）",
+			"desc" : "Logic",
 			"rang" : "71-80",
 			"unlock" : "10000"
 		},
