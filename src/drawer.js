@@ -21,6 +21,7 @@ import LevelDebug from './leveldebug';
 import PropTypes from 'prop-types';
 import {RadioButton, RadioButtonGroup} from 'material-ui/RadioButton';
 import { setTimeout } from 'timers';
+import {TeamIcon,TipsIcon} from './ui/myicon';
 
 const ToggleStyle = {marginTop: 16,marginBottom: 16,marginLeft:16,width:"85%"};
 const SpanStyle = {marginTop: 16,marginLeft:16,marginRight:8};
@@ -276,9 +277,9 @@ class MainDrawer extends Component{
                 />
             </RadioButtonGroup>
             <GrayBlock />
-            {this.props.loc==="game"?<MenuItem primaryText="任务提示" leftIcon={<IconTips />} style={BlodStyle} onClick={this.onTip}/>:undefined}
+            {this.props.loc==="game"?<MenuItem primaryText="任务提示" leftIcon={<TipsIcon />} style={BlodStyle} onClick={this.onTip}/>:undefined}
             <MenuItem primaryText="操作帮助" leftIcon={<HelpIcon />} style={BlodStyle} onClick={this.onHelp}/> 
-            <MenuItem primaryText="制作团队" leftIcon={<IconAbout />} style={BlodStyle} onClick={this.onAbout}/> 
+            <MenuItem primaryText="制作团队" leftIcon={<TeamIcon />} style={BlodStyle} onClick={this.onAbout}/> 
             <div style={{margin:16}}>版本:{Global.version}</div> 
             {openDebug?<MenuItem primaryText="DEBUG..." leftIcon={<IconDebug />} onClick={(event)=>{
                 window.location = `http://192.168.2.83:3001/#/login/${Global.getUID()}/${Global.getUserName()}/${Global.getCookie()}`

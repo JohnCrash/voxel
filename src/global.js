@@ -13,7 +13,7 @@ console.info('Import Global...');
 class _Global_ extends EventEmitter{
     constructor(){
         super();
-        this.version = '1.0.20';
+        this.version = '1.0.21';
         this.LevelJson = null;
         this.maxpasslv = null;
         this._debug = window.LOCALHOST;
@@ -414,6 +414,16 @@ class _Global_ extends EventEmitter{
         this.updateCls(this._uid,lv-1);
         this.updateLevelRank(lv-1,rank,blocks,best);
         this.wsPassLevel(lv-1,rank,blocks);
+        //在完成关卡后更新我的皇冠数量，以及班级表cls中我的皇冠数量
+        let json = this._loginJson;
+        if(json){
+            json.crown = this.getCrowns();
+            for(let o of json.cls){
+                if(o.uid=== this.getUID()){
+                    o.crown = json.crown;
+                }
+            }
+        }
     }
     setCurrentSceneManager(sceneManager){
         this._sceneManager = sceneManager;

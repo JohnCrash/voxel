@@ -1050,28 +1050,28 @@ router.post('/trash',function(req,res){
  * 皇冠排行榜
  */
 router.post('/crowns',function(req,res){
-  let {uid,cls} = req.UserInfo;
-  if(cls !== 0 && cls !== '0'){
-    sql(`select * from Crown`).then((result)=>{
-      /**
-       * 将count = 0 的人数去掉
-       */
-      let crowns = result.recordset;
-      if(crowns){
-        for(let i = 0;i<crowns.length;i++){
-          if(crowns[i].count == 0){
-            crowns[i].people = 0;
-            break;
-          }
+//  let {uid,cls} = req.UserInfo;
+//  if(cls !== 0 && cls !== '0'){
+  sql(`select * from Crown`).then((result)=>{
+    /**
+     * 将count = 0 的人数去掉
+     */
+    let crowns = result.recordset;
+    if(crowns){
+      for(let i = 0;i<crowns.length;i++){
+        if(crowns[i].count == 0){
+          crowns[i].people = 0;
+          break;
         }
       }
-      res.json({result:'ok',crowns});
-    }).catch((err)=>{
-      resError(res,err);
-    });
-  }else{
-    res.json({result:"ok"});
-  }
+    }
+    res.json({result:'ok',crowns});
+  }).catch((err)=>{
+    resError(res,err);
+  });
+//  }else{
+//    res.json({result:"ok"});
+//  }
 });
 
 /**

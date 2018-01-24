@@ -61,19 +61,21 @@ class Main extends Component{
         if(Global.getLoginJson()){
             let notice = Global.getLoginJson().notice;
             let text;
-            console.log(notice);
             try{
+                function colorBoldText(t,c){
+                    return t.replace(/^\*\*(.*)\*\*(.*)/,($0,$1,$2)=>{
+                        return `<font color=${c}>${$1}</font>${$2}`;
+                    });
+                }
                 notice = JSON.parse(notice);
                 text = '<div id="rootnode" style="display:flex;justify-content:center"> <div id="secend" style="text-align:left;">';
                 for(let msg of notice.msg){
                     text+=`<img src="scene/image/beyond${msg.type}.png" width=32 style="vertical-align:middle"/>`;
-                    text += msg.msg+'</br>';
+                    text += colorBoldText(msg.msg,'#1E90FF');
+                    text += '</br>';
                 }
                 text += '</div></div>';
             }catch(e){}
-            console.log('===16===');
-            console.log(text);
-            console.log(notice);
             if(notice&&text){
                 Global.getLoginJson().notice = null;
                 MessageBox.show('ok-center',undefined,<MarkdownElement text={text}/>,
