@@ -9,6 +9,7 @@ class _ljshell{
             document.addEventListener('deviceready', ()=>{
                 this.lj = window.ljAppObject;
                 let n = 0;
+                console.log('==============deviceready================');
                 console.log('document.addEventListener return');
                 this.lj.userinfo((msg,status)=>{
                     console.log('userinfo return :'+msg);
@@ -28,11 +29,12 @@ class _ljshell{
             }, false);
             if(window.LOCALHOST){//eslint-disable-line
                 setTimeout(()=>{
+                    console.log('==============deviceready timeout=================');
                     if(!this.lj){
                         this._userInfo = null;
                         cb(false,`没有从乐教乐学大厅进入.`);    
                     }
-                },1);
+                },2000);
             }
         }
     }

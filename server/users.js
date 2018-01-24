@@ -274,7 +274,7 @@ function notifyClass(t,name,uid,cls,p){
     name = name.trimRight();
     switch(t){
       case 1:sqlStr = `select uid,notice from UserInfo where lv=${p-1} and cls=${cls} and uid<>${uid}`;break;
-      case 2:sqlStr = `select uid,notice from UserInfo where olv<${p+10} and cls=${cls} and uid<>${uid}`;break;
+      case 2:sqlStr = `select uid,notice from UserInfo where lv<${p} and cls=${cls} and uid<>${uid}`;break;
       case 3:sqlStr = `select uid,notice from UserInfo where crown=${p-1} and cls=${cls} and uid<>${uid}`;break;
       default:return;
     }
@@ -282,8 +282,8 @@ function notifyClass(t,name,uid,cls,p){
       let users = result.recordset;
       let msg;
       switch(t){
-        case 1:msg = `**${name}**超越了你的关卡进度`;break;
-        case 2:msg = `**${name}**解锁了${p+1}-${p+10}的全部关卡`;break;
+        case 1:msg = `**${name}**超越了你的闯关进度`;break;
+        case 2:msg = `**${name}**解锁了关卡${p}-${p+9}`;break;
         case 3:msg = `**${name}**超越了你的皇冠排名`;break;
       }
       if(msg){
@@ -298,17 +298,17 @@ function notifyClass(t,name,uid,cls,p){
             try{
               let s = JSON.parse(user.notice);
               if(s && s.msg){//保留5条
-                s.msg.push(msg);
-                if(s.msg.length>5){
+                s.msg.push({type:t,msg});
+                if(s.msg.length>3){
                   s.msg.splice(0,s.msg.length-5);
                 }
               }
               user.notice = JSON.stringify(s);  
             }catch(e){
-              user.notice = `{"msg":["${msg}"]}`;
+              user.notice = `{"msg":[{"type":${t},"msg":"${msg}"}]}`;
             }
           }else{
-            user.notice = `{"msg":["${msg}"]}`;
+            user.notice = `{"msg":[{"type":${t},"msg":"${msg}"}]}`;
           }
           //更新同学的通知数据，当同学下回登录将看到这些通知，同时这些通知会被清空
           sql(`update UserInfo set notice=N'${user.notice}' where uid=${user.uid}`).then((result)=>{
@@ -505,26 +505,14 @@ function reCrown(req,crown){
   });
   */
 }
+
 /**
- * 回复login
- * 将玩家所在班级的全部信息打包发给玩家
- * uid | uname | lv | lastcommit
+ * 重新计算用户的皇冠数量crown，并返回完成关卡的排名情况lvs
+ * 计算好的结果通过cb返回
+ * 成功cb(true,crown,lvs);失败cb(false);
  */
-function responeseLogin(req,res){
-  let {UserName,uid,cookie,lv,olv,config,cls,trashlv,trash,readmsg,notice} = req.UserInfo;
-  
-  //一个简单复用函数
-  function done(clss){
-    for(let c of clss){
-      c.UserName = c.UserName.trimRight();
-    }
-    /**
-     * 这里处理用户每一关的排名情况
-     * 首先取得用户关卡完成情况使用sql语句:select lv,blocks from Level where uid=${uid}
-     * 然后取得关卡排行情况sql语句:select lv,blocks from Tops
-     * 然后根据这两个表就可以计算出用户每一关的排行情况了
-     */
-    Promise.all([sql(`select lv,blocks from Level where uid=${uid}`),sql(`select lv,blocks from Tops`)]).then(
+function CalcUserCrownAndLVS(uid,cb){
+  Promise.all([sql(`select lv,blocks from Level where uid=${uid}`),sql(`select lv,blocks from Tops`)]).then(
     ([levelss,topss])=>{
       let levels = levelss.recordset;
       let tops = topss.recordset;
@@ -551,8 +539,8 @@ function responeseLogin(req,res){
         //将tops做映射成二级数组,第一级是关卡，第二级数组是块数
         let lvtops = [];
         for(let it of tops){
-          if(it.lv && it.lv===+it.lv){
-            lvtops[it.lv] = lvtops[it.lv]?lvtops[it.lv]:[];
+          if(it.lv){
+            lvtops[it.lv] = lvtops[it.lv] || [];
             lvtops[it.lv].push(it.blocks);
           }
         }
@@ -588,48 +576,75 @@ function responeseLogin(req,res){
           }
         }
       }
-      let platform = req.body.platform;
-      let entryrandom = req.body.entryrandom;
-      reCrown(req,crown);
-      /**
-       * 将crown,lastlogin设置好，清除notice通知在看到后就删除
-       */
-      sql(`update UserInfo set crown=${crown},lastlogin=getdate(),notice=NULL where uid=${uid}`);
-      //记录动作
-      if(entryrandom)sqlAction(uid,cls,'e'+entryrandom); //将进入和登录结合起来，侦测点击到登录的人数差
-      sqlAction(uid,cls,'login '+platform);
-      //将关卡的视频配置和通知消息插入到这里
-      Promise.all([sql('select * from LevelVideo'),sql('select * from Message order by id desc')]).then(([R,M])=>{
-        let levelvideo;
-        let message;
-        if(R)levelvideo = R.recordset;
-        if(M)message = M.recordset;
-        res.json({
-          result:'ok',
-          lv,
-          olv,
-          config,
-          user:UserName.trimRight(),
-          uid,
-          cookie,
-          clsid:cls,
-          cls:clss,
-          lvs,
-          crown,
-          trashlv,
-          trash,
-          readmsg,
-          message,
-          levelvideo,
-          notice
-        });
-      }).catch((err)=>{
-        res.json({result:''});
-      });
+      cb(true,crown,lvs);
     }).catch((err)=>{
-      res.json({result:err});
+      cb(false);
     });
-  }
+}
+/**
+ * 回复login
+ * 将玩家所在班级的全部信息打包发给玩家
+ * uid | uname | lv | lastcommit
+ */
+function responeseLogin(req,res){
+  let {UserName,uid,cookie,lv,olv,config,cls,trashlv,trash,readmsg,notice} = req.UserInfo;
+  
+  //一个简单复用函数
+  function done(clss){
+    for(let c of clss){
+      c.UserName = c.UserName.trimRight();
+    }
+    /**
+     * 这里处理用户每一关的排名情况
+     * 首先取得用户关卡完成情况使用sql语句:select lv,blocks from Level where uid=${uid}
+     * 然后取得关卡排行情况sql语句:select lv,blocks from Tops
+     * 然后根据这两个表就可以计算出用户每一关的排行情况了
+     */
+    CalcUserCrownAndLVS(uid,(b,crown,lvs)=>{
+      if(b){
+        let platform = req.body.platform;
+        let entryrandom = req.body.entryrandom;
+        reCrown(req,crown);
+        /**
+         * 将crown,lastlogin设置好，清除notice通知在看到后就删除
+         */
+        sql(`update UserInfo set crown=${crown},lastlogin=getdate(),notice=NULL where uid=${uid}`);
+        //记录动作
+        if(entryrandom)sqlAction(uid,cls,'e'+entryrandom); //将进入和登录结合起来，侦测点击到登录的人数差
+        sqlAction(uid,cls,'login '+platform);
+        //将关卡的视频配置和通知消息插入到这里
+        Promise.all([sql('select * from LevelVideo'),sql('select * from Message order by id desc')]).then(([R,M])=>{
+          let levelvideo;
+          let message;
+          if(R)levelvideo = R.recordset;
+          if(M)message = M.recordset;
+          res.json({
+            result:'ok',
+            lv,
+            olv,
+            config,
+            user:UserName.trimRight(),
+            uid,
+            cookie,
+            clsid:cls,
+            cls:clss,
+            lvs,
+            crown,
+            trashlv,
+            trash,
+            readmsg,
+            message,
+            levelvideo,
+            notice
+          });
+        }).catch((err)=>{
+          res.json({result:''});
+        });
+      }else{
+        res.json({result:err});
+      }
+    }); //CalcUserCrownAndLVS end
+  } //done end
   if(cls==='0' || cls==0){//如果cls=0就不要查找了因为这表示所有没有班级的人
     done([]);
   }else{
@@ -830,22 +845,6 @@ router.post('/commit',function(req,res){
         sql(`insert into Method (lv,lname,blocks,count,method,md5) values (${lv},'${lname}',${blocks},1,N'${method}','${md5}')`);
       }
     });
-    //更新个人成绩
-    sql(`select try,blocks,tms,avgms from Level where uid='${req.UserInfo.uid}' and lname='${lname}'`).then((result)=>{
-      let data = result.recordset[0];
-      let avgms = req.body.each;
-      let tms = req.body.total;
-      if(data){
-        if(data.blocks>blocks){ //块数降低了
-          avgms += data.avgms;
-          avgms /= 2;
-          tms += data.tms;
-          sql(`update Level set blocks=${blocks},md5='${md5}',try=${data.try+1},tms=${tms},avgms=${avgms} where uid='${req.UserInfo.uid}' and lname='${lname}'`);
-        }
-      }else{
-        sql(`insert into Level (lv,lname,blocks,try,md5,uid,cls,uname,tms,avgms) values (${lv},'${lname}',${blocks},1,'${md5}',${req.UserInfo.uid},${req.UserInfo.cls},'${req.UserInfo.UserName}',${tms},${avgms})`);
-      }
-    });
     //记录动作
     sqlAction(req.UserInfo.uid,req.UserInfo.cls,`L${lv}-${blocks}`);
     //Tops是总排行，方法排行，取保留前5
@@ -864,12 +863,41 @@ router.post('/commit',function(req,res){
         }
         if(data[i].blocks<blocks)rank++;
       }
-      if(rank===1){
-        //新提交的成绩是第一名，需要更新,这样同班同学马上就能看到
-        reCrown(req,req.UserInfo.crown+1);
-        notifyClass(3,req.UserInfo.UserName,req.UserInfo.uid,req.UserInfo.cls,req.UserInfo.crown+1); //尝试查询被超越的同学
-      }
       notifyClass(1,req.UserInfo.UserName,req.UserInfo.uid,req.UserInfo.cls,lv); //尝试查询被超越的同学
+      //更新个人成绩，这一段代码放到前面或者这里都可以，但是需要通知皇冠超越，因此放这里可以知道rank的值，然后根据rank来通知
+      sql(`select try,blocks,tms,avgms from Level where uid='${req.UserInfo.uid}' and lname='${lname}'`).then((result)=>{
+        let data = result.recordset[0];
+        let avgms = req.body.each;
+        let tms = req.body.total;
+        if(data){
+          if(data.blocks>blocks){ //块数降低了
+            avgms += data.avgms;
+            avgms /= 2;
+            tms += data.tms;
+            return sql(`update Level set blocks=${blocks},md5='${md5}',try=${data.try+1},tms=${tms},avgms=${avgms} where uid='${req.UserInfo.uid}' and lname='${lname}'`);
+          }
+        }else{
+          return sql(`insert into Level (lv,lname,blocks,try,md5,uid,cls,uname,tms,avgms) values (${lv},'${lname}',${blocks},1,'${md5}',${req.UserInfo.uid},${req.UserInfo.cls},'${req.UserInfo.UserName}',${tms},${avgms})`);
+        }
+      }).then((result)=>{
+        /**
+         * 用户的关卡块数更新完成后
+         * 重新计算crown数量，然后在通知crown超越
+         */
+        if(rank===1){ //仅仅当用户取得皇冠后才做重新计算和通知
+          let {uid,UserName,cls} = req.UserInfo;
+          CalcUserCrownAndLVS(uid,(b,crown,lvs)=>{
+            if(b){
+              reCrown(req,crown);
+              sql(`update UserInfo set crown=${crown} where uid=${uid}`);
+              notifyClass(3,UserName,uid,cls,crown);
+            }
+          });
+        }
+      }).catch((err)=>{
+        console.error(err);
+      });
+
       if(best[lv] && best[lv][0]+best[lv][1]>blocks){
         //这里是卡BUG出来的结果，不操作Tops表
         return sql(`select * from Tops where lv=${lv}`);
@@ -969,7 +997,7 @@ router.post('/unlock',function(req,res){
       sql(`update UserInfo set olv=${olv} where uid='${uid}'`).
       then((result)=>{
         sqlAction(uid,cls,`unlock1(${olv})`);
-        notifyClass(2,UserName,uid,cls,olv); //通知同班同学，我解锁了
+        notifyClass(2,UserName,uid,cls,unlock); //通知同班同学，我解锁了
         res.json({result:'ok',olv,unlock});
       }).catch((err)=>{
         resError(res,err);
@@ -986,7 +1014,7 @@ router.post('/unlock',function(req,res){
           sql(`update UserInfo set olv=${olv} where uid='${uid}'`).
           then((result)=>{
             sqlAction(uid,cls,`unlock2(${olv})`);
-            notifyClass(2,UserName,uid,cls,olv); //通知同班同学，我解锁了
+            notifyClass(2,UserName,uid,cls,unlock); //通知同班同学，我解锁了
             res.json({result:'ok',olv,unlock});
           }).catch((err)=>{
             resError(res,err);

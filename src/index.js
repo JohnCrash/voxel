@@ -33,7 +33,7 @@ const store = createStore(reducer);
 function App(){
     return <Provider  store={store}>
         <MuiThemeProvider>
-            <div style={{webkitUserSelect:"none",webkitTouchCallout:"none"}/*禁止ios打开选择*/}>
+            <div style={{WebkitUserSelect:"none",WebkitTouchCallout:"none"}/*禁止ios打开选择*/}>
                 <Router>
                     <Switch>
                         <Route path='/main' component={Main}/>

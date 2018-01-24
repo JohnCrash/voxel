@@ -61,14 +61,24 @@ class Main extends Component{
         if(Global.getLoginJson()){
             let notice = Global.getLoginJson().notice;
             let text;
+            console.log(notice);
             try{
                 notice = JSON.parse(notice);
-                text = notice.msg.join('</br>');
-                console.log(text);
+                text = '<div id="rootnode" style="display:flex;justify-content:center"> <div id="secend" style="text-align:left;">';
+                for(let msg of notice.msg){
+                    text+=`<img src="scene/image/beyond${msg.type}.png" width=32 style="vertical-align:middle"/>`;
+                    text += msg.msg+'</br>';
+                }
+                text += '</div></div>';
             }catch(e){}
-            if(text)
+            console.log('===16===');
+            console.log(text);
+            console.log(notice);
+            if(notice&&text){
+                Global.getLoginJson().notice = null;
                 MessageBox.show('ok-center',undefined,<MarkdownElement text={text}/>,
                 (result)=>{});
+            }
         }
 
         this.initLogin();  
@@ -107,9 +117,9 @@ class Main extends Component{
         }
         let {readmsg,msgcount} = this.state;
         let message = Global.getLoginJson().message || [];
-        let menuitems = message.map((item)=>{
+        let menuitems = message.map((item,index)=>{
             let isreaded = readmsg.includes(item.id);
-            return <MenuItem rightIcon={isreaded?undefined:<DotIcon />}
+            return <MenuItem key={index} rightIcon={isreaded?undefined:<DotIcon />}
                 style={{color:isreaded?'gray':'dodgerblue',fontWeight:'bold'}} 
                 primaryText={item.title}
                 onClick={()=>{
@@ -138,10 +148,10 @@ class Main extends Component{
         <div style={{position:'fixed',display:'flex',alignItems:'center',
             top:'16px',right:'16px',zIndex:1100,fontSize:'x-large',color:'white'}}>
             <span onClick={this.onTops}>{Global.getCrowns()}×</span>
-            <FloatButton src={'scene/image/crown.png'} onClick={this.onTops} style={{width:'36px'}}/>
+            <FloatButton src={window.cdndomain?window.cdndomain+'scene/image/crown.png':'scene/image/crown.png'} onClick={this.onTops} style={{width:'36px'}}/>
             {message.length>0?<IconMenu
                 ref={(ref)=>{this.msgbox = ref;}}
-                iconButtonElement={<FloatButton src={'scene/image/message.png'} style={{width:'36px',marginLeft:'16px',marginRight:'8px'}}/>}
+                iconButtonElement={<FloatButton src={window.cdndomain?window.cdndomain+'scene/image/message.png':'scene/image/message.png'} style={{width:'36px',marginLeft:'16px',marginRight:'8px'}}/>}
                 anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
                 targetOrigin={{horizontal: 'left', vertical: 'top'}}
                 >
