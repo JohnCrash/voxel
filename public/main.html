@@ -45,12 +45,31 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 	<div id="root"></div>
 	<script>
 		window.platfrom = 'windows';
-		window.cdndomain = 'http://fileoss.ljlx.com/upgrade/luaapp/voxel/';
+		window.cdndomain = 'http://fileoss.ljlx.com/upgrade/luaapp/voxel/';		
 		if(localStorage.isdebug==='true'){
 			try{window.vConsole = new VConsole();}catch(e){console.log(e);}
 		}		
+		window.corsRequest = function(url,onload,errcb,asyncLoad){
+			var xhr = new XMLHttpRequest;
+			xhr.open("GET", window.cdndomain+url, true);
+			xhr.withCredentials = true;
+			xhr.responseType = "arraybuffer";
+			function onerror(){
+				console.error('asyncLoad : '+url)
+				asyncLoad(url,onload,errcb);
+			}
+			xhr.onload = function xhr_onload() {
+				if (xhr.status == 200 || xhr.status == 0 && xhr.response) {
+					onload(new Uint8Array(xhr.response));
+				} else {
+					onerror()
+				}
+			};
+			xhr.onerror = onerror;
+			xhr.send(null)
+		}		
 		var progress = document.getElementById('progress');
-		var bar = document.getElementById('bar');
+		var bar = document.getElementById('bar');		
 		function progressBar(d){
 			if(bar)bar.setAttributeNS(null,'width',d*3>296?296:d*3);
 			if(progress)progress.innerHTML = d+"%";
@@ -60,7 +79,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 			var head = document.getElementsByTagName('head')[0];
 			var script = document.createElement('script');
             script.type = 'text/javascript';
-            script.src = window.cdndomain+js;
+            script.src = Global.getCDNURL(js);
 			script.onload=function(){cb();}
 			script.onreadystatechange=function(){
 				if(this.readyState==='complete')cb();

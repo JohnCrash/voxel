@@ -32,7 +32,7 @@ class ScriptManager_{
             let head = document.getElementsByTagName('head')[0];
             let script = document.createElement('script');
             script.type = 'text/javascript';
-            script.src = js;
+            script.src = window.cdndomain?window.cdndomain+js:js;
             script.onreadystatechange=function(){
                 if(this.readyState==='complete'){
                     s.state = 'ready';

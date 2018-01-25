@@ -17,6 +17,30 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 		-webkit-user-select: none;	
       }
     </style>
+	<script>
+		//修改libunrar.js使得libunrar.js.mem可以放入cdn服务器
+		/*
+		window.cdndomain = 'http://fileoss.ljlx.com/upgrade/luaapp/voxel/';
+		window.corsRequest = function(url,onload,errcb,asyncLoad){
+			var xhr = new XMLHttpRequest;
+			xhr.open("GET", 'http://fileoss.ljlx.com/upgrade/luaapp/voxel/'+url, true);
+			xhr.withCredentials = true;
+			xhr.responseType = "arraybuffer";
+			function onerror(){
+				console.error('asyncLoad : '+url)
+				asyncLoad(url,onload,errcb);
+			}
+			xhr.onload = function xhr_onload() {
+				if (xhr.status == 200 || xhr.status == 0 && xhr.response) {
+					onload(new Uint8Array(xhr.response));
+				} else {
+					onerror()
+				}
+			};
+			xhr.onerror = onerror;
+			xhr.send(null)
+		}*/
+	</script>
 	<script src="libs/vconsole.min.js"></script>
 	<script type="text/javascript" src="libs/three.min.js"></script>
 	<script type="text/javascript" src="libs/stats.min.js"></script>
@@ -43,8 +67,8 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 			window.vConsole = new VConsole();
 		//}
 		window.platfrom = 'windows';
-		//window.cdndomain = 'http://fileoss.ljlx.com/upgrade/luaapp/voxels/';
-		window.cdndomain = '';
+		//window.cdndomain = 'http://fileoss.ljlx.com/upgrade/luaapp/voxel/';
+		//window.cdndomain = '';
 		window.LOCALHOST = true;
 		function firstrequest(){
 			var h = new XMLHttpRequest();

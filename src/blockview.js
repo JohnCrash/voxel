@@ -385,7 +385,7 @@ class BlockView extends Component{
             console.log(e);
         }
         try{
-            let media = window.cdndomain?window.cdndomain+'blockly/media/':'blockly/media/';
+            let media = Global.getCDNURL('blockly/media/');
             this.workspace = Blockly.inject(this.blockDiv,
                 {toolbox: this.toolboxXML,
                     media,

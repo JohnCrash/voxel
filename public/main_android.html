@@ -49,6 +49,25 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 		if(localStorage.isdebug==='true'){
 			try{window.vConsole = new VConsole();}catch(e){console.log(e);}
 		}
+		window.corsRequest = function(url,onload,errcb,asyncLoad){
+			var xhr = new XMLHttpRequest;
+			xhr.open("GET", window.cdndomain+url, true);
+			xhr.withCredentials = true;
+			xhr.responseType = "arraybuffer";
+			function onerror(){
+				console.error('asyncLoad : '+url)
+				asyncLoad(url,onload,errcb);
+			}
+			xhr.onload = function xhr_onload() {
+				if (xhr.status == 200 || xhr.status == 0 && xhr.response) {
+					onload(new Uint8Array(xhr.response));
+				} else {
+					onerror()
+				}
+			};
+			xhr.onerror = onerror;
+			xhr.send(null)
+		}		
 		var progress = document.getElementById('progress');
 		var bar = document.getElementById('bar');
 		function progressBar(d){

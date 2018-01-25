@@ -153,7 +153,7 @@ class Unlock extends Component{
                             <div style={bgstyle} 
                                 onClick={dict.crown>=dict.unlock_crown?this.handleAction.bind(this,'unlock','crown'):()=>{
                                     this.crown_cond.style.display = 'block';
-                                }}><b style={mix({fontSize:'xx-large'},dict.crown>=dict.unlock_crown?{color:'#3cb371'}:{})}><img style={{width:'48px',verticalAlign:'bottom'}} src={window.cdndomain+'scene/image/crown.png'}/>免费解锁</b>
+                                }}><b style={mix({fontSize:'xx-large'},dict.crown>=dict.unlock_crown?{color:'#3cb371'}:{})}><img style={{width:'48px',verticalAlign:'bottom'}} src={Global.getCDNURL('scene/image/crown.png')}/>免费解锁</b>
                                 <div style={{color:'#1e90ff'}}>需要{dict.unlock_crown}皇冠</div>
                                 <div>当前你有{dict.crown}皇冠</div>
                                 <div ref={ref=>{this.crown_cond=ref;}} style={{color:'red',display:'none'}}>未达到解锁条件</div>

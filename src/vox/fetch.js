@@ -1,4 +1,6 @@
 import log from './log';
+import {Global} from '../global';
+
 require("whatwg-fetch");
 
 function fetchCDN(s){
@@ -57,6 +59,9 @@ function fetchText(s,cb,errcb){
 }
 
 function postJson(s,b,cb,errcb){
+    b = b || {};
+    b.uid = Global.getUID();
+    b.sum = Global.getSUM();
     fetch(s,{method:'POST',
     credentials: 'same-origin',
     headers: {'Content-Type': 'application/json'},

@@ -6,6 +6,7 @@ import MarkdownElement from './ui/MarkdownElement';
 import {TextManager} from './ui/TextManager';
 import React, {Component} from 'react';
 import {AudioManager} from './vox/audiomanager';
+import  crypto from 'crypto';
 /*global closeLoadingUI,loadingProgressBar*/
 /*global THREE*/
 //if(window.closeLoadingUI)root.style.display="none";
@@ -13,7 +14,7 @@ console.info('Import Global...');
 class _Global_ extends EventEmitter{
     constructor(){
         super();
-        this.version = '1.0.21';
+        this.version = '1.0.22';
         this.LevelJson = null;
         this.maxpasslv = null;
         this._debug = window.LOCALHOST;
@@ -761,6 +762,14 @@ class _Global_ extends EventEmitter{
         if(!this._curRandom)
             this._curRandom = Math.random();
         return this._curRandom;
+    }
+    getCDNURL(url){
+        return window.cdndomain?window.cdndomain+url:url;
+    }
+    getSUM(){
+        let md5sum = crypto.createHash('md5');
+        md5sum.update(String(this._uid));
+        return md5sum.digest('hex').slice(0,6);
     }
 };
 

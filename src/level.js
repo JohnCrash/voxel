@@ -375,6 +375,7 @@ class Level extends Component{
         if(this.isPlayAgin()){
             //加载本关方法
             let json = {
+                uid:Global.getUID(),
                 lname:name
             };
             let _this = this;
@@ -740,7 +741,7 @@ class Level extends Component{
                 </div>
                 <div style={{position:"absolute",right:"12px",top:"12px"}} onClick={this.blockTips}>
                     <span ref={ref=>this.blockcount=ref} style={{fontSize:"24px",fontWeight:"bold",verticalAlign:"middle"}}>0×</span>
-                    <img src={window.cdndomain?window.cdndomain+"media/title-beta.png":"media/title-beta.png"} style={{height:"24px",verticalAlign:"middle"}} />
+                    <img src={Global.getCDNURL("media/title-beta.png")} style={{height:"24px",verticalAlign:"middle"}} />
                 </div>
             </div>
             <div style={{position:"absolute",display:"flex",flexDirection:"column",left:"0px",right:"50%",bottom:"0px"}}>
@@ -804,7 +805,7 @@ class Level extends Component{
             </div>
             <div style={{position:"absolute",right:"12px",top:"12px"}} onClick={this.blockTips} >
                     <span ref={ref=>this.blockcount=ref} style={{fontSize:"24px",fontWeight:"bold",verticalAlign:"middle",color:uiColor}}>0×</span>
-                    <img src={window.cdndomain?window.cdndomain+"media/title-beta.png":"media/title-beta.png"} style={{height:"24px",verticalAlign:"middle"}} />
+                    <img src={Global.getCDNURL("media/title-beta.png")} style={{height:"24px",verticalAlign:"middle"}} />
             </div>
             <div>
                 <IconButton touch={true} iconStyle={{color:uiColor}} onClick={this.Menu.bind(this)} tooltipPosition="top-center">

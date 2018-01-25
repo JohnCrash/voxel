@@ -342,33 +342,41 @@ router.post('/postpos',function(req,res){
  * cookie => UserInfo
  */
 router.use(function(req,res,next){
-  let cookie;
-
-  if(req.body.cookie){
-    cookie = req.body.cookie;
-    setCookie(res,cookie);
-  }else{
-    cookie = "sc1="+req.cookies.sc1;
-  }
   let uid = req.body.uid;
   if(uid){ //uid 是一个整数查询更快捷
-    sql(`select * from UserInfo where uid='${uid}'`).then((result)=>{
-      req.UserInfo = result.recordset[0];
-      if(req.UserInfo){
-        next();
-      }else{
-        /**
-         * FIXBUG : 如果二次登录cookie会发生改变，被踢掉的用户将不能继续提交
-         */
-        if(req.url!=='/login')
-          throw '你的帐号在其他设备上登录，请重新登录游戏。';
-        next();
+    let s;
+    /**
+     * 对login和commit做校验
+     */
+    /*
+    if(req.url==='/login' || req.url==='/commit'){
+      let md5sum = crypto.createHash('md5');
+      md5sum.update(String(uid));
+      if(md5sum.digest('hex').slice(0,6)!==req.body.sum){
+        res.json({result:'请登录再进行游戏!'});
+        return;
       }
-    }).catch((err)=>{
-      resError(res,err);
-    });
-  }else if(cookie){
-    sql(`select * from UserInfo where cookie='${cookie}'`).then((result)=>{
+    } */   
+    /**
+     * 根据接口对用户信息进行优化
+     */
+    switch(req.url){
+      case '/login':s = '*';break;      
+      case '/commit':
+      case '/unlock':s='lv,UserName,olv,uid,cls,crown';break;
+      case '/tops':
+      case '/levelmethod':
+      case '/config':
+      case '/trash':
+      case '/crowns':
+      case 'levelplaytime':
+      case '/logout':
+      case '/report':s = 'uid,cls';break;
+      case '/readmsg':s = 'uid,readmsg';break;
+      default:s = '*';break;
+    }
+
+    sql(`select ${s} from UserInfo where uid='${uid}'`).then((result)=>{
       req.UserInfo = result.recordset[0];
       if(req.UserInfo){
         next();
@@ -464,46 +472,6 @@ function reCrown(req,crown){
   }).catch((err)=>{
     console.log(err);
   });
-/*
-  //下面算法有BUG
-  sql(`select * from Crown where count=${oldcrown} or count=${crown}`).then((result)=>{
-    let data = result.recordset;
-    if(!data || (data&&data.length===0)){
-      //没有初始化Crown
-      let a = [];
-      for(let i=0;i<201;i++)a.push(i);
-      let s = `insert into Crown (count) values (${a.join('),(')})`;
-      sql(s).then(()=>{
-        reCrown(req,crown); //在执行一遍
-      }).catch((err)=>{
-        console.log(err);
-      });
-    }else if(data.length===2){
-      //正常
-      let oldPeople,People;
-      if(data[0].count === crown){
-        People = data[0].people;
-        oldPeople = data[1].people;
-      }else{
-        People = data[1].people;
-        oldPeople = data[0].people;        
-      }
-      //更新统计表，老的人数-1，新的人数+1
-      Promise.all([sql(`update Crown set people=${oldPeople-1} where count=${oldcrown}`),
-      sql(`update Crown set people=${People+1} where count=${crown}`)]).then(()=>{
-          //操作用户数据crown，并且对Crown中的统计进行增减。
-          sql(`update UserInfo set crown=${crown} where uid=${req.UserInfo.uid}`);
-      }).catch((err)=>{
-        console.error(err);  
-      });
-    }else{
-      //Crown表不正常需要重新初始
-      console.error(`Table Crown issue.`);
-    }
-  }).catch((err)=>{
-    console.error(err);
-  });
-  */
 }
 
 /**
@@ -662,65 +630,35 @@ function responeseLogin(req,res){
  */
 function login(req,res){
   let {uid,uname,cookie} = req.body;
-  if(!cookie || !uid || !uname){
-    //res.json({result:'请从乐教乐学大厅进入'});
-    //return;
-    //暂时允许cookie登录
-    if(req.UserInfo && req.UserInfo.cookie){
-      responeseLogin(req,res);
-    }else{
-      //没有通过cookie验证，也没有输入参数
-      res.json({result:'请从乐教乐学大厅进入'});
-    }
-    return;
-  }
+
   if(req.UserInfo && 'uid' in req.UserInfo){
-    //从cookie登录
-    let dbCookie = req.UserInfo.cookie;
-    if(cookie!==dbCookie){
-      sql(`update UserInfo set cookie='${cookie}' where uid=${uid}`);
-    }
     responeseLogin(req,res);
   }else{
     if(uid){
-      //正常使用uid登录
-      sql(`select * from UserInfo where uid=${uid}`).then((result)=>{
-        req.UserInfo = result.recordset[0];
-        if(req.UserInfo && 'uid' in req.UserInfo){
-          let dbCookie = req.UserInfo.cookie;
-          if(cookie!==dbCookie){
-            sql(`update UserInfo set cookie='${cookie}' where uid=${uid}`);
-          }          
-          responeseLogin(req,res);
-        }else{
-          //这里插入一个新的用户
-          pullUserInfo(
-            req,
-            function(zone,errmsg){
-              if(zone){
-                let {zone_id,school_id,role} = zone;
-                sql(`insert into UserInfo (uid,cookie,lv,UserName,lastlogin,cls,school,role,createdate) values (${uid},'${cookie}',0,N'${uname}',getdate(),${zone_id},${school_id},${role},getdate())`).then((result)=>{
-                  //新产生的对象还没有数据
-                  req.UserInfo = {
-                    UserName:uname,
-                    uid,
-                    cookie,
-                    lv:0,
-                    olv:0,
-                    cls:zone_id
-                  };
-                  responeseLogin(req,res);
-                }).catch((err)=>{
-                  res.send({result:err});
-                });
-              }else{
-                res.send({result:errmsg});
-              }
-            });          
-        }
-      }).catch((err)=>{
-        resError(res,err);
-      });      
+      //插入一个新的用户
+      pullUserInfo(
+        req,
+        function(zone,errmsg){
+          if(zone){
+            let {zone_id,school_id,role} = zone;
+            sql(`insert into UserInfo (uid,cookie,lv,UserName,lastlogin,cls,school,role,createdate) values (${uid},'${cookie}',0,N'${uname}',getdate(),${zone_id},${school_id},${role},getdate())`).then((result)=>{
+              //新产生的对象还没有数据
+              req.UserInfo = {
+                UserName:uname,
+                uid,
+                cookie,
+                lv:0,
+                olv:0,
+                cls:zone_id
+              };
+              responeseLogin(req,res);
+            }).catch((err)=>{
+              res.send({result:err});
+            });
+          }else{
+            res.send({result:errmsg});
+          }
+        });
     }else{
       res.json({result:'请从乐教乐学大厅进入(没有cookie参数)'});
     }
@@ -736,6 +674,7 @@ router.post('/login',function(req,res){
 function tops(req,res){
   let lname = req.body.lname;
   let cls = req.UserInfo.cls;
+
   if(cls==='0' || cls===0){
     //不进行排名
     sql(`select blocks,count from Tops where lname='${lname}'`).then((data)=>{
@@ -748,7 +687,7 @@ function tops(req,res){
   }else{
     //正常排名
     Promise.all([sql(`select blocks,count from Tops where lname='${lname}'`),
-    sql(`select uname,blocks,try,uid from Level where lname='${lname}' and cls='${req.UserInfo.cls}'`)]).then(([data,cls])=>{
+    sql(`select uname,blocks,try,uid from Level where lname='${lname}' and cls='${cls}'`)]).then(([data,cls])=>{
       res.json({result:'ok',
       tops:data.recordset,
       cls:cls.recordset});
@@ -823,15 +762,13 @@ const best={
   '60':[17,-5]  
 };
 router.post('/commit',function(req,res){
-  let lv = req.body.lv;
-  let method = req.body.method;
-  let blocks = req.body.blocks;
-  let lname = req.body.lname;
-    
+  let {lv,method,blocks,lname} = req.body;
+  let {uid,cls,UserName} = req.UserInfo;
+
   if(method && (req.UserInfo.lv+1)>=lv){
     //更新用户做到第几关了
     if(req.UserInfo.lv+1==lv)
-      sql(`update UserInfo set lv='${lv}',lastcommit=getdate() where uid='${req.UserInfo.uid}'`);
+      sql(`update UserInfo set lv='${lv}',lastcommit=getdate() where uid='${uid}'`);
     //提交成绩
     var md5sum = crypto.createHash('md5');
     md5sum.update(method);
@@ -846,7 +783,7 @@ router.post('/commit',function(req,res){
       }
     });
     //记录动作
-    sqlAction(req.UserInfo.uid,req.UserInfo.cls,`L${lv}-${blocks}`);
+    sqlAction(uid,cls,`L${lv}-${blocks}`);
     //Tops是总排行，方法排行，取保留前5
     sql(`select count,blocks from Tops where lname='${lname}'`).then((result)=>{
       let data = result.recordset;
@@ -863,9 +800,9 @@ router.post('/commit',function(req,res){
         }
         if(data[i].blocks<blocks)rank++;
       }
-      notifyClass(1,req.UserInfo.UserName,req.UserInfo.uid,req.UserInfo.cls,lv); //尝试查询被超越的同学
+      notifyClass(1,UserName,uid,cls,lv); //尝试查询被超越的同学
       //更新个人成绩，这一段代码放到前面或者这里都可以，但是需要通知皇冠超越，因此放这里可以知道rank的值，然后根据rank来通知
-      sql(`select try,blocks,tms,avgms from Level where uid='${req.UserInfo.uid}' and lname='${lname}'`).then((result)=>{
+      sql(`select try,blocks,tms,avgms from Level where uid='${uid}' and lname='${lname}'`).then((result)=>{
         let data = result.recordset[0];
         let avgms = req.body.each;
         let tms = req.body.total;
@@ -874,10 +811,10 @@ router.post('/commit',function(req,res){
             avgms += data.avgms;
             avgms /= 2;
             tms += data.tms;
-            return sql(`update Level set blocks=${blocks},md5='${md5}',try=${data.try+1},tms=${tms},avgms=${avgms} where uid='${req.UserInfo.uid}' and lname='${lname}'`);
+            return sql(`update Level set blocks=${blocks},md5='${md5}',try=${data.try+1},tms=${tms},avgms=${avgms} where uid='${uid}' and lname='${lname}'`);
           }
         }else{
-          return sql(`insert into Level (lv,lname,blocks,try,md5,uid,cls,uname,tms,avgms) values (${lv},'${lname}',${blocks},1,'${md5}',${req.UserInfo.uid},${req.UserInfo.cls},'${req.UserInfo.UserName}',${tms},${avgms})`);
+          return sql(`insert into Level (lv,lname,blocks,try,md5,uid,cls,uname,tms,avgms) values (${lv},'${lname}',${blocks},1,'${md5}',${uid},${cls},'${UserName}',${tms},${avgms})`);
         }
       }).then((result)=>{
         /**
@@ -885,7 +822,6 @@ router.post('/commit',function(req,res){
          * 重新计算crown数量，然后在通知crown超越
          */
         if(rank===1){ //仅仅当用户取得皇冠后才做重新计算和通知
-          let {uid,UserName,cls} = req.UserInfo;
           CalcUserCrownAndLVS(uid,(b,crown,lvs)=>{
             if(b){
               reCrown(req,crown);
@@ -928,7 +864,9 @@ router.post('/commit',function(req,res){
  */
 router.post('/levelmethod',function(req,res){
   let {lname} = req.body;
-  sql(`select md5 from Level where uid='${req.UserInfo.uid}' and lname='${lname}'`).then((result)=>{
+  let {uid} = req.UserInfo;
+
+  sql(`select md5 from Level where uid='${uid}' and lname='${lname}'`).then((result)=>{
     let data = result.recordset[0];
     let method = '';
     if(data && data.md5){
@@ -958,7 +896,10 @@ router.post('/tops',function(req,res){
  * 保存配置
  */
 router.post('/config',function(req,res){
-  sql(`update UserInfo set config=N'${req.body.config}' where uid='${req.UserInfo.uid}'`).
+  let {config} = req.body;
+  let {uid} = req.UserInfo;
+
+  sql(`update UserInfo set config=N'${config}' where uid='${uid}'`).
   then((result)=>{
     res.json({result:'ok'});
   }).catch((err)=>{
@@ -1035,8 +976,10 @@ router.post('/unlock',function(req,res){
  */
 router.post('/trash',function(req,res){
   let {lv,method} = req.body;
+  let {uid} = req.UserInfo;
+
   if(lv && method){
-    sql(`update UserInfo set trashlv=${lv},trash=N'${method}' where uid=${req.UserInfo.uid}`).then((result)=>{
+    sql(`update UserInfo set trashlv=${lv},trash=N'${method}' where uid=${uid}`).then((result)=>{
       res.json({result:'ok'});
     }).catch((err)=>{
       resError(res,err);
@@ -1087,8 +1030,10 @@ router.post('/logout',function(req,res){
  */
 router.post('/levelplaytime',function(req,res){
   let {action,lv} = req.body;
+  let {uid,cls} = req.UserInfo;
+
   if(action)
-    sqlAction(req.UserInfo.uid,req.UserInfo.cls,`${action} ${lv}`);
+    sqlAction(uid,cls,`${action} ${lv}`);
   res.json({result:'ok'});
 });
 /**

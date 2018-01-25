@@ -38,7 +38,7 @@ class Login extends Component{
             console.log(`${uid} , ${uname} ,${cookie}`);
             Global.setUserInfo(uid,uname,cookie);
         }
-        let data={uid,uname,cookie,
+        let data={uid,sum:Global.getSUM(),uname,cookie,
             platform:Global.getPlatfrom(),
             entryrandom:window.entryrandom};
         fetch('/users/login',{method:'POST',

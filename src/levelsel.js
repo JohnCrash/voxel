@@ -202,11 +202,11 @@ class LevelSel extends PureComponent{
                 }
                 isbuild = seg_begin>=json.closed;//建造中的关卡
                 if(islock){
-                    icon = 'scene/image/lock.png';
+                    icon = Global.getCDNURL('scene/image/lock.png');
                     titleColor = 'gray';
                 }
                 if(isbuild){
-                    icon = 'scene/image/level_build.png';
+                    icon = Global.getCDNURL('scene/image/level_build.png');
                     titleColor = 'gray';
                 }
                 for(let i=seg_begin;i<=seg_end;i++){
@@ -289,7 +289,7 @@ class LevelSel extends PureComponent{
                 if(p)p.scrollIntoViewIfNeeded();}:undefined}>
                         <CardHeader avatar={icon} title={item.name} titleColor={titleColor} titleStyle={titleStyle} subtitle={item.desc}/>
                         <CardMedia>
-                            {item&&item.preview?<img src={window.cdndomain+item.preview} alt="" />:undefined}
+                            {item&&item.preview?<img src={Global.getCDNURL(item.preview)} alt="" />:undefined}
                         </CardMedia>
                         <CardText>{bl}</CardText>                          
                     </Card>;

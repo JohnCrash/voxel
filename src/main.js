@@ -150,10 +150,10 @@ class Main extends Component{
         <div style={{position:'fixed',display:'flex',alignItems:'center',
             top:'16px',right:'16px',zIndex:1100,fontSize:'x-large',color:'white'}}>
             <span onClick={this.onTops}>{Global.getCrowns()}×</span>
-            <FloatButton src={window.cdndomain?window.cdndomain+'scene/image/crown.png':'scene/image/crown.png'} onClick={this.onTops} style={{width:'36px'}}/>
+            <FloatButton src={Global.getCDNURL('scene/image/crown.png')} onClick={this.onTops} style={{width:'36px'}}/>
             {message.length>0?<IconMenu
                 ref={(ref)=>{this.msgbox = ref;}}
-                iconButtonElement={<FloatButton src={window.cdndomain?window.cdndomain+'scene/image/message.png':'scene/image/message.png'} style={{width:'36px',marginLeft:'16px',marginRight:'8px'}}/>}
+                iconButtonElement={<FloatButton src={Global.getCDNURL('scene/image/message.png')} style={{width:'36px',marginLeft:'16px',marginRight:'8px'}}/>}
                 anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
                 targetOrigin={{horizontal: 'left', vertical: 'top'}}
                 >
