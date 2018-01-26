@@ -14,7 +14,7 @@ console.info('Import Global...');
 class _Global_ extends EventEmitter{
     constructor(){
         super();
-        this.version = '1.0.22';
+        this.version = '1.0.25';
         this.LevelJson = null;
         this.maxpasslv = null;
         this._debug = window.LOCALHOST;
@@ -525,6 +525,9 @@ class _Global_ extends EventEmitter{
     getPlatfrom(){
         return this._platform;
     }
+    getClsID(){
+        return this._clsid;
+    }
     /**
      * 设置login信息
      */
@@ -533,6 +536,8 @@ class _Global_ extends EventEmitter{
         console.log("================login=================");
         console.log(json);
         console.log("======================================");
+        if(json)
+            this._clsid = json.clsid || 0;
         //cls做一个时间转换
         if(json && json.cls){
             for(let o of json.cls){

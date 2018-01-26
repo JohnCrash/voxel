@@ -115,10 +115,10 @@ class CrownTops extends Component{
             return <TableRow selectable={false} key={i} style={item.ismy?HighLightStyle:{}}>
                 <TableRowColumn  style={FixedWidthStyle}>
                     {i>2?<b style={{marginLeft:'12px'}}>{i+1}</b>:undefined}
-                    {i<3?<img src={`scene/image/${icon[i]}.png`} style={{height:"32px",verticalAlign:"middle"}} />:undefined}
+                    {i<3?<img src={Global.getCDNURL(`scene/image/${icon[i]}.png`)} style={{height:"32px",verticalAlign:"middle"}} />:undefined}
                 </TableRowColumn>
                 <TableRowColumn  style={FixedWidthStyle}>
-                    <img src="scene/image/crown.png" style={{height:"24px",verticalAlign:"middle"}} />
+                    <img src={Global.getCDNURL("scene/image/crown.png")} style={{height:"24px",verticalAlign:"middle"}} />
                     <span style={{verticalAlign:"middle"}}>×{item.count}</span>
                 </TableRowColumn>
                 <TableRowColumn  style={FixedWidthStyle}>
@@ -137,7 +137,7 @@ class CrownTops extends Component{
             </TableRow>;
         });
         let topNode = <div>
-            <img style={{width:'100%'}} src={'scene/image/tops_title.png'}/>
+            <img style={{width:'100%'}} src={Global.getCDNURL('scene/image/tops_title.png')}/>
             <Table bodyStyle={{overflowX:"initial",overflowY:"initial"}}>
                 <TableHeader style={{height:"24px"}} displaySelectAll={false} adjustForCheckbox={false}>
                     <TableRow style={{height:"24px"}}>

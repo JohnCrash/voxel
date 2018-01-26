@@ -50,8 +50,8 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Debug https热编译",
-            "url": "https://robot.ljlx.com/#/login",
+            "name": "Debug http热编译",
+            "url": "http://code.app.ljlx.com/#/login",
             "webRoot": "${workspaceRoot}"
         },              
         {

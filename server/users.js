@@ -342,7 +342,7 @@ router.post('/postpos',function(req,res){
  * cookie => UserInfo
  */
 router.use(function(req,res,next){
-  let uid = req.body.uid;
+  let {uid,cls} = req.body;
   if(uid){ //uid 是一个整数查询更快捷
     let s;
     /**
@@ -375,22 +375,26 @@ router.use(function(req,res,next){
       case '/readmsg':s = 'uid,readmsg';break;
       default:s = '*';break;
     }
-
-    sql(`select ${s} from UserInfo where uid='${uid}'`).then((result)=>{
-      req.UserInfo = result.recordset[0];
-      if(req.UserInfo){
-        next();
-      }else{
-        /**
-         * FIXBUG : 如果二次登录cookie会发生改变，被踢掉的用户将不能继续提交
-         */
-        if(req.url!=='/login')
-          throw '你的帐号在其他设备上登录，请重新登录游戏。';
-        next();
-      }
-    }).catch((err)=>{
-      resError(res,err);
-    });
+    if(s==='uid,cls' && cls!==undefined){
+      req.UserInfo = {uid,cls};
+      next();
+    }else{
+      sql(`select ${s} from UserInfo where uid='${uid}'`).then((result)=>{
+        req.UserInfo = result.recordset[0];
+        if(req.UserInfo){
+          next();
+        }else{
+          /**
+           * FIXBUG : 如果二次登录cookie会发生改变，被踢掉的用户将不能继续提交
+           */
+          if(req.url!=='/login')
+            throw '你的帐号在其他设备上登录，请重新登录游戏。';
+          next();
+        }
+      }).catch((err)=>{
+        resError(res,err);
+      });
+    }
   }else{
     if(req.url!=='/login')
       res.json({result:'请登录再进行游戏'});
@@ -580,7 +584,7 @@ function responeseLogin(req,res){
         //记录动作
         if(entryrandom)sqlAction(uid,cls,'e'+entryrandom); //将进入和登录结合起来，侦测点击到登录的人数差
         sqlAction(uid,cls,'login '+platform);
-        //将关卡的视频配置和通知消息插入到这里
+        //将关卡的视频配置和通知消息插入到这里        
         Promise.all([sql('select * from LevelVideo'),sql('select * from Message order by id desc')]).then(([R,M])=>{
           let levelvideo;
           let message;
@@ -672,12 +676,12 @@ router.post('/login',function(req,res){
 });
 
 function tops(req,res){
-  let lname = req.body.lname;
+  let lv = req.body.lv;
   let cls = req.UserInfo.cls;
 
   if(cls==='0' || cls===0){
     //不进行排名
-    sql(`select blocks,count from Tops where lname='${lname}'`).then((data)=>{
+    sql(`select blocks,count from Tops where lv='${lv}'`).then((data)=>{
       res.json({result:'ok',
         tops:data.recordset,
         cls:[]});
@@ -686,8 +690,8 @@ function tops(req,res){
     });
   }else{
     //正常排名
-    Promise.all([sql(`select blocks,count from Tops where lname='${lname}'`),
-    sql(`select uname,blocks,try,uid from Level where lname='${lname}' and cls='${cls}'`)]).then(([data,cls])=>{
+    Promise.all([sql(`select blocks,count from Tops where lv='${lv}'`),
+    sql(`select uname,blocks,try,uid from Level where lv='${lv}' and cls='${cls}'`)]).then(([data,cls])=>{
       res.json({result:'ok',
       tops:data.recordset,
       cls:cls.recordset});

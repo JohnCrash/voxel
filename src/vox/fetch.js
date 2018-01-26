@@ -62,6 +62,7 @@ function postJson(s,b,cb,errcb){
     b = b || {};
     b.uid = Global.getUID();
     b.sum = Global.getSUM();
+    b.cls = Global.getClsID();
     fetch(s,{method:'POST',
     credentials: 'same-origin',
     headers: {'Content-Type': 'application/json'},

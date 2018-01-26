@@ -33,6 +33,8 @@ import PropTypes from 'prop-types';
 import { setTimeout } from 'timers';
 import md from './mdtemplate';
 import Unlock from './unlock';
+import TopElement from './topelement';
+import RaisedButton from 'material-ui/RaisedButton';
 
 console.info('Import Level...');
 /*global Blockly*/
@@ -538,9 +540,22 @@ class Level extends Component{
                     let dict={name,lv:info.next-1,blocks,best,
                         unlock_crown,current_crown:Global.getCrowns()};
                     TextManager.load(`scene/ui/play_again.md`,(iserr,text)=>{
-                        if(!iserr)MessageBox.show('',undefined,<MarkdownElement text={md(text,dict)} />,(result)=>{
-                            if(this.voxview)this.voxview.rotateAnimation();    
-                        },'tips');
+                        if(!iserr){
+                            let ele = <div>
+                                <TopElement lv={info.next-1} blocks={blocks}/>
+                                <MarkdownElement text={md(text,dict)} />
+                                <RaisedButton label="学习内容" primary={true} style={{display:"block"}} onClick={()=>{
+                                    setTimeout(()=>{
+                                        MessageBox.show('ok',undefined,[<MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{
+                                            console.log(result); 
+                                        });    
+                                    },100);
+                                }}/>
+                            </div>
+                            MessageBox.show('',undefined,ele,(result)=>{
+                                if(this.voxview)this.voxview.rotateAnimation();    
+                            },'tips');
+                        }
                     });
                 }else{
                     MessageBox.show('ok',undefined,[<MarkdownElement file={`scene/${this.props.level}.md`}/>],(result)=>{

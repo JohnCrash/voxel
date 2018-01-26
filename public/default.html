@@ -50,11 +50,10 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 		}
 		window.corsRequest = function(url,onload,errcb,asyncLoad){
 			var xhr = new XMLHttpRequest;
-			xhr.open("GET", window.cdndomain+url, true);
+			xhr.open("GET", window.cdndomain+url+'.1', true);
 			xhr.withCredentials = true;
 			xhr.responseType = "arraybuffer";
 			function onerror(){
-				console.error('asyncLoad : '+url)
 				asyncLoad(url,onload,errcb);
 			}
 			xhr.onload = function xhr_onload() {
@@ -86,7 +85,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 			head.appendChild(script);
 			console.log('load '+js);
 		}
-		var jss = ['libs/three.min.js','libs/SPE.min.js','libs/stats.min.js','libs/dat.gui.min.js','libs/libunrar.js','blockly/blockly_compressed.js','blockly/blocks_compressed.js','blockly/javascript_compressed.js','blockly/msg/js/zh-hans.js','blockly/acorn.js','blockly/interpreter.js','app_compress.js',];
+		var jss = ['libs/three.min.js','libs/SPE.min.js','libs/stats.min.js','libs/dat.gui.min.js','libs/libunrar.js','blockly/blockly_compressed.js','blockly/blocks_compressed.js','blockly/javascript_compressed.js','blockly/msg/js/zh-hans.js','blockly/acorn.js','blockly/interpreter.js','libs/app_compress.js',];
 		var i = 0;var s = 0;
 		window.closeLoadingUI = function(){
 			console.log('close loading ui.');

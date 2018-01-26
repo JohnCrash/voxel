@@ -13,7 +13,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
         overflow: hidden;
       }
     </style>
-	<script src="http://fileoss.ljlx.com/upgrade/luaapp/voxel/libs/vconsole.min.js"></script>
+	<script src="http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/libs/vconsole.min.js"></script>
 	<script>
 		var _enconcount = 0;
 		function enableConsole(){
@@ -32,7 +32,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   </head>
   <body>
 	<div id="loading" style="position:absolute;left:0;right:0;top:0;bottom:0;align-items:center;display:flex;flex-direction:column;justify-content:center" >
-	<img src="http://fileoss.ljlx.com/upgrade/luaapp/voxel/scene/image/1080.jpg" style="width:100%" onclick="enableConsole();" />
+	<img src="http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/scene/image/1080.jpg" style="width:100%" onclick="enableConsole();" />
 		<div style="position:fixed;bottom:20%">
 		<div font-size="large"  style="text-align:center">正在加载</div>
 <svg width="300" height="16" viewBox="0 0 300 16">
@@ -45,17 +45,16 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 	<div id="root"></div>
 	<script>
 		window.platfrom = 'android';
-		window.cdndomain = 'http://fileoss.ljlx.com/upgrade/luaapp/voxel/';
+		window.cdndomain = 'http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/';
 		if(localStorage.isdebug==='true'){
 			try{window.vConsole = new VConsole();}catch(e){console.log(e);}
 		}
 		window.corsRequest = function(url,onload,errcb,asyncLoad){
 			var xhr = new XMLHttpRequest;
-			xhr.open("GET", window.cdndomain+url, true);
+			xhr.open("GET", window.cdndomain+url+'.1', true);
 			xhr.withCredentials = true;
 			xhr.responseType = "arraybuffer";
 			function onerror(){
-				console.error('asyncLoad : '+url)
 				asyncLoad(url,onload,errcb);
 			}
 			xhr.onload = function xhr_onload() {

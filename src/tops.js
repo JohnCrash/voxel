@@ -282,7 +282,7 @@ class Tops extends Component{
             autoScrollBodyContent={true}
             contentStyle={Global.getPlatfrom()!=="windows"?{width:"95%"}:undefined}>
             <div style={{float:'right',top:'-1px',right:'16px'}}>
-                <img style={{width:'96px'}} src='scene/image/topcup.png'/>
+                <img style={{width:'96px'}} src={Global.getCDNURL('scene/image/topcup.png')}/>
             </div>
             <MarkdownElement text={md(this.title,dict)}/>
             <MarkdownElement file={`scene/${level}-top.md`}/>

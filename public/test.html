@@ -16,39 +16,6 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     </style>  
   </head>
   <body>
-    <div id="root"></div>
-	<script>
-		window.platfrom = 'windows';
-		function loadJs(js,cb){
-			var head = document.getElementsByTagName('head')[0];
-			var script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.src = js;
-			script.onload=function(){
-				cb();
-			}
-			head.appendChild(script);
-			console.log('load '+js);
-		}
-		var jss = [
-			'libs/three.min.js',
-			'libs/stats.min.js',
-			'libs/dat.gui.min.js',
-			'libs/libunrar.js',
-			'blockly/blockly_compressed.js',
-			'blockly/blocks_compressed.js',
-			'blockly/javascript_compressed.js',
-			'blockly/msg/js/zh-hans.js',
-			'blockly/acorn.js',
-			'blockly/interpreter.js',
-		];
-		var i = 0;
-		function cb(){
-			if(i<jss.length)
-				loadJs(jss[i++],cb);
-		}
-		loadJs(jss[i++],cb);
-	</script>		
-    <script type="text/javascript" src="main_compress.js"></script>
+	<img src="https://fileosscdn.ljlx.com/upgrade/luaapp/voxels/scene/image/1080.jpg" style="width:100%" onclick="enableConsole();" />
   </body>
 </html>

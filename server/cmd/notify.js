@@ -24,7 +24,7 @@ function UserNotify(uid,msg,cb){
         .then((r) => {
             if (LXReturnHelper.IsLXSucceed(r)) {
                 cb(true);
-                console.log('succeed');
+                console.log('succeed');                console.log('succeed');
             }
         },
         (e) => {
