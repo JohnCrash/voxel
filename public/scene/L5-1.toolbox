@@ -12,5 +12,5 @@
 </xml>
 
 <xml id="default">
-	<block movable="false" deletable="flase" type="when_start" x="20" y="20"></block>
+	<block movable="true" deletable="flase" type="when_start" x="20" y="20"></block>
 </xml>

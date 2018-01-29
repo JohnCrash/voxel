@@ -32,6 +32,7 @@ function splitXML(s){
 }
 
 function xmlHead(s){
+    s = s.replace(` movable="false"`,""); //FIXBUG:删除when_start 不可移动的属性，因为当一个小块和when_start重叠，将不可恢复
     return `<xml xmlns="http://www.w3.org/1999/xhtml">${s}</xml>`;
 }
 
