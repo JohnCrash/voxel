@@ -14,7 +14,7 @@ console.info('Import Global...');
 class _Global_ extends EventEmitter{
     constructor(){
         super();
-        this.version = '1.0.27';
+        this.version = '1.0.30';
         this.LevelJson = null;
         this.maxpasslv = null;
         this._debug = window.LOCALHOST;
@@ -271,10 +271,22 @@ class _Global_ extends EventEmitter{
             console.info(`scene/${name}.index`);
             console.log(json);
             this.LevelJson = json;
-            if(cb){
-                cb(json);
-            }            
-        });        
+            /**
+             * 加载提示结构
+             */
+            fetchJson('scene/ui/level_tips/level_tips.json',(json2)=>{
+                this.LevelTips = json2;
+                if(cb){
+                    cb(json);
+                }
+            });
+        });
+    }
+    /**
+     * 返回提示结构
+     */
+    getLevelTips(){
+        return this.LevelTips;
     }
     /**
      * 取得当前关卡层次图
@@ -775,6 +787,49 @@ class _Global_ extends EventEmitter{
         let md5sum = crypto.createHash('md5');
         md5sum.update(String(this._uid));
         return md5sum.digest('hex').slice(0,6);
+    }
+    timeString(d){
+        let hh = Math.floor(d/3600);
+        let mm = Math.floor(d/60)%60;
+
+        return `${dz2(hh)}:${dz2(mm)}:${dz2(d%60)}`;
+        
+        function dz2(n){
+            let d = String(n);
+            if(d.length==0)
+                return '00';
+            else if(d.length==1)
+                return 0+d;
+            else return d;
+        }
+    } 
+    /**
+     * 做个优化确保不是每次调用都请求网络
+     */
+    lvtips(cb){
+        if(this._lvtipscurtime){
+            if(this._lvtipscooldown && this._lvtipscooldown>0){
+                this._lvtipsjson.cooldown = Math.floor(this._lvtipscooldown - ((new Date())-this._lvtipscurtime)/1000);
+            }else{
+                this._lvtipsjson.cooldown = 0;
+            }
+            cb(this._lvtipsjson);
+        }else{
+            postJson('/users/lvtips',{},(json)=>{
+                if(json.result==='ok'){
+                    this._lvtipscooldown = json.cooldown;
+                    this._lvtipscurtime = new Date();
+                    this._lvtipsjson = json;
+                    cb(json);
+                }
+            })    
+        }
+    }
+    /**
+     * 重新开始请求/users/lvtips接口
+     */
+    resetlvtips(){
+        this._lvtipscurtime = null;
     }
 };
 

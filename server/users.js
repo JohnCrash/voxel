@@ -69,7 +69,7 @@ function payGold(uid,num,cb,s){
         }else{
           if (r.error == Asset.LXEnumAssetChangeCode.LXEnumAssetChangeCode_MoneyNotEnough._value) {
             // 余额不足
-            cb(false,'余额不足');
+            cb(false,'金币余额不足');
           }else if(r.error == Asset.LXEnumAssetChangeCode.LXEnumAssetChangeCode_DbError._value){
             cb(false,'支付系统: Db 操作失败');
           }else{
@@ -371,8 +371,11 @@ router.use(function(req,res,next){
       case '/crowns':
       case 'levelplaytime':
       case '/logout':
+      case '/readmsg':
       case '/report':s = 'uid,cls';break;
       case '/readmsg':s = 'uid,readmsg';break;
+      case '/opentips':
+      case '/lvtips':s = 'uid,cls,tiplv,tipcooldown';break;
       default:s = '*';break;
     }
     if(s==='uid,cls' && cls!==undefined){
@@ -753,7 +756,7 @@ const best={
   '47':[11,-2],
   '48':[15,-5],
   '49':[22,-5],
-  '50':[16,-5],
+  '50':[10,-2],
   '51':[7,0],
   '52':[7,0],
   '53':[9,0],
@@ -942,6 +945,8 @@ router.post('/unlock',function(req,res){
       sql(`update UserInfo set olv=${olv} where uid='${uid}'`).
       then((result)=>{
         sqlAction(uid,cls,`unlock1(${olv})`);
+        //统计解锁数
+        sql(`update Unlock set unlock=unlock+1,crown_unlock=crown_unlock+1 where id=1`);
         notifyClass(2,UserName,uid,cls,unlock); //通知同班同学，我解锁了
         res.json({result:'ok',olv,unlock});
       }).catch((err)=>{
@@ -959,6 +964,8 @@ router.post('/unlock',function(req,res){
           sql(`update UserInfo set olv=${olv} where uid='${uid}'`).
           then((result)=>{
             sqlAction(uid,cls,`unlock2(${olv})`);
+            //统计解锁数
+            sql(`update Unlock set unlock=unlock+1,gold_unlock=gold_unlock+1,gold_total=gold_total+${unlocktable.gold} where id=1`);
             notifyClass(2,UserName,uid,cls,unlock); //通知同班同学，我解锁了
             res.json({result:'ok',olv,unlock});
           }).catch((err)=>{
@@ -967,7 +974,7 @@ router.post('/unlock',function(req,res){
         }else{
           res.json({result: msg});
         }
-      },"乐学编程关卡解锁");
+      },`乐学编程关卡解锁 ${uid},${olv}`);
       return;
     }
   }
@@ -1080,5 +1087,197 @@ router.post('/readmsg',function(req,res){
   }).catch((err)=>{
     resError(res,err);
   });
+});
+
+const tip_cds = [72,24,6,3/60]; //提示级别对应的等待时间
+const tip_golds = [3000,1000,300,100]; //提示级别对应的金币数量
+/**
+ * 计算倒计时，和权限
+ * 成功返回true + 对象
+ * {
+ *  tipcd : 解答的类型0-3
+ *  tipbit : 已经解答的类型tipcd的与值
+ *  cooldown : 倒计时
+ *  hasright : 是否有权力使用时间解锁
+ * }
+ */
+function calcTips(req,lv,cb){
+  let tips;
+  let {uid,tiplv,tipcooldown} = req.UserInfo;
+  sql(`select * from Tips where uid=${uid} and lv=${lv}`).then((result)=>{
+    tips = result.recordset[0] || {};
+    return sql(`select GETDATE()`); //当前时间
+  }).then((result)=>{
+    /**
+     * tiplv 正在倒计时的关卡
+     * tipcooldown 当前正在倒计时的时间结束点
+     * tips {
+     *  tipcd   0,1,2,3 分别代表,最优解(0),全部答案(1),部分答案(2),一点提示(3)，正在倒计时
+     *  tipbit  有4个位分别表示，一点提示，部分答案，全部答案，最优解 |0|0|0|0|
+     * }
+     * cdate 服务器当前时间
+     */
+    let cdate = result.recordset[0]['']; //mssql返回的时间是假设服务器返回的ISO时间,其实返回的是local时间
+    let utcdate = cdate.getTime();
+    //首先判断是不是还可以免费开提示，判断条件是如果没有tipcooldown就直接允许hasright=true
+    //如果有tipcooldown,判断倒计时开始点必须和当前时间不是一天，并且倒计时结束hasright=true否则hasright=false
+    let hasright,cooldown,isodate;
+    isodate = cdate.toISOString().split('T').join(' ').slice(0,-1);
+
+    if(tipcooldown){
+      let cur = cdate;
+      let cd = new Date(tipcooldown);
+
+      let hh = tips.tipcd===+tips.tipcd && tips.tipcd>=0 && tips.tipcd<4?tip_cds[tips.tipcd]:0;
+      cooldown = Math.floor((cd - cur)/1000)+1;//计算倒计时，单位秒  
+      //cd.setHours(cd.getHours()-hh);//tipcooldown是冷却完成的时间点，这里计算出冷却开始的时间点
+      cd.setTime(cd.getTime()-hh*3600*1000);
+      //(cur.getDate()!=cd.getDate() || cur.getMonth()!=cd.getMonth() || cur.getFullYear()!=cd.getFullYear()) && cooldown<=0;
+
+      //只要cooldown小于0就可以再次使用
+      hasright = cooldown<=0;
+      if(tips.tipcd===+tips.tipcd && cooldown<0){ //处理服务器重启的情况，见'setTimeout(()=>{'行
+        if(tips.tipcd>=0&&tips.tipcd<4){
+          tips.tipbit = tips.tipbit|(1<<tips.tipcd);
+          sql(`update Tips set tipcd=NULL,tipbit=${tips.tipbit} where uid=${uid} and lv=${lv}`);
+        }
+        tips.tipcd = undefined;
+      }
+    }else{
+      hasright = true;
+      cooldown = 0;
+    }
+    cb(true,{
+      tipcd :tips.tipcd,
+      tipbit:tips.tipbit,
+      cooldown,
+      hasright,
+      cdate:isodate,
+      utcdate
+    });
+  }).catch((e)=>{
+    cb(false,e);
+  });
+}
+/**
+ * 该接口的不同调用有不同的含义
+ * 接口{}查询当前倒计时情况
+ * 接口{lv}查询某一关卡情况
+ * 返回某一关的提示情况
+ * tipbit 有4个位分别表示，一点提示，部分答案，全部答案，最优解 |0|0|0|0|
+ * tipbit = 1表示仅仅最优解...
+ * tipcd = 0,1,2,3 分别代表,最优解(0),全部答案(1),部分答案(2),一点提示(3)，正在倒计时
+ * cooldown是倒计时,没有就是0或者负数
+ * hasright true有权利继续开，false不可以开
+ * 成功返回{
+ *  result:'ok',lv:9,tipbit:5,cooldown:3423,hasright:true
+ * }
+ */
+router.post('/lvtips',function(req,res){
+  let {uid,lv} = req.body;
+  let {tiplv,tipcooldown} = req.UserInfo;
+  let tips;
+  if(lv===undefined) //接口{}
+    lv = tiplv;
+
+  if(uid && lv){
+    calcTips(req,lv,(b,r)=>{
+      if(b){
+        res.json({
+          result:'ok',
+          lv,
+          tipcd :r.tipcd,
+          tipbit:r.tipbit,
+          cooldown:r.cooldown,
+          hasright:r.hasright,
+          cdate:r.cdate
+        });
+      }else{
+        resError(res,r);
+      }
+    });
+  }else{
+    resError(res,'参数错误');
+  }
+});
+
+/**
+ * 打开提示
+ * {lv,tiplv,gold}
+ * lv 那一关
+ * tiplv : 0,1,2,3 分别代表,最优解(0),全部答案(1),部分答案(2),一点提示(3)，正在倒计时
+ * gold : true金币解锁或者false时间解锁
+ */
+router.post('/opentips',function(req,res){
+  let {lv,tiplv,gold} = req.body;
+  let {uid,cls} = req.UserInfo;
+  let user_tiplv = req.UserInfo.tiplv;
+
+  if(uid && lv && tiplv>=0 && tiplv<4){
+    calcTips(req,lv,(b,r)=>{
+      if(b){
+        /**
+         * 首先判断是否可以解锁
+         */
+        let g = tip_golds[tiplv];
+        if(gold){
+          payGold(uid,g,(b,msg)=>{
+            if(b){
+              //统计与日志
+              sqlAction(uid,cls,`goldtips(${lv})`);
+              sql(`update Unlock set tips_unlock=tips_unlock+1,gold_total=gold_total+${g} where id=1`);
+              //直接解锁
+              if(r.tipbit===undefined)
+                sql(`insert into Tips (uid,lv,tipcd,tipbit) values (${uid},${lv},NULL,${r.tipbit|1<<tiplv})`);
+              else
+                sql(`update Tips set tipbit=${r.tipbit|1<<tiplv} where uid=${uid} and lv=${lv}`);
+              //如果解锁的项正在倒计时，那么让倒计时取消
+              if(lv===user_tiplv && r.tipcd===tiplv){
+                sql(`update UserInfo set tiplv=NULL,tipcooldown=NULL where uid=${uid}`);
+              }
+              res.json({result:'ok'});
+            }else{
+              res.json({result: msg}); //金币不足等...
+            }
+          },`乐学编程提示解锁 ${uid},${lv},${tiplv},${g}`);
+        }else if(r.hasright){
+          sqlAction(uid,cls,`cdtips(${lv})`);
+          //可以使用时间解锁,这里开始倒计时
+          //这里首先要设置UserInfo中的倒计时
+          let cdt = new Date(r.utcdate);//服务器当前时间
+          let cd = tip_cds[tiplv];
+          cdt.setTime(cdt.getTime()+cd*3600*1000); //解锁的时间
+          let d4 = cdt.toISOString().split('T').join(' ').slice(0,-1);
+          sql(`update UserInfo set tiplv=${lv},tipcooldown='${d4}' where uid=${uid}`);
+          if(r.tipbit===undefined){
+            sql(`insert into Tips (uid,lv,tipcd,tipbit) values (${uid},${lv},${tiplv},0)`);
+          }else{
+            sql(`update Tips set tipcd=${tiplv} where uid=${uid} and lv=${lv}`);
+          }
+          /**
+           * 服务器重新启动将导致定时器终止，这导致tipbit不会被设置
+           * 因此在calcTips中加入一个检查，一旦发现超时就设置tipbit
+           */
+          setTimeout(function(){
+            //定时器倒计时结束，倒计时后Tip可能改变
+            sql(`select * from Tips where uid=${uid} and lv=${lv}`).then((result)=>{
+              let R = result.recordset[0] || {};
+              sql(`update Tips set tipcd=NULL,tipbit=${R.tipbit|1<<tiplv} where uid=${uid} and lv=${lv}`);
+            });
+            //通知
+            UserNotify(uid,'【乐学编程】 提示解锁',(b,err)=>{});
+          },cd*3600*1000);
+          res.json({result:'ok'});
+        }else{
+          //不能解锁
+          res.json({result:'没有达成解锁条件'});
+        }
+      }else{
+        res.json({result:'参数错误2'});
+      }
+    });
+  }else{
+    resError(res,'参数错误');
+  }
 });
 module.exports = router;

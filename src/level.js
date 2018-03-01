@@ -14,6 +14,7 @@ import {IconPlayArrow,IconPause,IconReplay,IconRotateLeft,IconRotateRight,IconHe
 //import IconRotateLeft from 'material-ui/svg-icons/image/rotate-left';
 //import IconRotateRight from 'material-ui/svg-icons/image/rotate-right';
 import IconMenu from 'material-ui/svg-icons/navigation/menu';
+import TipMenu from 'material-ui/svg-icons/action/lightbulb-outline';
 //import IconStep from 'material-ui/svg-icons/maps/directions-walk';
 //import IconHelp from 'material-ui/svg-icons/action/help';
 import AddTest from 'material-ui/svg-icons/content/add';
@@ -35,6 +36,7 @@ import md from './mdtemplate';
 import Unlock from './unlock';
 import TopElement from './topelement';
 import RaisedButton from 'material-ui/RaisedButton';
+import Tips from './tips';
 
 console.info('Import Level...');
 /*global Blockly*/
@@ -284,7 +286,6 @@ class Level extends Component{
         this._isgameover = false;
         //加载voxview的时候uiColor必须为白色
         this.setState({uiColor:'#FFFFFF'});
-
         /**
          * 统计第一关的平均用时
          */
@@ -489,6 +490,10 @@ class Level extends Component{
     }
     Help(from,event){
         if(event)event.stopPropagation();
+        if(this.props.opentips && !from && !event){
+            this.Tips();
+            return;
+        }
         /**
          * 如果是第一个就是一个指南关卡
          */
@@ -675,7 +680,25 @@ class Level extends Component{
                 },'tips');
         });
     }
-
+    /**
+     * 打开提示对话栏
+     */
+    Tips(){
+        let info = Global.appGetLevelInfo(this.props.level);
+        if(info){
+            this.tips.open(info.next-1);
+        } 
+    }
+    /**
+     * 看看当前关卡有没有提示
+     */
+    hasTips(){
+        let levelTips = Global.getLevelTips();
+        let info = Global.appGetLevelInfo(this.props.level);
+        if(levelTips && info){
+            return levelTips[info.next-1];
+        }else return false;
+    }
     toolbarEle(portrait){
         let {uiColor,playPause,curSelectTest,isDebug} = this.state;   
         let tests = [];
@@ -715,10 +738,14 @@ class Level extends Component{
                     {portrait?undefined:<ToolbarGroup>
                         <IconButton touch={true} onClick={this.Menu.bind(this)} tooltip={b?"菜单...":undefined} tooltipPosition="top-center">
                             <IconMenu />
-                        </IconButton>                          
+                        </IconButton>
                     </ToolbarGroup>}
                     <ToolbarGroup lastChild={true}>
                         {debugTool}
+                        {portrait?undefined:this.hasTips()?
+                            <IconButton touch={true} onClick={this.Tips.bind(this)} tooltip={b?"任务提示":undefined} tooltipPosition="top-center">
+                                <TipMenu/>}
+                            </IconButton>:undefined}
                         <IconButton touch={true} iconStyle = {styles} onClick={this.Help.bind(this,'toolbar')} tooltip={b?"打开帮助":undefined} tooltipPosition="top-center">
                             <IconHelp />
                         </IconButton>                                                                        
@@ -765,6 +792,7 @@ class Level extends Component{
             <MainDrawer ref={ref=>this.drawer=ref}/>
             <Tops ref={ref=>this.Tops=ref} level={level}/>
             <Unlock ref={ref=>this.unlock=ref} />
+            <Tips ref={ref=>this.tips=ref} />
         </div>;
     }
     switchSize(){
@@ -799,7 +827,15 @@ class Level extends Component{
             >
                 <VoxView file={level} ref={ref=>this.voxview=ref} layout="portrait" style={{width:"100%",height:"100%"}}/>
                 {uiStyle==='simple'?undefined:this.toolbarEle(true)}
-                <div style={{position:"absolute",right:"0px",bottom:"0px"}}>
+                {this.hasTips()?<div style={{position:"absolute",left:"0px",bottom:"0px"}}>   
+                    <IconButton 
+                        style = {playLargStyle}
+                        iconStyle = {playIconLargStyle}
+                        touch={true} onClick={this.Tips.bind(this)} tooltipPosition="top-center">
+                        {<TipMenu />}
+                    </IconButton>  
+                </div>:undefined}
+                <div style={{position:"absolute",right:"0px",bottom:"0px"}}>              
                     <IconButton 
                         style={Global.isPad()?playLargStyle:playNormalStyle}
                         iconStyle={Global.isPad()?playIconLargStyle:playIconNormalStyle}
@@ -830,6 +866,7 @@ class Level extends Component{
             <MainDrawer ref={ref=>this.drawer=ref}/>
             <Tops ref={ref=>this.Tops=ref} level={level}/>
             <Unlock ref={ref=>this.unlock=ref} />
+            <Tips ref={ref=>this.tips=ref} />
         </div>;
     }
     render(){

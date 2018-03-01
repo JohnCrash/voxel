@@ -137,6 +137,12 @@ function TipsIcon(props){
     </SvgIcon>;
 }
 
+function CoinIcon(props){
+    return <SvgIcon viewBox="0 0 512 512" {...props}>
+    <path d="M256 16c-132.548 0-240 107.452-240 240s107.452 240 240 240c132.549 0 240-107.451 240-240s-107.451-240-240-240zM256 448c-106.039 0-192-85.961-192-192s85.961-192 192-192c106.039 0 192 85.961 192 192s-85.961 192-192 192zM272 240v-64h64v-32h-64v-32h-32v32h-64v128h64v64h-64v32h64v32h32v-32h64.001l-0.001-128h-64zM240 240h-32v-64h32v64zM304.001 336h-32.001v-64h32.001v64z"></path>
+    </SvgIcon>;
+}
+
 export {
     IconStep,
     EmbedIcon,
@@ -154,5 +160,6 @@ export {
     MovieIcon,
     DotIcon,
     TeamIcon,
-    TipsIcon
+    TipsIcon,
+    CoinIcon
 };

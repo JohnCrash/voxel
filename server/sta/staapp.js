@@ -266,7 +266,8 @@ function staExDay3(date,done){
     console.log('date : ',date);
     for(let i=0;i<3;i++){
         d.setDate(d.getDate()-1);
-        days[i] = sqlDateString(d).slice(0,11)+'00:00:00';
+        console.log(sqlDateString(d));
+        days[i] = sqlDateString(d).split(' ')[0]+' 00:00:00';
         console.log('date',i,':',days[i]);
     }
 
@@ -327,9 +328,9 @@ function staExDay3(date,done){
 }
 function doStaEx(){
     //'2017-12-13'
-/*
+    /*
     let task = [];
-    for(let i=1;i<=1;i++){
+    for(let i=22;i<=29;i++){
         task.push((cb)=>{
             staExDay3(`2018-1-${i}`,cb);
         });
@@ -341,7 +342,7 @@ function doStaEx(){
             console.log('FAILED!');
         }
     });
-*/
+    */
     staExDay3(sqlDateString(new Date()).split(' ')[0]);
 }
 //doStaEx();
@@ -359,7 +360,7 @@ setInterval(function(){
         console.log(lastDay);    
     }
     //每天执行一次
-    if(t.getHours()===23 && t.getMinutes()===58 && t.getDay() !== lastDay){
+    if(t.getHours()===23 && t.getMinutes()===30 && t.getDay() !== lastDay){
         doStaLv();
         doStaLvt();
         doStaEx();

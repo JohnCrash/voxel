@@ -47,7 +47,9 @@
     "browserify": "^14.4.0",
     "envify": "^4.1.0",
     "google-closure-compiler": "^20170806.0.0",
+    "mocha": "^5.0.0",
     "react-scripts": "^1.0.17",
+    "supertest": "^3.0.0",
     "uglify-js": "^3.1.6",
     "uglifyify": "^4.0.4",
     "watchify": "^3.9.0"

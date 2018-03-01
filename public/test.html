@@ -15,6 +15,19 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
       }
     </style>  
   </head>
+  <script>
+	if(localStorage){
+		document.write('have localStorage');
+		if( localStorage.test == 'test' ){
+			document.write('localStorage.test = '+localStorage.test);
+		}else{
+			localStorage.test = 'test';
+			document.write('set localStorage.test = test');
+		}
+	}else{
+		document.write('not localStorage');
+	}
+  </script>
   <body>
 	<img src="https://fileosscdn.ljlx.com/upgrade/luaapp/voxels/scene/image/1080.jpg" style="width:100%" onclick="enableConsole();" />
   </body>

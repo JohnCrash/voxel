@@ -38,7 +38,8 @@ function App(){
                     <Switch>
                         <Route path='/main' component={Main}/>
                         <Route path='/login' component={Login} />
-                        <Route path='/level/:lv' component={props=><Level level={props.match.params.lv} />}/> 
+                        <Route path='/level/:lv/:opentips' component={props=><Level level={props.match.params.lv} opentips={props.match.params.opentips}/>}/> 
+                        <Route path='/level/:lv' component={props=><Level level={props.match.params.lv}/>}/> 
                     </Switch>
                 </Router>
                 <MessageBox />
