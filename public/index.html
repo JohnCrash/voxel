@@ -19,7 +19,7 @@ minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     </style>
 	<script>
 		//修改libunrar.js使得libunrar.js.mem可以放入cdn服务器
-		window.cdndomain = 'http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/';
+		//window.cdndomain = 'http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/';
 		window.corsRequest = function(url,onload,errcb,asyncLoad){
 			var xhr = new XMLHttpRequest;
 			xhr.open("GET", 'http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/'+url, true);

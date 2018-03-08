@@ -1,4 +1,26 @@
 <xml id="toolbox">
+	<block type="variables_set" limit="3">
+		<field name="VAR" variabletype=""> x </field>
+		<value name="VALUE">
+			<shadow type="math_number">
+				<field name="NUM">1</field>
+			</shadow>
+		</value>
+	</block>
+	<block type="variables_get">
+		<field name="VAR" variabletype=""> x </field>
+	</block>
+	<block type="variables_set" limit="3">
+		<field name="VAR" variabletype=""> y </field>
+		<value name="VALUE">
+			<shadow type="math_number">
+				<field name="NUM">1</field>
+			</shadow>
+		</value>
+	</block>
+	<block type="variables_get">
+		<field name="VAR" variabletype=""> y </field>
+	</block>
 	<block type="controls_repeat_ext"></block>
 	<block type="forward"></block>
 	<block type="turn_left"></block>
@@ -8,30 +30,8 @@
 	<block type="lift_up" limit="1"></block>
 	<block type="put_down" limit="1"></block>
 	<block type="math_arithmetic"></block>
-	<block type="variables_set" limit="3">
-		<field name="VAR" variabletype=""> x </field>
-		<value name="VALUE">
-			<shadow type="math_number">
-				<field name="NUM">1</field>
-			</shadow>
-		</value>
-	</block>
-	<block type="variables_get">
-		<field name="VAR" variabletype=""> x </field>
-	</block>
-	<block type="variables_set" limit="3">
-		<field name="VAR" variabletype=""> y </field>
-		<value name="VALUE">
-			<shadow type="math_number">
-				<field name="NUM">1</field>
-			</shadow>
-		</value>
-	</block>
-	<block type="variables_get">
-		<field name="VAR" variabletype=""> y </field>
-	</block>
 </xml>
 
 <xml id="default">
-	<block movable="true" deletable="flase" type="when_start" x="20" y="20"></block>
+	<block movable="true" deletable="flase" type="when_start" x="20" y="20"><next><block movable="flase" deletable="flase" type="variables_set"><field name="VAR" variabletype=""> x </field><value name="VALUE"><shadow type="math_number"><field name="NUM">1</field></shadow></value></next></block>
 </xml>

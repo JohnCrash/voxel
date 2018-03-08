@@ -665,10 +665,12 @@ class SceneManager extends EventEmitter{
         this.stopMusic();
         AudioManager.load(file,(b,buffer)=>{
             if(!b){
+                try{
                 this.music.setBuffer(buffer);
                 this.music.setLoop(!!this.musicLoop);
                 this.music.setVolume(0.2);
                 this.music.play();
+                }catch(e){}
             }
         });             
     }
@@ -704,10 +706,12 @@ class SceneManager extends EventEmitter{
             let audio = new THREE.Audio(this.audioListener);
             AudioManager.load(file,(b,buffer)=>{
                 if(!b){
+                    try{
                     audio.setBuffer(buffer);
                     audio.setLoop(!!loop);
                     audio.setVolume(volume||1.0);
                     audio.play();
+                    }catch(e){}
                 }else{
                     try{audio.stop();}catch(e){}
                 }

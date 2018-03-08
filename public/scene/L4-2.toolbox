@@ -1,9 +1,5 @@
 <xml id="toolbox">
-    <block type="controls_repeat_ext"></block>
-	<block type="forward"></block>
-	<block type="turn_left"></block>
-	<block type="turn_right"></block>
-	<block type="variables_set" limit="1">
+    <block type="variables_set" limit="1">
 		<field name="VAR" variabletype=""> x </field>
 		<value name="VALUE">
 			<shadow type="math_number">
@@ -14,8 +10,12 @@
 	<block type="variables_get">
 		<field name="VAR" variabletype=""> x </field>
 	</block>
+	<block type="controls_repeat_ext"></block>
+	<block type="forward"></block>
+	<block type="turn_left"></block>
+	<block type="turn_right"></block>
 </xml>
 
 <xml id="default">
-	<block movable="true" deletable="flase" type="when_start" x="20" y="20"></block>
+	<block movable="true" deletable="flase" type="when_start" x="20" y="20"><next><block movable="flase" deletable="flase" type="variables_set"><field name="VAR" variabletype=""> x </field><value name="VALUE"><shadow type="math_number"><field name="NUM">1</field></shadow></value><next><block deletable="flase" type="forward"></next></block>
 </xml>

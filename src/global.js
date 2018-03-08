@@ -1,4 +1,4 @@
-import {postJson,fetchJson} from './vox/fetch';
+import {postJson,fetchJson,localJson} from './vox/fetch';
 import log from './vox/log';
 import EventEmitter from 'events';
 import {MessageBox} from './ui/MessageBox';
@@ -14,7 +14,7 @@ console.info('Import Global...');
 class _Global_ extends EventEmitter{
     constructor(){
         super();
-        this.version = '1.0.30';
+        this.version = '1.0.34';
         this.LevelJson = null;
         this.maxpasslv = null;
         this._debug = window.LOCALHOST;
@@ -274,7 +274,11 @@ class _Global_ extends EventEmitter{
             /**
              * 加载提示结构
              */
-            fetchJson('scene/ui/level_tips/level_tips.json',(json2)=>{
+            let fetch = (window.LOCALHOST)?localJson:fetchJson;
+            let url = 'scene/ui/level_tips/level_tips.json';
+            if(this._platform==='ios')
+                url += `?p=${this.getRandom()}`;
+            fetch(url,(json2)=>{
                 this.LevelTips = json2;
                 if(cb){
                     cb(json);
@@ -462,10 +466,12 @@ class _Global_ extends EventEmitter{
         this.stopMusic();
         AudioManager.load(file,(b,buffer)=>{
             if(!b){
+                try{
                 this.music.setBuffer(buffer);
                 //this.music.setLoop(!!this.musicLoop);
                 this.music.setVolume(0.2);
                 this.music.play();
+                }catch(e){}
             }
         });        
     }

@@ -138,6 +138,9 @@ function initItemBlockly(_this){
 	}
 	_this.injectBlocklyFunction('forward',function(name,step){
 		console.log('forward');
+		if(step==Infinity){
+			step = 9999;
+		}
 		var item = getItemByName(name);
 		if(!item||!step)return;
 		if((item._isobstruct||item.resultAction==='break') && !eqAngle(item.rotation.z-(step>0?Math.PI:0),item.forwardAngle)){

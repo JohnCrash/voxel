@@ -644,10 +644,12 @@ class Item{
             if(this.sceneManager.isMute())return;
             AudioManager.load(file,(b,buffer)=>{
                 if(!b){
+                    try{
                     this.audio.setBuffer(buffer);
                     this.audio.setLoop(!!loop);
                     this.audio.setVolume(volume||1.0);
                     this.audio.play();
+                    }catch(e){}
                 }else{
                     try{this.audio.stop();}catch(e){}
                 }

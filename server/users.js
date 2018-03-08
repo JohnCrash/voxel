@@ -371,7 +371,6 @@ router.use(function(req,res,next){
       case '/crowns':
       case 'levelplaytime':
       case '/logout':
-      case '/readmsg':
       case '/report':s = 'uid,cls';break;
       case '/readmsg':s = 'uid,readmsg';break;
       case '/opentips':

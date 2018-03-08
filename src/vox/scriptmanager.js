@@ -1,6 +1,8 @@
 /**
  * 实现一个简单前端动态加载脚本功能
  */
+import {Global} from "../global";
+
 class ScriptManager_{
     constructor(){
         this.scripts = {};
@@ -32,7 +34,11 @@ class ScriptManager_{
             let head = document.getElementsByTagName('head')[0];
             let script = document.createElement('script');
             script.type = 'text/javascript';
-            script.src = window.cdndomain?window.cdndomain+js:js;
+            if(Global.getPlatfrom()==='ios'){
+                script.src = window.cdndomain?window.cdndomain+js+'?q='+Global.getRandom():js;
+            }else{
+                script.src = window.cdndomain?window.cdndomain+js:js;
+            }
             script.onreadystatechange=function(){
                 if(this.readyState==='complete'){
                     s.state = 'ready';

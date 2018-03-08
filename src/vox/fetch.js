@@ -73,4 +73,14 @@ function postJson(s,b,cb,errcb){
         errcb?errcb(err):log(err);
     });    
 }
-export {fetchBin,fetchJson,fetchText,postJson}
+
+function localJson(s,cb,errcb){
+    fetch(s)
+    .then(response=>response.json())
+    .then(json=>cb(json))
+    .catch(err=>{
+        errcb?errcb(err):log(err);
+    });
+}
+
+export {fetchBin,fetchJson,fetchText,postJson,localJson}

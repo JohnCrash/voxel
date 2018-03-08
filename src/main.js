@@ -14,6 +14,7 @@ import MarkdownElement from './ui/MarkdownElement';
 import {MessageBox} from './ui/MessageBox';
 import {TextManager} from './ui/TextManager';
 import IconMenu from 'material-ui/IconMenu';
+import IconButton from 'material-ui/IconButton';
 import MenuItem from 'material-ui/MenuItem';
 import {DotIcon} from "./ui/myicon";
 import {postJson,fetchJson} from './vox/fetch';

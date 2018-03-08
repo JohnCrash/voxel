@@ -1,5 +1,5 @@
 CACHE MANIFEST
-#11
+#13
 libs/libunrar.js.mem
 http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/libs/libunrar.js.mem.1
 http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/libs/vconsole.min.js
@@ -22,6 +22,7 @@ http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/libs/SPE.min.js
 http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/scene/image/1080.jpg
 
 http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/scene/main.index
+http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/scene/ui/level_tips/level_tips.json
 
 http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/scene/ui/download_windows.md
 http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/scene/ui/pay.md

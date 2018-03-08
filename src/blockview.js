@@ -705,7 +705,7 @@ class BlockView extends Component{
             if(this.runComplateCB)
                 this.runComplateCB('nolink');
             return;
-        }        
+        }
         if(!this.myInterpreter){
             Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
             Blockly.JavaScript.addReservedWords('highlightBlock');
@@ -739,7 +739,9 @@ class BlockView extends Component{
             try{
                 var hasMoreCode = this.myInterpreter.step();
                 if(cb)cb('step');
-                if(this.runComplateCB)this.runComplateCB('step');                
+                if(this.runComplateCB)this.runComplateCB('step'); 
+            }catch(e){
+                console.error(e);
             }finally{
                 if (!hasMoreCode) {
                     console.log('Program complete');

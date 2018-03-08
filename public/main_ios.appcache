@@ -1,9 +1,9 @@
 CACHE MANIFEST
-#11
+#13
 libs/libunrar.js.mem
 http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/libs/libunrar.js.mem.1
 http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/libs/vconsole.min.js
-http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/libs/app_compress.js?q=5
+http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/libs/app_compress.js?q=9
 http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/libs/three.min.js
 http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/libs/stats.min.js
 http://fileosscdn.ljlx.com/upgrade/luaapp/voxels/libs/dat.gui.min.js

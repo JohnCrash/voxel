@@ -137,7 +137,8 @@ class Tips extends Component{
             if(json.result==='ok'){
                 postJson('/users/lvtips',{lv},(json)=>{
                     if(json.result==='ok'){
-                        localStorage.coolv='';
+                        if(!gold)
+                            localStorage.coolv='';
                         this.initCooldown(json);
                     }else{
                         MessageBox.show('ok',undefined,<MarkdownElement text={json.result}/>,()=>{});
@@ -172,7 +173,7 @@ class Tips extends Component{
                     if(tipbit&(1<<item.tiplv)){
                         //已经解锁
                         let cur = showlv===5-(item.tiplv+1);
-                        return <div>
+                        return <div key={index}>
                             <span style={titleStyle}>{item.title}</span>
                             <RaisedButton label={cur?'已打开':'可查看'} onClick={()=>{
                                 this.setState({showlv:5-(item.tiplv+1)});
@@ -180,14 +181,14 @@ class Tips extends Component{
                         </div>;
                     }else if(tipcd==item.tiplv && cooldown>0){
                         //正在倒计时
-                        return <div>
+                        return <div key={index}>
                             <span style={titleStyle}>{item.title}</span>
                             <RaisedButton label={Global.timeString(cooldown)} backgroundColor="#EF9A9A" labelColor='#FFFFFF' style={timeStyle} icon={<IconTimer color='#FFFFFF'/>}/>
                             <ConfirmButton onClick={this.onUnlock.bind(this,item.tiplv,true)} label={item.gold} style={goldStyle} icon={<CoinIcon  color='gold'/>}/>
                         </div>;
                     }else{
                         //未解锁也没有计时
-                        return <div>
+                        return <div key={index}>
                             <span style={titleStyle}>{item.title}</span>
                             <ConfirmButton onClick={this.onUnlock.bind(this,item.tiplv,false)} disabled={!hasright} label={item.unlock} backgroundColor="#29B6F6" labelColor='#FFFFFF' style={timeStyle} icon={<IconLock color='#FFFFFF'/>}/>
                             <ConfirmButton onClick={this.onUnlock.bind(this,item.tiplv,true)} label={item.gold} style={goldStyle} icon={<CoinIcon color='gold'/>}/>

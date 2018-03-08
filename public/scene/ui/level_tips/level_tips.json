@@ -96,5 +96,68 @@
 		"tip_2": "L3-4_T2.png",
 		"tip_3": "L3-4_T3.png",
 		"tip_4": "L3-4_T4.png"
+	},
+	"25": 
+	{
+		"tip_1": "L3-5_T1.png",
+		"tip_2": "L3-5_T2.png",
+		"tip_3": "L3-5_T3.png",
+		"tip_4": "L3-5_T4.png"
+	},
+	"27": 
+	{
+		"tip_1": "L3-7_T1.png",
+		"tip_2": "L3-7_T2.png",
+		"tip_3": "L3-7_T3.png",
+		"tip_4": "L3-7_T4.png"
+	},
+	"28": 
+	{
+		"tip_1": "L3-8_T1.png",
+		"tip_2": "L3-8_T2.png",
+		"tip_3": "L3-8_T3.png",
+		"tip_4": "L3-8_T4.png"
+	},
+	"29": 
+	{
+		"tip_1": "L3-9_T1.png",
+		"tip_2": "L3-9_T2.png",
+		"tip_3": "L3-9_T3.png",
+		"tip_4": "L3-9_T4.png"
+	},
+	"30": 
+	{
+		"tip_1": "L3-10_T1.png",
+		"tip_2": "L3-10_T2.png",
+		"tip_3": "L3-10_T3.png",
+		"tip_4": "L3-10_T4.png"
+	},
+	"34": 
+	{
+		"tip_1": "L4-4_T1.png",
+		"tip_2": "L4-4_T2.png",
+		"tip_3": "L4-4_T3.png",
+		"tip_4": "L4-4_T4.png"
+	},
+	"37": 
+	{
+		"tip_1": "L4-7_T1.png",
+		"tip_2": "L4-7_T2.png",
+		"tip_3": "L4-7_T3.png",
+		"tip_4": "L4-7_T4.png"
+	},
+	"39": 
+	{
+		"tip_1": "L4-9_T1.png",
+		"tip_2": "L4-9_T2.png",
+		"tip_3": "L4-9_T3.png",
+		"tip_4": "L4-9_T4.png"
+	},
+	"40": 
+	{
+		"tip_1": "L4-10_T1.png",
+		"tip_2": "L4-10_T2.png",
+		"tip_3": "L4-10_T3.png",
+		"tip_4": "L4-10_T4.png"
 	}
 }
