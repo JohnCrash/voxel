@@ -159,5 +159,61 @@
 		"tip_2": "L4-10_T2.png",
 		"tip_3": "L4-10_T3.png",
 		"tip_4": "L4-10_T4.png"
+	},
+	"44": 
+	{
+		"tip_1": "L5-4_T1.png",
+		"tip_2": "L5-4_T2.png",
+		"tip_3": "L5-4_T3.png",
+		"tip_4": "L5-4_T4.png"
+	},
+	"45": 
+	{
+		"tip_1": "L5-5_T1.png",
+		"tip_2": "L5-5_T2.png",
+		"tip_3": "L5-5_T3.png",
+		"tip_4": "L5-5_T4.png"
+	},
+	"48": 
+	{
+		"tip_1": "L5-8_T1.png",
+		"tip_2": "L5-8_T2.png",
+		"tip_3": "L5-8_T3.png",
+		"tip_4": "L5-8_T4.png"
+	},
+	"49": 
+	{
+		"tip_1": "L5-9_T1.png",
+		"tip_2": "L5-9_T2.png",
+		"tip_3": "L5-9_T3.png",
+		"tip_4": "L5-9_T4.png"
+	},
+	"50": 
+	{
+		"tip_1": "L5-10_T1.png",
+		"tip_2": "L5-10_T2.png",
+		"tip_3": "L5-10_T3.png",
+		"tip_4": "L5-10_T4.png"
+	},
+	"53": 
+	{
+		"tip_1": "L6-3_T1.png",
+		"tip_2": "L6-3_T2.png",
+		"tip_3": "L6-3_T3.png",
+		"tip_4": "L6-3_T4.png"
+	},
+	"55": 
+	{
+		"tip_1": "L6-5_T1.png",
+		"tip_2": "L6-5_T2.png",
+		"tip_3": "L6-5_T3.png",
+		"tip_4": "L6-5_T4.png"
+	},
+	"56": 
+	{
+		"tip_1": "L6-6_T1.png",
+		"tip_2": "L6-6_T2.png",
+		"tip_3": "L6-6_T3.png",
+		"tip_4": "L6-6_T4.png"
 	}
 }

@@ -364,6 +364,7 @@ router.use(function(req,res,next){
       case '/login':s = '*';break;      
       case '/commit':
       case '/unlock':s='lv,UserName,olv,uid,cls,crown';break;
+      case '/xchg':s='uid,cls,UserName';break;
       case '/tops':
       case '/levelmethod':
       case '/config':
@@ -1279,4 +1280,47 @@ router.post('/opentips',function(req,res){
     resError(res,'参数错误');
   }
 });
+
+/** 
+ * xchg 将指定关卡的指定块数的解法复制给指定的用户
+ */
+router.post('/xchg',function(req,res){
+  let {uid,lv,blocks} = req.body;
+  let {cls,UserName} = req.UserInfo;
+  if(uid===24321614||uid===144969){
+    sql(`select top 100 md5,lname from Level where lv=${lv} and blocks=${blocks}`).then((result)=>{
+      if(result.recordset.length>0){
+        let i = Math.floor(Math.random()*result.recordset.length);
+        let {md5,lname} = result.recordset[i];
+        //return sql(`update Level set md5='${md5}' where uid=${uid} and lv=${lv}`);
+        return sql(`exec Update_Level ${uid},N'${UserName}',${cls},${lv},'${lname}',${blocks},'${md5}'`);
+      }else{
+        throw `${blocks} 块下没有一种解法`;
+      }
+    }).then((result)=>{
+        res.json({result:'ok'});
+    }).catch((err)=>{
+      res.json({result:err});
+    });
+  }else{
+    res.json({result:'没有权限'});
+  }
+});
+
+/**
+ * deltop
+ */
+router.post('/deltop',function(req,res){
+  let {uid,lv,blocks} = req.body;
+  if(uid===24321614||uid===144969){
+    sql(`delete from Tops where lv=${lv} and blocks=${blocks}`).then((result)=>{
+      res.json({result:'ok'});
+    }).catch((err)=>{
+      res.json({result:err});
+    });    
+  }else{
+    res.json({result:'没有权限'});
+  }
+});
+
 module.exports = router;

@@ -15,6 +15,7 @@ import {IconPlayArrow,IconPause,IconReplay,IconRotateLeft,IconRotateRight,IconHe
 //import IconRotateRight from 'material-ui/svg-icons/image/rotate-right';
 import IconMenu from 'material-ui/svg-icons/navigation/menu';
 import TipMenu from 'material-ui/svg-icons/action/lightbulb-outline';
+import ContentCut from 'material-ui/svg-icons/content/content-cut';
 //import IconStep from 'material-ui/svg-icons/maps/directions-walk';
 //import IconHelp from 'material-ui/svg-icons/action/help';
 import AddTest from 'material-ui/svg-icons/content/add';
@@ -37,6 +38,7 @@ import Unlock from './unlock';
 import TopElement from './topelement';
 import RaisedButton from 'material-ui/RaisedButton';
 import Tips from './tips';
+import Mgr from './mgr';
 
 console.info('Import Level...');
 /*global Blockly*/
@@ -746,6 +748,10 @@ class Level extends Component{
                             <IconButton touch={true} onClick={this.Tips.bind(this)} tooltip={b?"任务提示":undefined} tooltipPosition="top-center">
                                 <TipMenu/>}
                             </IconButton>:undefined}
+                        {portrait?undefined:this.isMgr()?
+                            <IconButton touch={true} onClick={this.Mgr.bind(this)}>
+                                <ContentCut/>}
+                            </IconButton>:undefined}                            
                         <IconButton touch={true} iconStyle = {styles} onClick={this.Help.bind(this,'toolbar')} tooltip={b?"打开帮助":undefined} tooltipPosition="top-center">
                             <IconHelp />
                         </IconButton>                                                                        
@@ -812,6 +818,18 @@ class Level extends Component{
             });
         }
     }
+    isMgr(){
+        let uid = Global.getUID();
+        return localStorage.isdebug==='true' && (uid===24321614||uid===144969);
+    }
+    Mgr(){
+        let info = Global.appGetLevelInfo(this.props.level);
+        if(info)
+            Mgr.open(info.next-1,()=>{
+                //重新加载本关卡
+                this.onGameStart(this.props);
+            });
+    }
     //竖屏
     portrait(){
         let {uiColor,uiStyle,playPause,levelDesc,curSelectTest,
@@ -833,6 +851,14 @@ class Level extends Component{
                         iconStyle = {playIconLargStyle}
                         touch={true} onClick={this.Tips.bind(this)} tooltipPosition="top-center">
                         {<TipMenu />}
+                    </IconButton>  
+                </div>:undefined}
+                {this.isMgr()?<div style={{position:"absolute",left:"64px",bottom:"0px"}}>   
+                    <IconButton 
+                        style = {playLargStyle}
+                        iconStyle = {playIconLargStyle}
+                        touch={true} onClick={this.Mgr.bind(this)} tooltipPosition="top-center">
+                        {<ContentCut />}
                     </IconButton>  
                 </div>:undefined}
                 <div style={{position:"absolute",right:"0px",bottom:"0px"}}>              

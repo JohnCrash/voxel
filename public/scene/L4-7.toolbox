@@ -11,6 +11,10 @@
 		<field name="VAR" variabletype=""> x </field>
 	</block>
 	<block type="controls_repeat_ext"></block>
+	<block type="forward"></block>
+	<block type="turn_left"></block>
+	<block type="turn_right"></block>
+	<block type="jump" limit="3"></block>
 	<block type="math_arithmetic">
 		<field name="OP">MULTIPLY</field>
 		<value name="A"></value>
@@ -20,10 +24,6 @@
             </shadow>
         </value>
 	</block>
-	<block type="forward"></block>
-	<block type="turn_left"></block>
-	<block type="turn_right"></block>
-	<block type="jump" limit="3"></block>
 </xml>
 
 <xml id="default">
