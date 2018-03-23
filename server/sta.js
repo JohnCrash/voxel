@@ -42,7 +42,7 @@ const resolvers = {
             });
         },
         incomeDistribLv:()=>{
-            return sql(`select * from DistribLv`).then(result=>result.recordset);
+            return sql(`select * from DistribLv order by lv`).then(result=>result.recordset);
         },
         dau:(parent,{lastday},context)=>{
             return sql(`select * from StaAU where DateDiff(DD,date,getdate())<=${lastday} order by date`).then(result=>result.recordset);

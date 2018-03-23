@@ -1227,7 +1227,7 @@ router.post('/opentips',function(req,res){
             if(b){
               //统计与日志
               //sqlAction(uid,cls,`goldtips(${lv})`);
-              sqlAction(uid,cls,`g(${lv}-${g})`);
+              sqlAction(uid,cls,`g(${lv}-${g}-${tiplv})`);
               sql(`update Unlock set tips_unlock=tips_unlock+1,gold_total=gold_total+${g} where id=1`);
               //直接解锁
               if(r.tipbit===undefined)
@@ -1245,7 +1245,7 @@ router.post('/opentips',function(req,res){
           },`乐学编程提示解锁 ${uid},${lv},${tiplv},${g}`);
         }else if(r.hasright){
           //sqlAction(uid,cls,`cdtips(${lv})`);
-          sqlAction(uid,cls,`cdtips(${lv})`);
+          sqlAction(uid,cls,`cdtips(${lv}-${tiplv})`);
           //可以使用时间解锁,这里开始倒计时
           //这里首先要设置UserInfo中的倒计时
           let cdt = new Date(r.utcdate);//服务器当前时间

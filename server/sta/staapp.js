@@ -373,12 +373,16 @@ function eachDayToday(dd){
             let m = element.action.match(/goldtips\((\d+)\)/);
             if(m && m[1]){
                 sta.tips += 300;
-                sta.distriblv[m[1]] = sta.distriblv[m[1]]?sta.distriblv[m[1]]+300:300;
+                sta.distriblv[m[1]] = {};sta.distriblv[m[1]]?sta.distriblv[m[1]]+300:300;
             }else{
-                m = element.action.match(/g\((\d+)\-(\d+)\)/);
+                m = element.action.match(/g\((\d+)\-(\d+)-(\d+)\)/);
                 if(m && m[1] && m[2]){
                     sta.tips += m[2];
-                    sta.distriblv[m[1]] = sta.distriblv[m[1]]?sta.distriblv[m[1]]+m[2]:m[2];
+                    let lvs = sta.distriblv[m[1]] || {lv:m[1],gold:0,t1:0,t2:0,t3:0,t4:0};
+                    lvs.gold += m[2];
+                    if(m[3]===+m[3] && m[3]>=0 && m[3]<4){
+                        lvs[`t${m[3]+1}`]++;
+                    }
                 }
             }
         }else if(element.action[0] === 'u'){
@@ -398,7 +402,8 @@ function eachDayToday(dd){
             //将数据写入到数据库中
             sql(`insert into DayIncome (date,unlock,tips) values ('${date}',${sta.unlock},${sta.tips})`);
             for(let lv in sta.distriblv){
-                sql(`exec Update_DistribLv ${lv},${sta.distriblv[lv]}`);
+                let lvs = sta.distriblv[lv];
+                sql(`exec Update_DistribLv ${lv},${lvs.gold},${lvs.t1},${lvs.t2},${lvs.t3},${lvs.t4}`);
             }
             console.log(sta);
         }else{
