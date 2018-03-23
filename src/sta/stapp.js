@@ -14,6 +14,10 @@ import {
   } from 'react-router-dom';
   import reducer from './reducer';
 import Main from './main';
+import { ApolloProvider } from 'react-apollo';
+import { ApolloClient } from 'apollo-client';
+import { HttpLink } from 'apollo-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -21,12 +25,21 @@ injectTapEventPlugin();
 
 const store = createStore(reducer);
 
+const client = new ApolloClient({
+    link: new HttpLink({ uri: 'graphql' }),
+    cache: new InMemoryCache(),
+  });
+
 function App(){
-    return <Provider  store={store}>
-        <MuiThemeProvider>
-            <Main />
-        </MuiThemeProvider>
-    </Provider>;
+    return (
+    <ApolloProvider client={client}>
+        <Provider  store={store}>
+            <MuiThemeProvider>
+                <Main />
+            </MuiThemeProvider>
+        </Provider>
+    </ApolloProvider>
+    );
 }
 
 function render(){

@@ -39,6 +39,7 @@ import TopElement from './topelement';
 import RaisedButton from 'material-ui/RaisedButton';
 import Tips from './tips';
 import Mgr from './mgr';
+import Confetti from 'react-confetti';
 
 console.info('Import Level...');
 /*global Blockly*/
@@ -86,7 +87,9 @@ class Level extends Component{
             blocklytoolbox:toolboxMode, //展开blockly工具条
             switchSize:false,
             uiStyle:Global.getUIStyle(),
-            uiColor:'#000000'
+            uiColor:'#000000',
+            confetti:false,
+            numberOfPieces:100
         }
     }
     componentDidMount(){
@@ -132,7 +135,7 @@ class Level extends Component{
         this._isgameover = false;
         this.voxview.reset();
         this.blockview.reset();
-        this.setState({playPause:true});
+        this.setState({playPause:true,confetti:false});
     }
     RotationRight(event){
         if(event)event.stopPropagation();
@@ -164,18 +167,27 @@ class Level extends Component{
                 //指南提示
                 this._isrunning = false;
                 this.needReset = true;
-                this.setState({playPause:true});
-                if(this.isPlayAgin()){
-                    this.commitAgin();
-                }else{
-                    this.blockview.openGuid(6,()=>{//GUID_SUCCESS
-                        Global.playSound(lj.successSound);
-                        this.Tops.open(this.blockview.getBlockCount(),
-                        this.blockview.toXML(),now-this.btms,now-this.btpms,
-                        ()=>{this.Reset();});
-                        this.btpms = now;    
-                    });    
-                }
+                console.log(`FPS : ${Global.getVoxFPS()}`);
+                this.setState({
+                    playPause:true,
+                    confetti:true, //打开彩带
+                    numberOfPieces:Global.getVoxFPS()*2
+                });
+                Global.playSound(lj.successSound);
+                BlocklyInterface.pause();
+                setTimeout(()=>{
+                    if(this.isPlayAgin()){
+                        this.commitAgin();
+                    }else{
+                        this.blockview.openGuid(6,()=>{//GUID_SUCCESS
+                            this.Tops.open(this.blockview.getBlockCount(),
+                            this.blockview.toXML(),now-this.btms,now-this.btpms,
+                            ()=>{this.Reset();});
+                            this.btpms = now;    
+                        });    
+                    }
+                },2500);
+
                 return;
             case 'WrongAction':
                 md = 'scene/ui/wrongaction.md';
@@ -287,7 +299,7 @@ class Level extends Component{
         this._isrunning = false;
         this._isgameover = false;
         //加载voxview的时候uiColor必须为白色
-        this.setState({uiColor:'#FFFFFF'});
+        this.setState({uiColor:'#FFFFFF',confetti:false});
         /**
          * 统计第一关的平均用时
          */
@@ -602,10 +614,8 @@ class Level extends Component{
             let dict={name,lv:info.next-1,blocks:cur,best};
             if(cur < blocks){
                 //成功提高
-                Global.playSound(lj.successSound);
                 TextManager.load(`scene/ui/best_again.md`,(iserr,text)=>{
                     if(!iserr)MessageBox.show('',undefined,<MarkdownElement text={md(text,dict)} />,(result)=>{
-                        Global.playSound(lj.successSound);
                         this.Tops.open(this.blockview.getBlockCount(),
                         this.blockview.toXML(),now-this.btms,now-this.btpms,
                         ()=>{this.Reset();});
@@ -615,7 +625,6 @@ class Level extends Component{
             }else{
                 //没有成功
                 this.btpms = now;
-                Global.playSound(lj.successSound);
                 TextManager.load(`scene/ui/fail_again.md`,(iserr,text)=>{
                     if(!iserr)MessageBox.show('',undefined,<MarkdownElement text={md(text,dict)} />,(result)=>{
                         if(result==='again'){
@@ -644,6 +653,8 @@ class Level extends Component{
                             }else{
                                 this.gonext(info);
                             }
+                        }else if(result==='close'){
+                            this.setState({confetti:false});
                         }
                     },'tips_again');                    
                 });                
@@ -771,7 +782,7 @@ class Level extends Component{
     //横屏
     landscape(){
         let {uiColor,uiStyle,playPause,levelDesc,curSelectTest,
-            openTops,blocklytoolbox,switchSize} = this.state;
+            openTops,blocklytoolbox,switchSize,confetti,numberOfPieces} = this.state;
         let {level} = this.props;
         let divStyle = Global.getPlatfrom()==='ios'?{position:"fixed",left:'0px',right:'0px',top:'0px',bottom:'0px'}:undefined;
         return <div>
@@ -781,7 +792,7 @@ class Level extends Component{
             <div style={{position:"absolute",left:"50%",top:"0px",right:"0px",bottom:"0px"}}>
                 <div style={{position:"absolute",left:"0px",right:"0px",top:"0px",bottom:"0px"}}>
                 <BlockView ref={ref=>this.blockview=ref} 
-                    file={`scene/${level}.toolbox`} 
+                    file={`scene/${level}.toolbox?p=${Global.getRandom()}`} 
                     onBlockCount={this.onBlockCount.bind(this)}
                     layout="landscape"
                     guid={level==='L1-1'}
@@ -799,6 +810,7 @@ class Level extends Component{
             <Tops ref={ref=>this.Tops=ref} level={level}/>
             <Unlock ref={ref=>this.unlock=ref} />
             <Tips ref={ref=>this.tips=ref} />
+            {confetti?<Confetti width={window.innerWidth} height={window.innerHeight} gravity={0.15} numberOfPieces={numberOfPieces}/>:undefined}
         </div>;
     }
     switchSize(){
@@ -833,7 +845,7 @@ class Level extends Component{
     //竖屏
     portrait(){
         let {uiColor,uiStyle,playPause,levelDesc,curSelectTest,
-            openTops,blocklytoolbox,switchSize} = this.state;
+            openTops,blocklytoolbox,switchSize,confetti,numberOfPieces} = this.state;
         let {level} = this.props;
         //ios关闭滚动
         let divStyle = Global.getPlatfrom()==='ios'?{position:"fixed",left:'0px',right:'0px',top:'0px',bottom:'0px'}:undefined;
@@ -873,7 +885,7 @@ class Level extends Component{
             <div style={{position:"absolute",left:"0px",top:switchSize?"60%":"50%",right:"0px",bottom:"0px"}}>
                 <div style={{position:"absolute",left:"0px",right:"0px",top:"0px",bottom:"0px"}}>
                 <BlockView ref={ref=>this.blockview=ref} 
-                    file={`scene/${level}.toolbox`} 
+                    file={`scene/${level}.toolbox?p=${Global.getRandom()}`} 
                     onBlockCount={this.onBlockCount.bind(this)}
                     layout="portrait"
                     guid={level==='L1-1'}
@@ -893,6 +905,7 @@ class Level extends Component{
             <Tops ref={ref=>this.Tops=ref} level={level}/>
             <Unlock ref={ref=>this.unlock=ref} />
             <Tips ref={ref=>this.tips=ref} />
+            {confetti?<Confetti width={window.innerWidth} height={window.innerHeight} gravity={0.15} numberOfPieces={numberOfPieces}/>:undefined}
         </div>;
     }
     render(){

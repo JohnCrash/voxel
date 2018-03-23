@@ -15,6 +15,7 @@ const {
   LXReturnHelper
 } = ljlx;
 const { Asset } = ljlx.Main;
+const sql = require('./sql');
 
 /**
  * 付金币
@@ -151,16 +152,16 @@ function stripTailSpace(s){
   return s;
 }
 
-const SQL = Sql.connect(config.sqlserver);
-function sql(query){
+//const SQL = Sql.connect(config.sqlserver);
+//function sql(query){
   /*
     //老的连接池方式
     return new Sql.ConnectionPool(config.sqlserver).connect().then(pool=>{
       return pool.request().query(query);
     });
   */
-  return SQL.then((pool)=>{return pool.request().query(query)});
-}
+//  return SQL.then((pool)=>{return pool.request().query(query)});
+//}
 
 function resError(res,err){
   if(err && err.message)
@@ -963,7 +964,8 @@ router.post('/unlock',function(req,res){
         if(b){
           sql(`update UserInfo set olv=${olv} where uid='${uid}'`).
           then((result)=>{
-            sqlAction(uid,cls,`unlock2(${olv})`);
+            //sqlAction(uid,cls,`unlock2(${olv})`);
+            sqlAction(uid,cls,`u(${olv}-${unlocktable.gold})`);
             //统计解锁数
             sql(`update Unlock set unlock=unlock+1,gold_unlock=gold_unlock+1,gold_total=gold_total+${unlocktable.gold} where id=1`);
             notifyClass(2,UserName,uid,cls,unlock); //通知同班同学，我解锁了
@@ -1224,7 +1226,8 @@ router.post('/opentips',function(req,res){
           payGold(uid,g,(b,msg)=>{
             if(b){
               //统计与日志
-              sqlAction(uid,cls,`goldtips(${lv})`);
+              //sqlAction(uid,cls,`goldtips(${lv})`);
+              sqlAction(uid,cls,`g(${lv}-${g})`);
               sql(`update Unlock set tips_unlock=tips_unlock+1,gold_total=gold_total+${g} where id=1`);
               //直接解锁
               if(r.tipbit===undefined)
@@ -1241,6 +1244,7 @@ router.post('/opentips',function(req,res){
             }
           },`乐学编程提示解锁 ${uid},${lv},${tiplv},${g}`);
         }else if(r.hasright){
+          //sqlAction(uid,cls,`cdtips(${lv})`);
           sqlAction(uid,cls,`cdtips(${lv})`);
           //可以使用时间解锁,这里开始倒计时
           //这里首先要设置UserInfo中的倒计时

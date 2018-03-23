@@ -345,6 +345,71 @@ function doStaEx(){
     */
     staExDay3(sqlDateString(new Date()).split(' ')[0]);
 }
+
+/**
+ * 统计每天的金币数量
+ * 想从头开始重新统计见p3.js
+ */
+ //某一天的全部用户流
+ function eachUserStream(date,each,done){
+    sql(`select action from UserStream where DATEDIFF(DD,'${date}',date)=0`).then(result=>{
+        result.recordset.forEach(element => {
+            each(date,element);
+        });
+        done(false,date);
+    }).catch((err)=>{
+        console.error(err);
+        done(true,err);
+    })
+}
+
+function eachDayToday(dd){
+    let task = [];
+    let sta = {date:dd,unlock:0,tips:0,distriblv:{}};
+    console.log('eachDayToday',dd);
+    eachUserStream(dd,(date,element)=>{
+        if(element.action[0] === 'g'){
+            //提示解锁
+            let m = element.action.match(/goldtips\((\d+)\)/);
+            if(m && m[1]){
+                sta.tips += 300;
+                sta.distriblv[m[1]] = sta.distriblv[m[1]]?sta.distriblv[m[1]]+300:300;
+            }else{
+                m = element.action.match(/g\((\d+)\-(\d+)\)/);
+                if(m && m[1] && m[2]){
+                    sta.tips += m[2];
+                    sta.distriblv[m[1]] = sta.distriblv[m[1]]?sta.distriblv[m[1]]+m[2]:m[2];
+                }
+            }
+        }else if(element.action[0] === 'u'){
+            //通过解锁
+            let m = element.action.match(/unlock2\((\d+)\)/);
+            if( m && m[1] ){
+                sta.unlock += 3000;
+            }else{
+                m = element.action.match(/u\((\d+)\-(\d+)\)/);
+                if(m && m[1] && m[2]){
+                    sta.unlock += m[2];
+                }
+            }
+        }
+    },(err,date)=>{
+        if(!err){
+            //将数据写入到数据库中
+            sql(`insert into DayIncome (date,unlock,tips) values ('${date}',${sta.unlock},${sta.tips})`);
+            for(let lv in sta.distriblv){
+                sql(`exec Update_DistribLv ${lv},${sta.distriblv[lv]}`);
+            }
+            console.log(sta);
+        }else{
+            console.error(err);
+        }
+    }); 
+}
+
+function doStaGold(){
+    eachDayToday(sqlDateString(new Date()).split(' ')[0]);
+}
 //doStaEx();
 /**
  * 启动一个周期进程用来从分析数据
@@ -364,6 +429,7 @@ setInterval(function(){
         doStaLv();
         doStaLvt();
         doStaEx();
+        doStaGold();
         lastDay = t.getDay();
     }
     //每小时执行一次

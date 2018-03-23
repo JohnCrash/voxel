@@ -34,6 +34,9 @@ class VoxView extends Component{
         this.sceneManager = new SceneManager(this.game);
         this.game.observer = true;
         this.game.camera.rotation.order = 'ZXY';
+        this.game.on('update',(dt)=>{
+            if(dt>0)Global.setVoxFPS(1000/dt);
+        });
         this.game.run();
         BlocklyInterface.setCurrentVoxView(this);
         Global.setCurrentSceneManager(this.sceneManager);

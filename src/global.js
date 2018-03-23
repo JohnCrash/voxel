@@ -14,7 +14,7 @@ console.info('Import Global...');
 class _Global_ extends EventEmitter{
     constructor(){
         super();
-        this.version = '1.0.35';
+        this.version = '1.0.36';
         this.LevelJson = null;
         this.maxpasslv = null;
         this._debug = window.LOCALHOST;
@@ -27,7 +27,7 @@ class _Global_ extends EventEmitter{
         this._userName = 'None';
         this._blocklyskin = "Scratch";
         this._ui = [];
-
+        this._fps = 60;
         //windows,android,ios
         try{
             let plow = navigator.platform.toLocaleLowerCase();
@@ -836,6 +836,15 @@ class _Global_ extends EventEmitter{
      */
     resetlvtips(){
         this._lvtipscurtime = null;
+    }
+    /**
+     * 测试vox FPS
+     */
+    setVoxFPS(fps){
+        this._fps = (this._fps+fps)/2;
+    }
+    getVoxFPS(){
+        return this._fps;
     }
 };
 
