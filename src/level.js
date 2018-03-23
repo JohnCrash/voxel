@@ -715,6 +715,7 @@ class Level extends Component{
     toolbarEle(portrait){
         let {uiColor,playPause,curSelectTest,isDebug} = this.state;   
         let tests = [];
+        isDebug = false;
         if(this.testXML){
             for(let i=0;i<this.testXML.length;i++)
                 tests.push(<MenuItem value={i} key={i} primaryText={`test ${i}`} />);
@@ -747,6 +748,7 @@ class Level extends Component{
         return <Toolbar style={portrait?{width:"100%",
                 background:"rgba(0,0,0,0)",
                 bottom:"0px",
+                left:'32px',
                 position:"absolute"}:undefined}>
                     {portrait?undefined:<ToolbarGroup>
                         <IconButton touch={true} onClick={this.Menu.bind(this)} tooltip={b?"菜单...":undefined} tooltipPosition="top-center">

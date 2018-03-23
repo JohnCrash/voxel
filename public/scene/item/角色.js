@@ -122,6 +122,8 @@ function initItemBlockly(_this){
 			if(this.currentAction==='forward'){
 				this.blocklyContinue('collision obstruct');
 				this.currentAction='idle';
+				this.forwardEnd.x = this.position.x;
+				this.forwardEnd.y = this.position.y;
 			}else{
 				this.currentAction = 'jumpwall';
 			}
