@@ -358,58 +358,74 @@ function doStaEx(){
         });
         done(false,date);
     }).catch((err)=>{
-        console.error(err);
+        console.error('eachUserStream',err);
         done(true,err);
     })
 }
 
 function eachDayToday(dd){
+    let d = new Date(dd);
+    let today = new Date();
     let task = [];
-    let sta = {date:dd,unlock:0,tips:0,distriblv:{}};
-    console.log('eachDayToday',dd);
-    eachUserStream(dd,(date,element)=>{
-        if(element.action[0] === 'g'){
-            //提示解锁
-            let m = element.action.match(/goldtips\((\d+)\)/);
-            if(m && m[1]){
-                sta.tips += 300;
-                sta.distriblv[m[1]] = {};sta.distriblv[m[1]]?sta.distriblv[m[1]]+300:300;
-            }else{
-                m = element.action.match(/g\((\d+)\-(\d+)-(\d+)\)/);
-                if(m && m[1] && m[2]){
-                    sta.tips += m[2];
-                    let lvs = sta.distriblv[m[1]] || {lv:m[1],gold:0,t1:0,t2:0,t3:0,t4:0};
-                    lvs.gold += m[2];
-                    if(m[3]===+m[3] && m[3]>=0 && m[3]<4){
-                        lvs[`t${m[3]+1}`]++;
+    for(;d<today;d.setDate(d.getDate()+1)){
+        let dd = d.toISOString().slice(0,10);
+        let sta = {date:dd,unlock:0,tips:0,distriblv:{}};
+        task.push((cb)=>{
+            eachUserStream(dd,(date,element)=>{
+                if(element.action[0] === 'g'){
+                    //提示解锁
+                    let m = element.action.match(/goldtips\((\d+)\)/);
+                    if(m && m[1]){
+                        sta.tips += 300;
+                        sta.distriblv[m[1]] = sta.distriblv[m[1]]?sta.distriblv[m[1]]+300:300;
+                    }else{
+                        m = element.action.match(/g\((\d+)\-(\d+)-(\d+)\)/);
+                        if(m && m[1] && m[2]){
+                            sta.tips += Number(m[2]);
+                            let tiplv = Number(m[3]);
+                            sta.distriblv[m[1]] = sta.distriblv[m[1]]?sta.distriblv[m[1]]+Number(m[2]):Number(m[2]);
+                        }
+                    }
+                }else if(element.action[0] === 'u'){
+                    //通过解锁
+                    let m = element.action.match(/unlock2\((\d+)\)/);
+                    if( m && m[1] ){
+                        sta.unlock += 3000;
+                    }else{
+                        m = element.action.match(/u\((\d+)\-(\d+)\)/);
+                        if(m && m[1] && m[2]){
+                            sta.unlock += Number(m[2]);
+                        }
                     }
                 }
-            }
-        }else if(element.action[0] === 'u'){
-            //通过解锁
-            let m = element.action.match(/unlock2\((\d+)\)/);
-            if( m && m[1] ){
-                sta.unlock += 3000;
-            }else{
-                m = element.action.match(/u\((\d+)\-(\d+)\)/);
-                if(m && m[1] && m[2]){
-                    sta.unlock += m[2];
-                }
-            }
-        }
-    },(err,date)=>{
+            },(err,date)=>{
+                if(!err){
+                    cb(false,'ok');
+                    //将数据写入到数据库中
+                    sql(`insert into DayIncome (date,unlock,tips) values ('${date}',${sta.unlock},${sta.tips})`).catch((err)=>{
+                        console.error(`insert into DayIncome (date,unlock,tips) values ('${date}',${sta.unlock},${sta.tips})`);
+                        console.error(err);
+                    });
+                    for(let lv in sta.distriblv){
+                        let sqlcmd = `exec Update_DistribLv ${lv},${sta.distriblv[lv]},NULL,NULL,NULL,NULL`;
+                        sql(sqlcmd).catch((err)=>{
+                            console.error(sqlcmd);
+                            console.error(err);
+                        });;
+                    }
+                    console.log(sta);
+                }else
+                    cb(true,err);
+            });    
+        });
+    }
+    async.series(task,(err,results)=>{
         if(!err){
-            //将数据写入到数据库中
-            sql(`insert into DayIncome (date,unlock,tips) values ('${date}',${sta.unlock},${sta.tips})`);
-            for(let lv in sta.distriblv){
-                let lvs = sta.distriblv[lv];
-                sql(`exec Update_DistribLv ${lv},${lvs.gold},${lvs.t1},${lvs.t2},${lvs.t3},${lvs.t4}`);
-            }
-            console.log(sta);
+            console.log('done');
         }else{
             console.error(err);
         }
-    }); 
+    });
 }
 
 function doStaGold(){

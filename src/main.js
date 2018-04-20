@@ -20,25 +20,123 @@ import {DotIcon} from "./ui/myicon";
 import {postJson,fetchJson} from './vox/fetch';
 import IconTimer from 'material-ui/svg-icons/image/timer';
 import TipMenu from 'material-ui/svg-icons/action/lightbulb-outline';
+import ReturnBack from 'material-ui/svg-icons/image/navigate-before';
 import { setInterval, clearInterval } from 'timers';
+import BgMgr from './bgmgr';
+import BgSList from './bgslist';
+import { Glacier2 } from 'ice';
 
 console.info('Import Main...');
-
+const titles = [
+    '乐学编程',
+    '班级列表',
+    '全部学生进度',
+];
 class Main extends Component{
     constructor(props){
         super(props);
-        this.state = {
-            title : '',
-            anchorEl : null,
-            isdebug : false,
-            msgcount : 0,
-            readmsg :[],
-            cooldown : 0,
-            coolv : 0
-        }
+        /*
+        let ms = Global.getMainState();
+        if(ms){
+            this._classlist = ms.classlist;
+            this._clsid = ms.clsid;
+            this._clsname = ms.clsname;
+            this._students = ms.students;
+            this._watchUID = ms.watchUID;
+            this._watchUname = ms.watchUname;
+            this.state = {
+                title : '',
+                anchorEl : null,
+                isdebug : false,
+                msgcount : 0,
+                readmsg :[],
+                cooldown : 0,
+                coolv : 0,
+                mode : 'student',
+                classlist : this._classlist,
+                studentlist : this._students
+            }
+        } */
+            this.state = {
+                title : '',
+                anchorEl : null,
+                isdebug : false,
+                msgcount : 0,
+                readmsg :[],
+                cooldown : 0,
+                coolv : 0,
+                mode : 'main', //'main' , 'mgr'
+                classlist : null,
+                studentlist : null
+            }    
         Global.regAppTitle((t)=>{
             this.appTitle(t);
         });
+        Global.setMainFrame(this);
+    }
+    /**
+     * 打开班级列表
+     */
+    openTeacherMgr(){
+        postJson('users/myclass',{},(json)=>{
+            if(json.result==='ok'){
+                this._classlist = json.classes;
+                this.setState({mode:'classlist',classlist:json.classes,title:titles[1]});
+                Global.push(()=>{
+                    this.setState({mode:'main',title:titles[0]}); //返回主菜单
+                });
+            }else{
+                MessageBox.show('ok','错误',json.result,(result)=>{});
+            }
+        });        
+    }
+    /**
+     * 打开班级学生列表
+     */
+    openStudensList(clsid,name){
+        postJson('users/mystudent',{clsid},(json)=>{
+            if(json.result==='ok'){
+                this._clsid = clsid;
+                this._clsname = name;
+                this._students = json.students;
+                this.setState({mode:'studentlist',studentlist:json.students,title:name});
+                Global.push(()=>{
+                    this.setState({mode:'classlist',studentlist:json.students,title:titles[1]}); 
+                });
+            }else{
+                MessageBox.show('ok','错误',json.result,(result)=>{});
+            }
+        });   
+    }
+    /**
+     * 打开学生的关卡列表
+     */
+    openStudentLevel(uid,uname,cls){
+        let _this = this;
+        postJson('users/login2',{uid,uid2:uid,cls},(json)=>{
+            if(json.result==='ok'){
+                console.log(json);
+                _this._watchUID = uid;
+                _this._watchUname = uname;
+                Global.watchStudent(json)/*{
+                    classlist:this._classlist,
+                    clsid:this._clsid,
+                    clsname:this._clsname,
+                    students:this._students,
+                    watchUID:uid,
+                    watchUname:uname,
+                }); */
+                _this.setState({mode:'student',title:`${uname}(${_this._clsname})`});
+                Global.push(()=>{
+                    _this._watchUID = null;
+                    _this._watchUname = null;
+                    Global.unwatchStudent();
+                    _this.setState({mode:'studentlist',title:titles[2]});
+                });                
+            }else{
+                MessageBox.show('ok','错误',json.result,(result)=>{});
+            }
+        }); 
     }
     initLogin(){
         let json = Global.getLoginJson();
@@ -49,10 +147,11 @@ class Main extends Component{
         }
     }
     appTitle(t){
-        this.setState({title:t});
+        if(!this._watchUID)
+            this.setState({title:t});
     }
     componentDidMount(){
-        document.title = "乐学编程";
+        document.title = titles[0];
         //出一个介绍对话栏
         /*
         if(!localStorage.guid0 && !Main.isshow)
@@ -131,7 +230,28 @@ class Main extends Component{
     }
     onMenu(event){
         event.preventDefault();
-        this.drawer.open(true);
+        switch(this.state.mode){
+            case 'classlist':
+                this.setState({mode:'main',title:titles[0]}); //返回主菜单
+                Global.pop();
+            break;
+            case 'studentlist':
+                this.setState({mode:'classlist',title:titles[1]}); //返回
+                Global.pop();
+            break;
+            case 'student':
+                this._watchUID = null;
+                this._watchUname = null;
+                Global.unwatchStudent();
+                this.setState({mode:'studentlist',title:titles[2]}); //返回
+                Global.pop();
+            break;
+            case 'main':
+            default:
+                this.setState({mode:'main',title:titles[0]}); //返回主菜单
+                this.drawer.open(true); //打开边栏
+            break;            
+        }
     }
     onTops=(event)=>{
         this.crowntops.show();
@@ -161,7 +281,7 @@ class Main extends Component{
                 lvideo = m[1];
             }
         }
-        let {readmsg,msgcount,cooldown,coolv} = this.state;
+        let {readmsg,msgcount,cooldown,coolv,mode,classlist,studentlist} = this.state;
         let message = Global.getLoginJson().message || [];
         let menuitems = message.map((item,index)=>{
             let isreaded = readmsg.includes(item.id);
@@ -180,37 +300,56 @@ class Main extends Component{
                     });                    
                 }}/>;
         });
+        let nodeElment;
+        switch(mode){
+            case 'classlist':
+            nodeElment = (<BgMgr classlist={classlist} ref={r=>this.bgmgr = r}/>);
+            break;
+            case 'studentlist':
+            nodeElment = (<BgSList studentlist={studentlist} ref={r=>this.bgslist = r}/>);
+            break;
+            case 'student':
+            case 'main':
+            default:
+                nodeElment = (
+            <div>
+                <MainDrawer key='mydrawer' loc='main' ref={ref=>this.drawer=ref}/>
+            <LevelSel key='levelselect' index='main' current={Global.getMaxPassLevel()} 
+                other={Global.getLoginJson()? Global.getLoginJson().cls:null} 
+                lvs={Global.getLoginJson()? Global.getLoginJson().lvs:null} 
+                lvideo={lvideo}
+                unlock={Global.getMaxUnlockLevel()}
+                ref={r=>{this.levelSel=r}}/>
+            <div style={{position:'fixed',display:'flex',alignItems:'center',
+                top:'16px',right:'16px',zIndex:1100,fontSize:'x-large',color:'white'}}>
+                <span onClick={this.onTops}>{Global.getCrowns()}×</span>
+                <FloatButton src={Global.getCDNURL('scene/image/crown.png')} onClick={this.onTops} style={{width:'36px'}}/>
+                {message.length>0?<IconMenu
+                    ref={(ref)=>{this.msgbox = ref;}}
+                    iconButtonElement={<FloatButton src={Global.getCDNURL('scene/image/message.png')} style={{width:'36px',marginLeft:'16px',marginRight:'8px'}}/>}
+                    anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+                    targetOrigin={{horizontal: 'left', vertical: 'top'}}
+                    >
+                    {menuitems}
+                </IconMenu>:undefined}
+                {message.length>0&&msgcount>0?<div style={{pointerEvents:'none',position:'absolute',top:'-6px',right:'-6px',width:'24px',height:'24px',borderRadius:'12px',background:'red',fontSize:'18px',fontWeight:'bold',textAlign:'center'}}>{this.state.msgcount}</div>:undefined}
+            </div>
+            <CrownTops ref={r=>this.crowntops = r} onClose={this.handleCloseTops}/>
+            {coolv?<div style={{position:'fixed',display:'flex',top:'72px',right:'6px',zIndex:1100,alignItems:'center',
+                        width:'128px',height:'48px',background:cooldown<=0?'green':'red',borderRadius:'6px'}} onClick={this.handleTipsClick.bind(this)}>
+                {cooldown<=0?<TipMenu color='white' style={{width:'36px',height:'36px'}}/>:<IconTimer color='white' style={{width:'36px',height:'36px'}}/>}
+                <div style={{color:'white',fontWeight:'bold',textAlign:'center'}}><span>{cooldown<=0?'提示':'提示解锁中'}</span><br/><span>{cooldown<=0?'已解锁':Global.timeString(cooldown)}</span></div>
+            </div>:undefined}
+        </div>
+                );
+            break;
+        }
         return <div><AppBar 
             title={this.state.title}
+            iconElementLeft={mode==='main'?undefined:<IconButton><ReturnBack /></IconButton>}
             style={appbarStyle}
             onLeftIconButtonTouchTap={this.onMenu.bind(this)}/>
-            <MainDrawer key='mydrawer' loc='main' ref={ref=>this.drawer=ref}/>
-        <LevelSel key='levelselect' index='main' current={Global.getMaxPassLevel()} 
-            other={Global.getLoginJson()? Global.getLoginJson().cls:null} 
-            lvs={Global.getLoginJson()? Global.getLoginJson().lvs:null} 
-            lvideo={lvideo}
-            unlock={Global.getMaxUnlockLevel()}
-            ref={r=>{this.levelSel=r}}/>
-        <div style={{position:'fixed',display:'flex',alignItems:'center',
-            top:'16px',right:'16px',zIndex:1100,fontSize:'x-large',color:'white'}}>
-            <span onClick={this.onTops}>{Global.getCrowns()}×</span>
-            <FloatButton src={Global.getCDNURL('scene/image/crown.png')} onClick={this.onTops} style={{width:'36px'}}/>
-            {message.length>0?<IconMenu
-                ref={(ref)=>{this.msgbox = ref;}}
-                iconButtonElement={<FloatButton src={Global.getCDNURL('scene/image/message.png')} style={{width:'36px',marginLeft:'16px',marginRight:'8px'}}/>}
-                anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-                targetOrigin={{horizontal: 'left', vertical: 'top'}}
-                >
-                {menuitems}
-            </IconMenu>:undefined}
-            {message.length>0&&msgcount>0?<div style={{pointerEvents:'none',position:'absolute',top:'-6px',right:'-6px',width:'24px',height:'24px',borderRadius:'12px',background:'red',fontSize:'18px',fontWeight:'bold',textAlign:'center'}}>{this.state.msgcount}</div>:undefined}
-        </div>
-        <CrownTops ref={r=>this.crowntops = r} onClose={this.handleCloseTops}/>
-        {coolv?<div style={{position:'fixed',display:'flex',top:'72px',right:'6px',zIndex:1100,alignItems:'center',
-                    width:'128px',height:'48px',background:cooldown<=0?'green':'red',borderRadius:'6px'}} onClick={this.handleTipsClick.bind(this)}>
-            {cooldown<=0?<TipMenu color='white' style={{width:'36px',height:'36px'}}/>:<IconTimer color='white' style={{width:'36px',height:'36px'}}/>}
-            <div style={{color:'white',fontWeight:'bold',textAlign:'center'}}><span>{cooldown<=0?'提示':'提示解锁中'}</span><br/><span>{cooldown<=0?'已解锁':Global.timeString(cooldown)}</span></div>
-        </div>:undefined}
+            {nodeElment}
         </div>;
         /**
          * FixBug : iOS有一个触摸事件穿透问题，上面打开对话CrownTops滑动手指，会滚动LevelSel

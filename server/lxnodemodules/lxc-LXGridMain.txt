@@ -1,0 +1,2 @@
+Ice.Default.Locator=LXGridMain/Locator:tcp -h 192.168.10.103 -p 4061 :tcp -h 192.168.10.104 -p 4061
+Ice.Override.ConnectTimeout=500

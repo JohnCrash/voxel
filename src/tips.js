@@ -14,6 +14,7 @@ import level from './level';
 import MarkdownElement from './ui/MarkdownElement';
 import {MessageBox} from './ui/MessageBox';
 import ConfirmButton from './ui/confirm-button';
+import {ljshell} from './ljshell';
 
 const titleStyle = {
     fontWeight : 'bold',
@@ -134,6 +135,7 @@ class Tips extends Component{
         let lv = this.state.lv;
         Global.resetlvtips();
         postJson('/users/opentips',{lv,tiplv,gold},(json)=>{
+            console.log(json);
             if(json.result==='ok'){
                 postJson('/users/lvtips',{lv},(json)=>{
                     if(json.result==='ok'){
@@ -145,7 +147,19 @@ class Tips extends Component{
                     }
                 });
             }else{
-                MessageBox.show('ok',undefined,<MarkdownElement text={json.result}/>,()=>{});
+                MessageBox.show('okpay',undefined,<MarkdownElement text={json.result}/>,(result)=>{
+                    if(result==='pay'){
+                        if(ljshell && ljshell.pay){
+                            console.log('====> paygold');
+                            ljshell.pay({action:'paygold',
+                            count:2000,
+                            autopay:1,
+                            appid:1126,
+                            userid:Global.getUID()},(b)=>{
+                            });
+                        }  
+                    }
+                });
             }
         });
     }

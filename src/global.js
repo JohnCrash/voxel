@@ -14,7 +14,7 @@ console.info('Import Global...');
 class _Global_ extends EventEmitter{
     constructor(){
         super();
-        this.version = '1.0.38';
+        this.version = '1.0.42';
         this.LevelJson = null;
         this.maxpasslv = null;
         this._debug = window.LOCALHOST;
@@ -285,6 +285,56 @@ class _Global_ extends EventEmitter{
                 }
             });
         });
+    }
+    setGameState(b){
+        this._ingame = b;
+    }
+    isMainUI(){
+        return !this._ingame;
+    }
+    /**
+     * 打开老师后台
+     */
+    openTeacherMgr(){
+        this._mainFrame.openTeacherMgr();
+    }
+    openStudensList(clsid,name){
+        this._mainFrame.openStudensList(clsid,name);
+    }
+    openStudentLevel(uid,uname,cls){
+        this._mainFrame.openStudentLevel(uid,uname,cls);
+    }
+    setMainFrame(mframe){
+        this._mainFrame = mframe;
+    }
+    //getMainState(){
+    //    return this._mainState;
+    //}
+    watchStudent(json){
+        if(!this._loginJson2){
+            this._loginJson2 = this._loginJson;
+            this.maxpasslv2 = this.maxpasslv;
+            this.maxunlocklv2 = this.maxunlocklv;
+            this._uname2 = this._uname;
+        }
+        //this._mainState = mainState;
+        this.setLoginJson(json);
+        this.setMaxPassLevel(json.lv+1);
+        this.setMaxUnlockLevel(json.olv);
+        this.setUserName(json.user);
+    }
+    unwatchStudent(){
+        if(this._loginJson2){
+            this.setLoginJson(this._loginJson2);
+            this.setMaxPassLevel(this.maxpasslv2+1);
+            this.setMaxUnlockLevel(this.maxunlocklv2);
+            this.setUserName(this._uname2);
+            this._loginJson2 = null;
+            this.maxpasslv2 = null;
+            this.maxunlocklv2 = null;
+            this._uname2 = null;
+            this._mainState = null;
+        }
     }
     /**
      * 返回提示结构
@@ -564,21 +614,23 @@ class _Global_ extends EventEmitter{
         }
         //将readmsg转换为数组,它可以是"1,2" = [1,2]
         if(json.readmsg && json.message){
-            json.readmsg = json.readmsg.split(',').map((item)=>{
-                try{
-                    return Number(item);
-                }catch(e){
-                    return 0;
+            if(typeof json.readmsg === 'string'){
+                json.readmsg = json.readmsg.split(',').map((item)=>{
+                    try{
+                        return Number(item);
+                    }catch(e){
+                        return 0;
+                    }
+                });
+                let ids = [];
+                for(let msg of json.message){
+                    ids.push(msg.id);
                 }
-            });
-            let ids = [];
-            for(let msg of json.message){
-                ids.push(msg.id);
+                //将不在message中的已读标记去掉
+                json.readmsg = json.readmsg.filter((value)=>{
+                    return ids.includes(value);
+                });
             }
-            //将不在message中的已读标记去掉
-            json.readmsg = json.readmsg.filter((value)=>{
-                return ids.includes(value);
-            });
         }else{
             json.readmsg = json.readmsg || [];
             json.message = json.message || [];

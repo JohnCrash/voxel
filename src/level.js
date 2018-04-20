@@ -93,6 +93,7 @@ class Level extends Component{
         }
     }
     componentDidMount(){
+        Global.setGameState(true);
         Global.setCurrentLevelComponent(this);
         this.onGameStart(this.props);
         Global._immLayout = ((layout)=>{
@@ -106,6 +107,7 @@ class Level extends Component{
         }).bind(this);        
     }
     componentWillUnmount(){
+        Global.setGameState(false);
         Global.setCurrentLevelComponent(null);
         Global._immLayout = null;
         Global._immBlocklytoolbox = null;
@@ -620,7 +622,7 @@ class Level extends Component{
                         this.blockview.toXML(),now-this.btms,now-this.btpms,
                         ()=>{this.Reset();});
                         this.btpms = now;
-                    },'tips');                    
+                    },'tips');
                 });
             }else{
                 //没有成功
@@ -745,7 +747,7 @@ class Level extends Component{
                 <IconRotateRight />
             </IconButton>  
         */
-        return <Toolbar style={portrait?{width:"100%",
+        return <Toolbar style={portrait?{
                 background:"rgba(0,0,0,0)",
                 bottom:"0px",
                 left:'32px',
@@ -875,7 +877,7 @@ class Level extends Component{
                         {<ContentCut />}
                     </IconButton>  
                 </div>:undefined}
-                <div style={{position:"absolute",right:"0px",bottom:"0px"}}>              
+                <div style={{position:"absolute",right:"0px",bottom:"0px"}}>
                     <IconButton 
                         style={Global.isPad()?playLargStyle:playNormalStyle}
                         iconStyle={Global.isPad()?playIconLargStyle:playIconNormalStyle}

@@ -72,28 +72,39 @@ class Unlock extends Component{
     handleAction(result,param){
         if(result==='unlock'){
             //处理解锁操作...
-            this.setState({step:UNLOCKING}); //加载界面
-            postJson('users/unlock',{param},(json)=>{
-                if(json.result==='ok'){
-                    //这里做一个动画
-                    if(this.props.changeButtonState){
-                        let i = 0;
-                        let to = ()=>{
-                            if(i++ < 10){
-                                this.props.changeButtonState(json.unlock+i-1,'locked','unfinished');
-                                setTimeout(to,100);
-                            }else{
-                                this.setState({open:true,step:LOCKED}); //确定界面
-                            }
-                        };
-                        this.setState({open:false});
-                        to();
-                    }else
-                        this.setState({step:LOCKED}); //确定界面
-                }else{
-                    this.setState({step:LOCKERROR,errmsg:(json&&json.result)?json.result:"解锁失败.."}); //解锁失败        
-                }
-            });
+            let unlock_it=()=>{
+                this.setState({step:UNLOCKING}); //加载界面
+                postJson('users/unlock',{param},(json)=>{
+                    if(json.result==='ok'){
+                        //这里做一个动画
+                        if(this.props.changeButtonState){
+                            let i = 0;
+                            let to = ()=>{
+                                if(i++ < 10){
+                                    this.props.changeButtonState(json.unlock+i-1,'locked','unfinished');
+                                    setTimeout(to,100);
+                                }else{
+                                    this.setState({open:true,step:LOCKED}); //确定界面
+                                }
+                            };
+                            this.setState({open:false});
+                            to();
+                        }else
+                            this.setState({step:LOCKED}); //确定界面
+                    }else{
+                        this.setState({step:LOCKERROR,errmsg:(json&&json.result)?json.result:"解锁失败.."}); //解锁失败        
+                    }
+                });
+            }
+            if(param==='gold'){
+                //金币支付再次确认
+                MessageBox.show('okcancel',"支付确认",`你确定要使用${this.dict.gold}金币来解锁后续10关吗？`,(result)=>{
+                    if(result==='ok'){
+                        unlock_it();
+                    }});
+            }
+            else
+                unlock_it();
         }else if(result==='cancel'){
             if(this._cb)this._cb(false);
             this._cb = null;            
@@ -109,15 +120,14 @@ class Unlock extends Component{
             this._cb = null;
             this.setState({open:false});
         }else if(result==='pay'){
-            if(Global.getPlatfrom()!=='windows' && ljshell && ljshell.pay){
+            if(ljshell && ljshell.pay){
                 console.log('====> paygold');
                 ljshell.pay({action:'paygold',
-                count:20,
+                count:2000,
+                autopay:1,
                 appid:1126,
                 userid:Global.getUID()},(b)=>{
                 });
-            }else{
-                MessageBox.show('ok',undefined,<MarkdownElement text={this.unlock_pay}/>,(result)=>{});
             }
             if(this._cb)this._cb(false);
             this._cb = null;

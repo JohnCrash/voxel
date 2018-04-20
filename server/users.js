@@ -53,6 +53,7 @@ function payGold(uid,num,cb,s){
     invoker = new LXSliceInvokerAsset(config.ljlxconfig);
   }catch(e){
     cb(false,'支付金币系统异常.');
+    console.error('payGOld:',e,config.ljlxconfig);
     return ;
   }
   if(invoker){
@@ -362,6 +363,8 @@ router.use(function(req,res,next){
      * 根据接口对用户信息进行优化
      */
     switch(req.url){
+      case '/login2':
+        uid = req.body.uid2;
       case '/login':s = '*';break;      
       case '/commit':
       case '/unlock':s='lv,UserName,olv,uid,cls,crown';break;
@@ -374,6 +377,7 @@ router.use(function(req,res,next){
       case 'levelplaytime':
       case '/logout':
       case '/report':s = 'uid,cls';break;
+      case '/myclass':s = 'uid';break;
       case '/readmsg':s = 'uid,readmsg';break;
       case '/opentips':
       case '/lvtips':s = 'uid,cls,tiplv,tipcooldown';break;
@@ -442,6 +446,11 @@ function pullUserInfo(req,cb){
   }catch(e){
     cb(false,e.toString());
   }
+}
+
+//新的
+function pullUserInfoNew(req,cb){
+
 }
 /**
  * 初始化Crown表格
@@ -561,10 +570,13 @@ function CalcUserCrownAndLVS(uid,cb){
  * 回复login
  * 将玩家所在班级的全部信息打包发给玩家
  * uid | uname | lv | lastcommit
+ * is2 老师虚拟登录
  */
-function responeseLogin(req,res){
-  let {UserName,uid,cookie,lv,olv,config,cls,trashlv,trash,readmsg,notice} = req.UserInfo;
-  
+function responeseLogin_old(req,res,is2){
+  let {UserName,uid,cookie,lv,olv,config,cls,trashlv,trash,readmsg,notice,user_role} = req.UserInfo;
+//  console.log('===========login===========');
+//  console.log(req.UserInfo);
+//  console.log('===========================');
   //一个简单复用函数
   function done(clss){
     for(let c of clss){
@@ -580,20 +592,22 @@ function responeseLogin(req,res){
       if(b){
         let platform = req.body.platform;
         let entryrandom = req.body.entryrandom;
-        reCrown(req,crown);
+        if(!is2)reCrown(req,crown);
         /**
          * 将crown,lastlogin设置好，清除notice通知在看到后就删除
          */
-        sql(`update UserInfo set crown=${crown},lastlogin=getdate(),notice=NULL where uid=${uid}`);
+        if(!is2)sql(`update UserInfo set crown=${crown},lastlogin=getdate(),notice=NULL where uid=${uid}`);
         //记录动作
-        if(entryrandom)sqlAction(uid,cls,'e'+entryrandom); //将进入和登录结合起来，侦测点击到登录的人数差
-        sqlAction(uid,cls,'login '+platform);
-        //将关卡的视频配置和通知消息插入到这里        
+        if(entryrandom&&!is2)sqlAction(uid,cls,'e'+entryrandom); //将进入和登录结合起来，侦测点击到登录的人数差
+        if(!is2)sqlAction(uid,cls,'login '+platform);
+        //将关卡的视频配置和通知消息插入到这里
         Promise.all([sql('select * from LevelVideo'),sql('select * from Message order by id desc')]).then(([R,M])=>{
           let levelvideo;
           let message;
           if(R)levelvideo = R.recordset;
           if(M)message = M.recordset;
+          if(!is2)setCookie(res,`uid=${uid}`);
+          if(!is2)setCookie(res,`cc2=${cookie}`);
           res.json({
             result:'ok',
             lv,
@@ -611,7 +625,8 @@ function responeseLogin(req,res){
             readmsg,
             message,
             levelvideo,
-            notice
+            notice,
+            user_role
           });
         }).catch((err)=>{
           res.json({result:''});
@@ -630,6 +645,51 @@ function responeseLogin(req,res){
       resError(res,err);
     });  
   }
+}
+
+//补充用户信息，如果没有user_role,就从https://api.ljlx.com/platform/userinfo/getuserinfo?user_id=144969
+function responeseLogin(req,res){
+    if(req.UserInfo && 'user_role' in req.UserInfo && req.UserInfo.user_role){ //数据已经更新了不用在更新了
+      responeseLogin_old(req,res);
+    }else{
+      let {uid,cookie} = req.body;
+      try{
+        fetch(`https://api.ljlx.com/platform/userinfo/getuserinfo?user_id=${uid}`,{
+          method:'GET',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            'Cookie':cookie,
+          }
+        }).then(function(responese){
+          return responese.json();
+        }).then(function(json){
+          if(json.result==0){
+            //一方面将数据更新到数据库中，同时修改当前的上下文
+            let userinfo = json.data.user_info;
+            req.UserInfo.user_role = userinfo.user_role;
+            req.UserInfo.login_name = userinfo.login_name;
+            req.UserInfo.gender = userinfo.gender;
+            req.UserInfo.rank = userinfo.rank;
+            req.UserInfo.exper = userinfo.exper;
+            //update UserInfo set crown=${crown},lastlogin=getdate(),notice=NULL where uid=${uid}
+            sql(`update UserInfo set user_role=${userinfo.user_role},login_name='${userinfo.login_name}',gender=${userinfo.gender},rank=${userinfo.rank},exper=${userinfo.exper} where uid=${uid}`).catch((err)=>{
+              console.error('responeseLogin update ',err);
+            });
+            responeseLogin_old(req,res);
+          }else{
+            console.error('responeseLogin result ',json.msg);
+            responeseLogin_old(req,res); //如果有问题回到老版本
+          }
+        }).catch(function(e){
+          console.error('responeseLogin catch ',e);
+          responeseLogin_old(req,res); //如果有问题回到老版本
+        });
+      }catch(e){
+        console.error('responeseLogin try ',e);
+        responeseLogin_old(req,res); //如果有问题回到老版本
+      }
+    }
 }
 /**
  * 系统登入一个新的用户
@@ -679,6 +739,17 @@ router.post('/login',function(req,res){
   login(req,res);
 });
 
+/**
+ * 老师检查学生进度虚拟登录
+ */
+router.post('/login2',function(req,res){
+  if(req.UserInfo && 'uid' in req.UserInfo){
+    responeseLogin_old(req,res,true);
+  }else{
+    res.json({result:'用户数据记录'});
+  }
+});
+
 function tops(req,res){
   let lv = req.body.lv;
   let cls = req.UserInfo.cls;
@@ -704,6 +775,7 @@ function tops(req,res){
     });
   }
 }
+
 /**
  * 提交成绩，返回排名情况
  */
@@ -1070,7 +1142,7 @@ router.post('/readmsg',function(req,res){
   let {readed} = req.body;
   let {uid,readmsg} = req.UserInfo;
   if(typeof readed !== 'number'){
-    res.json({result:'参数错误'});
+    res.json({result:'参数错误 readmsg'});
     return;
   }
   if(readmsg){
@@ -1199,7 +1271,7 @@ router.post('/lvtips',function(req,res){
       }
     });
   }else{
-    resError(res,'参数错误');
+    resError(res,`参数错误 lvtips ${lv} ${uid}`);
   }
 });
 
@@ -1240,6 +1312,7 @@ router.post('/opentips',function(req,res){
               }
               res.json({result:'ok'});
             }else{
+              console.error('payGold ERROR : ',msg);
               res.json({result: msg}); //金币不足等...
             }
           },`乐学编程提示解锁 ${uid},${lv},${tiplv},${g}`);
@@ -1277,11 +1350,11 @@ router.post('/opentips',function(req,res){
           res.json({result:'没有达成解锁条件'});
         }
       }else{
-        res.json({result:'参数错误2'});
+        res.json({result:'参数错误 opentips 2'});
       }
     });
   }else{
-    resError(res,'参数错误');
+    resError(res,'参数错误 opentips');
   }
 });
 
@@ -1327,4 +1400,68 @@ router.post('/deltop',function(req,res){
   }
 });
 
+/**
+ * myclass
+ */
+router.post('/myclass',function(req,res){
+  let {uid} = req.body;
+  let cookie = req.cookies['cc2'];
+  return fetch(`https://api.ljlx.com/platform/class/getteacherclasslist?user_id=${uid}`,{
+    method:'GET',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      'Cookie':cookie,
+    }
+  }).then(function(responese){
+    return responese.json();
+  }).then(function(json){
+    //测试数据
+    res.json({
+      result:'ok',
+      classes:[
+        {
+          name:'七年级第一体育特招班',
+          clsid:16811543
+        },
+        {
+          name:'高一225孔班',
+          clsid:145808
+        },
+        {
+          name:'高三舞蹈班',
+          clsid:0
+        }                        
+      ]
+    });  
+        /*  
+    if(json.result==0 && json.data && json.data.classes){
+        res.json({
+          result:'ok',
+          classes:json.data.classes.map((item)=>{
+            return {name:item.name,clsid:item.zone_id};
+          })
+        }); 
+    }else{
+      res.json({result:`getteacherclasslist接口返回:${json.msg}`});
+    } */
+  }).catch(function(err){
+    res.json({result:err});
+  });
+});
+
+/**
+ * mystudent
+ * 参数clsid
+ */
+router.post('/mystudent',function(req,res){
+  let {clsid} = req.body;
+  sql(`select Top 100 uid,UserName,cls,lastcommit,lv,olv from UserInfo where cls=${clsid}`).then((result)=>{
+    res.json({
+      result:'ok',
+      students:result.recordset});
+  }).catch(function(err){
+    res.json({result:err});
+  });
+});
 module.exports = router;

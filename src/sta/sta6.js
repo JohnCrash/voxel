@@ -39,7 +39,7 @@ class Sta6 extends Component{
        *  count : 99}
        * ]
        */
-      let b = {dd:14};
+      let b = {dd:60};
       fetch('/users/stalau',{method:'POST',
       credentials: 'same-origin',
       headers: {'Content-Type': 'application/json'},

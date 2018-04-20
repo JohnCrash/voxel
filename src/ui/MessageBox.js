@@ -111,6 +111,16 @@ class MessageBox extends Component{
         let actions;
         let bodyStyle,actionsContainerStyle;
         switch(this.state.type){
+            case 'okpay':
+                actions = [<FlatButton
+                    label="兑换金币"
+                    primary="secondary"
+                    onClick={this.handleClose.bind(this,'pay')}/>,
+                <FlatButton
+                    label="取消"
+                    primary={true}
+                    onClick={this.handleClose.bind(this,'ok')}/>];
+                break;
             case 'okcancel':
                 actions = [<FlatButton
                         label="取消"

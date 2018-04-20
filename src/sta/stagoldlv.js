@@ -36,7 +36,7 @@ export default graphql(GOLD_QUERY,{options: { variables: { day: 30 } }})((props)
                 trigger: 'axis'
             },            
             series: {
-                type: 'line',
+                type: 'bar',
                 data: incomeDistribLv.map(item=>{return item.gold})
             }
         }}/>;

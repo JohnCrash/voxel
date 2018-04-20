@@ -28,7 +28,7 @@ function eachUserStream(date,each,done){
         });
         done(false,date);
     }).catch((err)=>{
-        console.error(err);
+        console.error('eachUserStream',err);
         done(true,err);
     })
 }
@@ -50,10 +50,11 @@ function eachDayToday(date){
                         sta.tips += 300;
                         sta.distriblv[m[1]] = sta.distriblv[m[1]]?sta.distriblv[m[1]]+300:300;
                     }else{
-                        m = element.action.match(/g\((\d+)\-(\d+)\)/);
+                        m = element.action.match(/g\((\d+)\-(\d+)-(\d+)\)/);
                         if(m && m[1] && m[2]){
-                            sta.tips += m[2];
-                            sta.distriblv[m[1]] = sta.distriblv[m[1]]?sta.distriblv[m[1]]+m[2]:m[2];
+                            sta.tips += Number(m[2]);
+                            let tiplv = Number(m[3]);
+                            sta.distriblv[m[1]] = sta.distriblv[m[1]]?sta.distriblv[m[1]]+Number(m[2]):Number(m[2]);
                         }
                     }
                 }else if(element.action[0] === 'u'){
@@ -64,7 +65,7 @@ function eachDayToday(date){
                     }else{
                         m = element.action.match(/u\((\d+)\-(\d+)\)/);
                         if(m && m[1] && m[2]){
-                            sta.unlock += m[2];
+                            sta.unlock += Number(m[2]);
                         }
                     }
                 }
@@ -72,9 +73,16 @@ function eachDayToday(date){
                 if(!err){
                     cb(false,'ok');
                     //将数据写入到数据库中
-                    sql(`insert into DayIncome (date,unlock,tips) values ('${date}',${sta.unlock},${sta.tips})`);
+                    sql(`insert into DayIncome (date,unlock,tips) values ('${date}',${sta.unlock},${sta.tips})`).catch((err)=>{
+                        console.error(`insert into DayIncome (date,unlock,tips) values ('${date}',${sta.unlock},${sta.tips})`);
+                        console.error(err);
+                    });
                     for(let lv in sta.distriblv){
-                        sql(`exec Update_DistribLv ${lv},${sta.distriblv[lv]}`);
+                        let sqlcmd = `exec Update_DistribLv ${lv},${sta.distriblv[lv]},NULL,NULL,NULL,NULL`;
+                        sql(sqlcmd).catch((err)=>{
+                            console.error(sqlcmd);
+                            console.error(err);
+                        });;
                     }
                     console.log(sta);
                 }else
@@ -91,5 +99,5 @@ function eachDayToday(date){
     });
 }
 
-eachDayToday('2017-12-01');
+eachDayToday('2018-03-20');
 //eachDayToday('2018-02-28');

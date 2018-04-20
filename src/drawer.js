@@ -194,6 +194,9 @@ class MainDrawer extends Component{
         this.motifyConfig = true;
         Global.setBlocklySkin(value);
     }
+    onTeacherMgr = (event)=>{
+        Global.openTeacherMgr();
+    }
    render(){
         let {music,sound,lang,uistyle,openMenu,landscape,blocklytoolbox,openDebug} = this.state;
         let {loc} = this.props;
@@ -255,7 +258,7 @@ class MainDrawer extends Component{
                 this.setState({uistyle:b?"simple":"features"});
                 this.motifyConfig = true;
                 Global.setUIStyle(b?"simple":"features");
-            }} />
+            }} />            
             <GrayBlock />
             <div style={{marginTop:'16px'}}><span style={SpanStyle}><b>编程块样式</b></span></div>
             <RadioButtonGroup style={RadioStyle}
@@ -280,6 +283,7 @@ class MainDrawer extends Component{
             {this.props.loc==="game"?<MenuItem primaryText="任务提示" leftIcon={<TipsIcon />} style={BlodStyle} onClick={this.onTip}/>:undefined}
             <MenuItem primaryText="操作帮助" leftIcon={<HelpIcon />} style={BlodStyle} onClick={this.onHelp}/> 
             <MenuItem primaryText="制作团队" leftIcon={<TeamIcon />} style={BlodStyle} onClick={this.onAbout}/> 
+            {Global.isMainUI()?<MenuItem primaryText="教师管理后台" leftIcon={<TeamIcon />} style={BlodStyle} onClick={this.onTeacherMgr}/>:undefined }
             <div style={{margin:16}}>版本:{Global.version}</div> 
             {openDebug?<MenuItem primaryText="DEBUG..." leftIcon={<IconDebug />} onClick={(event)=>{
                 window.location = `http://192.168.2.83:3001/#/login/${Global.getUID()}/${Global.getUserName()}/${Global.getCookie()}`

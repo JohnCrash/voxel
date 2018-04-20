@@ -1,0 +1,15 @@
+{
+    "name": "lxnodemodules",
+    "version": "1.0.5",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "node test"
+    },
+    "author": "hackett",
+    "license": "ISC",
+    "dependencies": {
+        "ice": "3.6.1",
+        "js-md5": "^0.4.2"
+    }
+}

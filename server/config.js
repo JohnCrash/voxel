@@ -10,8 +10,8 @@ const config = {
     public: 'public',
     upload: 'public/',
     ljlxconfig: __dirname+'/lxc-LXGridMain.txt',
-    ljlxkey: __dirname+'/ljlx/_.ljlx.com.key',
-    ljlxcert: __dirname+'/ljlx/_.ljlx.com.crt'
+    ljlxkey: __dirname+'/lxnodemodules/_.ljlx.com.key',
+    ljlxcert: __dirname+'/lxnodemodules/_.ljlx.com.crt'
 };
 
 module.exports = config;

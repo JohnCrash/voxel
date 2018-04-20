@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import { graphql } from 'react-apollo';
+import { graphql,Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { LineChart } from 'react-d3';
 import EChart from './echart';
@@ -16,6 +16,25 @@ export const GOLD_QUERY = gql`
     }
   }
 `;
+//Query 不能正常工作
+/*
+const GoldQuery = ({day}) => (
+    <Query query={GOLD_QUERY}
+        render={result=>{
+            if (result.loading) {
+                return <div>Loading</div>;
+            }
+            if (result.error) {
+                return <h1>ERROR</h1>;
+            }
+            return <div>good</div>;
+        }}
+    />
+);
+export default ()=>{
+    return <GoldQuery day={30} />;
+};
+*/
 
 export default graphql(GOLD_QUERY,{options: { variables: { day: 30 } }})((props)=>{
     let {data} = props;
