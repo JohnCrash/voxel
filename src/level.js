@@ -708,6 +708,7 @@ class Level extends Component{
      * 看看当前关卡有没有提示
      */
     hasTips(){
+        if(Global.getMainState())return false;//watch mode
         let levelTips = Global.getLevelTips();
         let info = Global.appGetLevelInfo(this.props.level);
         if(levelTips && info){

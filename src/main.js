@@ -24,7 +24,6 @@ import ReturnBack from 'material-ui/svg-icons/image/navigate-before';
 import { setInterval, clearInterval } from 'timers';
 import BgMgr from './bgmgr';
 import BgSList from './bgslist';
-import { Glacier2 } from 'ice';
 
 console.info('Import Main...');
 const titles = [
@@ -35,7 +34,6 @@ const titles = [
 class Main extends Component{
     constructor(props){
         super(props);
-        /*
         let ms = Global.getMainState();
         if(ms){
             this._classlist = ms.classlist;
@@ -45,7 +43,7 @@ class Main extends Component{
             this._watchUID = ms.watchUID;
             this._watchUname = ms.watchUname;
             this.state = {
-                title : '',
+                title : ms.title,
                 anchorEl : null,
                 isdebug : false,
                 msgcount : 0,
@@ -56,7 +54,7 @@ class Main extends Component{
                 classlist : this._classlist,
                 studentlist : this._students
             }
-        } */
+        }else{
             this.state = {
                 title : '',
                 anchorEl : null,
@@ -68,7 +66,9 @@ class Main extends Component{
                 mode : 'main', //'main' , 'mgr'
                 classlist : null,
                 studentlist : null
-            }    
+            }  
+        }
+  
         Global.regAppTitle((t)=>{
             this.appTitle(t);
         });
@@ -118,15 +118,17 @@ class Main extends Component{
                 console.log(json);
                 _this._watchUID = uid;
                 _this._watchUname = uname;
-                Global.watchStudent(json)/*{
+                let title = `${uname}(${_this._clsname})`;
+                Global.watchStudent(json,{
+                    title,
                     classlist:this._classlist,
                     clsid:this._clsid,
                     clsname:this._clsname,
                     students:this._students,
                     watchUID:uid,
                     watchUname:uname,
-                }); */
-                _this.setState({mode:'student',title:`${uname}(${_this._clsname})`});
+                }); 
+                _this.setState({mode:'student',title});
                 Global.push(()=>{
                     _this._watchUID = null;
                     _this._watchUname = null;
@@ -140,7 +142,8 @@ class Main extends Component{
     }
     initLogin(){
         let json = Global.getLoginJson();
-        if(json){
+        let ms = Global.getMainState();
+        if(json && !ms){
             let readmsg = json.readmsg || [];
             let message = json.message || [];
             this.setState({msgcount:message.length-readmsg.length,readmsg});    
@@ -164,7 +167,7 @@ class Main extends Component{
                 });
         }); */
         //打开一个通知消息栏
-        if(Global.getLoginJson()){
+        if(Global.getLoginJson() && !Global.getMainState()){
             let notice = Global.getLoginJson().notice;
             let text;
             try{

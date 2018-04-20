@@ -390,8 +390,8 @@ class BlockView extends Component{
             this.workspace = Blockly.inject(this.blockDiv,
                 {toolbox: this.toolboxXML,
                     media,
-                    trashcan: true,
-                    scrollbars: true,
+                    trashcan: true && !Global.getMainState(),
+                    scrollbars: true && !Global.getMainState(),
                     zoom: {
                         //controls: true,
                         //wheel: false,
@@ -803,7 +803,7 @@ class BlockView extends Component{
     render(){
         let {openNumInput,num} = this.state;
         return <div style={{width:"100%",height:"100%"}} ref={ref=>this.blockDiv=ref}>
-                {this.state.toolboxMode!=="expand"?<IconButton
+                {this.state.toolboxMode!=="expand"&&!Global.getMainState()?<IconButton
                     onClick={this.openFlyOut.bind(this)}
                     iconStyle={{width:48,height:48,color:"#BDBDBD"}}
                     style={{display:this.state.tbopen?"inline-block":"none",

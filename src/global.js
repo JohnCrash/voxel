@@ -307,17 +307,19 @@ class _Global_ extends EventEmitter{
     setMainFrame(mframe){
         this._mainFrame = mframe;
     }
-    //getMainState(){
-    //    return this._mainState;
-    //}
-    watchStudent(json){
+    getMainState(){
+        return this._mainState;
+    }
+    watchStudent(json,mainState){
         if(!this._loginJson2){
+            this._uid2 = this._uid;
+            this._uid = mainState.watchUID;
             this._loginJson2 = this._loginJson;
             this.maxpasslv2 = this.maxpasslv;
             this.maxunlocklv2 = this.maxunlocklv;
             this._uname2 = this._uname;
         }
-        //this._mainState = mainState;
+        this._mainState = mainState;
         this.setLoginJson(json);
         this.setMaxPassLevel(json.lv+1);
         this.setMaxUnlockLevel(json.olv);
@@ -329,6 +331,7 @@ class _Global_ extends EventEmitter{
             this.setMaxPassLevel(this.maxpasslv2+1);
             this.setMaxUnlockLevel(this.maxunlocklv2);
             this.setUserName(this._uname2);
+            this._uid = this._uid2;
             this._loginJson2 = null;
             this.maxpasslv2 = null;
             this.maxunlocklv2 = null;
