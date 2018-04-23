@@ -390,8 +390,8 @@ class BlockView extends Component{
             this.workspace = Blockly.inject(this.blockDiv,
                 {toolbox: this.toolboxXML,
                     media,
-                    trashcan: true && !Global.getMainState(),
-                    scrollbars: true && !Global.getMainState(),
+                    trashcan: true,
+                    scrollbars: true,
                     zoom: {
                         //controls: true,
                         //wheel: false,
@@ -512,15 +512,20 @@ class BlockView extends Component{
             let h = metrics.contentHeight - metrics.viewHeight;
             //console.log(metrics);
             //console.log(`w : ${w},h : ${h}`);
-            this.workspace.scrollbar.set(w-4,h-12);
-            //console.log(this.workspace.scrollbar);
-            this.workspace.scrollbar.setContainerVisible(false);
+            if(this.workspace.scrollbar){
+                this.workspace.scrollbar.set(w-4,h-12);
+                //console.log(this.workspace.scrollbar);
+                this.workspace.scrollbar.setContainerVisible(false);
+            }
+
             this.workspace.updateScreenCalculationsIfScrolled();
             this.workspace.deleteAreaToolbox_ = null;
 
             //debug
             metrics = this.workspace.getMetrics();
-            this.workspace.scrollbar.set(w-4-(metrics.viewLeft - 12),h-12-(metrics.viewTop - 1));          
+            if(this.workspace.scrollbar){
+                this.workspace.scrollbar.set(w-4-(metrics.viewLeft - 12),h-12-(metrics.viewTop - 1));          
+            }
         }else{//恢复挂钩
             //拖放优化，当开始拖放的时候暂停刷新
             Blockly.BlockDragger.prototype.startBlockDrag = function(xy){

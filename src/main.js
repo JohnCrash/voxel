@@ -79,10 +79,13 @@ class Main extends Component{
      */
     openTeacherMgr(){
         postJson('users/myclass',{},(json)=>{
+            console.log('users/myclass ==>');
+            console.log(json);
             if(json.result==='ok'){
                 this._classlist = json.classes;
                 this.setState({mode:'classlist',classlist:json.classes,title:titles[1]});
                 Global.push(()=>{
+                    Global.pop();
                     this.setState({mode:'main',title:titles[0]}); //返回主菜单
                 });
             }else{
@@ -95,12 +98,15 @@ class Main extends Component{
      */
     openStudensList(clsid,name){
         postJson('users/mystudent',{clsid},(json)=>{
+            console.log('users/mystudent ==>');
+            console.log(json);            
             if(json.result==='ok'){
                 this._clsid = clsid;
                 this._clsname = name;
                 this._students = json.students;
                 this.setState({mode:'studentlist',studentlist:json.students,title:name});
                 Global.push(()=>{
+                    Global.pop();
                     this.setState({mode:'classlist',studentlist:json.students,title:titles[1]}); 
                 });
             }else{
@@ -114,6 +120,8 @@ class Main extends Component{
     openStudentLevel(uid,uname,cls){
         let _this = this;
         postJson('users/login2',{uid,uid2:uid,cls},(json)=>{
+            console.log('users/login2 ==>');
+            console.log(json);               
             if(json.result==='ok'){
                 console.log(json);
                 _this._watchUID = uid;
@@ -130,6 +138,7 @@ class Main extends Component{
                 }); 
                 _this.setState({mode:'student',title});
                 Global.push(()=>{
+                    Global.pop();
                     _this._watchUID = null;
                     _this._watchUname = null;
                     Global.unwatchStudent();

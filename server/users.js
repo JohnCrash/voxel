@@ -1417,6 +1417,7 @@ router.post('/myclass',function(req,res){
     return responese.json();
   }).then(function(json){
     //测试数据
+    /*
     res.json({
       result:'ok',
       classes:[
@@ -1433,8 +1434,7 @@ router.post('/myclass',function(req,res){
           clsid:0
         }                        
       ]
-    });  
-        /*  
+    }); */
     if(json.result==0 && json.data && json.data.classes){
         res.json({
           result:'ok',
@@ -1444,7 +1444,7 @@ router.post('/myclass',function(req,res){
         }); 
     }else{
       res.json({result:`getteacherclasslist接口返回:${json.msg}`});
-    } */
+    }
   }).catch(function(err){
     res.json({result:err});
   });

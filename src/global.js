@@ -14,7 +14,7 @@ console.info('Import Global...');
 class _Global_ extends EventEmitter{
     constructor(){
         super();
-        this.version = '1.0.42';
+        this.version = '1.0.47';
         this.LevelJson = null;
         this.maxpasslv = null;
         this._debug = window.LOCALHOST;
@@ -46,7 +46,13 @@ class _Global_ extends EventEmitter{
         document.addEventListener("backbutton", ()=>{
             console.log('===>backbutton');
             this.callTop();
-        }, false);
+        }, false);    
+        document.onkeyup = (e)=>{
+            if(e.key==="Escape"){
+                this.callTop();
+                e.stopPropagation();
+            }
+        };                
         console.log('Global push game quit');
         try{
             this.push(()=>{
@@ -291,6 +297,17 @@ class _Global_ extends EventEmitter{
     }
     isMainUI(){
         return !this._ingame;
+    }
+    /**
+     * user_role(用户角色)
+     *  角色值	说明
+     *   1	学生
+     *   2	家长
+     *   3	老师
+     *   4	教育局工作人员
+     */
+    isTeacher(){
+        return this._loginJson.user_role===3;
     }
     /**
      * 打开老师后台
