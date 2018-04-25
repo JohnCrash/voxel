@@ -31,6 +31,15 @@ const titles = [
     '班级列表',
     '全部学生进度',
 ];
+const scroll = true;
+const div_style={
+    overflowY:scroll?'auto':'hidden',
+    position:scroll?'absolute':'fixed',
+    left :'0px',
+    right :'0px',
+    bottom :'0px',
+    top :'64px',
+};
 class Main extends Component{
     constructor(props){
         super(props);
@@ -126,7 +135,7 @@ class Main extends Component{
                 console.log(json);
                 _this._watchUID = uid;
                 _this._watchUname = uname;
-                let title = `${uname}(${_this._clsname})`;
+                let title = `${uname}`;//(${_this._clsname})`;
                 Global.watchStudent(json,{
                     title,
                     classlist:this._classlist,
@@ -142,7 +151,7 @@ class Main extends Component{
                     _this._watchUID = null;
                     _this._watchUname = null;
                     Global.unwatchStudent();
-                    _this.setState({mode:'studentlist',title:titles[2]});
+                    _this.setState({mode:'studentlist',title:this._clsname});
                 });                
             }else{
                 MessageBox.show('ok','错误',json.result,(result)=>{});
@@ -255,7 +264,7 @@ class Main extends Component{
                 this._watchUID = null;
                 this._watchUname = null;
                 Global.unwatchStudent();
-                this.setState({mode:'studentlist',title:titles[2]}); //返回
+                this.setState({mode:'studentlist',title:this._clsname}); //返回
                 Global.pop();
             break;
             case 'main':
@@ -315,10 +324,14 @@ class Main extends Component{
         let nodeElment;
         switch(mode){
             case 'classlist':
-            nodeElment = (<BgMgr classlist={classlist} ref={r=>this.bgmgr = r}/>);
+            nodeElment = (<div style={div_style}>
+                    <BgMgr classlist={classlist} ref={r=>this.bgmgr = r}/>
+                </div>);
             break;
             case 'studentlist':
-            nodeElment = (<BgSList studentlist={studentlist} ref={r=>this.bgslist = r}/>);
+            nodeElment = (<div style={div_style}>
+                <BgSList studentlist={studentlist} ref={r=>this.bgslist = r}/>
+                </div>);
             break;
             case 'student':
             case 'main':

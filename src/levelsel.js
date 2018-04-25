@@ -394,7 +394,7 @@ class LevelSel extends PureComponent{
                 {this.renderLevel}
                 </Paper>
             </div>
-            <SelectChar open={this.state.openCharacterSelectDialog} link={this.selectAfterLink}/>
+            {!Global.getMainState()?<SelectChar open={this.state.openCharacterSelectDialog} link={this.selectAfterLink}/>:undefined}
             <Unlock ref={ref=>this.unlock=ref} changeButtonState={this.changeButtonState.bind(this)}/>
             <LevelVideo open={openVideo} src={videoSrc} poster={videoPoster} onEnded={this.onVideoEnded.bind(this)}/>
         </div>;

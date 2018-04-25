@@ -14,7 +14,7 @@ console.info('Import Global...');
 class _Global_ extends EventEmitter{
     constructor(){
         super();
-        this.version = '1.0.47';
+        this.version = '1.0.51';
         this.LevelJson = null;
         this.maxpasslv = null;
         this._debug = window.LOCALHOST;
@@ -335,12 +335,17 @@ class _Global_ extends EventEmitter{
             this.maxpasslv2 = this.maxpasslv;
             this.maxunlocklv2 = this.maxunlocklv;
             this._uname2 = this._uname;
+            this._character2 = this._character;
         }
         this._mainState = mainState;
         this.setLoginJson(json);
         this.setMaxPassLevel(json.lv+1);
         this.setMaxUnlockLevel(json.olv);
         this.setUserName(json.user);
+        if(json.config){
+            let config = JSON.parse(json.config);
+            this.setCharacter(config.character);
+        }
     }
     unwatchStudent(){
         if(this._loginJson2){
@@ -348,12 +353,15 @@ class _Global_ extends EventEmitter{
             this.setMaxPassLevel(this.maxpasslv2+1);
             this.setMaxUnlockLevel(this.maxunlocklv2);
             this.setUserName(this._uname2);
+            this.setCharacter(this._character2);
             this._uid = this._uid2;
             this._loginJson2 = null;
             this.maxpasslv2 = null;
             this.maxunlocklv2 = null;
             this._uname2 = null;
             this._mainState = null;
+            this._character2 = null;
+            this._uid2 = null;
         }
     }
     /**
