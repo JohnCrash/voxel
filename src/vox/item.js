@@ -152,7 +152,7 @@ class Item{
         this.specificGravity = json.specificGravity || 0.2; //比重
         this.loadedDoAction = 'idle';
         this.state = 'loading';
-
+        this.json = j;
         this.node.castShadow = this._castShadow;
         this.node.receiveShadow = this._receiveShadow;
         let load = ()=>{

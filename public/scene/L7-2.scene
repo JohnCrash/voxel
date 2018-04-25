@@ -4,14 +4,14 @@
 	"bgcolor": 16750517,
 	"camera": {
 		"position": {
-			"x": 143.96941386849926,
-			"y": -214.10637135723235,
-			"z": 154.25621239654345
+			"x": -157.08632706837366,
+			"y": -144.8939962368971,
+			"z": 128.32818655053913
 		},
 		"rotation": {
-			"x": 1.14668131856027,
+			"x": 1.2048589602934106,
 			"y": 0,
-			"z": 0.6073745796940322
+			"z": 5.448336148308962
 		}
 	},
 	"material": {
@@ -129,16 +129,16 @@
 				"y": 0,
 				"z": 0
 			},
-			"name": "地面",
+			"name": "物品1",
 			"visible": true,
-			"ground": true,
+			"ground": false,
 			"collision": false,
 			"fixed": false,
 			"gravity": false,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": true,
-			"file": "scene/vox/Level7-1.vox",
+			"receiveShadow": false,
+			"file": "scene/vox/Level7-2.vox",
 			"actions": [
 				{
 					"name": "idle",
@@ -147,16 +147,16 @@
 					],
 					"delay": 0,
 					"loop": true,
-					"acc": 33,
+					"acc": 17,
 					"curIndex": 0
 				}
 			]
 		},
 		{
 			"position": {
-				"x": -54,
-				"y": -28,
-				"z": 51.00000074462952
+				"x": -55,
+				"y": -7.5,
+				"z": 50
 			},
 			"rotation": {
 				"x": 0,
@@ -171,111 +171,19 @@
 			"gravity": true,
 			"specificGravity": 0.2,
 			"castShadow": true,
-			"receiveShadow": false,
+			"receiveShadow": true,
 			"template": "scene/item/男孩.item"
 		},
 		{
 			"position": {
-				"x": -36,
-				"y": -28,
+				"x": 34.5,
+				"y": -7.5,
 				"z": 70
 			},
 			"rotation": {
 				"x": 0,
 				"y": 0,
-				"z": 0
-			},
-			"name": "数字障碍",
-			"num": 4,
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": false,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/数字障碍.item"
-		},
-		{
-			"position": {
-				"x": -18,
-				"y": -28,
-				"z": 70
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "数字障碍1",
-			"num": 3,
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": false,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/数字障碍.item"
-		},
-		{
-			"position": {
-				"x": 0,
-				"y": -28,
-				"z": 70
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "数字障碍2",
-			"num": 2,
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": false,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/数字障碍.item"
-		},
-		{
-			"position": {
-				"x": 18,
-				"y": -28,
-				"z": 70
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 0
-			},
-			"name": "数字障碍3",
-			"num": 1,
-			"visible": true,
-			"ground": false,
-			"collision": true,
-			"fixed": false,
-			"gravity": false,
-			"specificGravity": 0.2,
-			"castShadow": true,
-			"receiveShadow": false,
-			"template": "scene/item/数字障碍.item"
-		},
-		{
-			"position": {
-				"x": 36,
-				"y": -28,
-				"z": 51.000001025390766
-			},
-			"rotation": {
-				"x": 0,
-				"y": 0,
-				"z": 477.36500371298916
+				"z": 215.39073392276953
 			},
 			"name": "宝石",
 			"visible": true,
@@ -287,6 +195,94 @@
 			"castShadow": true,
 			"receiveShadow": false,
 			"template": "scene/item/黄宝石.item"
+		},
+		{
+			"position": {
+				"x": 17,
+				"y": -8,
+				"z": 63
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "数字障碍",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/数字障碍.item"
+		},
+		{
+			"position": {
+				"x": -1,
+				"y": -8,
+				"z": 59
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "数字障碍1",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/数字障碍.item"
+		},
+		{
+			"position": {
+				"x": -19,
+				"y": -8,
+				"z": 55
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "数字障碍2",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/数字障碍.item"
+		},
+		{
+			"position": {
+				"x": -37,
+				"y": -8,
+				"z": 51
+			},
+			"rotation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"name": "数字障碍3",
+			"visible": true,
+			"ground": false,
+			"collision": true,
+			"fixed": false,
+			"gravity": true,
+			"specificGravity": 0.2,
+			"castShadow": true,
+			"receiveShadow": false,
+			"template": "scene/item/数字障碍.item"
 		}
 	],
 	"zfog": {

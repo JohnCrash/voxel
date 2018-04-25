@@ -73,6 +73,36 @@ function initItemBlockly(_this){
 		}
 		item.doAction(action);
 	}
+	////////////////////// add by jxx 20180418 ///////////////////////
+/*	function ItemNumBoxAction(item,action){
+		//console.log('ACTION : ${item.name} ${action}');
+		alert(333)
+
+		if(item.liftItem){
+			alert(action)
+			//数字障碍的动作
+			switch(action){
+				case 'n_1':action = 'num_1';break;
+				case 'n_2':action = 'num_2';break;
+				case 'n_3':action = 'num_3';break;
+				case 'n_4':action = 'num_4';break;
+				case 'n_5':action = 'num_5';break;
+				case 'n_6':action = 'num_6';break;
+				case 'n_7':action = 'num_7';break;
+				case 'n_8':action = 'num_8';break;
+				case 'n_9':action = 'num_9';break;
+				case 'n_10':action = 'num_10';break;
+				case 'n_11':action = 'num_11';break;
+				case 'n_12':action = 'num_12';break;
+				case 'n_13':action = 'num_13';break;
+				case 'n_14':action = 'num_14';break;
+				case 'n_15':action = 'num_15';break;
+			}
+		}
+		item.doAction(action);
+	}*/
+	///////////////////////// added end by jxx 20180418 //////////////////
+
 	//开始
 	Blockly.Blocks['when_start'] = {
     init: function () {
@@ -395,7 +425,80 @@ function initItemBlockly(_this){
 				item.blocklyContinue('unlock 2');
 			},300);
 		}
-	});		
+	});
+	
+	////////////////////////////////// add by jxx 20180418 ///////////////////////////////
+	// 移除数字障碍
+	Blockly.Blocks['remove_num_obstacle'] = {
+	  init: function() {
+		appendCharacterDropdown(this.appendDummyInput())
+			.appendField('移除数字障碍');
+			//.appendField(Blockly.Msg.CLEAR_OBSTACLE);
+		this.setInputsInline(true);
+		this.setPreviousStatement(true, null);
+		this.setNextStatement(true, null);
+		this.setColour(256);
+	 this.setTooltip("");
+	 this.setHelpUrl("");
+	  }
+	};
+
+	Blockly.JavaScript['remove_num_obstacle'] = function(block) {
+	  var charcter_name = block.getFieldValue('CHARCTER');
+	  var code = 'unlock_numbox("'+charcter_name+'");\n';
+	  return code;
+	};
+	
+	_this.injectBlocklyFunction('unlock_numbox',function(name){
+		var item = getItemByName(name);
+		if(!item)return;
+		if(item.liftItem){
+			item.blocklyStop('unlock_numbox liftitem obstruct');
+			setTimeout(function(){item.blocklyEvent('WrongAction');},1000);			
+			return;
+		}
+		if(item._obstructItem){
+			if(item._obstructItem.typeName!=='数字障碍'){
+				item.blocklyStop('unlock_numbox obstruct');	
+				setTimeout(function(){item.blocklyEvent('WrongAction');},1000);
+				return;
+			}
+		}
+		if(item._isobstruct && eqAngle(item.rotation.z,item.forwardAngle)){
+			item.blocklyStop('unlock_numbox');
+			
+			//item.obstruct.doAction('unlock_numbox');
+
+			setTimeout(function(){
+				if(item._obstructItem.update_box_num()<=0){
+					setTimeout(function(){
+						item.currentAction = 'forward';
+						var d = STEP - calcD(item);
+						item.forwardBegin = {x:item.position.x,y:item.position.y};
+						item.forwardEnd = {
+							x:item.position.x+Math.cos(item.rotation.z-Math.PI/2)*d,
+							y:item.position.y+Math.sin(item.rotation.z-Math.PI/2)*d
+						};
+						item.forwardT = 0;
+						item.speed = 2*SPEED;
+
+						ItemAction(item,'walk');
+					},300);
+				}else{
+					ItemAction(item,'remove_cones');
+					setTimeout(function(){
+						item.blocklyContinue('unlock_numbox');
+					},300);	
+				}				
+			},200);
+		}else{
+			item.blocklyStop('unlock_numbox 2');
+			setTimeout(function(){
+				item.blocklyContinue('unlock_numbox 2');
+			},300);
+		}
+	});	
+	////////////////////////////////// added end by jxx 20180418 //////////////////////////////////
 	
 	// 打开宝箱
 	Blockly.Blocks['open_box'] = {
@@ -618,6 +721,7 @@ function initItemBlockly(_this){
 		appendCharacterDropdown(this.appendDummyInput())
 			.appendField(Blockly.Msg.FORWARD_IS)
 			.appendField(new Blockly.FieldDropdown([
+			[Blockly.Msg.BARRIER,"num_box"],  // add by jxx 20180418
 			[Blockly.Msg.BARRIER,"barrier"], 
 			[Blockly.Msg.DIAMOND,"diamond"],
 			[Blockly.Msg.BOX,"chest"], 
@@ -658,6 +762,14 @@ function initItemBlockly(_this){
 		var ar = item.sceneManager.ptItem(pt);
 		var i,z;
 		switch(it){
+			//////// add by jxx 20180418 ////////////////
+			case 'num_box':
+				console.log(ar);
+				for(i=0;i<ar.length;i++){
+					if(ar[i].typeName==='数字障碍')return true;
+				}
+				break;
+			///////////// added end by jxx 20180418 /////////////
 			case 'barrier':
 				console.log(ar);
 				for(i=0;i<ar.length;i++){
@@ -678,7 +790,7 @@ function initItemBlockly(_this){
 				for(i=0;i<ar.length;i++){
 					if(ar[i].typeName==='石块')return true;
 				}			
-				break;				
+				break;
 			case 'ladder':
 				if(ar.length===0){
 					pt.z = item.position.z+1;
